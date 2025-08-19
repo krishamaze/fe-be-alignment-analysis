@@ -8,18 +8,60 @@ on:
     types: [sync-dev-branches]
 
 permissions:
-  contents: write  # needed if you commit & push updates
+  contents: write
 
 jobs:
   sync-branches:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout analysis repo + private submodules
+      - name: Checkout analysis repo
         uses: actions/checkout@v4
         with:
-          # If the workflow lives IN this repo, omit 'repository:' entirely.
-          repository: krishamaze/fe-be-alignment-analysis
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}   # <— uses your secret
-          submodules: recursive                         # clones backend & frontend
-          fetch-depth: 0                                # safer for submodules
-          persist-credentials: true                     # keeps creds for git push
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          submodules: recursive
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Auto-Sync"
+          git config --local pull.ff only
+
+      - name: Sync Backend Branch
+        run: |
+          cd backend
+          git fetch origin
+          git checkout -B krishna/implement-phase-a1-admin-api-scaffold origin/krishna/implement-phase-a1-admin-api-scaffold
+          git pull --ff-only
+          echo "Backend synced to: $(git rev-parse --short HEAD)"
+          cd ..
+
+      - name: Sync Frontend Branch
+        run: |
+          cd frontend
+          git fetch origin
+          git checkout -B feature/dashboard-integration origin/feature/dashboard-integration
+          git pull --ff-only
+          echo "Frontend synced to: $(git rev-parse --short HEAD)"
+          cd ..
+
+      - name: Commit Updates
+        run: |
+          git add backend frontend
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto-sync: FE (feature/dashboard-integration) & BE (krishna/implement-phase-a1-admin-api-scaffold) - $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            git push
+            echo "✅ Analysis repo updated with latest changes"
+          else
+            echo "ℹ️ No changes to commit"
+          fi
+
+      - name: Summary
+        run: |
+          echo "## Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Backend Branch**: krishna/implement-phase-a1-admin-api-scaffold" >> $GITHUB_STEP_SUMMARY
+          echo "- **Frontend Branch**: feature/dashboard-integration" >> $GITHUB_STEP_SUMMARY
+          echo "- **Sync Time**: $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Backend Commit**: $(cd backend && git rev-parse --short HEAD)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Frontend Commit**: $(cd frontend && git rev-parse --short HEAD)" >> $GITHUB_STEP_SUMMARY
