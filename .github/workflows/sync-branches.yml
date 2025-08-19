@@ -28,22 +28,72 @@ jobs:
           git config --local user.name "GitHub Action Auto-Sync"
           git config --local pull.ff only
 
+      - name: Verify Repository Access
+        run: |
+          echo "Verifying access to backend repository..."
+          if ! git ls-remote --heads https://github.com/krishamaze/finetune-ERP-backend > /dev/null 2>&1; then
+            echo "❌ Cannot access backend repository. Check if:"
+            echo "  - Repository exists and is accessible"
+            echo "  - Personal Access Token has correct permissions"
+            echo "  - Token is not expired"
+            exit 1
+          fi
+          echo "✅ Backend repository accessible"
+
+          echo "Verifying access to frontend repository..."
+          if ! git ls-remote --heads https://github.com/krishamaze/finetune-ERP-frontend > /dev/null 2>&1; then
+            echo "❌ Cannot access frontend repository. Check if:"
+            echo "  - Repository exists and is accessible"
+            echo "  - Personal Access Token has correct permissions"
+            echo "  - Token is not expired"
+            exit 1
+          fi
+          echo "✅ Frontend repository accessible"
+
+      - name: Verify Backend Branch Exists
+        run: |
+          cd backend
+          echo "Checking if backend branch exists..."
+          if ! git ls-remote --exit-code origin krishna/implement-phase-a1-admin-api-scaffold; then
+            echo "❌ Backend branch 'krishna/implement-phase-a1-admin-api-scaffold' does not exist in remote repository"
+            exit 1
+          fi
+          echo "✅ Backend branch exists"
+          cd ..
+
+      - name: Verify Frontend Branch Exists
+        run: |
+          cd frontend
+          echo "Checking if frontend branch exists..."
+          if ! git ls-remote --exit-code origin feature/dashboard-integration; then
+            echo "❌ Frontend branch 'feature/dashboard-integration' does not exist in remote repository"
+            exit 1
+          fi
+          echo "✅ Frontend branch exists"
+          cd ..
+
       - name: Sync Backend Branch
         run: |
           cd backend
+          echo "Fetching backend updates..."
           git fetch origin krishna/implement-phase-a1-admin-api-scaffold
+          echo "Checking out backend branch..."
           git checkout -B krishna/implement-phase-a1-admin-api-scaffold origin/krishna/implement-phase-a1-admin-api-scaffold
+          echo "Pulling latest changes..."
           git pull --ff-only
-          echo "Backend synced to: $(git rev-parse --short HEAD)"
+          echo "✅ Backend synced to: $(git rev-parse --short HEAD)"
           cd ..
 
       - name: Sync Frontend Branch
         run: |
           cd frontend
+          echo "Fetching frontend updates..."
           git fetch origin
+          echo "Checking out frontend branch..."
           git checkout -B feature/dashboard-integration origin/feature/dashboard-integration
+          echo "Pulling latest changes..."
           git pull --ff-only
-          echo "Frontend synced to: $(git rev-parse --short HEAD)"
+          echo "✅ Frontend synced to: $(git rev-parse --short HEAD)"
           cd ..
 
       - name: Commit Updates
@@ -59,9 +109,18 @@ jobs:
 
       - name: Summary
         run: |
-          echo "## Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔄 Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Repository Status" >> $GITHUB_STEP_SUMMARY
+          echo "- **Backend Repository**: krishamaze/finetune-ERP-backend" >> $GITHUB_STEP_SUMMARY
           echo "- **Backend Branch**: krishna/implement-phase-a1-admin-api-scaffold" >> $GITHUB_STEP_SUMMARY
+          echo "- **Backend Commit**: \`$(cd backend && git rev-parse --short HEAD)\` - $(cd backend && git log -1 --pretty=format:'%s')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Frontend Repository**: krishamaze/finetune-ERP-frontend" >> $GITHUB_STEP_SUMMARY
           echo "- **Frontend Branch**: feature/dashboard-integration" >> $GITHUB_STEP_SUMMARY
-          echo "- **Sync Time**: $(date -u)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Backend Commit**: $(cd backend && git rev-parse --short HEAD)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Frontend Commit**: $(cd frontend && git rev-parse --short HEAD)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Frontend Commit**: \`$(cd frontend && git rev-parse --short HEAD)\` - $(cd frontend && git log -1 --pretty=format:'%s')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Sync Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **Sync Time**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "- **Workflow**: Auto-Sync Development Branches" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ✅ Completed Successfully" >> $GITHUB_STEP_SUMMARY
