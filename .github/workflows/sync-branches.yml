@@ -31,7 +31,7 @@ jobs:
       - name: Sync Backend Branch
         run: |
           cd backend
-          git fetch origin
+          git fetch origin krishna/implement-phase-a1-admin-api-scaffold
           git checkout -B krishna/implement-phase-a1-admin-api-scaffold origin/krishna/implement-phase-a1-admin-api-scaffold
           git pull --ff-only
           echo "Backend synced to: $(git rev-parse --short HEAD)"
