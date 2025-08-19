@@ -1,61 +1,69 @@
 name: Auto-Sync Development Branches
 
 on:
-  workflow_dispatch: # Manual trigger
+  workflow_dispatch:
   schedule:
-    - cron: '0 */2 * * *' # Every 2 hours during development
+    - cron: '0 */2 * * *'
   repository_dispatch:
     types: [sync-dev-branches]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: auto-sync-dev-branches
+  cancel-in-progress: true
 
 jobs:
   sync-branches:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout analysis repo
-        uses: actions/checkout@v3
+      - name: Checkout parent repo (with submodules)
+        uses: actions/checkout@v4
         with:
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}   # PAT with repo access
           submodules: recursive
-          
+          fetch-depth: 0
+          persist-credentials: true
+
       - name: Configure Git
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action Auto-Sync"
-          
-      - name: Sync Backend Branch
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action Auto-Sync"
+          git config --global pull.ff only
+          set -euo pipefail
+
+      - name: Sync Backend branch
         run: |
-          cd backend
-          git fetch origin
-          git checkout krishna/implement-phase-a1-admin-api-scaffold
-          git pull origin krishna/implement-phase-a1-admin-api-scaffold
-          echo "Backend synced to: $(git rev-parse --short HEAD)"
-          cd ..
-          
-      - name: Sync Frontend Branch  
+          git -C backend fetch origin
+          git -C backend checkout -B krishna/implement-phase-a1-admin-api-scaffold origin/krishna/implement-phase-a1-admin-api-scaffold
+          git -C backend pull --ff-only
+          echo "Backend synced to: $(git -C backend rev-parse --short HEAD)"
+
+      - name: Sync Frontend branch
         run: |
-          cd frontend
-          git fetch origin
-          git checkout feature/dashboard-integration
-          git pull origin feature/dashboard-integration
-          echo "Frontend synced to: $(git rev-parse --short HEAD)"
-          cd ..
-          
-      - name: Commit Updates
+          git -C frontend fetch origin
+          git -C frontend checkout -B feature/dashboard-integration origin/feature/dashboard-integration
+          git -C frontend pull --ff-only
+          echo "Frontend synced to: $(git -C frontend rev-parse --short HEAD)"
+
+      - name: Commit updated submodule SHAs
         run: |
-          git add .
+          git add backend frontend
           if ! git diff --staged --quiet; then
-            git commit -m "Auto-sync: FE (feature/dashboard-integration) & BE (krishna/implement-phase-a1-admin-api-scaffold) - $(date)"
+            git commit -m "Auto-sync: BE krishna/implement-phase-a1-admin-api-scaffold, FE feature/dashboard-integration — $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
             git push
-            echo "✅ Analysis repo updated with latest changes"
+            echo "✅ Parent repo updated with latest submodule commits"
           else
-            echo "ℹ️ No changes to commit"
+            echo "ℹ️ No submodule pointer changes to commit"
           fi
-          
+
       - name: Summary
+        if: always()
         run: |
           echo "## Sync Summary" >> $GITHUB_STEP_SUMMARY
           echo "- **Backend Branch**: krishna/implement-phase-a1-admin-api-scaffold" >> $GITHUB_STEP_SUMMARY
           echo "- **Frontend Branch**: feature/dashboard-integration" >> $GITHUB_STEP_SUMMARY
-          echo "- **Sync Time**: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Time (UTC)**: $(date -u)" >> $GITHUB_STEP_SUMMARY
           echo "- **Backend Commit**: $(cd backend && git rev-parse --short HEAD)" >> $GITHUB_STEP_SUMMARY
           echo "- **Frontend Commit**: $(cd frontend && git rev-parse --short HEAD)" >> $GITHUB_STEP_SUMMARY
