@@ -1,0 +1,4 @@
+finetune-ERP-frontend-New/src/assets/* !text !filter !merge !diff
+finetune-ERP-frontend-New/src/assets/images/NoDataFound.png !text !filter !merge !diff
+finetune-ERP-frontend-New/src/assets/images/loader.gif !text !filter !merge !diff
+docs/assets/* !text !filter !merge !diff
