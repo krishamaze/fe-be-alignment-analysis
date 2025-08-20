@@ -1,9 +1,0 @@
-[submodule "backend"]
-	path = backend
-	url = https://github.com/krishamaze/finetune-ERP-backend.git
-	branch = krishna/implement-phase-a1-admin-api-scaffold
-
-[submodule "frontend"]
-	path = frontend
-	url = https://github.com/krishamaze/finetune-ERP-frontend.git
-	branch = feature/dashboard-integration
