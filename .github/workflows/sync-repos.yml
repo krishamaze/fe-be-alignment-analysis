@@ -16,11 +16,11 @@ jobs:
   sync-repos:
     runs-on: ubuntu-latest
     steps:
-      # Checkout analysis repo with RW token (pushes back here)
+      # Checkout the analysis repo with RW token (pushes back here)
       - name: Checkout analysis repo
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.WRITE_TOKEN }}   # Fine-grained PAT: Contents Read&Write for this repo
+          token: ${{ secrets.WRITE_TOKEN }}   # Fine-grained PAT: Contents Read & Write for THIS repo
           fetch-depth: 1
 
       - name: Configure git
@@ -33,7 +33,7 @@ jobs:
       - name: Clean work dirs
         run: rm -rf frontend backend temp-frontend temp-backend
 
-      # -------- Preflight: verify branches exist with Basic auth header --------
+      # -------- Preflight: verify FE/BE branches exist (fast fail) --------
       - name: Preflight: verify FE/BE branches
         shell: bash
         env:
@@ -53,7 +53,7 @@ jobs:
           chk finetune-ERP-frontend feature/dashboard-integration
           chk finetune-ERP-backend  krishna/implement-phase-a1-admin-api-scaffold
 
-      # -------- Clone with Basic header (Git over HTTPS expects Basic, not Bearer) --------
+      # -------- Clone with Basic header (Git over HTTPS uses Basic, not Bearer) --------
       - name: Clone Frontend
         shell: bash
         env:
@@ -61,90 +61,4 @@ jobs:
         run: |
           set -euo pipefail
           CLEAN="$(printf '%s' "$READ_PAT" | tr -d '\r\n')"
-          BASIC="$(printf 'x-access-token:%s' "$CLEAN" | base64 -w0 2>/dev/null || printf 'x-access-token:%s' "$CLEAN" | base64 | tr -d '\n')"
-          echo "Cloning Frontend…"
-          git -c http.extraHeader="Authorization: Basic ${BASIC}" \
-              clone --depth 1 --branch feature/dashboard-integration \
-              https://github.com/krishamaze/finetune-ERP-frontend.git temp-frontend
-          test -d temp-frontend/.git || { echo "Frontend checkout failed"; exit 1; }
-          test -s temp-frontend/package.json || { echo "Frontend looks empty"; exit 1; }
-
-      - name: Clone Backend
-        shell: bash
-        env:
-          READ_PAT: ${{ secrets.READ_TOKEN }}
-        run: |
-          set -euo pipefail
-          CLEAN="$(printf '%s' "$READ_PAT" | tr -d '\r\n')"
-          BASIC="$(printf 'x-access-token:%s' "$CLEAN" | base64 -w0 2>/dev/null || printf 'x-access-token:%s' "$CLEAN" | base64 | tr -d '\n')"
-          echo "Cloning Backend…"
-          git -c http.extraHeader="Authorization: Basic ${BASIC}" \
-              clone --depth 1 --branch krishna/implement-phase-a1-admin-api-scaffold \
-              https://github.com/krishamaze/finetune-ERP-backend.git temp-backend
-          test -d temp-backend/.git || { echo "Backend checkout failed"; exit 1; }
-          test -f temp-backend/manage.py || { echo "Backend key file missing"; exit 1; }
-
-      # Capture SHAs for traceability (and reuse later)
-      - name: Trace synced SHAs
-        id: trace
-        shell: bash
-        run: |
-          set -euo pipefail
-          FE_SHA="$(git -C temp-frontend rev-parse --short HEAD || true)"
-          BE_SHA="$(git -C temp-backend  rev-parse --short HEAD || true)"
-          echo "Frontend SHA: ${FE_SHA}"
-          echo "Backend  SHA: ${BE_SHA}"
-          echo "FE_SHA=${FE_SHA}" >> $GITHUB_ENV
-          echo "BE_SHA=${BE_SHA}" >> $GITHUB_ENV
-
-      # -------- Copy into analysis repo, excluding VCS/sensitive files --------
-      - name: Copy files (excluding git history)
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p frontend backend
-          cp -r temp-frontend/* frontend/ 2>/dev/null || true
-          cp -r temp-frontend/.[!.]* frontend/ 2>/dev/null || true
-          cp -r temp-backend/*  backend/  2>/dev/null || true
-          cp -r temp-backend/.[!.]* backend/ 2>/dev/null || true
-          rm -rf temp-frontend temp-backend frontend/.git backend/.git
-
-      - name: Remove sensitive files
-        run: |
-          find frontend backend -name ".env*" -delete 2>/dev/null || true
-          find frontend backend -name "node_modules" -type d -exec rm -rf {} + 2>/dev/null || true
-          find frontend backend -name ".git" -type d -exec rm -rf {} + 2>/dev/null || true
-
-      - name: Create sync info
-        shell: bash
-        env:
-          FE_REPO_URL: ${{ vars.FE_REPO_URL }}
-          BE_REPO_URL: ${{ vars.BE_REPO_URL }}
-        run: |
-          set -euo pipefail
-          {
-            echo "# Repo Sync Information"
-            echo
-            echo "**Last Synced:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-            echo
-            echo "**Frontend Repo:** ${FE_REPO_URL:-https://github.com/krishamaze/finetune-ERP-frontend}"
-            echo "**Frontend Branch:** feature/dashboard-integration"
-            echo "**Frontend Commit:** ${FE_SHA:-unknown}"
-            echo
-            echo "**Backend Repo:** ${BE_REPO_URL:-https://github.com/krishamaze/finetune-ERP-backend}"
-            echo "**Backend Branch:** krishna/implement-phase-a1-admin-api-scaffold"
-            echo "**Backend Commit:** ${BE_SHA:-unknown}"
-          } > SYNC_INFO.md
-
-      - name: Commit and push changes
-        shell: bash
-        run: |
-          set -euo pipefail
-          git add -A
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Sync repos: $(date -u '+%Y-%m-%d %H:%M:%S UTC') | FE:${FE_SHA:-?} BE:${BE_SHA:-?}"
-            git push
-            echo "Changes synced successfully!"
-          fi
+          BASIC="$(printf 'x-access-token:%s' "$CLEAN" | base64 -w0 2>
