@@ -28,136 +28,41 @@ jobs:
           git config --local user.name "GitHub Action Auto-Sync"
           git config --local pull.ff only
 
-      - name: Debug checkout state
-        run: |
-          echo "Repository root contents:"
-          ls -la
-          echo "Submodule configuration:"
-          cat .gitmodules
-          echo "Git submodule status after checkout:"
-          git submodule status || echo "No submodules found"
-
-      - name: Verify Repository Access and Branches
-        run: |
-          echo "Verifying access to backend repository and branch..."
-          if ! git ls-remote --exit-code https://github.com/krishamaze/finetune-ERP-backend krishna/implement-phase-a1-admin-api-scaffold; then
-            echo "❌ Cannot access backend repository or branch 'krishna/implement-phase-a1-admin-api-scaffold'. Check if:"
-            echo "  - Repository exists and is accessible"
-            echo "  - Branch exists in the repository"
-            echo "  - Personal Access Token has correct permissions"
-            echo "  - Token is not expired"
-            exit 1
-          fi
-          echo "✅ Backend repository and branch accessible"
-
-          echo "Verifying access to frontend repository and branch..."
-          if ! git ls-remote --exit-code https://github.com/krishamaze/finetune-ERP-frontend feature/dashboard-integration; then
-            echo "❌ Cannot access frontend repository or branch 'feature/dashboard-integration'. Check if:"
-            echo "  - Repository exists and is accessible"
-            echo "  - Branch exists in the repository"
-            echo "  - Personal Access Token has correct permissions"
-            echo "  - Token is not expired"
-            exit 1
-          fi
-          echo "✅ Frontend repository and branch accessible"
-
-      - name: Setup submodules (with fallback)
+      - name: Update submodules to latest
         run: |
           echo "Current submodule status:"
-          git submodule status || echo "No submodules initialized"
+          git submodule status
 
-          echo "Cleaning up any existing submodule state..."
-          rm -rf backend frontend || true
+          echo "Updating submodules to latest commits on their respective branches..."
+          git submodule update --remote --merge
 
-          echo "Attempting submodule initialization..."
-          git config -f .gitmodules submodule.backend.url \
-            https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-backend
-          git config -f .gitmodules submodule.frontend.url \
-            https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-frontend
+          echo "Updated submodule status:"
+          git submodule status
 
-          git submodule sync --recursive
-          if ! git submodule update --init --recursive --jobs 4; then
-            echo "⚠️ Submodule initialization failed, falling back to manual clone..."
-
-            echo "Cloning backend repository..."
-            git clone -b krishna/implement-phase-a1-admin-api-scaffold \
-              https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-backend \
-              backend
-
-            echo "Cloning frontend repository..."
-            git clone -b feature/dashboard-integration \
-              https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-frontend \
-              frontend
-
-            echo "✅ Manual clone completed successfully"
-          else
-            echo "✅ Submodule initialization successful"
-          fi
-
-          echo "Final status:"
-          ls -la backend/ frontend/ || echo "Directories not found"
-
-      - name: Sanity check submodule remotes
+      - name: Verify submodule sync
         run: |
-          echo "Checking backend submodule:"
-          if [ -d "backend/.git" ]; then
-            echo "✅ Backend is a proper git repository"
-            git -C backend remote -v
-          else
-            echo "❌ Backend is not a proper git repository"
-            ls -la backend/ || echo "Backend directory does not exist"
-            exit 1
-          fi
+          echo "Backend status:"
+          echo "  Branch: $(git -C backend branch --show-current)"
+          echo "  Commit: $(git -C backend rev-parse --short HEAD)"
+          echo "  Message: $(git -C backend log -1 --pretty=format:'%s')"
 
-          echo "Checking frontend submodule:"
-          if [ -d "frontend/.git" ]; then
-            echo "✅ Frontend is a proper git repository"
-            git -C frontend remote -v
-          else
-            echo "❌ Frontend is not a proper git repository"
-            ls -la frontend/ || echo "Frontend directory does not exist"
-            exit 1
-          fi
+          echo "Frontend status:"
+          echo "  Branch: $(git -C frontend branch --show-current)"
+          echo "  Commit: $(git -C frontend rev-parse --short HEAD)"
+          echo "  Message: $(git -C frontend log -1 --pretty=format:'%s')"
 
-      - name: Sync Backend Branch
+      - name: Commit submodule updates
         run: |
-          cd backend
-          echo "Current directory: $(pwd)"
-          echo "Current branch: $(git branch --show-current)"
-          echo "Git remote status:"
-          git remote -v
-
-          echo "Fetching latest changes..."
-          git fetch origin
-          echo "Pulling latest changes..."
-          git pull --ff-only
-          echo "✅ Backend synced to: $(git rev-parse --short HEAD)"
-          cd ..
-
-      - name: Sync Frontend Branch
-        run: |
-          cd frontend
-          echo "Current directory: $(pwd)"
-          echo "Current branch: $(git branch --show-current)"
-          echo "Git remote status:"
-          git remote -v
-
-          echo "Fetching latest changes..."
-          git fetch origin
-          echo "Pulling latest changes..."
-          git pull --ff-only
-          echo "✅ Frontend synced to: $(git rev-parse --short HEAD)"
-          cd ..
-
-      - name: Commit Updates
-        run: |
+          echo "Checking for submodule updates..."
           git add backend frontend
           if ! git diff --staged --quiet; then
-            git commit -m "Auto-sync: FE (feature/dashboard-integration) & BE (krishna/implement-phase-a1-admin-api-scaffold) - $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            BACKEND_COMMIT=$(git -C backend rev-parse --short HEAD)
+            FRONTEND_COMMIT=$(git -C frontend rev-parse --short HEAD)
+            git commit -m "Auto-sync submodules: BE@${BACKEND_COMMIT} FE@${FRONTEND_COMMIT} - $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
             git push
-            echo "✅ Analysis repo updated with latest changes"
+            echo "✅ Analysis repo updated with latest submodule commits"
           else
-            echo "ℹ️ No changes to commit"
+            echo "ℹ️ No submodule updates to commit"
           fi
 
       - name: Summary
