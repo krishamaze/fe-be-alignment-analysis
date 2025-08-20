@@ -1,0 +1,83 @@
+name: Sync Frontend and Backend Repos
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:       # Manual trigger button
+  
+jobs:
+  sync-repos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout analysis repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.WRITE_TOKEN }}
+          fetch-depth: 1
+
+      - name: Configure git
+        run: |
+          git config user.name "sync-bot"
+          git config user.email "sync-bot@krishamaze.com"
+
+      - name: Remove existing folders
+        run: |
+          rm -rf frontend/ backend/
+          
+      - name: Clone Frontend
+        run: |
+          git clone --depth 1 --branch feature/dashboard-integration \
+            https://${{ secrets.READ_TOKEN }}@github.com/krishamaze/finetune-ERP-frontend.git \
+            temp-frontend
+          
+      - name: Clone Backend  
+        run: |
+          git clone --depth 1 --branch krishna/implement-phase-a1-admin-api-scaffold \
+            https://${{ secrets.READ_TOKEN }}@github.com/krishamaze/finetune-ERP-backend.git \
+            temp-backend
+
+      - name: Copy files (excluding git history)
+        run: |
+          # Copy frontend files
+          mkdir -p frontend
+          cp -r temp-frontend/* frontend/ 2>/dev/null || true
+          cp -r temp-frontend/.[!.]* frontend/ 2>/dev/null || true
+          
+          # Copy backend files  
+          mkdir -p backend
+          cp -r temp-backend/* backend/ 2>/dev/null || true
+          cp -r temp-backend/.[!.]* backend/ 2>/dev/null || true
+          
+          # Clean up temp folders and git directories
+          rm -rf temp-frontend temp-backend
+          rm -rf frontend/.git backend/.git
+          
+      - name: Remove sensitive files
+        run: |
+          # Remove sensitive files from both folders
+          find frontend backend -name ".env*" -delete 2>/dev/null || true
+          find frontend backend -name "node_modules" -type d -exec rm -rf {} + 2>/dev/null || true
+          find frontend backend -name ".git" -type d -exec rm -rf {} + 2>/dev/null || true
+
+      - name: Create sync info
+        run: |
+          echo "# Repo Sync Information" > SYNC_INFO.md
+          echo "" >> SYNC_INFO.md
+          echo "**Last Synced:** $(date)" >> SYNC_INFO.md
+          echo "" >> SYNC_INFO.md
+          echo "**Frontend Branch:** feature/dashboard-integration" >> SYNC_INFO.md
+          echo "**Backend Branch:** krishna/implement-phase-a1-admin-api-scaffold" >> SYNC_INFO.md
+          echo "" >> SYNC_INFO.md
+          echo "**Frontend Repo:** https://github.com/krishamaze/finetune-ERP-frontend" >> SYNC_INFO.md
+          echo "**Backend Repo:** https://github.com/krishamaze/finetune-ERP-backend" >> SYNC_INFO.md
+
+      - name: Commit and push changes
+        run: |
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Sync repos: $(date '+%Y-%m-%d %H:%M:%S')"
+            git push
+            echo "Changes synced successfully!"
+          fi
