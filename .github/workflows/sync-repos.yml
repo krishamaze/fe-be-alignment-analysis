@@ -25,23 +25,23 @@ jobs:
           rm -rf frontend/ backend/
           
       - name: Clone Frontend
+        env:
+          GITHUB_TOKEN: ${{ secrets.READ_TOKEN }}
         run: |
           echo "Cloning Frontend repo..."
-          if ! git clone --depth 1 --branch feature/dashboard-integration "https://${{ secrets.READ_TOKEN }}@github.com/krishamaze/finetune-ERP-frontend.git" temp-frontend; then
-            echo "Failed to clone frontend. Checking if branch exists..."
-            git ls-remote --heads "https://${{ secrets.READ_TOKEN }}@github.com/krishamaze/finetune-ERP-frontend.git" | grep feature/dashboard-integration || echo "Branch not found"
-            exit 1
-          fi
+          # Extract just the domain and path, then add token
+          REPO_URL="${{ vars.FE_REPO_URL }}"
+          git clone --depth 1 --branch feature/dashboard-integration "https://${GITHUB_TOKEN}@${REPO_URL#https://}" temp-frontend
           echo "Frontend clone successful"
           
-      - name: Clone Backend  
+      - name: Clone Backend
+        env:
+          GITHUB_TOKEN: ${{ secrets.READ_TOKEN }}
         run: |
           echo "Cloning Backend repo..."
-          if ! git clone --depth 1 --branch krishna/implement-phase-a1-admin-api-scaffold "https://${{ secrets.READ_TOKEN }}@github.com/krishamaze/finetune-ERP-backend.git" temp-backend; then
-            echo "Failed to clone backend. Checking if branch exists..."
-            git ls-remote --heads "https://${{ secrets.READ_TOKEN }}@github.com/krishamaze/finetune-ERP-backend.git" | grep krishna/implement-phase-a1-admin-api-scaffold || echo "Branch not found"
-            exit 1
-          fi
+          # Extract just the domain and path, then add token
+          REPO_URL="${{ vars.BE_REPO_URL }}"
+          git clone --depth 1 --branch krishna/implement-phase-a1-admin-api-scaffold "https://${GITHUB_TOKEN}@${REPO_URL#https://}" temp-backend
           echo "Backend clone successful"
 
       - name: Copy files (excluding git history)
@@ -76,8 +76,8 @@ jobs:
           echo "**Frontend Branch:** feature/dashboard-integration" >> SYNC_INFO.md
           echo "**Backend Branch:** krishna/implement-phase-a1-admin-api-scaffold" >> SYNC_INFO.md
           echo "" >> SYNC_INFO.md
-          echo "**Frontend Repo:** https://github.com/krishamaze/finetune-ERP-frontend" >> SYNC_INFO.md
-          echo "**Backend Repo:** https://github.com/krishamaze/finetune-ERP-backend" >> SYNC_INFO.md
+          echo "**Frontend Repo:** ${{ vars.FE_REPO_URL }}" >> SYNC_INFO.md
+          echo "**Backend Repo:** ${{ vars.BE_REPO_URL }}" >> SYNC_INFO.md
 
       - name: Commit and push changes
         run: |
