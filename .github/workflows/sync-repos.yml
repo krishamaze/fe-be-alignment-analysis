@@ -16,6 +16,7 @@ jobs:
   sync-repos:
     runs-on: ubuntu-latest
     steps:
+      # Checkout the analysis repo with RW token
       - name: Checkout analysis repo
         uses: actions/checkout@v4
         with:
@@ -30,23 +31,23 @@ jobs:
       - name: Clean work dirs
         run: rm -rf frontend backend temp-frontend temp-backend
 
-      - name: Checkout Frontend
-        uses: actions/checkout@v4
-        with:
-          repository: krishamaze/finetune-ERP-frontend
-          ref: feature/dashboard-integration
-          path: temp-frontend
-          token: ${{ secrets.READ_TOKEN }}   # Read-only PAT
-          persist-credentials: false
+      # Clone frontend using Bearer token header
+      - name: Clone Frontend
+        run: |
+          echo "Cloning Frontend..."
+          git -c http.extraHeader="Authorization: Bearer ${{ secrets.READ_TOKEN }}" \
+              clone --depth 1 --branch feature/dashboard-integration \
+              https://github.com/krishamaze/finetune-ERP-frontend.git temp-frontend
+          echo "Frontend clone successful"
 
-      - name: Checkout Backend
-        uses: actions/checkout@v4
-        with:
-          repository: krishamaze/finetune-ERP-backend
-          ref: krishna/implement-phase-a1-admin-api-scaffold
-          path: temp-backend
-          token: ${{ secrets.READ_TOKEN }}   # Read-only PAT
-          persist-credentials: false
+      # Clone backend using Bearer token header
+      - name: Clone Backend
+        run: |
+          echo "Cloning Backend..."
+          git -c http.extraHeader="Authorization: Bearer ${{ secrets.READ_TOKEN }}" \
+              clone --depth 1 --branch krishna/implement-phase-a1-admin-api-scaffold \
+              https://github.com/krishamaze/finetune-ERP-backend.git temp-backend
+          echo "Backend clone successful"
 
       - name: Copy files (excluding git history)
         run: |
@@ -57,33 +58,4 @@ jobs:
           cp -r temp-backend/.[!.]* backend/ 2>/dev/null || true
           rm -rf temp-frontend temp-backend frontend/.git backend/.git
 
-      - name: Remove sensitive files
-        run: |
-          find frontend backend -name ".env*" -delete 2>/dev/null || true
-          find frontend backend -name "node_modules" -type d -exec rm -rf {} + 2>/dev/null || true
-          find frontend backend -name ".git" -type d -exec rm -rf {} + 2>/dev/null || true
-
-      - name: Create sync info
-        run: |
-          {
-            echo "# Repo Sync Information"
-            echo
-            echo "**Last Synced:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-            echo
-            echo "**Frontend Branch:** feature/dashboard-integration"
-            echo "**Backend Branch:** krishna/implement-phase-a1-admin-api-scaffold"
-            echo
-            echo "**Frontend Repo:** ${{ vars.FE_REPO_URL }}"
-            echo "**Backend Repo:** ${{ vars.BE_REPO_URL }}"
-          } > SYNC_INFO.md
-
-      - name: Commit and push changes
-        run: |
-          git add -A
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Sync repos: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-            git push
-            echo "Changes synced successfully!"
-          fi
+      - name: Rem
