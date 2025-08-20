@@ -58,8 +58,14 @@ jobs:
         run: |
           cd backend
           echo "Current directory: $(pwd)"
-          echo "Git remote status:"
+          echo "Git remote status before fix:"
           git remote -v || echo "No remotes configured yet"
+
+          echo "Configuring correct backend remote..."
+          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-backend
+          echo "Git remote status after fix:"
+          git remote -v
+
           echo "Fetching backend updates..."
           git fetch origin krishna/implement-phase-a1-admin-api-scaffold
           echo "Checking out backend branch..."
@@ -73,8 +79,14 @@ jobs:
         run: |
           cd frontend
           echo "Current directory: $(pwd)"
-          echo "Git remote status:"
+          echo "Git remote status before fix:"
           git remote -v || echo "No remotes configured yet"
+
+          echo "Configuring correct frontend remote..."
+          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-frontend
+          echo "Git remote status after fix:"
+          git remote -v
+
           echo "Fetching frontend updates..."
           git fetch origin
           echo "Checking out frontend branch..."
