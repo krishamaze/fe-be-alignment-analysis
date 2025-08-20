@@ -52,7 +52,20 @@ jobs:
           fi
           echo "✅ Frontend repository and branch accessible"
 
+      - name: Init submodules (force)
+        run: |
+          git submodule sync --recursive
+          git config -f .gitmodules submodule.backend.url \
+            https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-backend
+          git config -f .gitmodules submodule.frontend.url \
+            https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-frontend
+          git submodule sync --recursive
+          git submodule update --init --recursive --jobs 4
 
+      - name: Sanity check submodule remotes
+        run: |
+          git -C backend remote -v
+          git -C frontend remote -v
 
       - name: Sync Backend Branch
         run: |
