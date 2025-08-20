@@ -28,53 +28,38 @@ jobs:
           git config --local user.name "GitHub Action Auto-Sync"
           git config --local pull.ff only
 
-      - name: Verify Repository Access
+      - name: Verify Repository Access and Branches
         run: |
-          echo "Verifying access to backend repository..."
-          if ! git ls-remote --heads https://github.com/krishamaze/finetune-ERP-backend > /dev/null 2>&1; then
-            echo "❌ Cannot access backend repository. Check if:"
+          echo "Verifying access to backend repository and branch..."
+          if ! git ls-remote --exit-code https://github.com/krishamaze/finetune-ERP-backend krishna/implement-phase-a1-admin-api-scaffold; then
+            echo "❌ Cannot access backend repository or branch 'krishna/implement-phase-a1-admin-api-scaffold'. Check if:"
             echo "  - Repository exists and is accessible"
+            echo "  - Branch exists in the repository"
             echo "  - Personal Access Token has correct permissions"
             echo "  - Token is not expired"
             exit 1
           fi
-          echo "✅ Backend repository accessible"
+          echo "✅ Backend repository and branch accessible"
 
-          echo "Verifying access to frontend repository..."
-          if ! git ls-remote --heads https://github.com/krishamaze/finetune-ERP-frontend > /dev/null 2>&1; then
-            echo "❌ Cannot access frontend repository. Check if:"
+          echo "Verifying access to frontend repository and branch..."
+          if ! git ls-remote --exit-code https://github.com/krishamaze/finetune-ERP-frontend feature/dashboard-integration; then
+            echo "❌ Cannot access frontend repository or branch 'feature/dashboard-integration'. Check if:"
             echo "  - Repository exists and is accessible"
+            echo "  - Branch exists in the repository"
             echo "  - Personal Access Token has correct permissions"
             echo "  - Token is not expired"
             exit 1
           fi
-          echo "✅ Frontend repository accessible"
+          echo "✅ Frontend repository and branch accessible"
 
-      - name: Verify Backend Branch Exists
-        run: |
-          cd backend
-          echo "Checking if backend branch exists..."
-          if ! git ls-remote --exit-code origin krishna/implement-phase-a1-admin-api-scaffold; then
-            echo "❌ Backend branch 'krishna/implement-phase-a1-admin-api-scaffold' does not exist in remote repository"
-            exit 1
-          fi
-          echo "✅ Backend branch exists"
-          cd ..
 
-      - name: Verify Frontend Branch Exists
-        run: |
-          cd frontend
-          echo "Checking if frontend branch exists..."
-          if ! git ls-remote --exit-code origin feature/dashboard-integration; then
-            echo "❌ Frontend branch 'feature/dashboard-integration' does not exist in remote repository"
-            exit 1
-          fi
-          echo "✅ Frontend branch exists"
-          cd ..
 
       - name: Sync Backend Branch
         run: |
           cd backend
+          echo "Current directory: $(pwd)"
+          echo "Git remote status:"
+          git remote -v || echo "No remotes configured yet"
           echo "Fetching backend updates..."
           git fetch origin krishna/implement-phase-a1-admin-api-scaffold
           echo "Checking out backend branch..."
@@ -87,6 +72,9 @@ jobs:
       - name: Sync Frontend Branch
         run: |
           cd frontend
+          echo "Current directory: $(pwd)"
+          echo "Git remote status:"
+          git remote -v || echo "No remotes configured yet"
           echo "Fetching frontend updates..."
           git fetch origin
           echo "Checking out frontend branch..."
