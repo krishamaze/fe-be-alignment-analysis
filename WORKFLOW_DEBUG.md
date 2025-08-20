@@ -11,7 +11,12 @@ The workflow was failing at the "Verify Backend Branch Exists" step with:
 ### Root Cause
 The verification step was running `git ls-remote origin` from within the submodule directory, but the submodule's `origin` remote wasn't properly configured during the checkout process.
 
+**Additional Issue Discovered:**
+GitHub Actions checkout with submodules sets the submodule's `origin` remote to point to the parent repository instead of the actual submodule repository. This causes fetch operations to fail because the parent repo doesn't contain the submodule's branches.
+
 ### Solution Applied
+
+**Phase 1: Branch Verification Fix**
 Changed the branch verification to use full repository URLs instead of relying on local `origin` remotes:
 
 **Before:**
@@ -23,6 +28,16 @@ git ls-remote --exit-code origin krishna/implement-phase-a1-admin-api-scaffold
 **After:**
 ```bash
 git ls-remote --exit-code https://github.com/krishamaze/finetune-ERP-backend krishna/implement-phase-a1-admin-api-scaffold
+```
+
+**Phase 2: Remote Configuration Fix**
+Added remote URL correction in sync steps to fix the GitHub Actions submodule checkout issue:
+
+```bash
+cd backend
+# Fix the remote URL to point to actual backend repo instead of parent repo
+git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-backend
+git fetch origin krishna/implement-phase-a1-admin-api-scaffold
 ```
 
 ### Workflow Improvements Made
