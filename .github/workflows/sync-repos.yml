@@ -12,7 +12,7 @@ jobs:
       - name: Checkout analysis repo
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.WRITE_TOKEN }}
+          token: ${{ secrets.WRITE_TOKEN || github.token }}
           fetch-depth: 1
 
       - name: Configure git
@@ -26,15 +26,11 @@ jobs:
           
       - name: Clone Frontend
         run: |
-          git clone --depth 1 --branch feature/dashboard-integration \
-            https://${{ secrets.READ_TOKEN }}@github.com/krishamaze/finetune-ERP-frontend.git \
-            temp-frontend
+          git clone --depth 1 --branch feature/dashboard-integration https://${{ secrets.READ_TOKEN }}@github.com/krishamaze/finetune-ERP-frontend.git temp-frontend
           
       - name: Clone Backend  
         run: |
-          git clone --depth 1 --branch krishna/implement-phase-a1-admin-api-scaffold \
-            https://${{ secrets.READ_TOKEN }}@github.com/krishamaze/finetune-ERP-backend.git \
-            temp-backend
+          git clone --depth 1 --branch krishna/implement-phase-a1-admin-api-scaffold https://${{ secrets.READ_TOKEN }}@github.com/krishamaze/finetune-ERP-backend.git temp-backend
 
       - name: Copy files (excluding git history)
         run: |
