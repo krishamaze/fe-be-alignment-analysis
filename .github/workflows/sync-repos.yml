@@ -29,35 +29,37 @@ jobs:
           git config user.name "sync-bot"
           git config user.email "sync-bot@krishamaze.com"
 
-      - name: Remove existing folders
+      - name: Clean work dirs
         run: rm -rf frontend backend temp-frontend temp-backend
 
-      - name: Clone Frontend
+      - name: Clone Frontend (private repo via Basic header)
         env:
-          READ_PAT: ${{ secrets.READ_TOKEN }}
-          FE_URL: ${{ vars.FE_REPO_URL }}   # e.g., https://github.com/krishamaze/finetune-ERP-frontend.git
+          READ_PAT: ${{ secrets.READ_TOKEN }}      # classic: repo scope OR fine-grained: Contents:Read on FE/BE
+          FE_URL:  ${{ vars.FE_REPO_URL }}        # e.g. https://github.com/krishamaze/finetune-ERP-frontend.git
         shell: bash
         run: |
           set -euo pipefail
+          CLEAN_PAT="$(printf '%s' "$READ_PAT" | tr -d '\r\n')"
+          FE_URL="${FE_URL%/}"
+          BASIC="$(printf 'x-access-token:%s' "$CLEAN_PAT" | base64 -w0 2>/dev/null || printf 'x-access-token:%s' "$CLEAN_PAT" | base64 | tr -d '\n')"
           echo "Cloning Frontend…"
-          # Extract the repo path without https://
-          REPO_PATH="${FE_URL#https://github.com/}"
-          git clone --depth 1 --branch feature/dashboard-integration \
-            "https://x-access-token:${READ_PAT}@github.com/${REPO_PATH}" temp-frontend
+          git -c http.extraHeader="Authorization: Basic ${BASIC}" \
+              clone --depth 1 --branch feature/dashboard-integration "$FE_URL" temp-frontend
           test -d temp-frontend/.git || { echo "Frontend checkout failed"; exit 1; }
 
-      - name: Clone Backend
+      - name: Clone Backend (private repo via Basic header)
         env:
           READ_PAT: ${{ secrets.READ_TOKEN }}
-          BE_URL: ${{ vars.BE_REPO_URL }}   # e.g., https://github.com/krishamaze/finetune-ERP-backend.git
+          BE_URL:  ${{ vars.BE_REPO_URL }}        # e.g. https://github.com/krishamaze/finetune-ERP-backend.git
         shell: bash
         run: |
           set -euo pipefail
+          CLEAN_PAT="$(printf '%s' "$READ_PAT" | tr -d '\r\n')"
+          BE_URL="${BE_URL%/}"
+          BASIC="$(printf 'x-access-token:%s' "$CLEAN_PAT" | base64 -w0 2>/dev/null || printf 'x-access-token:%s' "$CLEAN_PAT" | base64 | tr -d '\n')"
           echo "Cloning Backend…"
-          # Extract the repo path without https://
-          REPO_PATH="${BE_URL#https://github.com/}"
-          git clone --depth 1 --branch krishna/implement-phase-a1-admin-api-scaffold \
-            "https://x-access-token:${READ_PAT}@github.com/${REPO_PATH}" temp-backend
+          git -c http.extraHeader="Authorization: Basic ${BASIC}" \
+              clone --depth 1 --branch krishna/implement-phase-a1-admin-api-scaffold "$BE_URL" temp-backend
           test -d temp-backend/.git || { echo "Backend checkout failed"; exit 1; }
 
       - name: Copy files (excluding git history)
