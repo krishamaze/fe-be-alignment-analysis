@@ -19,7 +19,7 @@ jobs:
       - name: Checkout analysis repo
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.WRITE_TOKEN || github.token }}
+          token: ${{ secrets.ANALYSIS_WRITE_TOKEN || github.token }}
           fetch-depth: 1
 
       - name: Configure git
@@ -34,30 +34,32 @@ jobs:
 
       - name: Clone Frontend
         env:
-          READ_PAT: ${{ secrets.READ_TOKEN }}
+          FE_READ_PAT: ${{ secrets.FE_READ_TOKEN }}
           FE_URL: ${{ vars.FE_REPO_URL }}   # e.g., https://github.com/krishamaze/finetune-ERP-frontend.git
+          FE_BRANCH: ${{ vars.FE_BRANCH }}
         shell: bash
         run: |
           set -euo pipefail
           echo "Cloning Frontend…"
           # Extract the repo path without https://
           REPO_PATH="${FE_URL#https://github.com/}"
-          git clone --depth 1 --branch feature/dashboard-integration \
-            "https://x-access-token:${READ_PAT}@github.com/${REPO_PATH}" temp-frontend
+          git clone --depth 1 --branch "${FE_BRANCH}" \
+            "https://x-access-token:${FE_READ_PAT}@github.com/${REPO_PATH}" temp-frontend
           test -d temp-frontend/.git || { echo "Frontend checkout failed"; exit 1; }
 
       - name: Clone Backend
         env:
-          READ_PAT: ${{ secrets.READ_TOKEN }}
+          BE_READ_PAT: ${{ secrets.BE_READ_TOKEN }}
           BE_URL: ${{ vars.BE_REPO_URL }}   # e.g., https://github.com/krishamaze/finetune-ERP-backend.git
+          BE_BRANCH: ${{ vars.BE_BRANCH }}
         shell: bash
         run: |
           set -euo pipefail
           echo "Cloning Backend…"
           # Extract the repo path without https://
           REPO_PATH="${BE_URL#https://github.com/}"
-          git clone --depth 1 --branch krishna/implement-phase-a1-admin-api-scaffold \
-            "https://x-access-token:${READ_PAT}@github.com/${REPO_PATH}" temp-backend
+          git clone --depth 1 --branch "${BE_BRANCH}" \
+            "https://x-access-token:${BE_READ_PAT}@github.com/${REPO_PATH}" temp-backend
           test -d temp-backend/.git || { echo "Backend checkout failed"; exit 1; }
 
       - name: Copy files (excluding git history)
@@ -86,8 +88,8 @@ jobs:
             echo
             echo "**Last Synced:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
             echo
-            echo "**Frontend Branch:** feature/dashboard-integration"
-            echo "**Backend Branch:** krishna/implement-phase-a1-admin-api-scaffold"
+            echo "**Frontend Branch:** ${{ vars.FE_BRANCH }}"
+            echo "**Backend Branch:** ${{ vars.BE_BRANCH }}"
             echo
             echo "**Frontend Repo:** ${{ vars.FE_REPO_URL }}"
             echo "**Backend Repo:** ${{ vars.BE_REPO_URL }}"
