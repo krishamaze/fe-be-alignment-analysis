@@ -19,7 +19,7 @@ jobs:
       - name: Checkout analysis repo
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.WRITE_TOKEN || github.token }}
+          token: ${{ secrets.WRITE_TOKEN }}   # RW access to analysis repo
           fetch-depth: 1
 
       - name: Configure git
@@ -30,22 +30,22 @@ jobs:
       - name: Clean work dirs
         run: rm -rf frontend backend temp-frontend temp-backend
 
-      - name: Checkout Frontend (private repo)
+      - name: Checkout Frontend
         uses: actions/checkout@v4
         with:
           repository: krishamaze/finetune-ERP-frontend
           ref: feature/dashboard-integration
           path: temp-frontend
-          token: ${{ secrets.READ_TOKEN }}
+          token: ${{ secrets.READ_TOKEN }}   # Read-only PAT
           persist-credentials: false
 
-      - name: Checkout Backend (private repo)
+      - name: Checkout Backend
         uses: actions/checkout@v4
         with:
           repository: krishamaze/finetune-ERP-backend
           ref: krishna/implement-phase-a1-admin-api-scaffold
           path: temp-backend
-          token: ${{ secrets.READ_TOKEN }}
+          token: ${{ secrets.READ_TOKEN }}   # Read-only PAT
           persist-credentials: false
 
       - name: Copy files (excluding git history)
@@ -73,8 +73,8 @@ jobs:
             echo "**Frontend Branch:** feature/dashboard-integration"
             echo "**Backend Branch:** krishna/implement-phase-a1-admin-api-scaffold"
             echo
-            echo "**Frontend Repo:** https://github.com/krishamaze/finetune-ERP-frontend"
-            echo "**Backend Repo:** https://github.com/krishamaze/finetune-ERP-backend"
+            echo "**Frontend Repo:** ${{ vars.FE_REPO_URL }}"
+            echo "**Backend Repo:** ${{ vars.BE_REPO_URL }}"
           } > SYNC_INFO.md
 
       - name: Commit and push changes
