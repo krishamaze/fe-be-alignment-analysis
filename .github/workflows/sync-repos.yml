@@ -40,8 +40,10 @@ jobs:
         run: |
           set -euo pipefail
           echo "Cloning Frontend…"
+          # Extract the repo path without https://
+          REPO_PATH="${FE_URL#https://github.com/}"
           git clone --depth 1 --branch feature/dashboard-integration \
-            "https://x-access-token:${READ_PAT}@${FE_URL#https://}" temp-frontend
+            "https://x-access-token:${READ_PAT}@github.com/${REPO_PATH}" temp-frontend
           test -d temp-frontend/.git || { echo "Frontend checkout failed"; exit 1; }
 
       - name: Clone Backend
@@ -52,8 +54,10 @@ jobs:
         run: |
           set -euo pipefail
           echo "Cloning Backend…"
+          # Extract the repo path without https://
+          REPO_PATH="${BE_URL#https://github.com/}"
           git clone --depth 1 --branch krishna/implement-phase-a1-admin-api-scaffold \
-            "https://x-access-token:${READ_PAT}@${BE_URL#https://}" temp-backend
+            "https://x-access-token:${READ_PAT}@github.com/${REPO_PATH}" temp-backend
           test -d temp-backend/.git || { echo "Backend checkout failed"; exit 1; }
 
       - name: Copy files (excluding git history)
