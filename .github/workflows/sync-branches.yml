@@ -61,7 +61,7 @@ jobs:
           fi
           echo "✅ Frontend repository and branch accessible"
 
-      - name: Init submodules (force)
+      - name: Setup submodules (with fallback)
         run: |
           echo "Current submodule status:"
           git submodule status || echo "No submodules initialized"
@@ -69,18 +69,33 @@ jobs:
           echo "Cleaning up any existing submodule state..."
           rm -rf backend frontend || true
 
-          echo "Configuring submodule URLs with authentication..."
+          echo "Attempting submodule initialization..."
           git config -f .gitmodules submodule.backend.url \
             https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-backend
           git config -f .gitmodules submodule.frontend.url \
             https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-frontend
 
-          echo "Syncing and initializing submodules..."
           git submodule sync --recursive
-          git submodule update --init --recursive --jobs 4
+          if ! git submodule update --init --recursive --jobs 4; then
+            echo "⚠️ Submodule initialization failed, falling back to manual clone..."
 
-          echo "Final submodule status:"
-          git submodule status
+            echo "Cloning backend repository..."
+            git clone -b krishna/implement-phase-a1-admin-api-scaffold \
+              https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-backend \
+              backend
+
+            echo "Cloning frontend repository..."
+            git clone -b feature/dashboard-integration \
+              https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-frontend \
+              frontend
+
+            echo "✅ Manual clone completed successfully"
+          else
+            echo "✅ Submodule initialization successful"
+          fi
+
+          echo "Final status:"
+          ls -la backend/ frontend/ || echo "Directories not found"
 
       - name: Sanity check submodule remotes
         run: |
@@ -108,18 +123,12 @@ jobs:
         run: |
           cd backend
           echo "Current directory: $(pwd)"
-          echo "Git remote status before fix:"
-          git remote -v || echo "No remotes configured yet"
-
-          echo "Configuring correct backend remote..."
-          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-backend
-          echo "Git remote status after fix:"
+          echo "Current branch: $(git branch --show-current)"
+          echo "Git remote status:"
           git remote -v
 
-          echo "Fetching backend updates..."
-          git fetch origin krishna/implement-phase-a1-admin-api-scaffold
-          echo "Checking out backend branch..."
-          git checkout -B krishna/implement-phase-a1-admin-api-scaffold origin/krishna/implement-phase-a1-admin-api-scaffold
+          echo "Fetching latest changes..."
+          git fetch origin
           echo "Pulling latest changes..."
           git pull --ff-only
           echo "✅ Backend synced to: $(git rev-parse --short HEAD)"
@@ -129,18 +138,12 @@ jobs:
         run: |
           cd frontend
           echo "Current directory: $(pwd)"
-          echo "Git remote status before fix:"
-          git remote -v || echo "No remotes configured yet"
-
-          echo "Configuring correct frontend remote..."
-          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-frontend
-          echo "Git remote status after fix:"
+          echo "Current branch: $(git branch --show-current)"
+          echo "Git remote status:"
           git remote -v
 
-          echo "Fetching frontend updates..."
+          echo "Fetching latest changes..."
           git fetch origin
-          echo "Checking out frontend branch..."
-          git checkout -B feature/dashboard-integration origin/feature/dashboard-integration
           echo "Pulling latest changes..."
           git pull --ff-only
           echo "✅ Frontend synced to: $(git rev-parse --short HEAD)"
