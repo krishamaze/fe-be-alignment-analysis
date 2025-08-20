@@ -23,49 +23,33 @@ jobs:
           fetch-depth: 1
 
       - name: Configure git
-        shell: bash
         run: |
-          set -euo pipefail
           git config user.name "sync-bot"
           git config user.email "sync-bot@krishamaze.com"
 
       - name: Clean work dirs
         run: rm -rf frontend backend temp-frontend temp-backend
 
-      - name: Clone Frontend (private repo via Basic header)
-        env:
-          READ_PAT: ${{ secrets.READ_TOKEN }}      # classic: repo scope OR fine-grained: Contents:Read on FE/BE
-          FE_URL:  ${{ vars.FE_REPO_URL }}        # e.g. https://github.com/krishamaze/finetune-ERP-frontend.git
-        shell: bash
-        run: |
-          set -euo pipefail
-          CLEAN_PAT="$(printf '%s' "$READ_PAT" | tr -d '\r\n')"
-          FE_URL="${FE_URL%/}"
-          BASIC="$(printf 'x-access-token:%s' "$CLEAN_PAT" | base64 -w0 2>/dev/null || printf 'x-access-token:%s' "$CLEAN_PAT" | base64 | tr -d '\n')"
-          echo "Cloning Frontend…"
-          git -c http.extraHeader="Authorization: Basic ${BASIC}" \
-              clone --depth 1 --branch feature/dashboard-integration "$FE_URL" temp-frontend
-          test -d temp-frontend/.git || { echo "Frontend checkout failed"; exit 1; }
+      - name: Checkout Frontend (private repo)
+        uses: actions/checkout@v4
+        with:
+          repository: krishamaze/finetune-ERP-frontend
+          ref: feature/dashboard-integration
+          path: temp-frontend
+          token: ${{ secrets.READ_TOKEN }}
+          persist-credentials: false
 
-      - name: Clone Backend (private repo via Basic header)
-        env:
-          READ_PAT: ${{ secrets.READ_TOKEN }}
-          BE_URL:  ${{ vars.BE_REPO_URL }}        # e.g. https://github.com/krishamaze/finetune-ERP-backend.git
-        shell: bash
-        run: |
-          set -euo pipefail
-          CLEAN_PAT="$(printf '%s' "$READ_PAT" | tr -d '\r\n')"
-          BE_URL="${BE_URL%/}"
-          BASIC="$(printf 'x-access-token:%s' "$CLEAN_PAT" | base64 -w0 2>/dev/null || printf 'x-access-token:%s' "$CLEAN_PAT" | base64 | tr -d '\n')"
-          echo "Cloning Backend…"
-          git -c http.extraHeader="Authorization: Basic ${BASIC}" \
-              clone --depth 1 --branch krishna/implement-phase-a1-admin-api-scaffold "$BE_URL" temp-backend
-          test -d temp-backend/.git || { echo "Backend checkout failed"; exit 1; }
+      - name: Checkout Backend (private repo)
+        uses: actions/checkout@v4
+        with:
+          repository: krishamaze/finetune-ERP-backend
+          ref: krishna/implement-phase-a1-admin-api-scaffold
+          path: temp-backend
+          token: ${{ secrets.READ_TOKEN }}
+          persist-credentials: false
 
       - name: Copy files (excluding git history)
-        shell: bash
         run: |
-          set -euo pipefail
           mkdir -p frontend backend
           cp -r temp-frontend/* frontend/ 2>/dev/null || true
           cp -r temp-frontend/.[!.]* frontend/ 2>/dev/null || true
@@ -80,9 +64,7 @@ jobs:
           find frontend backend -name ".git" -type d -exec rm -rf {} + 2>/dev/null || true
 
       - name: Create sync info
-        shell: bash
         run: |
-          set -euo pipefail
           {
             echo "# Repo Sync Information"
             echo
@@ -91,14 +73,12 @@ jobs:
             echo "**Frontend Branch:** feature/dashboard-integration"
             echo "**Backend Branch:** krishna/implement-phase-a1-admin-api-scaffold"
             echo
-            echo "**Frontend Repo:** ${{ vars.FE_REPO_URL }}"
-            echo "**Backend Repo:** ${{ vars.BE_REPO_URL }}"
+            echo "**Frontend Repo:** https://github.com/krishamaze/finetune-ERP-frontend"
+            echo "**Backend Repo:** https://github.com/krishamaze/finetune-ERP-backend"
           } > SYNC_INFO.md
 
       - name: Commit and push changes
-        shell: bash
         run: |
-          set -euo pipefail
           git add -A
           if git diff --cached --quiet; then
             echo "No changes to commit"
