@@ -9,7 +9,9 @@ fe-be-alignment-analysis/
 ├── backend/          # Submodule: krishamaze/finetune-ERP-backend
 ├── frontend/         # Submodule: krishamaze/finetune-ERP-frontend
 ├── .gitmodules       # Submodule configuration
-└── .github/workflows/sync-branches.yml  # Auto-sync workflow
+└── .github/workflows/
+    ├── sync-branches.yml  # Auto-sync workflow
+    └── sync-repos.yml     # Subtree-based repo sync
 ```
 
 ## Submodule Configuration
@@ -62,6 +64,17 @@ The sync workflow runs:
 - **Every 2 hours** (scheduled via cron)
 - **Manual trigger** (workflow_dispatch)
 - **Repository dispatch** (external API calls)
+
+## Subtree Sync Workflow
+
+An additional workflow (`.github/workflows/sync-repos.yml`) mirrors the frontend and backend repositories into this analysis repository using `git subtree`.
+
+- **Authentication**: requires a `SYNC_TOKEN` secret with access to both repositories
+- **Schedule**: runs every 6 hours and supports manual or repository dispatch triggers
+- **Process**:
+  - Adds remotes for the frontend and backend repos
+  - Syncs `frontend/` and `backend/` with `git subtree pull` (falling back to `git subtree add` on first run)
+  - Commits and pushes changes as `sync-bot`
 
 ## Manual Testing
 
