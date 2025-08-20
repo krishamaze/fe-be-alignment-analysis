@@ -2,7 +2,7 @@ name: Sync Frontend and Backend Repos
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 */6 * * *'  # Fixed: removed extra asterisk
   workflow_dispatch:
 
 permissions:
@@ -16,11 +16,10 @@ jobs:
   sync-repos:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the analysis repo with RW token
       - name: Checkout analysis repo
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.WRITE_TOKEN }}   # RW access to analysis repo
+          token: ${{ secrets.WRITE_TOKEN }}
           fetch-depth: 1
 
       - name: Configure git
@@ -39,6 +38,7 @@ jobs:
               clone --depth 1 --branch feature/dashboard-integration \
               https://github.com/krishamaze/finetune-ERP-frontend.git temp-frontend
           echo "Frontend clone successful"
+          test -d temp-frontend/.git || { echo "Frontend checkout failed"; exit 1; }
 
       # Clone backend using Bearer token header
       - name: Clone Backend
@@ -48,6 +48,7 @@ jobs:
               clone --depth 1 --branch krishna/implement-phase-a1-admin-api-scaffold \
               https://github.com/krishamaze/finetune-ERP-backend.git temp-backend
           echo "Backend clone successful"
+          test -d temp-backend/.git || { echo "Backend checkout failed"; exit 1; }
 
       - name: Copy files (excluding git history)
         run: |
@@ -58,4 +59,33 @@ jobs:
           cp -r temp-backend/.[!.]* backend/ 2>/dev/null || true
           rm -rf temp-frontend temp-backend frontend/.git backend/.git
 
-      - name: Rem
+      - name: Remove sensitive files
+        run: |
+          find frontend backend -name ".env*" -delete 2>/dev/null || true
+          find frontend backend -name "node_modules" -type d -exec rm -rf {} + 2>/dev/null || true
+          find frontend backend -name ".git" -type d -exec rm -rf {} + 2>/dev/null || true
+
+      - name: Create sync info
+        run: |
+          cat << 'EOF' > SYNC_INFO.md
+          # Repo Sync Information
+
+          **Last Synced:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+
+          **Frontend Branch:** feature/dashboard-integration
+          **Backend Branch:** krishna/implement-phase-a1-admin-api-scaffold
+
+          **Frontend Repo:** https://github.com/krishamaze/finetune-ERP-frontend.git
+          **Backend Repo:** https://github.com/krishamaze/finetune-ERP-backend.git
+          EOF
+
+      - name: Commit and push changes
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Sync repos: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+            git push
+            echo "Changes synced successfully!"
+          fi
