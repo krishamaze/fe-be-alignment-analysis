@@ -28,6 +28,15 @@ jobs:
           git config --local user.name "GitHub Action Auto-Sync"
           git config --local pull.ff only
 
+      - name: Debug checkout state
+        run: |
+          echo "Repository root contents:"
+          ls -la
+          echo "Submodule configuration:"
+          cat .gitmodules
+          echo "Git submodule status after checkout:"
+          git submodule status || echo "No submodules found"
+
       - name: Verify Repository Access and Branches
         run: |
           echo "Verifying access to backend repository and branch..."
@@ -54,18 +63,46 @@ jobs:
 
       - name: Init submodules (force)
         run: |
-          git submodule sync --recursive
+          echo "Current submodule status:"
+          git submodule status || echo "No submodules initialized"
+
+          echo "Cleaning up any existing submodule state..."
+          rm -rf backend frontend || true
+
+          echo "Configuring submodule URLs with authentication..."
           git config -f .gitmodules submodule.backend.url \
             https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-backend
           git config -f .gitmodules submodule.frontend.url \
             https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-frontend
+
+          echo "Syncing and initializing submodules..."
           git submodule sync --recursive
           git submodule update --init --recursive --jobs 4
 
+          echo "Final submodule status:"
+          git submodule status
+
       - name: Sanity check submodule remotes
         run: |
-          git -C backend remote -v
-          git -C frontend remote -v
+          echo "Checking backend submodule:"
+          if [ -d "backend/.git" ]; then
+            echo "✅ Backend is a proper git repository"
+            git -C backend remote -v
+          else
+            echo "❌ Backend is not a proper git repository"
+            ls -la backend/ || echo "Backend directory does not exist"
+            exit 1
+          fi
+
+          echo "Checking frontend submodule:"
+          if [ -d "frontend/.git" ]; then
+            echo "✅ Frontend is a proper git repository"
+            git -C frontend remote -v
+          else
+            echo "❌ Frontend is not a proper git repository"
+            ls -la frontend/ || echo "Frontend directory does not exist"
+            exit 1
+          fi
 
       - name: Sync Backend Branch
         run: |
