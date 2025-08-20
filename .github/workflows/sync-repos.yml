@@ -1,0 +1,37 @@
+name: Sync Frontend and Backend
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+  repository_dispatch:
+
+jobs:
+  sync-repos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout analysis repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.SYNC_TOKEN }}
+          fetch-depth: 0
+
+      - name: Sync Frontend
+        run: |
+          git remote add fe-origin https://${{ secrets.SYNC_TOKEN }}@github.com/your-org/frontend-repo.git
+          git fetch fe-origin
+          git subtree pull --prefix=frontend fe-origin main --squash || git subtree add --prefix=frontend fe-origin main --squash
+
+      - name: Sync Backend
+        run: |
+          git remote add be-origin https://${{ secrets.SYNC_TOKEN }}@github.com/your-org/backend-repo.git
+          git fetch be-origin
+          git subtree pull --prefix=backend be-origin main --squash || git subtree add --prefix=backend be-origin main --squash
+
+      - name: Commit and push
+        run: |
+          git config user.name "sync-bot"
+          git config user.email "sync@yourorg.com"
+          git add .
+          git diff --staged --quiet || git commit -m "Sync repos: $(date)"
+          git push
