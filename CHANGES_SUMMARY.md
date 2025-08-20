@@ -70,19 +70,38 @@
 | Workflow Logic | ✅ Fixed | Remote configuration and verification corrected |
 | Authentication | ⚠️ Pending | Requires `PERSONAL_ACCESS_TOKEN` secret |
 
-## Expected Workflow Behavior
+## Final Solution: Hybrid Approach with Fallback
 
-1. **Repository Access and Branch Verification**: ✅ Should pass
-2. **Sync Backend Branch**: 
-   - Corrects remote URL to point to backend repository
-   - Fetches latest changes from target branch
-   - Checks out and pulls updates
-3. **Sync Frontend Branch**:
-   - Corrects remote URL to point to frontend repository  
-   - Fetches latest changes from target branch
-   - Checks out and pulls updates
-4. **Commit Updates**: Commits any submodule changes to analysis repository
+### Issue 3: Submodule Initialization Failure
+**Problem:** `git submodule update --init` failing silently, leaving no backend/frontend directories
+**Root Cause:** Personal Access Token permissions or submodule configuration issues
+**Solution:** Hybrid approach with automatic fallback to manual clone
+
+### Updated Workflow Behavior
+
+1. **Repository Access and Branch Verification**: ✅ Verified working
+2. **Setup Submodules (with fallback)**:
+   - Attempts standard submodule initialization
+   - If that fails, automatically falls back to manual clone
+   - Ensures repositories are always available
+3. **Sync Backend/Frontend Branches**:
+   - Simplified since repositories are cloned with correct branches
+   - Just fetch and pull latest changes
+4. **Commit Updates**: Commits any changes to analysis repository
 5. **Summary**: Provides detailed sync report
+
+### Fallback Logic
+```yaml
+if ! git submodule update --init --recursive --jobs 4; then
+  echo "⚠️ Submodule initialization failed, falling back to manual clone..."
+  git clone -b krishna/implement-phase-a1-admin-api-scaffold \
+    https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-backend \
+    backend
+  git clone -b feature/dashboard-integration \
+    https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/krishamaze/finetune-ERP-frontend \
+    frontend
+fi
+```
 
 ## Next Steps
 
