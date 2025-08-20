@@ -30,23 +30,21 @@ jobs:
       - name: Clean work dirs
         run: rm -rf frontend backend temp-frontend temp-backend
 
-      # Clone frontend using Bearer token header
+      # Clone frontend using token authentication
       - name: Clone Frontend
         run: |
           echo "Cloning Frontend..."
-          git -c http.extraHeader="Authorization: Bearer ${{ secrets.READ_TOKEN }}" \
-              clone --depth 1 --branch feature/dashboard-integration \
-              https://github.com/krishamaze/finetune-ERP-frontend.git temp-frontend
+          git clone --depth 1 --branch feature/dashboard-integration \
+              https://x-access-token:${{ secrets.READ_TOKEN }}@github.com/krishamaze/finetune-ERP-frontend.git temp-frontend
           echo "Frontend clone successful"
           test -d temp-frontend/.git || { echo "Frontend checkout failed"; exit 1; }
 
-      # Clone backend using Bearer token header
+      # Clone backend using token authentication
       - name: Clone Backend
         run: |
           echo "Cloning Backend..."
-          git -c http.extraHeader="Authorization: Bearer ${{ secrets.READ_TOKEN }}" \
-              clone --depth 1 --branch krishna/implement-phase-a1-admin-api-scaffold \
-              https://github.com/krishamaze/finetune-ERP-backend.git temp-backend
+          git clone --depth 1 --branch krishna/implement-phase-a1-admin-api-scaffold \
+              https://x-access-token:${{ secrets.READ_TOKEN }}@github.com/krishamaze/finetune-ERP-backend.git temp-backend
           echo "Backend clone successful"
           test -d temp-backend/.git || { echo "Backend checkout failed"; exit 1; }
 
