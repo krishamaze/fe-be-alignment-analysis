@@ -217,13 +217,7 @@ function Partners() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="mailto:partnerships@techstore.com"
-              className="bg-white text-keyline px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-            >
-              Contact Us
-            </a>
-            <a
-              href="tel:+91-1800-123-4567"
+              href="tel:+919791151863"
               className="border border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-keyline transition-colors"
             >
               Call Now

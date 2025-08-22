@@ -25,3 +25,9 @@
 ## Deprecation policy
 
 _TODO: document how deprecated endpoints will be communicated and sunset._
+
+## Business details source
+
+- Address: `legacy_django/serviceapp/templates/serviceapp/locate.html`
+- Support phone: `legacy_django/serviceapp/views.py`
+- Email/GST/CIN: not present in legacy system
