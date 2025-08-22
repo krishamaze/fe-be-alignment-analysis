@@ -16,6 +16,7 @@
 - Shared `Navbar` and `Footer` wrap all public pages.
 - Added SEO metadata (title, description, OG tags) for each page.
 - Contact and schedule-call forms use reCAPTCHA with client-side throttling.
+- Cleaned up leftover debug text in `ScheduleCall.jsx` metadata setup.
 - Index page fetches brand data from `/api/marketing/brands/` with loading, error, and empty states.
 
 ## SEO & Performance Notes
