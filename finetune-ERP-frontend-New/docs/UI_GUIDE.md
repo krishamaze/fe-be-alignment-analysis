@@ -53,3 +53,7 @@ Giveaway Redemption and Workledger tiles navigate to `/giveaway-redemption` and 
 - Apply the `.input` utility on all fields for consistent styling.
 - Display `AppLoader` during async submission and surface errors with toasts.
 - Include Google reCAPTCHA using `VITE_RECAPTCHA_SITE_KEY` and throttle repeat submissions for 30 seconds.
+
+## SEO metadata
+
+- Public pages should set `document.title` and update `description` and Open Graph meta tags via `useEffect`.
