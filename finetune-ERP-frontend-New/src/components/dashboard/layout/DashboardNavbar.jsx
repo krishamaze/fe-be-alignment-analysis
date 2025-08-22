@@ -17,9 +17,9 @@ function DashboardNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    dispatch(logoutUser()).finally(() => {
-      navigate('/login');
-    });
+      dispatch(logoutUser()).finally(() => {
+        navigate('/teamlogin');
+      });
   };
 
   return (
