@@ -1,5 +1,6 @@
+  import { Link } from 'react-router-dom';
   import logo from '/src/assets/logo.png';
-  
+
   function Hero() {
     return (
       <section 
@@ -15,12 +16,24 @@
             Expert mobile & gadget repair, trusted by thousands. Visit us or book online in seconds.
           </p>
           <div className="mt-6 w-full flex flex-col md:flex-row gap-4 justify-center md:justify-start">
-            <a href="https://wa.me/919994422442" className="bg-[#128C7E] text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition">
+            <a
+              href="https://wa.me/919994422442"
+              className="bg-[#128C7E] text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition"
+            >
               Book via WhatsApp
             </a>
-            <a href="#services" className="bg-white text-black px-6 py-3 rounded-lg border hover:bg-gray-100 transition">
+            <a
+              href="#services"
+              className="bg-white text-black px-6 py-3 rounded-lg border hover:bg-gray-100 transition"
+            >
               View Services
             </a>
+            <Link
+              to="/schedule-call"
+              className="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition"
+            >
+              Schedule a Call
+            </Link>
           </div>
         </div>
 

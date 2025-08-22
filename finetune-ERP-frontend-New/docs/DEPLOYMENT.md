@@ -20,6 +20,12 @@ Optimised for static hosts such as [Vercel](https://vercel.com); see `vercel.jso
 | Staging | TODO | TODO |
 | Production | TODO | TODO |
 
+## Environment variables
+
+| Variable | Purpose |
+|----------|---------|
+| `VITE_RECAPTCHA_SITE_KEY` | Google reCAPTCHA site key for public forms |
+
 ## Caching
 
 Serve `dist` assets with long‑term cache headers. HTML should be cached for a short time and serve `index.html` on unknown routes.

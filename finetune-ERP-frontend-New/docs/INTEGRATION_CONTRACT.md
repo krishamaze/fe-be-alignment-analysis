@@ -18,6 +18,8 @@
 | Branch head assignment | `assignBranchHeadToStore` / `unassignBranchHeadFromStore` | `POST /api/stores/:id/assign-branch-head` |
 | Auth login | `loginUser` (auth slice) | `POST /api/auth/login` (returns tokens and user info) |
 | Token refresh | auto refresh | `POST /api/token/refresh` |
+| Contact form | axios post | `POST /api/marketing/contact/` |
+| Schedule call form | axios post | `POST /api/marketing/schedule-call/` |
 
 ## Deprecation policy
 

@@ -1,5 +1,6 @@
 import Navbar from './components/common/Navbar';
 import EcommerceNavbar from './components/ecommerce/Navbar';
+import Footer from './components/common/Footer';
 import Hero from '../src/pages/Hero';
 import TeamLogin from './components/auth/TeamLogin';
 import Signup from './components/ecommerce/Signup';
@@ -24,6 +25,7 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Locate from './pages/Locate';
 import Terms from './pages/Terms';
+import ScheduleCall from './pages/ScheduleCall';
 
 // E-commerce pages
 import Shop from './pages/ecommerce/Shop';
@@ -53,10 +55,8 @@ function AppContent() {
 
   return (
     <>
-      {location.pathname !== '/dashboard' && (
-        isEcommerceRoute ? 
-        <EcommerceNavbar /> 
-        : <Navbar />
+      {!location.pathname.startsWith('/dashboard') && (
+        isEcommerceRoute ? <EcommerceNavbar /> : <Navbar />
       )}
       <Routes>
         <Route path="/" element={<Hero />} />
@@ -76,6 +76,7 @@ function AppContent() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/locate" element={<Locate />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/schedule-call" element={<ScheduleCall />} />
 
         <Route
           path="/workledger/*"
@@ -114,6 +115,7 @@ function AppContent() {
         </Route>
         {/* <Route path="*" element={<Navigate to="/" />} /> */}
       </Routes>
+      {!location.pathname.startsWith('/dashboard') && <Footer />}
     </>
   );
 }

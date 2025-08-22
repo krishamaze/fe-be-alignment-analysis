@@ -47,3 +47,9 @@ Giveaway Redemption and Workledger tiles navigate to `/giveaway-redemption` and 
   - *Active:* increase keyline width by 0.5–1px or add a subtle inset shadow.
   - *Focus:* show a brand-colored ring offset 2–3px from the element.
 - **Primary CTA:** solid black button with white text; all other elements rely on brand keylines.
+
+## Public form pattern
+
+- Apply the `.input` utility on all fields for consistent styling.
+- Display `AppLoader` during async submission and surface errors with toasts.
+- Include Google reCAPTCHA using `VITE_RECAPTCHA_SITE_KEY` and throttle repeat submissions for 30 seconds.

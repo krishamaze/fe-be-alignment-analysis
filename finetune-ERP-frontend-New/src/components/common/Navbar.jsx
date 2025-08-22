@@ -15,9 +15,10 @@ function Navbar() {
   const isLoginPage = location.pathname === '/teamlogin';
   // Navigation links
   const navLinks = [
-    { name: 'About Us', href: '#about' },
-    { name: 'Locate Us', href: '#' },
-    ...(isLoginPage ? [] : [{ name: 'Login', href: loginTarget }])
+    { name: 'About', href: '/about' },
+    { name: 'Locate', href: '/locate' },
+    { name: 'Contact', href: '/contact' },
+    ...(isLoginPage ? [] : [{ name: 'Login', href: loginTarget }]),
   ];
 
   // Close on outside click
@@ -65,7 +66,7 @@ function Navbar() {
                   </button>
                 </Link>
               ) : (
-                <a href={link.href}>{link.name}</a>
+                <Link to={link.href}>{link.name}</Link>
               )}
             </li>
           ))}
@@ -94,22 +95,19 @@ function Navbar() {
         >
           {navLinks.map((link) => (
             link.name === 'Login' ? (
-              <Link
-                key={link.name}
-                to={loginTarget}
-              >
+              <Link key={link.name} to={loginTarget}>
                 <button className='w-full bg-black text-white px-4 py-2 rounded hover:bg-gray-800'>
                   {token ? 'Dashboard' : 'Login'}
                 </button>
               </Link>
             ) : (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
+                to={link.href}
                 className="block text-gray-700 hover:text-keyline"
               >
                 {link.name}
-              </a>
+              </Link>
             )
           ))}
 
