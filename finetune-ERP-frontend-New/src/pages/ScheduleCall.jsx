@@ -14,7 +14,6 @@ export default function ScheduleCall() {
 
   useEffect(() => {
     document.title = 'Schedule a Call – Finetune';
-krishna/migrate-static-public-pages-to-react-4pjma4
     const desc = 'Request a callback from our support team.';
     const setMeta = (key, val, property = false) => {
       const attr = property ? 'property' : 'name';
