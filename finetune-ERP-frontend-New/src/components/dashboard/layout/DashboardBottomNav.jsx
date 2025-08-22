@@ -21,9 +21,9 @@ export default function DashboardBottomNav({ role, navOpen, setNavOpen }) {
   const [moreOpen, setMoreOpen] = useState(false);
 
   const handleLogout = () => {
-    dispatch(logoutUser()).finally(() => {
-      navigate('/login');
-    });
+      dispatch(logoutUser()).finally(() => {
+        navigate('/teamlogin');
+      });
   };
 
   const adminNavItems = [
