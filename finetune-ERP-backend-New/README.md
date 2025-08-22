@@ -23,6 +23,13 @@ python manage.py runserver
 - `python manage.py attendance_autoclose` – finalize previous day
 - `python manage.py sanitize_branch_heads [--dry-run|--apply]` – reconcile branch head assignments and clear extra branch heads
 
+### Marketing API
+| Method | Path | Description |
+|-------|------|-------------|
+| GET | `/api/marketing/brands/` | List brands |
+| POST | `/api/marketing/contact/` | Create contact message |
+| POST | `/api/marketing/schedule-call/` | Schedule a call |
+
 ## Troubleshooting
 | Issue | Fix |
 |------|-----|
