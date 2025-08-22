@@ -1,0 +1,11 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{# Extra submit buttons for quick decisions on attendance requests #}
+{% block submit_buttons_bottom %}
+  {{ block.super }}
+  {% if show_approve_reject %}
+    <button type="submit" class="button" name="_approve">{% trans "Approve" %}</button>
+    <button type="submit" class="button" name="_reject">{% trans "Reject" %}</button>
+  {% endif %}
+{% endblock %}
