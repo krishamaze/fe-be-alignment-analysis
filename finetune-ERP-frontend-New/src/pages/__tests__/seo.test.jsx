@@ -2,8 +2,10 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import About from '../About';
 import Index from '../Index';
+import StoreDetails from '../StoreDetails';
 import Stores from '../Stores';
 import axios from 'axios';
 vi.mock('axios');
@@ -45,5 +47,22 @@ describe('SEO meta tags', () => {
     expect(document.title).toBe('Stores – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
     expect(desc.getAttribute('content')).toContain('Browse Finetune service branches');
+  });
+
+  it('sets title and description for StoreDetails page', async () => {
+    axios.get.mockResolvedValue({ data: { id: 1, store_name: 'Alpha Store', code: 'ST1', address: '123 St' } });
+    const container = document.createElement('div');
+    await act(async () => {
+      createRoot(container).render(
+        <MemoryRouter initialEntries={['/stores/1']}>
+          <Routes>
+            <Route path="/stores/:id" element={<StoreDetails />} />
+          </Routes>
+        </MemoryRouter>
+      );
+    });
+    expect(document.title).toBe('Alpha Store – Finetune');
+    const desc = document.head.querySelector("meta[name='description']");
+    expect(desc.getAttribute('content')).toContain('Details for Alpha Store');
   });
 });
