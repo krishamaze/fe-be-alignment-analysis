@@ -13,6 +13,11 @@ Vitest discovers files ending in `.test.js` or `.test.jsx`.
 - Use `describe`/`it` from Vitest.
 - Mock API calls via `vi.fn()` or Axios mock adapters when needed.
 
+### DOM tests
+
+- Add `// @vitest-environment jsdom` to files that require the DOM.
+- Set `globalThis.IS_REACT_ACT_ENVIRONMENT = true` before calling React's `act()`.
+
 Example:
 
 ```js
