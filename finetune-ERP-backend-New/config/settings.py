@@ -94,6 +94,7 @@ INSTALLED_APPS = [
     'accounts',
     'store',
     'attendance',
+    'marketing',
     ##'django_extensions',
 ]
 

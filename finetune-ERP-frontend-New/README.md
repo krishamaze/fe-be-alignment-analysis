@@ -15,6 +15,15 @@ React + Vite application providing ERP and e‑commerce interfaces for finetune.
 4. **Build**: `npm run build`
 5. **Preview build**: `npm run preview`
 
+### Marketing pages
+| Route | Component |
+|-------|-----------|
+| `/marketing` | `Index.jsx` |
+| `/about` | `About.jsx` |
+| `/contact` | `Contact.jsx` |
+| `/locate` | `Locate.jsx` |
+| `/terms` | `Terms.jsx` |
+
 ## Environment
 
 | Variable | Description | Example |
