@@ -33,7 +33,13 @@ export default function About() {
         <div>
           <p>
             We are selling multi branded mobiles, accessories, computer
-            accessories with best quality. We are located at <b>K.G Chavadi Road</b>.
+            accessories with best quality.
+          </p>
+          <address className="not-italic">
+            Cheran Plaza K.G Chavadi Road, Ettimadai, Pirivu, near KK MAHAAL,
+            Coimbatore, Tamil Nadu 641105.
+          </address>
+          <p>
             We pledge to take the best quality service to every individual.
           </p>
           <p className="mt-4 font-semibold text-center text-keyline">

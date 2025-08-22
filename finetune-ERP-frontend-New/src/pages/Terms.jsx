@@ -29,9 +29,8 @@ export default function Terms() {
         tablet, computer and/or any accessories (“Device”).
       </p>
       <p>
-        1.2 References to “us”, “we” and “our” refer to Mobile Phone Repair Centre
-        and references to “you” and “your” are to you, the person addressed on this
-        form.
+        1.2 References to “us”, “we” and “our” refer to Finetune and references to
+        “you” and “your” are to you, the person addressed on this form.
       </p>
       <p className="font-bold">All repairs (unless otherwise stated)</p>
       <p>
@@ -78,8 +77,8 @@ export default function Terms() {
         2.10 Use of our service may void your manufacturer’s warranty.
       </p>
       <p>
-        2.11 The Mobile Phone Repair Centre may install warranty seals following the
-        repair. Any tampering of the seals will void our warranty.
+        2.11 Finetune may install warranty seals following the repair. Any tampering
+        of the seals will void our warranty.
       </p>
       <p>
         2.12 Our products and repairs are covered by the warranty terms outlined
@@ -94,6 +93,10 @@ export default function Terms() {
         <li>Smartphone Logic Board Repair – 1 month Warranty</li>
         <li>'AAA' Grade Quality LCD Screen – 1 month Warranty</li>
       </ul>
+      <address className="not-italic mt-4 text-sm text-gray-700">
+        Cheran Plaza K.G Chavadi Road, Ettimadai, Pirivu, near KK MAHAAL,
+        Coimbatore, Tamil Nadu 641105. Phone: <a href="tel:+919791151863" className="text-keyline">+91 97911 51863</a>
+      </address>
     </div>
   );
 }
