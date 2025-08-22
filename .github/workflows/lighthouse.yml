@@ -1,0 +1,26 @@
+name: lighthouse
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        working-directory: finetune-ERP-frontend-New
+        run: npm ci
+      - name: Build app
+        working-directory: finetune-ERP-frontend-New
+        run: npm run build
+      - name: Lighthouse audit
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          configPath: finetune-ERP-frontend-New/lighthouserc.json
+          uploadArtifacts: true

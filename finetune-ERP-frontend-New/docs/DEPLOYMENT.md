@@ -34,3 +34,16 @@ Serve `dist` assets with long‑term cache headers. HTML should be cached for a 
 
 1. Push to a preview branch to trigger Vercel preview.
 2. Merge to `main` for production deployment.
+
+## Lighthouse audits
+
+Pull requests and pushes run Lighthouse against the built `/about` page via the GitHub Actions workflow `lighthouse.yml`. Reports (JSON and HTML) are attached to the workflow run as artifacts.
+
+### Local run
+
+```bash
+npm run build
+npx -y lhci autorun --config=lighthouserc.json
+```
+
+The build fails if any category score (performance, accessibility, SEO) falls below 90 or if Largest Contentful Paint exceeds 2.5 s.
