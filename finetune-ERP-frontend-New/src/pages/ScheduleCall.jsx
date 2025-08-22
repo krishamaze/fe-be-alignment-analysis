@@ -1,34 +1,16 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import ReCAPTCHA from 'react-google-recaptcha';
 import END_POINTS from '../utils/Endpoints';
 import AppLoader from '../components/AppLoader';
 
-export default function Contact() {
-  const [form, setForm] = useState({ name: '', mobile_no: '', message: '' });
+export default function ScheduleCall() {
+  const [form, setForm] = useState({ name: '', date: '', time: '', message: '' });
   const [loading, setLoading] = useState(false);
   const [captcha, setCaptcha] = useState('');
   const [cooldown, setCooldown] = useState(false);
   const recaptchaRef = useRef(null);
-
-  useEffect(() => {
-    document.title = 'Contact – Finetune';
-    const desc = 'Reach out for device repair or support.';
-    const setMeta = (key, val, property = false) => {
-      const attr = property ? 'property' : 'name';
-      let tag = document.head.querySelector(`meta[${attr}='${key}']`);
-      if (!tag) {
-        tag = document.createElement('meta');
-        tag.setAttribute(attr, key);
-        document.head.appendChild(tag);
-      }
-      tag.setAttribute('content', val);
-    };
-    setMeta('description', desc);
-    setMeta('og:title', 'Contact – Finetune', true);
-    setMeta('og:description', desc, true);
-  }, []);
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -44,12 +26,12 @@ export default function Contact() {
     }
     try {
       setLoading(true);
-      await axios.post(`${END_POINTS.API_BASE_URL}/marketing/contact/`, {
+      await axios.post(`${END_POINTS.API_BASE_URL}/marketing/schedule-call/`, {
         ...form,
         captcha_token: captcha,
       });
-      toast.success('Message sent');
-      setForm({ name: '', mobile_no: '', message: '' });
+      toast.success('We will reach out soon');
+      setForm({ name: '', date: '', time: '', message: '' });
       recaptchaRef.current?.reset();
       setCaptcha('');
       setCooldown(true);
@@ -64,7 +46,7 @@ export default function Contact() {
   return (
     <div className="p-4 pt-24 max-w-xl mx-auto">
       {loading && <AppLoader />}
-      <h1 className="text-2xl font-bold mb-4">Contact Us</h1>
+      <h1 className="text-2xl font-bold mb-4">Schedule a Call</h1>
       <form onSubmit={submit} className="space-y-4">
         <input
           name="name"
@@ -75,18 +57,26 @@ export default function Contact() {
           required
         />
         <input
-          name="mobile_no"
-          value={form.mobile_no}
+          type="date"
+          name="date"
+          value={form.date}
           onChange={onChange}
-          placeholder="Mobile"
-          maxLength={10}
           className="input"
+          required
+        />
+        <input
+          type="time"
+          name="time"
+          value={form.time}
+          onChange={onChange}
+          className="input"
+          required
         />
         <textarea
           name="message"
           value={form.message}
           onChange={onChange}
-          placeholder="Message"
+          placeholder="Message (optional)"
           className="input"
         />
         <ReCAPTCHA
@@ -99,7 +89,7 @@ export default function Contact() {
           disabled={loading}
           className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 disabled:opacity-50"
         >
-          Send
+          Submit
         </button>
       </form>
     </div>
