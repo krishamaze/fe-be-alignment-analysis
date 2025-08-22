@@ -19,6 +19,11 @@ import Settings from './pages/Settings';
 import FocusLayout from './components/layout/FocusLayout';
 import Workledger from './pages/Workledger';
 import WorkledgerDetails from './pages/WorkledgerDetails';
+import IndexPage from './pages/Index';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Locate from './pages/Locate';
+import Terms from './pages/Terms';
 
 // E-commerce pages
 import Shop from './pages/ecommerce/Shop';
@@ -65,6 +70,11 @@ function AppContent() {
         <Route path="/partners" element={<Partners />} />
         <Route path="/help" element={<HelpCentre />} />
         <Route path="/legal" element={<Legal />} />
+        <Route path="/marketing" element={<IndexPage />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/locate" element={<Locate />} />
+        <Route path="/terms" element={<Terms />} />
 
         <Route
           path="/workledger/*"
