@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { HiOutlinePhone, HiOutlineMail, HiOutlineClock, HiOutlineChat, HiOutlineQuestionMarkCircle, HiOutlineTruck, HiOutlineShieldCheck, HiOutlineRefresh } from 'react-icons/hi';
+import { HiOutlinePhone, HiOutlineClock, HiOutlineChat, HiOutlineQuestionMarkCircle, HiOutlineTruck, HiOutlineShieldCheck, HiOutlineRefresh } from 'react-icons/hi';
 
 function HelpCentre() {
   const [activeTab, setActiveTab] = useState('contact');
 
   const contactInfo = {
-    phone: "+91-1800-123-4567",
-    email: "support@techstore.com",
-    address: "TechStore India Pvt. Ltd.\n123, Tech Park, Electronic City\nBangalore - 560100, Karnataka, India",
+    phone: "+91 97911 51863",
+    address:
+      "Cheran Plaza K.G Chavadi Road\nEttimadai, Pirivu\nnear KK MAHAAL\nCoimbatore - 641105, Tamil Nadu, India",
     workingHours: "Monday - Saturday: 9:00 AM - 8:00 PM\nSunday: 10:00 AM - 6:00 PM"
   };
 
@@ -91,13 +91,6 @@ function HelpCentre() {
       color: "bg-gray-500"
     },
     {
-      icon: <HiOutlineMail className="w-8 h-8" />,
-      title: "Email Support",
-      description: "Send us a detailed message",
-      action: "Send Email",
-      color: "bg-green-500"
-    },
-    {
       icon: <HiOutlineChat className="w-8 h-8" />,
       title: "Live Chat",
       description: "Chat with our support team",
@@ -126,7 +119,7 @@ function HelpCentre() {
         </div>
 
         {/* Support Options */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-12">
           {supportOptions.map((option, index) => (
             <div key={index} className="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
               <div className={`${option.color} text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4`}>
@@ -144,22 +137,13 @@ function HelpCentre() {
         {/* Contact Information */}
         <div className="bg-white rounded-lg shadow-sm p-8 mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="flex items-start gap-3">
               <HiOutlinePhone className="w-6 h-6 text-keyline mt-1" />
               <div>
                 <h3 className="font-semibold text-gray-900">Phone Support</h3>
                 <p className="text-gray-600">{contactInfo.phone}</p>
                 <p className="text-sm text-gray-500">Available during business hours</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start gap-3">
-              <HiOutlineMail className="w-6 h-6 text-green-600 mt-1" />
-              <div>
-                <h3 className="font-semibold text-gray-900">Email Support</h3>
-                <p className="text-gray-600">{contactInfo.email}</p>
-                <p className="text-sm text-gray-500">24/7 support via email</p>
               </div>
             </div>
             

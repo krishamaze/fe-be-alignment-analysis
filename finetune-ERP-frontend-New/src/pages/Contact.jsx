@@ -65,6 +65,11 @@ export default function Contact() {
     <div className="p-4 pt-24 max-w-xl mx-auto">
       {loading && <AppLoader />}
       <h1 className="text-2xl font-bold mb-4">Contact Us</h1>
+      <address className="not-italic mb-4 text-gray-700">
+        Cheran Plaza K.G Chavadi Road, Ettimadai, Pirivu, near KK MAHAAL,
+        Coimbatore, Tamil Nadu 641105.<br />
+        Phone: <a href="tel:+919791151863" className="text-keyline">+91 97911 51863</a>
+      </address>
       <form onSubmit={submit} className="space-y-4">
         <input
           name="name"

@@ -44,11 +44,11 @@ function Legal() {
       content: [
         {
           section: "1. Acceptance of Terms",
-          text: "By accessing and using TechStore's website and services, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service."
+          text: "By accessing and using Finetune's website and services, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service."
         },
         {
           section: "2. Use License",
-          text: "Permission is granted to temporarily download one copy of the materials (information or software) on TechStore's website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title."
+          text: "Permission is granted to temporarily download one copy of the materials (information or software) on Finetune's website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title."
         },
         {
           section: "3. User Account",
@@ -68,11 +68,11 @@ function Legal() {
         },
         {
           section: "7. Limitation of Liability",
-          text: "In no event shall TechStore, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential, or punitive damages."
+          text: "In no event shall Finetune, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential, or punitive damages."
         },
         {
           section: "8. Governing Law",
-          text: "These terms and conditions are governed by and construed in accordance with the laws of India. Any disputes relating to these terms and conditions will be subject to the exclusive jurisdiction of the courts of Bangalore, Karnataka."
+          text: "These terms and conditions are governed by and construed in accordance with the laws of India. Any disputes relating to these terms and conditions will be subject to the exclusive jurisdiction of the courts of Coimbatore, Tamil Nadu."
         }
       ]
     },
@@ -300,42 +300,15 @@ function Legal() {
                     If you have any questions about our legal policies, please contact us:
                   </p>
                   <div className="space-y-2 text-sm text-gray-600">
-                    <p>📧 Email: legal@techstore.com</p>
-                    <p>📞 Phone: +91-1800-123-4567</p>
-                    <p>📍 Address: TechStore India Pvt. Ltd., Bangalore, Karnataka</p>
+                    <p>📞 Phone: +91 97911 51863</p>
+                    <p>
+                      📍 Address: Cheran Plaza K.G Chavadi Road, Ettimadai, Pirivu,
+                      near KK MAHAAL, Coimbatore, Tamil Nadu 641105
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Additional Legal Information */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">GST Information</h3>
-            <p className="text-gray-600 text-sm">
-              GST Number: 29AABCT1234Z1Z5<br />
-              All prices include applicable taxes
-            </p>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Company Details</h3>
-            <p className="text-gray-600 text-sm">
-              TechStore India Pvt. Ltd.<br />
-              CIN: U51109KA2020PTC123456<br />
-              Registered Office: Bangalore, Karnataka
-            </p>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Compliance</h3>
-            <p className="text-gray-600 text-sm">
-              ISO 27001 Certified<br />
-              PCI DSS Compliant<br />
-              GDPR Compliant
-            </p>
           </div>
         </div>
       </div>
