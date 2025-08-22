@@ -1,14 +1,18 @@
 // @vitest-environment jsdom
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import About from '../About';
 import Index from '../Index';
+import Stores from '../Stores';
+import axios from 'axios';
+vi.mock('axios');
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 afterEach(() => {
   document.head.innerHTML = '';
+  vi.resetAllMocks();
 });
 
 describe('SEO meta tags', () => {
@@ -30,5 +34,16 @@ describe('SEO meta tags', () => {
     expect(document.title).toBe('Brands – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
     expect(desc.getAttribute('content')).toContain('Brands we service');
+  });
+
+  it('sets title and description for Stores page', async () => {
+    axios.get.mockResolvedValue({ data: { content: [] } });
+    const container = document.createElement('div');
+    await act(async () => {
+      createRoot(container).render(<Stores />);
+    });
+    expect(document.title).toBe('Stores – Finetune');
+    const desc = document.head.querySelector("meta[name='description']");
+    expect(desc.getAttribute('content')).toContain('Browse Finetune service branches');
   });
 });
