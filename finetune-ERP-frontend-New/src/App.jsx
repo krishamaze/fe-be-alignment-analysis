@@ -41,13 +41,14 @@ function AppContent() {
   const location = useLocation();
 
   // Check if current route is e-commerce related
-  const isEcommerceRoute = location.pathname === "/" || 
-                          location.pathname.startsWith('/shop') || 
+  const isEcommerceRoute = location.pathname === "/" ||
+                          location.pathname.startsWith('/shop') ||
                           location.pathname.startsWith('/categories') ||
                           location.pathname.startsWith('/partners') ||
                           location.pathname.startsWith('/help') ||
                           location.pathname.startsWith('/legal') ||
                           location.pathname.startsWith('/signup') ||
+                          location.pathname.startsWith('/teamlogin') ||
                           location.pathname.startsWith('/login');
 
   return (
@@ -59,7 +60,7 @@ function AppContent() {
       )}
       <Routes>
         <Route path="/" element={<Hero />} />
-        <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <TeamLogin />} />
+        <Route path="/teamlogin" element={token ? <Navigate to="/dashboard" /> : <TeamLogin />} />
         <Route path="/signup" element={<Signup />} />
         
         {/* E-commerce routes */}
@@ -81,7 +82,7 @@ function AppContent() {
           element={
             token && ['system_admin', 'branch_head', 'advisor'].includes(role)
               ? <FocusLayout title="Workledger" />
-              : <Navigate to="/login" />
+              : <Navigate to="/teamlogin" />
           }
         >
           <Route index element={<Workledger />} />
@@ -93,13 +94,13 @@ function AppContent() {
           element={
             token && ['system_admin', 'branch_head', 'advisor'].includes(role)
               ? <FocusLayout title="Giveaway Redemption" />
-              : <Navigate to="/login" />
+              : <Navigate to="/teamlogin" />
           }
         >
           <Route index element={<GiveawayRedemption />} />
         </Route>
 
-        <Route path="/dashboard" element={token ? <Dashboard /> : <Navigate to="/login" />}> 
+        <Route path="/dashboard" element={token ? <Dashboard /> : <Navigate to="/teamlogin" />}> 
         
           {['system_admin'].includes(role) && (
             <>

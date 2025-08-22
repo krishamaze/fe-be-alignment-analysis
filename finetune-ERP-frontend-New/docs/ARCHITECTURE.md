@@ -12,7 +12,7 @@ graph TD
 
 ## Routing
 
-- **Public**: `/`, `/login`, `/signup`, e‑commerce routes (`/shop`, `/product/:id`, etc.)
+ - **Public**: `/`, `/teamlogin`, `/signup`, e‑commerce routes (`/shop`, `/product/:id`, etc.). `/login` is reserved for public login.
 - **Protected**: `/dashboard` requires a valid `token` cookie.
 - **Role gated**: within `/dashboard`, routes like `/users`, `/stores` and `/settings` require `role` of `system_admin`.
 
