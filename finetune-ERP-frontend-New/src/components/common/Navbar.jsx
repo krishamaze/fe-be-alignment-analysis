@@ -7,12 +7,12 @@ import Logo from './Logo';
 
 function Navbar() {
   const token = useAppSelector(selectAuthToken);
-  const loginTarget = token ? '/dashboard' : '/login';
+  const loginTarget = token ? '/dashboard' : '/teamlogin';
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
-  const isLoginPage = location.pathname === '/login';
+  const isLoginPage = location.pathname === '/teamlogin';
   // Navigation links
   const navLinks = [
     { name: 'About Us', href: '#about' },
