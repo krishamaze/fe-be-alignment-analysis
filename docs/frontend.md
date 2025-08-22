@@ -24,7 +24,7 @@
 ## SEO & Performance Notes
 
 - SEO tags verified via page source inspection.
-- SEO tests cover About, Brands and Stores pages.
+- SEO tests cover About, Brands, Stores and Store details pages.
 - TODO: run Lighthouse to confirm performance within ±10% of legacy baseline.
 
 ## Dependencies & Blockers
