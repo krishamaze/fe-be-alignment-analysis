@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -11,6 +11,24 @@ export default function ScheduleCall() {
   const [captcha, setCaptcha] = useState('');
   const [cooldown, setCooldown] = useState(false);
   const recaptchaRef = useRef(null);
+
+  useEffect(() => {
+    document.title = 'Schedule a Call – Finetune';
+    const desc = 'Request a callback from our support team.';
+    const setMeta = (key, val, property = false) => {
+      const attr = property ? 'property' : 'name';
+      let tag = document.head.querySelector(`meta[${attr}='${key}']`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute(attr, key);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', val);
+    };
+    setMeta('description', desc);
+    setMeta('og:title', 'Schedule a Call – Finetune', true);
+    setMeta('og:description', desc, true);
+  }, []);
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
