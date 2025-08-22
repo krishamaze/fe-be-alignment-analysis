@@ -20,6 +20,7 @@
 | Token refresh | auto refresh | `POST /api/token/refresh` |
 | Contact form | axios post | `POST /api/marketing/contact/` |
 | Schedule call form | axios post | `POST /api/marketing/schedule-call/` |
+| Brand listing | axios get | `GET /api/marketing/brands/` |
 
 ## Deprecation policy
 
