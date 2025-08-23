@@ -7,7 +7,7 @@ import Spares from '../Spares';
 import END_POINTS from '../../utils/Endpoints';
 
 vi.mock('axios');
-vi.mock('react-toastify', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
+vi.mock('react-hot-toast', () => { const toast = () => {}; toast.success = vi.fn(); toast.error = vi.fn(); return { default: toast }; });
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 

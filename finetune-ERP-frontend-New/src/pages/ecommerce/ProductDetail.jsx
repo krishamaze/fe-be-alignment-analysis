@@ -4,7 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import { getProductById } from '../../utils/mockData';
 import { addToCart } from '../../redux/slice/cartSlice';
 import Payment from '../../components/ecommerce/Payment';
-import { HiOutlineStar, HiOutlineShoppingCart, HiOutlineHeart, HiOutlineTruck, HiOutlineShieldCheck, HiOutlineRefresh, HiOutlineArrowLeft } from 'react-icons/hi';
+import { Star, ShoppingCart, Heart, Truck, ShieldCheck, RefreshCw, ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 function ProductDetail() {
@@ -79,7 +79,7 @@ function ProductDetail() {
             onClick={() => setShowPayment(false)}
             className="flex items-center gap-2 text-body-md text-primary/70 dark:text-surface/70 hover:text-secondary mb-6"
           >
-            <HiOutlineArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4" />
             Back to Product
           </button>
           <Payment
@@ -130,7 +130,7 @@ function ProductDetail() {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <HiOutlineStar
+                  <Star
                     key={i}
                     className={`w-5 h-5 ${
                       i < Math.floor(product.rating)
@@ -209,7 +209,7 @@ function ProductDetail() {
                 onClick={handleAddToCart}
                 className="flex-1 bg-primary text-surface py-3 px-6 rounded-lg font-semibold hover:bg-primary/80 dark:bg-surface dark:text-primary dark:hover:bg-surface/80 transition-colors flex items-center justify-center gap-2"
               >
-                <HiOutlineShoppingCart className="w-5 h-5" />
+                <ShoppingCart className="w-5 h-5" />
                 Add to Cart
               </button>
               <button
@@ -222,24 +222,24 @@ function ProductDetail() {
 
             {/* Wishlist Button */}
             <button className="w-full border border-primary/30 dark:border-surface/30 text-body-md text-primary/70 dark:text-surface/70 py-3 px-6 rounded-lg font-semibold hover:bg-surface/80 dark:hover:bg-primary/80 transition-colors flex items-center justify-center gap-2">
-              <HiOutlineHeart className="w-5 h-5" />
+              <Heart className="w-5 h-5" />
               Add to Wishlist
             </button>
 
             {/* Features */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-primary/20 dark:border-surface/20">
               <div className="text-center">
-                <HiOutlineTruck className="w-8 h-8 text-keyline mx-auto mb-2" />
+                <Truck className="w-8 h-8 text-keyline mx-auto mb-2" />
                 <h4 className="font-medium text-primary dark:text-surface text-body-md">Free Shipping</h4>
                 <p className="text-body-sm text-primary/60 dark:text-surface/60">On orders above ₹999</p>
               </div>
               <div className="text-center">
-                <HiOutlineShieldCheck className="w-8 h-8 text-success mx-auto mb-2" />
+                <ShieldCheck className="w-8 h-8 text-success mx-auto mb-2" />
                 <h4 className="font-medium text-primary dark:text-surface text-body-md">Genuine Product</h4>
                 <p className="text-body-sm text-primary/60 dark:text-surface/60">100% authentic</p>
               </div>
               <div className="text-center">
-                <HiOutlineRefresh className="w-8 h-8 text-secondary mx-auto mb-2" />
+                <RefreshCw className="w-8 h-8 text-secondary mx-auto mb-2" />
                 <h4 className="font-medium text-primary dark:text-surface text-body-md">Easy Returns</h4>
                 <p className="text-body-sm text-primary/60 dark:text-surface/60">30-day return policy</p>
               </div>
