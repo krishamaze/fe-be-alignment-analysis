@@ -25,6 +25,11 @@ All paths are relative to `/api/` unless noted.
 | GET | spares/{id} | SpareViewSet.retrieve | optional | Read only | — |
 | PUT/PATCH | spares/{id} | SpareViewSet.update | JWT | SystemAdmin | — |
 | DELETE | spares/{id} | SpareViewSet.destroy | JWT | SystemAdmin | — |
+| GET | bookings | BookingViewSet.list | JWT | SystemAdmin | — |
+| POST | bookings | BookingViewSet.create | None | AllowAny | 5/hour |
+| GET | bookings/{id} | BookingViewSet.retrieve | JWT | SystemAdmin | — |
+| PUT/PATCH | bookings/{id} | BookingViewSet.update | JWT | SystemAdmin | — |
+| DELETE | bookings/{id} | BookingViewSet.destroy | JWT | SystemAdmin | — |
 | POST | attendance/check-in | CheckInView | JWT | Advisor | — |
 | POST | attendance/check-out | CheckOutView | JWT | Advisor | — |
 | GET | attendance/me/today | MeTodayView | JWT | Advisor | — |

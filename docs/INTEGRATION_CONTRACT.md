@@ -58,6 +58,36 @@
 - **Body:** `{ "name": string, "sku": string, "price": number }`
 - **Response:** `201 Created` with `{ "id": number, "name": string, "sku": string, "price": string, "is_active": boolean }`
 - **Errors:** `401` if unauthenticated, `403` if unauthorized
+
+### List Bookings
+- **URL:** `/api/bookings`
+- **Method:** `GET`
+- **Auth:** `system_admin` only
+- **Response:**
+  ```json
+  {
+    "content": [
+      { "id": 1, "name": "John", "email": "j@example.com", "date": "2024-01-01", "time": "10:00", "message": "hi", "status": "pending" }
+    ]
+  }
+  ```
+
+### Retrieve Booking
+- **URL:** `/api/bookings/{id}`
+- **Method:** `GET`
+- **Auth:** `system_admin` only
+- **Response:**
+  ```json
+  { "id": 1, "name": "John", "email": "j@example.com", "date": "2024-01-01", "time": "10:00", "message": "hi", "status": "pending" }
+  ```
+
+### Create Booking
+- **URL:** `/api/bookings`
+- **Method:** `POST`
+- **Auth:** None
+- **Body:** `{ "name": string, "email": string?, "date": YYYY-MM-DD, "time": HH:MM, "message": string?, "captcha_token": string }`
+- **Response:** `201 Created` with `{ "id": number, "name": string, "email": string, "date": string, "time": string, "message": string, "status": string }`
+- **Errors:** `400` for invalid captcha, `429` if rate limited
 ### Submit Contact Request
 - **URL:** `/api/marketing/contact/`
 - **Method:** `POST`
@@ -77,4 +107,4 @@
 ## Notes
 - Write operations (`POST`, `PUT`, `PATCH`, `DELETE`) are restricted to users with the `system_admin` role per `IsSystemAdminOrReadOnly`.
 - TODO: document pagination query parameters when backend stabilizes.
-- Contact and schedule-call forms require a valid reCAPTCHA token and are throttled at 5 requests/hour per IP.
+- Contact, schedule-call, and booking forms require a valid reCAPTCHA token and are throttled at 5 requests/hour per IP.

@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/', include('accounts.urls.user_urls')),  # 🧑
     path('api/', include('store.urls')),  # NOT api/stores/
     path('api/', include('spares.urls')),
+    path('api/', include('bookings.urls')),
     path('api/marketing/', include('marketing.urls')),
     path('api/attendance/', include('attendance.urls')),
     ##path('api/token', TokenObtainPairView.as_view(), name='token_obtain_pair'),

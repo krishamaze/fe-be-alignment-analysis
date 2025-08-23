@@ -8,8 +8,13 @@ import Index from '../Index';
 import StoreDetails from '../StoreDetails';
 import Stores from '../Stores';
 import Spares from '../Spares';
+import Bookings from '../Bookings';
 import axios from 'axios';
 vi.mock('axios');
+vi.mock('react-google-recaptcha', () => ({
+  __esModule: true,
+  default: () => <div data-testid="recaptcha" />,
+}));
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -75,5 +80,14 @@ describe('SEO meta tags', () => {
     expect(document.title).toBe('Spares – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
     expect(desc.getAttribute('content')).toContain('spare parts pricing');
+  });
+  it('sets title and description for Bookings page', async () => {
+    const container = document.createElement('div');
+    await act(async () => {
+      createRoot(container).render(<Bookings />);
+    });
+    expect(document.title).toBe('Book a Service – Finetune');
+    const desc = document.head.querySelector("meta[name='description']");
+    expect(desc.getAttribute('content')).toContain('Schedule a service booking');
   });
 });

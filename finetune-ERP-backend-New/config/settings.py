@@ -75,6 +75,7 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'contact': '5/hour',
         'schedule_call': '5/hour',
+        'booking': '5/hour',
     },
 }
 
@@ -104,6 +105,7 @@ INSTALLED_APPS = [
     'attendance',
     'marketing',
     'spares',
+    'bookings',
     ##'django_extensions',
 ]
 
