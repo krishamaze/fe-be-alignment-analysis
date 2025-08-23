@@ -3,6 +3,7 @@ from freezegun import freeze_time
 from rest_framework.test import APIClient
 from attendance.models import Attendance, AttendanceRequest
 
+
 @pytest.mark.django_db
 def test_checkin_success_inside_geofence(advisor1, day_shift, fake_selfie, localdt):
     client = APIClient()
@@ -16,6 +17,7 @@ def test_checkin_success_inside_geofence(advisor1, day_shift, fake_selfie, local
     assert resp.status_code == 201
     att = Attendance.objects.get(id=resp.data["id"])
     assert att.status == "OPEN"
+
 
 @pytest.mark.django_db
 def test_double_checkin_blocked(advisor1, day_shift, fake_selfie, localdt):
@@ -31,10 +33,16 @@ def test_double_checkin_blocked(advisor1, day_shift, fake_selfie, localdt):
     with freeze_time(localdt(2025, 8, 13, 9, 6)):
         resp2 = client.post(
             "/api/attendance/check-in",
-            {"shift_id": day_shift.id, "lat": 0, "lon": 0, "photo": fake_selfie("x.jpg")},
+            {
+                "shift_id": day_shift.id,
+                "lat": 0,
+                "lon": 0,
+                "photo": fake_selfie("x.jpg"),
+            },
             format="multipart",
         )
     assert resp2.status_code == 400
+
 
 @pytest.mark.django_db
 def test_late_beyond_grace_creates_request(advisor1, day_shift, fake_selfie, localdt):
@@ -49,7 +57,13 @@ def test_late_beyond_grace_creates_request(advisor1, day_shift, fake_selfie, loc
     assert resp.status_code == 201
     att = Attendance.objects.get(id=resp.data["id"])
     assert att.status == "PENDING_APPROVAL"
-    assert AttendanceRequest.objects.filter(attendance=att, type="LATE", status="PENDING").count() == 1
+    assert (
+        AttendanceRequest.objects.filter(
+            attendance=att, type="LATE", status="PENDING"
+        ).count()
+        == 1
+    )
+
 
 @pytest.mark.django_db
 def test_outside_geofence_request(advisor1, day_shift, fake_selfie, localdt):
@@ -64,7 +78,10 @@ def test_outside_geofence_request(advisor1, day_shift, fake_selfie, localdt):
     assert resp.status_code == 201
     att = Attendance.objects.get(id=resp.data["id"])
     assert att.status == "PENDING_APPROVAL"
-    assert AttendanceRequest.objects.filter(attendance=att, type="OUTSIDE_GEOFENCE", status="PENDING").exists()
+    assert AttendanceRequest.objects.filter(
+        attendance=att, type="OUTSIDE_GEOFENCE", status="PENDING"
+    ).exists()
+
 
 @pytest.mark.django_db
 def test_checkout_present_and_ot_request(advisor1, day_shift, fake_selfie, localdt):
@@ -95,4 +112,9 @@ def test_checkout_present_and_ot_request(advisor1, day_shift, fake_selfie, local
     att = Attendance.objects.get(id=att_id)
     assert att.status == "PRESENT"
     assert att.worked_minutes == 360
-    assert AttendanceRequest.objects.filter(attendance=att, type="OT", status="PENDING").count() == 1
+    assert (
+        AttendanceRequest.objects.filter(
+            attendance=att, type="OT", status="PENDING"
+        ).count()
+        == 1
+    )

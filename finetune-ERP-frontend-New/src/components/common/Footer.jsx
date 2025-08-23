@@ -8,9 +8,13 @@ export default function Footer() {
         <address className="not-italic text-sm text-gray-500 text-center">
           Cheran Plaza K.G Chavadi Road, Ettimadai, Pirivu, near KK MAHAAL,
           Coimbatore, Tamil Nadu 641105. Phone:{' '}
-          <a href="tel:+919791151863" className="text-keyline">+91 97911 51863</a>
+          <a href="tel:+919791151863" className="text-keyline">
+            +91 97911 51863
+          </a>
         </address>
-        <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} Finetune</p>
+        <p className="text-sm text-gray-500">
+          &copy; {new Date().getFullYear()} Finetune
+        </p>
       </div>
     </footer>
   );

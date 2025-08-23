@@ -75,7 +75,9 @@ class AutoCloseTests(TestCase):
         self.assertEqual(att.shift, self.night_shift)
         self.assertEqual(att.status, "ABSENT")
         self.assertFalse(
-            Attendance.objects.filter(user=user, date=target + timedelta(days=1)).exists()
+            Attendance.objects.filter(
+                user=user, date=target + timedelta(days=1)
+            ).exists()
         )
 
     def test_idempotent(self):

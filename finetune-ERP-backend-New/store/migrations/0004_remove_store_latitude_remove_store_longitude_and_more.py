@@ -6,20 +6,20 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('store', '0003_store_latitude_store_longitude_store_radius'),
+        ("store", "0003_store_latitude_store_longitude_store_radius"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='store',
-            name='latitude',
+            model_name="store",
+            name="latitude",
         ),
         migrations.RemoveField(
-            model_name='store',
-            name='longitude',
+            model_name="store",
+            name="longitude",
         ),
         migrations.RemoveField(
-            model_name='store',
-            name='radius',
+            model_name="store",
+            name="radius",
         ),
     ]

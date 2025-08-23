@@ -11,7 +11,9 @@ function FocusLayout({ title = '' }) {
       <div className="mt-16">
         <header className="flex items-center gap-2 p-4 border-b border-keyline bg-white">
           <button
-            onClick={() => (window.history.length > 1 ? navigate(-1) : navigate('/dashboard'))}
+            onClick={() =>
+              window.history.length > 1 ? navigate(-1) : navigate('/dashboard')
+            }
             className="p-1"
           >
             <HiOutlineArrowLeft className="w-6 h-6 text-gray-700" />

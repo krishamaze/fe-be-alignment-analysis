@@ -177,7 +177,9 @@ class AdvisorScheduleSerializer(serializers.ModelSerializer):
             "preview_shifts",
         ]
 
-    def get_preview_shifts(self, obj: AdvisorSchedule) -> Dict[str, Optional[Dict[str, Any]]]:
+    def get_preview_shifts(
+        self, obj: AdvisorSchedule
+    ) -> Dict[str, Optional[Dict[str, Any]]]:
         """Return resolved shifts for a list of dates.
 
         The serializer context may include ``date_range`` which should be a list
@@ -303,9 +305,7 @@ class StoreGeofenceSerializer(serializers.ModelSerializer):
 
     def validate_longitude(self, value):  # type: ignore[override]
         if not -180 <= value <= 180:
-            raise serializers.ValidationError(
-                "Longitude must be between -180 and 180."
-            )
+            raise serializers.ValidationError("Longitude must be between -180 and 180.")
         return value
 
 
@@ -319,7 +319,9 @@ class AttendanceSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.filter(role="advisor")
     )
-    shift = serializers.PrimaryKeyRelatedField(queryset=Shift.objects.filter(is_active=True))
+    shift = serializers.PrimaryKeyRelatedField(
+        queryset=Shift.objects.filter(is_active=True)
+    )
 
     class Meta:
         model = Attendance
@@ -420,12 +422,16 @@ class AttendanceRequestSerializer(serializers.ModelSerializer):
             minutes = meta.get("requested_minutes")
             if not isinstance(minutes, int) or minutes <= 0:
                 raise serializers.ValidationError(
-                    {"meta": "OT requests require a positive integer 'requested_minutes'."}
+                    {
+                        "meta": "OT requests require a positive integer 'requested_minutes'."
+                    }
                 )
         elif req_type == "ADJUST":
             if not (meta.get("set_check_in") or meta.get("set_check_out")):
                 raise serializers.ValidationError(
-                    {"meta": "ADJUST requests require 'set_check_in' or 'set_check_out'."}
+                    {
+                        "meta": "ADJUST requests require 'set_check_in' or 'set_check_out'."
+                    }
                 )
         # LATE and OUTSIDE_GEOFENCE have no additional requirements.
         return attrs
@@ -465,4 +471,3 @@ class AttendanceRequestListSerializer(serializers.ModelSerializer):
         user = obj.attendance.user
         full = user.get_full_name()
         return full if full else user.username
-

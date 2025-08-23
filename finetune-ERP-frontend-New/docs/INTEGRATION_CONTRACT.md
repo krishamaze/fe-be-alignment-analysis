@@ -8,19 +8,19 @@
 
 ## Feature mapping
 
-| Feature | Frontend call | Backend path |
-|---------|---------------|--------------|
-| User listing | `getUsers` | `GET /api/users` |
-| User create/update/delete | `createUser` / `updateUser` / `softDeleteUser` | `POST/PUT/DELETE /api/users` |
-| Assign store to user | `assignStoreToUser` | `PATCH /api/users/:id` |
-| Store listing | `getStores` | `GET /api/stores` |
-| Store create/update/delete | `createStore` / `updateStore` / `softDeleteStore` | `POST/PUT/DELETE /api/stores` |
-| Branch head assignment | `assignBranchHeadToStore` / `unassignBranchHeadFromStore` | `POST /api/stores/:id/assign-branch-head` |
-| Auth login | `loginUser` (auth slice) | `POST /api/auth/login` (returns tokens and user info) |
-| Token refresh | auto refresh | `POST /api/token/refresh` |
-| Contact form | axios post | `POST /api/marketing/contact/` |
-| Schedule call form | axios post | `POST /api/marketing/schedule-call/` |
-| Brand listing | axios get | `GET /api/marketing/brands/` |
+| Feature                    | Frontend call                                             | Backend path                                          |
+| -------------------------- | --------------------------------------------------------- | ----------------------------------------------------- |
+| User listing               | `getUsers`                                                | `GET /api/users`                                      |
+| User create/update/delete  | `createUser` / `updateUser` / `softDeleteUser`            | `POST/PUT/DELETE /api/users`                          |
+| Assign store to user       | `assignStoreToUser`                                       | `PATCH /api/users/:id`                                |
+| Store listing              | `getStores`                                               | `GET /api/stores`                                     |
+| Store create/update/delete | `createStore` / `updateStore` / `softDeleteStore`         | `POST/PUT/DELETE /api/stores`                         |
+| Branch head assignment     | `assignBranchHeadToStore` / `unassignBranchHeadFromStore` | `POST /api/stores/:id/assign-branch-head`             |
+| Auth login                 | `loginUser` (auth slice)                                  | `POST /api/auth/login` (returns tokens and user info) |
+| Token refresh              | auto refresh                                              | `POST /api/token/refresh`                             |
+| Contact form               | axios post                                                | `POST /api/marketing/contact/`                        |
+| Schedule call form         | axios post                                                | `POST /api/marketing/schedule-call/`                  |
+| Brand listing              | axios get                                                 | `GET /api/marketing/brands/`                          |
 
 ## Deprecation policy
 

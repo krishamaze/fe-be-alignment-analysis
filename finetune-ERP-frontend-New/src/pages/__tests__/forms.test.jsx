@@ -10,7 +10,12 @@ import END_POINTS from '../../utils/Endpoints';
 import axios from 'axios';
 
 vi.mock('axios');
-vi.mock('react-hot-toast', () => { const toast = () => {}; toast.success = vi.fn(); toast.error = vi.fn(); return { default: toast }; });
+vi.mock('react-hot-toast', () => {
+  const toast = () => {};
+  toast.success = vi.fn();
+  toast.error = vi.fn();
+  return { default: toast };
+});
 vi.mock('react-google-recaptcha', () => ({
   __esModule: true,
   default: ({ onChange }) => {
@@ -53,9 +58,11 @@ describe('Contact form', () => {
       message.dispatchEvent(new Event('input', { bubbles: true }));
     });
     await act(async () => {
-      container.querySelector('form').dispatchEvent(
-        new Event('submit', { bubbles: true, cancelable: true })
-      );
+      container
+        .querySelector('form')
+        .dispatchEvent(
+          new Event('submit', { bubbles: true, cancelable: true })
+        );
     });
     expect(fetch).toHaveBeenCalledWith(
       '/api/contact',
@@ -92,9 +99,11 @@ describe('ScheduleCall form', () => {
       message.dispatchEvent(new Event('input', { bubbles: true }));
     });
     await act(async () => {
-      container.querySelector('form').dispatchEvent(
-        new Event('submit', { bubbles: true, cancelable: true })
-      );
+      container
+        .querySelector('form')
+        .dispatchEvent(
+          new Event('submit', { bubbles: true, cancelable: true })
+        );
     });
     expect(axios.post).toHaveBeenCalledWith(
       `${END_POINTS.API_BASE_URL}/marketing/schedule-call/`,
@@ -141,9 +150,11 @@ describe('Bookings form', () => {
       message.dispatchEvent(new Event('input', { bubbles: true }));
     });
     await act(async () => {
-      container.querySelector('form').dispatchEvent(
-        new Event('submit', { bubbles: true, cancelable: true })
-      );
+      container
+        .querySelector('form')
+        .dispatchEvent(
+          new Event('submit', { bubbles: true, cancelable: true })
+        );
     });
     expect(axios.post).toHaveBeenCalledWith(
       `${END_POINTS.API_BASE_URL}/bookings`,

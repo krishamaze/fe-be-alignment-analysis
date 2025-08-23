@@ -6,13 +6,16 @@ import BranchHeadDashboard from '../../../pages/BranchHeadDashboard';
 import AdvisorDashboard from '../../../pages/AdvisorDashboard';
 import DashboardNavbar from './DashboardNavbar';
 import { useAppSelector } from '../../../redux/hook';
-import { selectAuthRole, selectAuthStatus } from '../../../redux/slice/authSlice';
+import {
+  selectAuthRole,
+  selectAuthStatus,
+} from '../../../redux/slice/authSlice';
 
 function Dashboard() {
   const role = useAppSelector(selectAuthRole);
   const status = useAppSelector(selectAuthStatus);
   const location = useLocation();
-  const isExactDashboard = location.pathname === "/dashboard";
+  const isExactDashboard = location.pathname === '/dashboard';
   const [navOpen, setNavOpen] = useState(true);
 
   // Show spinner if token is not yet loaded from storage
@@ -27,7 +30,11 @@ function Dashboard() {
       case 'advisor':
         return <AdvisorDashboard />;
       default:
-        return <p className="text-center text-red-500">Invalid role: {role || 'none'}</p>;
+        return (
+          <p className="text-center text-red-500">
+            Invalid role: {role || 'none'}
+          </p>
+        );
     }
   };
 
@@ -47,7 +54,11 @@ function Dashboard() {
           </>
         )}
       </main>
-      <DashboardBottomNav role={role || 'guest'} navOpen={navOpen} setNavOpen={setNavOpen} />
+      <DashboardBottomNav
+        role={role || 'guest'}
+        navOpen={navOpen}
+        setNavOpen={setNavOpen}
+      />
     </>
   );
 }

@@ -4,7 +4,7 @@ const StoreFilters = ({
   branchHead,
   onSearchChange,
   onStatusChange,
-  onBranchHeadChange
+  onBranchHeadChange,
 }) => {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
@@ -36,7 +36,12 @@ const StoreFilters = ({
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </div>
       </div>
@@ -60,7 +65,12 @@ const StoreFilters = ({
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </div>
       </div>
