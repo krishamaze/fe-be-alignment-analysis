@@ -4,6 +4,7 @@ import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import Contact from '../Contact';
 import ScheduleCall from '../ScheduleCall';
+import Bookings from '../Bookings';
 import END_POINTS from '../../utils/Endpoints';
 import axios from 'axios';
 
@@ -91,6 +92,50 @@ describe('ScheduleCall form', () => {
     });
     expect(axios.post).toHaveBeenCalledWith(
       `${END_POINTS.API_BASE_URL}/marketing/schedule-call/`,
+      expect.objectContaining({ captcha_token: 'tok' })
+    );
+  });
+});
+
+describe('Bookings form', () => {
+  it('posts form data with captcha', async () => {
+    axios.post.mockResolvedValue({});
+    const container = document.createElement('div');
+    await act(async () => {
+      createRoot(container).render(<Bookings />);
+    });
+    const name = container.querySelector('input[name="name"]');
+    const email = container.querySelector('input[name="email"]');
+    const date = container.querySelector('input[name="date"]');
+    const time = container.querySelector('input[name="time"]');
+    const message = container.querySelector('textarea[name="message"]');
+    await act(async () => {
+      name.value = 'A';
+      name.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    await act(async () => {
+      email.value = 'a@b.com';
+      email.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    await act(async () => {
+      date.value = '2024-01-01';
+      date.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    await act(async () => {
+      time.value = '10:00';
+      time.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    await act(async () => {
+      message.value = 'hi';
+      message.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    await act(async () => {
+      container.querySelector('form').dispatchEvent(
+        new Event('submit', { bubbles: true, cancelable: true })
+      );
+    });
+    expect(axios.post).toHaveBeenCalledWith(
+      `${END_POINTS.API_BASE_URL}/bookings`,
       expect.objectContaining({ captcha_token: 'tok' })
     );
   });

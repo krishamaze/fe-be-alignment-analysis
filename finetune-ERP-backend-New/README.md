@@ -32,6 +32,15 @@ python manage.py runserver
 
 Both endpoints require `RECAPTCHA_SECRET_KEY` and are throttled to 5 requests/hour per IP.
 
+### Bookings API
+| Method | Path | Description |
+|-------|------|-------------|
+| GET | `/api/bookings` | List bookings (admin only) |
+| POST | `/api/bookings` | Create booking |
+| GET | `/api/bookings/{id}` | Retrieve booking (admin only) |
+
+Public booking submissions require `RECAPTCHA_SECRET_KEY` and are throttled to 5 requests/hour per IP.
+
 ## Troubleshooting
 | Issue | Fix |
 |------|-----|
