@@ -30,6 +30,8 @@ python manage.py runserver
 | POST | `/api/marketing/contact/` | Create contact message |
 | POST | `/api/marketing/schedule-call/` | Schedule a call |
 
+Both endpoints require `RECAPTCHA_SECRET_KEY` and are throttled to 5 requests/hour per IP.
+
 ## Troubleshooting
 | Issue | Fix |
 |------|-----|
