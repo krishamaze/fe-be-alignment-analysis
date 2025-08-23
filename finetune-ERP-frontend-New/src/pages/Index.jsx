@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Helmet } from 'react-helmet-async';
 import END_POINTS from '../utils/Endpoints';
 import Loader from '../components/common/Loader';
 
@@ -68,24 +67,24 @@ export default function Index() {
   }
 
   return (
-    <div className="p-4 pt-24">
-      <Helmet>
-        <title>Brands – Finetune</title>
-        <meta name="description" content="Brands we service and support." />
-        <meta property="og:title" content="Brands – Finetune" />
-        <meta
-          property="og:description"
-          content="Brands we service and support."
-        />
-      </Helmet>
-      <h1 className="text-2xl font-bold mb-4 text-center text-keyline">
-        Brands
-      </h1>
-      <ul className="list-disc pl-5 space-y-2 max-w-xl mx-auto">
-        {brands.map((b) => (
-          <li key={b.id}>{b.name}</li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <title>Brands – Finetune</title>
+      <meta name="description" content="Brands we service and support." />
+      <meta property="og:title" content="Brands – Finetune" />
+      <meta
+        property="og:description"
+        content="Brands we service and support."
+      />
+      <div className="p-4 pt-24">
+        <h1 className="text-2xl font-bold mb-4 text-center text-keyline">
+          Brands
+        </h1>
+        <ul className="list-disc pl-5 space-y-2 max-w-xl mx-auto">
+          {brands.map((b) => (
+            <li key={b.id}>{b.name}</li>
+          ))}
+        </ul>
+      </div>
+    </>
   );
 }

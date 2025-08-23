@@ -3,7 +3,6 @@ import { describe, it, expect, afterEach, vi } from 'vitest';
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import Contact from '../Contact';
-import { HelmetProvider } from 'react-helmet-async';
 import ScheduleCall from '../ScheduleCall';
 import Bookings from '../Bookings';
 import END_POINTS from '../../utils/Endpoints';
@@ -36,11 +35,7 @@ describe('Contact form', () => {
     globalThis.fetch = vi.fn().mockResolvedValue({ ok: true });
     const container = document.createElement('div');
     await act(async () => {
-      createRoot(container).render(
-        <HelmetProvider>
-          <Contact />
-        </HelmetProvider>
-      );
+      createRoot(container).render(<Contact />);
     });
     const name = container.querySelector('input[name="name"]');
     const email = container.querySelector('input[name="email"]');
