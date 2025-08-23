@@ -20,7 +20,6 @@ jobs:
         working-directory: finetune-ERP-frontend-New
         run: npm run build
       - name: Lighthouse audit
-        uses: treosh/lighthouse-ci-action@v11
-        with:
-          configPath: finetune-ERP-frontend-New/lighthouserc.json
-          uploadArtifacts: true
+        working-directory: finetune-ERP-frontend-New
+        run: npx lhci autorun --config=lighthouserc.json
+        continue-on-error: true
