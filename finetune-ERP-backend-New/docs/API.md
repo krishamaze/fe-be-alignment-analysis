@@ -44,8 +44,8 @@ All paths are relative to `/api/` unless noted.
 | POST | token/refresh | TokenRefreshView | refresh | AllowAny | — |
 | POST | token/verify | TokenVerifyView | optional | AllowAny | — |
 | GET | marketing/brands | BrandListView | None | AllowAny | — |
-| POST | marketing/contact | ContactCreateView | None | AllowAny | TODO |
-| POST | marketing/schedule-call | ScheduleCallCreateView | None | AllowAny | TODO |
+| POST | marketing/contact | ContactCreateView | None | AllowAny | 5/hour |
+| POST | marketing/schedule-call | ScheduleCallCreateView | None | AllowAny | 5/hour |
 
 Branch heads are created without a `store` and assigned later via `/stores/{id}/assign-branch-head`.
 

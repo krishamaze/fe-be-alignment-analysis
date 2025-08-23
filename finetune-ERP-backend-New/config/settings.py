@@ -17,6 +17,7 @@ except ImportError:
 # ✅ Environment Settings
 SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-in-dev')  # Safe default in local
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'             # Controlled via env
+RECAPTCHA_SECRET_KEY = os.environ.get('RECAPTCHA_SECRET_KEY', '')
 ALLOWED_HOSTS = [
     'api.finetune.store', 
     'localhost', 
@@ -68,6 +69,13 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'utils.pagination.SpringStylePagination',
     'PAGE_SIZE': 10,
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.ScopedRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'contact': '5/hour',
+        'schedule_call': '5/hour',
+    },
 }
 
 SIMPLE_JWT = {

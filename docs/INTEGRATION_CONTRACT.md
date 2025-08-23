@@ -1,4 +1,4 @@
-# Stores API Integration Contract
+# Public API Integration Contract
 
 ## Endpoints
 
@@ -34,10 +34,27 @@
     "code": "ST001",
     "address": "123 Main St",
     "branch_head_name": "Jane Doe",
-    "branch_head_email": "jane@example.com"
+  "branch_head_email": "jane@example.com"
   }
   ```
+
+### Submit Contact Request
+- **URL:** `/api/marketing/contact/`
+- **Method:** `POST`
+- **Auth:** None
+- **Body:** `{ "name": string, "mobile_no": string?, "message": string?, "captcha_token": string }`
+- **Response:** `201 Created` with `{ "id": number, "name": string, "mobile_no": string, "message": string }`
+- **Errors:** `400` for invalid captcha, `429` if rate limited
+
+### Submit Schedule Call
+- **URL:** `/api/marketing/schedule-call/`
+- **Method:** `POST`
+- **Auth:** None
+- **Body:** `{ "name": string, "date": YYYY-MM-DD, "time": HH:MM, "message": string?, "captcha_token": string }`
+- **Response:** `201 Created` with `{ "id": number, "name": string, "date": string, "time": string, "message": string }`
+- **Errors:** `400` for invalid captcha, `429` if rate limited
 
 ## Notes
 - Write operations (`POST`, `PUT`, `PATCH`, `DELETE`) are restricted to users with the `system_admin` role per `IsSystemAdminOrReadOnly`.
 - TODO: document pagination query parameters when backend stabilizes.
+- Contact and schedule-call forms require a valid reCAPTCHA token and are throttled at 5 requests/hour per IP.
