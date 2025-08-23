@@ -10,6 +10,11 @@ const END_POINTS = {
   // STORE
   MODIFY_STORE: "/api/stores",
   GET_STORES: "/api/stores",
+  
+  // SPARES
+  MODIFY_SPARE: "/api/spares",
+  GET_SPARES: "/api/spares",
+
 
   // AUTHENTICATION
   LOGIN: '/api/auth/login',
