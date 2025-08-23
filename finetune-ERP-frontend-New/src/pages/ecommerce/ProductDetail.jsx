@@ -59,11 +59,11 @@ function ProductDetail() {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+      <div className="min-h-screen bg-surface dark:bg-primary pt-20 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-gray-400 text-6xl mb-4">❌</div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Product not found</h3>
-          <Link to="/shop" className="text-gray-700 hover:text-keyline">
+          <div className="text-primary/40 dark:text-surface/40 text-display-xl mb-4">❌</div>
+          <h3 className="text-heading-md font-medium text-primary dark:text-surface mb-2">Product not found</h3>
+          <Link to="/shop" className="text-body-md text-primary/70 dark:text-surface/70 hover:text-secondary">
             Back to Shop
           </Link>
         </div>
@@ -73,11 +73,11 @@ function ProductDetail() {
 
   if (showPayment) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-20">
+      <div className="min-h-screen bg-surface dark:bg-primary pt-20">
         <div className="max-w-4xl mx-auto px-4 py-8">
           <button
             onClick={() => setShowPayment(false)}
-            className="flex items-center gap-2 text-gray-700 hover:text-keyline mb-6"
+            className="flex items-center gap-2 text-body-md text-primary/70 dark:text-surface/70 hover:text-secondary mb-6"
           >
             <HiOutlineArrowLeft className="w-4 h-4" />
             Back to Product
@@ -94,23 +94,23 @@ function ProductDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-surface dark:bg-primary pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm text-gray-600 mb-8">
-          <Link to="/shop" className="hover:text-keyline">Shop</Link>
+        <nav className="flex items-center gap-2 text-body-sm text-primary/60 dark:text-surface/60 mb-8">
+          <Link to="/shop" className="hover:text-secondary">Shop</Link>
           <span>•</span>
-          <Link to={`/categories/${product.category}`} className="hover:text-keyline capitalize">
+          <Link to={`/categories/${product.category}`} className="hover:text-secondary capitalize">
             {product.category}
           </Link>
           <span>•</span>
-          <span className="text-gray-900">{product.name}</span>
+          <span className="text-primary dark:text-surface">{product.name}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Images */}
           <div className="space-y-4">
-            <div className="aspect-square bg-white rounded-lg overflow-hidden shadow-sm">
+            <div className="aspect-square bg-surface dark:bg-primary rounded-lg overflow-hidden shadow-sm">
               <img
                 src={product.image}
                 alt={product.name}
@@ -122,8 +122,8 @@ function ProductDetail() {
           {/* Product Info */}
           <div className="space-y-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
-              <p className="text-gray-600 text-lg">{product.description}</p>
+              <h1 className="text-heading-xl font-bold text-primary dark:text-surface mb-2">{product.name}</h1>
+              <p className="text-primary/60 dark:text-surface/60 text-body-md">{product.description}</p>
             </div>
 
             {/* Rating */}
@@ -134,35 +134,35 @@ function ProductDetail() {
                     key={i}
                     className={`w-5 h-5 ${
                       i < Math.floor(product.rating)
-                        ? 'text-yellow-400 fill-current'
-                        : 'text-gray-300'
+                        ? 'text-secondary fill-current'
+                        : 'text-primary/20 dark:text-surface/20'
                     }`}
                   />
                 ))}
               </div>
-              <span className="text-gray-600">{product.rating} out of 5</span>
-              <span className="text-gray-500">({product.reviews} reviews)</span>
+              <span className="text-body-sm text-primary/60 dark:text-surface/60">{product.rating} out of 5</span>
+              <span className="text-body-sm text-primary/50 dark:text-surface/50">({product.reviews} reviews)</span>
             </div>
 
             {/* Price */}
             <div className="space-y-2">
               <div className="flex items-center gap-3">
-                <span className="text-3xl font-bold text-gray-900">
+                <span className="text-heading-xl font-bold text-primary dark:text-surface">
                   {formatPrice(product.price)}
                 </span>
                 {product.originalPrice > product.price && (
-                  <span className="text-xl text-gray-500 line-through">
+                  <span className="text-heading-lg text-primary/50 dark:text-surface/50 line-through">
                     {formatPrice(product.originalPrice)}
                   </span>
                 )}
                 {product.discount > 0 && (
-                  <span className="bg-red-100 text-red-800 text-sm font-medium px-2 py-1 rounded">
+                  <span className="bg-error/10 dark:bg-error/20 text-error text-body-sm font-medium px-2 py-1 rounded">
                     {product.discount}% OFF
                   </span>
                 )}
               </div>
               {product.originalPrice > product.price && (
-                <p className="text-green-600 font-medium">
+                <p className="text-success text-body-md font-medium">
                   You save {formatPrice(product.originalPrice - product.price)}
                 </p>
               )}
@@ -170,11 +170,11 @@ function ProductDetail() {
 
             {/* Specifications */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Specifications</h3>
+              <h3 className="text-heading-lg font-semibold text-primary dark:text-surface mb-3">Specifications</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {Object.entries(product.specs).map(([key, value]) => (
-                  <div key={key} className="flex justify-between py-2 border-b border-gray-100">
-                    <span className="text-gray-600 capitalize">{key.replace(/([A-Z])/g, ' $1')}:</span>
+                  <div key={key} className="flex justify-between py-2 border-b border-primary/10 dark:border-surface/10">
+                    <span className="text-primary/60 dark:text-surface/60 capitalize">{key.replace(/([A-Z])/g, ' $1')}:</span>
                     <span className="font-medium">{value}</span>
                   </div>
                 ))}
@@ -183,20 +183,20 @@ function ProductDetail() {
 
             {/* Quantity */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-body-sm font-medium text-primary/70 dark:text-surface/70 mb-2">
                 Quantity
               </label>
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-8 h-8 border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50"
+                  className="w-8 h-8 border border-primary/30 dark:border-surface/30 rounded-lg flex items-center justify-center hover:bg-surface/80 dark:hover:bg-primary/80"
                 >
                   -
                 </button>
                 <span className="w-12 text-center font-medium">{quantity}</span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  className="w-8 h-8 border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50"
+                  className="w-8 h-8 border border-primary/30 dark:border-surface/30 rounded-lg flex items-center justify-center hover:bg-surface/80 dark:hover:bg-primary/80"
                 >
                   +
                 </button>
@@ -207,49 +207,49 @@ function ProductDetail() {
             <div className="flex flex-col sm:flex-row gap-4">
               <button
                 onClick={handleAddToCart}
-                className="flex-1 bg-black text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-900 transition-colors flex items-center justify-center gap-2"
+                className="flex-1 bg-primary text-surface py-3 px-6 rounded-lg font-semibold hover:bg-primary/80 dark:bg-surface dark:text-primary dark:hover:bg-surface/80 transition-colors flex items-center justify-center gap-2"
               >
                 <HiOutlineShoppingCart className="w-5 h-5" />
                 Add to Cart
               </button>
               <button
                 onClick={handleBuyNow}
-                className="flex-1 bg-black text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-900 transition-colors"
+                className="flex-1 bg-primary text-surface py-3 px-6 rounded-lg font-semibold hover:bg-primary/80 dark:bg-surface dark:text-primary dark:hover:bg-surface/80 transition-colors"
               >
                 Buy Now with PhonePe
               </button>
             </div>
 
             {/* Wishlist Button */}
-            <button className="w-full border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+            <button className="w-full border border-primary/30 dark:border-surface/30 text-body-md text-primary/70 dark:text-surface/70 py-3 px-6 rounded-lg font-semibold hover:bg-surface/80 dark:hover:bg-primary/80 transition-colors flex items-center justify-center gap-2">
               <HiOutlineHeart className="w-5 h-5" />
               Add to Wishlist
             </button>
 
             {/* Features */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-gray-200">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-primary/20 dark:border-surface/20">
               <div className="text-center">
                 <HiOutlineTruck className="w-8 h-8 text-keyline mx-auto mb-2" />
-                <h4 className="font-medium text-gray-900">Free Shipping</h4>
-                <p className="text-sm text-gray-600">On orders above ₹999</p>
+                <h4 className="font-medium text-primary dark:text-surface text-body-md">Free Shipping</h4>
+                <p className="text-body-sm text-primary/60 dark:text-surface/60">On orders above ₹999</p>
               </div>
               <div className="text-center">
-                <HiOutlineShieldCheck className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                <h4 className="font-medium text-gray-900">Genuine Product</h4>
-                <p className="text-sm text-gray-600">100% authentic</p>
+                <HiOutlineShieldCheck className="w-8 h-8 text-success mx-auto mb-2" />
+                <h4 className="font-medium text-primary dark:text-surface text-body-md">Genuine Product</h4>
+                <p className="text-body-sm text-primary/60 dark:text-surface/60">100% authentic</p>
               </div>
               <div className="text-center">
-                <HiOutlineRefresh className="w-8 h-8 text-orange-600 mx-auto mb-2" />
-                <h4 className="font-medium text-gray-900">Easy Returns</h4>
-                <p className="text-sm text-gray-600">30-day return policy</p>
+                <HiOutlineRefresh className="w-8 h-8 text-secondary mx-auto mb-2" />
+                <h4 className="font-medium text-primary dark:text-surface text-body-md">Easy Returns</h4>
+                <p className="text-body-sm text-primary/60 dark:text-surface/60">30-day return policy</p>
               </div>
             </div>
 
             {/* Stock Status */}
-            <div className="pt-4 border-t border-gray-200">
+            <div className="pt-4 border-t border-primary/20 dark:border-surface/20">
               <div className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${product.inStock ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                <span className={product.inStock ? 'text-green-600' : 'text-red-600'}>
+                <div className={`w-3 h-3 rounded-full ${product.inStock ? 'bg-success' : 'bg-error'}`}></div>
+                <span className={`${product.inStock ? 'text-success' : 'text-error'} text-body-md`}>
                   {product.inStock ? 'In Stock' : 'Out of Stock'}
                 </span>
               </div>
@@ -259,7 +259,7 @@ function ProductDetail() {
 
         {/* Related Products Section */}
         <div className="mt-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">You might also like</h2>
+          <h2 className="text-heading-lg font-bold text-primary dark:text-surface mb-8">You might also like</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* TODO: Add related products */}
           </div>
