@@ -3,7 +3,12 @@ import { useDispatch } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
 import { getProductsByCategory, categories } from '../../utils/mockData';
 import { addToCart } from '../../redux/slice/cartSlice';
-import { HiOutlineArrowLeft, HiOutlineHeart, HiOutlineShoppingCart, HiOutlineStar } from 'react-icons/hi';
+import {
+  HiOutlineArrowLeft,
+  HiOutlineHeart,
+  HiOutlineShoppingCart,
+  HiOutlineStar,
+} from 'react-icons/hi';
 import toast from 'react-hot-toast';
 
 function CategoryPage() {
@@ -16,8 +21,8 @@ function CategoryPage() {
   useEffect(() => {
     const categoryProducts = getProductsByCategory(categoryId);
     setProducts(categoryProducts);
-    
-    const categoryInfo = categories.find(cat => cat.id === categoryId);
+
+    const categoryInfo = categories.find((cat) => cat.id === categoryId);
     setCategory(categoryInfo);
   }, [categoryId]);
 
@@ -50,7 +55,7 @@ function CategoryPage() {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(price);
   };
 
@@ -69,7 +74,9 @@ function CategoryPage() {
       <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
         <div className="text-center">
           <div className="text-gray-400 text-6xl mb-4">❌</div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Category not found</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Category not found
+          </h3>
           <Link to="/shop" className="text-gray-700 hover:text-keyline">
             Back to Shop
           </Link>
@@ -83,18 +90,20 @@ function CategoryPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <Link 
-            to="/shop" 
+          <Link
+            to="/shop"
             className="inline-flex items-center gap-2 text-gray-700 hover:text-keyline mb-4"
           >
             <HiOutlineArrowLeft className="w-4 h-4" />
             Back to Shop
           </Link>
-          
+
           <div className="flex items-center gap-4">
             <div className="text-4xl">{category.icon}</div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{category.name}</h1>
+              <h1 className="text-3xl font-bold text-gray-900">
+                {category.name}
+              </h1>
               <p className="text-gray-600">{category.description}</p>
             </div>
           </div>
@@ -106,9 +115,11 @@ function CategoryPage() {
             <div className="text-sm text-gray-600">
               {products.length} products in {category.name}
             </div>
-            
+
             <div className="flex items-center gap-4">
-              <label className="text-sm font-medium text-gray-700">Sort by:</label>
+              <label className="text-sm font-medium text-gray-700">
+                Sort by:
+              </label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
@@ -127,7 +138,10 @@ function CategoryPage() {
         {/* Product Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map((product) => (
-            <div key={product.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+            <div
+              key={product.id}
+              className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+            >
               {/* Product Image */}
               <div className="relative aspect-square overflow-hidden">
                 <img
@@ -155,7 +169,7 @@ function CategoryPage() {
                     {product.name}
                   </h3>
                 </Link>
-                
+
                 <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                   {product.description}
                 </p>
@@ -208,7 +222,9 @@ function CategoryPage() {
         {products.length === 0 && (
           <div className="text-center py-12">
             <div className="text-gray-400 text-6xl mb-4">📦</div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              No products found
+            </h3>
             <p className="text-gray-600">This category is currently empty</p>
           </div>
         )}
@@ -217,4 +233,4 @@ function CategoryPage() {
   );
 }
 
-export default CategoryPage; 
+export default CategoryPage;

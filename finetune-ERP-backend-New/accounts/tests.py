@@ -27,6 +27,4 @@ class MeAPITests(TestCase):
         self.assertEqual(resp.data["id"], self.user.id)
         self.assertEqual(resp.data["store_ids"], [self.store.id])
         self.assertTrue(resp.data["workledger_enabled"])
-        self.assertEqual(
-            resp.data["store_geofences"][0]["store_id"], self.store.id
-        )
+        self.assertEqual(resp.data["store_geofences"][0]["store_id"], self.store.id)

@@ -7,7 +7,12 @@ import Spares from '../Spares';
 import END_POINTS from '../../utils/Endpoints';
 
 vi.mock('axios');
-vi.mock('react-hot-toast', () => { const toast = () => {}; toast.success = vi.fn(); toast.error = vi.fn(); return { default: toast }; });
+vi.mock('react-hot-toast', () => {
+  const toast = () => {};
+  toast.success = vi.fn();
+  toast.error = vi.fn();
+  return { default: toast };
+});
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -42,9 +47,11 @@ describe('Spares page', () => {
       price.dispatchEvent(new Event('input', { bubbles: true }));
     });
     await act(async () => {
-      container.querySelector('form').dispatchEvent(
-        new Event('submit', { bubbles: true, cancelable: true })
-      );
+      container
+        .querySelector('form')
+        .dispatchEvent(
+          new Event('submit', { bubbles: true, cancelable: true })
+        );
     });
     expect(axios.post).toHaveBeenCalled();
   });

@@ -1,6 +1,12 @@
 import pytest
 from datetime import date, timedelta
-from attendance.models import AdvisorSchedule, WeekOff, ScheduleException, resolve_planned_shift
+from attendance.models import (
+    AdvisorSchedule,
+    WeekOff,
+    ScheduleException,
+    resolve_planned_shift,
+)
+
 
 @pytest.mark.django_db
 def test_fixed_schedule_returns_default_shift(advisor1, day_shift):
@@ -13,6 +19,7 @@ def test_fixed_schedule_returns_default_shift(advisor1, day_shift):
     )
     resolved = resolve_planned_shift(advisor1, date(2025, 8, 12))
     assert resolved == day_shift
+
 
 @pytest.mark.django_db
 def test_alternate_weekly_parity(advisor1, advisor2, day_shift, night_shift):
@@ -37,6 +44,7 @@ def test_alternate_weekly_parity(advisor1, advisor2, day_shift, night_shift):
     assert resolve_planned_shift(advisor1, anchor + timedelta(days=7)) == night_shift
     assert resolve_planned_shift(advisor2, anchor) == night_shift
     assert resolve_planned_shift(advisor2, anchor + timedelta(days=7)) == day_shift
+
 
 @pytest.mark.django_db
 def test_weekoff_and_schedule_exception(advisor1, day_shift, night_shift):

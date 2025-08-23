@@ -22,7 +22,9 @@ class IsSystemAdmin(BasePermission):
     def has_permission(self, request, view):
         u = request.user
         return bool(
-            u and u.is_authenticated and (u.is_superuser or getattr(u, "role", None) == "system_admin")
+            u
+            and u.is_authenticated
+            and (u.is_superuser or getattr(u, "role", None) == "system_admin")
         )
 
 
@@ -31,7 +33,9 @@ class IsBranchHead(BasePermission):
 
     def has_permission(self, request, view):
         u = request.user
-        return bool(u and u.is_authenticated and getattr(u, "role", None) == "branch_head")
+        return bool(
+            u and u.is_authenticated and getattr(u, "role", None) == "branch_head"
+        )
 
 
 class IsAdvisor(BasePermission):
@@ -96,10 +100,9 @@ class IsSelfAdvisorOrManager(BasePermission):
         if getattr(u, "role", None) == "branch_head":
             if getattr(target_user, "role", None) != "advisor":
                 return False
-            return (
-                getattr(u, "store_id", None) is not None
-                and getattr(target_user, "store_id", None) == getattr(u, "store_id", None)
-            )
+            return getattr(u, "store_id", None) is not None and getattr(
+                target_user, "store_id", None
+            ) == getattr(u, "store_id", None)
 
         return False
 
@@ -111,4 +114,3 @@ def target_user_id(user_obj):
         return int(getattr(user_obj, "id", None))
     except Exception:  # pragma: no cover - defensive
         return None
-

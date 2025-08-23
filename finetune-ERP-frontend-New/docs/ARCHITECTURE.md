@@ -12,7 +12,7 @@ graph TD
 
 ## Routing
 
- - **Public**: `/`, `/teamlogin`, `/signup`, `/about/`, `/contact/`, `/locate/`, `/terms-and-conditions/`, `/schedule-call`, e‑commerce routes (`/shop`, `/product/:id`, etc.). `/login` is reserved for public login.
+- **Public**: `/`, `/teamlogin`, `/signup`, `/about/`, `/contact/`, `/locate/`, `/terms-and-conditions/`, `/schedule-call`, e‑commerce routes (`/shop`, `/product/:id`, etc.). `/login` is reserved for public login.
 - **Protected**: `/dashboard` requires a valid `token` cookie.
 - **Role gated**: within `/dashboard`, routes like `/users`, `/stores` and `/settings` require `role` of `system_admin`.
 
@@ -20,12 +20,12 @@ graph TD
 
 Redux Toolkit slices manage UI state:
 
-| Slice | Responsibility |
-|-------|----------------|
-| `auth` | authentication tokens and user info |
-| `user` | user list & pagination |
-| `store` | store records & pagination |
-| `cart` | e‑commerce cart state |
+| Slice   | Responsibility                      |
+| ------- | ----------------------------------- |
+| `auth`  | authentication tokens and user info |
+| `user`  | user list & pagination              |
+| `store` | store records & pagination          |
+| `cart`  | e‑commerce cart state               |
 
 Asynchronous operations use `createAsyncThunk` backed by a shared `fetchBaseQuery` that handles token attachment and refresh. There is no RTK Query cache; components dispatch follow‑up queries after mutations.
 

@@ -1,19 +1,26 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { 
-  removeFromCart, 
-  updateQuantity, 
-  clearCart, 
-  closeCart 
+import {
+  removeFromCart,
+  updateQuantity,
+  clearCart,
+  closeCart,
 } from '../../redux/slice/cartSlice';
-import { HiOutlineX, HiOutlineTrash, HiOutlineShoppingBag, HiOutlineArrowRight } from 'react-icons/hi';
+import {
+  HiOutlineX,
+  HiOutlineTrash,
+  HiOutlineShoppingBag,
+  HiOutlineArrowRight,
+} from 'react-icons/hi';
 import Payment from './Payment';
 import { useState } from 'react';
 
 function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { items, total, itemCount, isOpen } = useSelector(state => state.cart);
+  const { items, total, itemCount, isOpen } = useSelector(
+    (state) => state.cart
+  );
   const [showPayment, setShowPayment] = useState(false);
   const [orderId, setOrderId] = useState('');
 
@@ -21,7 +28,7 @@ function Cart() {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(price);
   };
 
@@ -43,8 +50,10 @@ function Cart() {
 
   const handleCheckout = () => {
     if (items.length === 0) return;
-    
-    setOrderId('ORD' + Date.now() + Math.random().toString(36).substr(2, 5).toUpperCase());
+
+    setOrderId(
+      'ORD' + Date.now() + Math.random().toString(36).substr(2, 5).toUpperCase()
+    );
     setShowPayment(true);
   };
 
@@ -116,8 +125,12 @@ function Cart() {
           {items.length === 0 ? (
             <div className="text-center py-12">
               <HiOutlineShoppingBag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Your cart is empty</h3>
-              <p className="text-gray-600 mb-6">Add some products to get started!</p>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Your cart is empty
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Add some products to get started!
+              </p>
               <button
                 onClick={() => {
                   handleCloseCart();
@@ -131,7 +144,10 @@ function Cart() {
           ) : (
             <div className="space-y-4">
               {items.map((item) => (
-                <div key={item.id} className="flex gap-4 p-4 border border-gray-200 rounded-lg">
+                <div
+                  key={item.id}
+                  className="flex gap-4 p-4 border border-gray-200 rounded-lg"
+                >
                   {/* Product Image */}
                   <div className="w-20 h-20 flex-shrink-0">
                     <img
@@ -143,22 +159,34 @@ function Cart() {
 
                   {/* Product Details */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-gray-900 truncate">{item.name}</h3>
-                    <p className="text-sm text-gray-600 mb-2">{item.category}</p>
-                    <p className="font-semibold text-gray-900">{formatPrice(item.price)}</p>
-                    
+                    <h3 className="font-medium text-gray-900 truncate">
+                      {item.name}
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-2">
+                      {item.category}
+                    </p>
+                    <p className="font-semibold text-gray-900">
+                      {formatPrice(item.price)}
+                    </p>
+
                     {/* Quantity Controls */}
                     <div className="flex items-center gap-2 mt-3">
                       <button
-                        onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                        onClick={() =>
+                          handleUpdateQuantity(item.id, item.quantity - 1)
+                        }
                         className="w-6 h-6 border border-gray-300 rounded flex items-center justify-center hover:bg-gray-50"
                       >
                         -
                       </button>
-                      <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
+                      <span className="w-8 text-center text-sm font-medium">
+                        {item.quantity}
+                      </span>
                       <div className="flex items-center space-x-2">
                         <button
-                          onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                          onClick={() =>
+                            handleUpdateQuantity(item.id, item.quantity + 1)
+                          }
                           disabled={item.quantity >= item.stockCount}
                           className={`w-6 h-6 border border-gray-300 rounded flex items-center justify-center hover:bg-gray-50
                             ${item.quantity >= item.stockCount ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -166,10 +194,11 @@ function Cart() {
                           +
                         </button>
                         {item.quantity >= item.stockCount && (
-                          <div className="text-red-500 text-sm">Stock reached max limit</div>
+                          <div className="text-red-500 text-sm">
+                            Stock reached max limit
+                          </div>
                         )}
                       </div>
-
                     </div>
                   </div>
 
@@ -192,7 +221,9 @@ function Cart() {
             {/* Summary */}
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Subtotal ({itemCount} items):</span>
+                <span className="text-gray-600">
+                  Subtotal ({itemCount} items):
+                </span>
                 <span className="font-medium">{formatPrice(total)}</span>
               </div>
               <div className="flex justify-between text-sm">
@@ -216,14 +247,14 @@ function Cart() {
                 <span>Proceed to Checkout</span>
                 <HiOutlineArrowRight className="w-5 h-5" />
               </button>
-              
+
               <button
                 onClick={handleClearCart}
                 className="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 Clear Cart
               </button>
-              
+
               <button
                 onClick={() => {
                   handleCloseCart();
@@ -241,4 +272,4 @@ function Cart() {
   );
 }
 
-export default Cart; 
+export default Cart;

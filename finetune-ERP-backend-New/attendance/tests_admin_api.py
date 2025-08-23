@@ -4,7 +4,13 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 
 from accounts.models import CustomUser
-from attendance.models import Shift, AdvisorSchedule, WeekOff, ScheduleException, AdvisorPayrollProfile
+from attendance.models import (
+    Shift,
+    AdvisorSchedule,
+    WeekOff,
+    ScheduleException,
+    AdvisorPayrollProfile,
+)
 from store.models import Store, StoreGeofence
 
 
@@ -28,11 +34,15 @@ class AdminAPITests(TestCase):
             "end_time": "17:00",
         }
         # create
-        resp = self.client.post(url, data, format="multipart", HTTP_IDEMPOTENCY_KEY="k1")
+        resp = self.client.post(
+            url, data, format="multipart", HTTP_IDEMPOTENCY_KEY="k1"
+        )
         self.assertEqual(resp.status_code, 201)
         shift_id = resp.data["id"]
         # idempotent retry
-        resp2 = self.client.post(url, data, format="multipart", HTTP_IDEMPOTENCY_KEY="k1")
+        resp2 = self.client.post(
+            url, data, format="multipart", HTTP_IDEMPOTENCY_KEY="k1"
+        )
         self.assertEqual(resp2.data["id"], shift_id)
         # json rejected
         resp3 = self.client.post(url, data, format="json")
@@ -56,10 +66,14 @@ class AdminAPITests(TestCase):
             "default_shift": shift.id,
         }
         url = "/api/attendance/admin/schedules"
-        resp = self.client.post(url, data, format="multipart", HTTP_IDEMPOTENCY_KEY="s1")
+        resp = self.client.post(
+            url, data, format="multipart", HTTP_IDEMPOTENCY_KEY="s1"
+        )
         sched_id = resp.data["id"]
         # preview
-        prev = self.client.get(f"{url}/{sched_id}/preview?start=2024-01-01&end=2024-01-02")
+        prev = self.client.get(
+            f"{url}/{sched_id}/preview?start=2024-01-01&end=2024-01-02"
+        )
         self.assertIn("2024-01-01", prev.data)
         # delete -> soft
         del_resp = self.client.delete(f"{url}/{sched_id}")
@@ -84,9 +98,13 @@ class AdminAPITests(TestCase):
             "date": "2024-01-05",
             "override_shift": shift.id,
         }
-        resp = self.client.post(ex_url, ex_data, format="multipart", HTTP_IDEMPOTENCY_KEY="ex1")
+        resp = self.client.post(
+            ex_url, ex_data, format="multipart", HTTP_IDEMPOTENCY_KEY="ex1"
+        )
         ex_id = resp.data["id"]
-        resp2 = self.client.post(ex_url, ex_data, format="multipart", HTTP_IDEMPOTENCY_KEY="ex1")
+        resp2 = self.client.post(
+            ex_url, ex_data, format="multipart", HTTP_IDEMPOTENCY_KEY="ex1"
+        )
         self.assertEqual(resp2.data["id"], ex_id)
 
         # geofence upsert
@@ -114,7 +132,14 @@ class AdminAPITests(TestCase):
         # payroll upsert
         p_url = f"/api/attendance/admin/payroll/{self.advisor.id}"
         pdata = {"hourly_rate": "123.45", "is_active": True}
-        resp = self.client.put(p_url, pdata, format="multipart", HTTP_IDEMPOTENCY_KEY="p1")
+        resp = self.client.put(
+            p_url, pdata, format="multipart", HTTP_IDEMPOTENCY_KEY="p1"
+        )
         pid = resp.data["id"]
-        resp2 = self.client.patch(p_url, {"hourly_rate": "123.45"}, format="multipart", HTTP_IDEMPOTENCY_KEY="p1")
+        resp2 = self.client.patch(
+            p_url,
+            {"hourly_rate": "123.45"},
+            format="multipart",
+            HTTP_IDEMPOTENCY_KEY="p1",
+        )
         self.assertEqual(resp2.data["id"], pid)

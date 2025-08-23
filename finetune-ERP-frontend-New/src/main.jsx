@@ -1,7 +1,7 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.jsx';
+import './index.css';
 import { LayoutProvider } from './params/LayoutContext.jsx';
 import { Provider } from 'react-redux';
 import { HelmetProvider } from 'react-helmet-async';
@@ -17,4 +17,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       </HelmetProvider>
     </Provider>
   </React.StrictMode>
-)
+);

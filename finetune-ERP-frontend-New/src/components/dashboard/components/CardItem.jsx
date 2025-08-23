@@ -9,10 +9,18 @@ function CardItem({ title = 'Feature', icon, disabled = false, to }) {
       tabIndex={0}
       aria-disabled={disabled}
       onClick={disabled ? () => toast('Coming soon') : undefined}
-      onKeyDown={disabled ? (e) => { if (e.key === 'Enter') toast('Coming soon'); } : undefined}
+      onKeyDown={
+        disabled
+          ? (e) => {
+              if (e.key === 'Enter') toast('Coming soon');
+            }
+          : undefined
+      }
       className={`rounded-2xl p-4 shadow-sm flex items-center justify-between bg-surface dark:bg-primary transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-keyline ${disabled ? 'opacity-70 cursor-not-allowed' : 'hover:scale-[1.01]'}`}
     >
-      <h3 className="text-body-lg font-semibold text-primary dark:text-surface">{title}</h3>
+      <h3 className="text-body-lg font-semibold text-primary dark:text-surface">
+        {title}
+      </h3>
       <div className="text-primary/40 dark:text-surface/40">
         {icon || <Lock size={28} />}
       </div>

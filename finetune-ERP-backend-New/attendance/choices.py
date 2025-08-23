@@ -43,6 +43,3 @@ RequestStatus = (
     ("APPROVED", "Approved"),
     ("REJECTED", "Rejected"),
 )
-
-
-

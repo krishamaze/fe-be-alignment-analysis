@@ -10,9 +10,25 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       if (currentPage <= 4) {
         pages.push(1, 2, 3, 4, 5, '...', totalPages);
       } else if (currentPage >= totalPages - 3) {
-        pages.push(1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+        pages.push(
+          1,
+          '...',
+          totalPages - 4,
+          totalPages - 3,
+          totalPages - 2,
+          totalPages - 1,
+          totalPages
+        );
       } else {
-        pages.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+        pages.push(
+          1,
+          '...',
+          currentPage - 1,
+          currentPage,
+          currentPage + 1,
+          '...',
+          totalPages
+        );
       }
     }
 
@@ -39,7 +55,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             key={page}
             onClick={() => onPageChange(page - 1)}
             className={`px-2 py-1 border rounded ${
-             ( currentPage ) === page ? 'border-keyline text-gray-800' : 'bg-white text-gray-800'
+              currentPage === page
+                ? 'border-keyline text-gray-800'
+                : 'bg-white text-gray-800'
             }`}
           >
             {page}
