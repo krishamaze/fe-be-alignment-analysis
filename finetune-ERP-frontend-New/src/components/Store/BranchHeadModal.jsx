@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hook';
 import { getUsers } from '../../api/user';
 import { assignBranchHeadToStore, unassignBranchHeadFromStore } from '../../api/store';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 
 const BranchHeadModal = ({ isOpen, onClose, store }) => {
   const dispatch = useAppDispatch();
