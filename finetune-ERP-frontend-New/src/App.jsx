@@ -19,7 +19,7 @@ import Settings from './pages/Settings';
 import FocusLayout from './components/layout/FocusLayout';
 import Workledger from './pages/Workledger';
 import WorkledgerDetails from './pages/WorkledgerDetails';
-import IndexPage from './pages/Index';
+import Brands from './pages/Brands';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Locate from './pages/Locate';
@@ -76,7 +76,8 @@ function AppContent() {
         <Route path="/partners" element={<Partners />} />
         <Route path="/help" element={<HelpCentre />} />
         <Route path="/legal" element={<Legal />} />
-        <Route path="/marketing" element={<IndexPage />} />
+        <Route path="/brands" element={<Brands />} />
+        <Route path="/marketing" element={<Brands />} />
         <Route path="/about/" element={<About />} />
         <Route path="/contact/" element={<Contact />} />
         <Route path="/locate/" element={<Locate />} />

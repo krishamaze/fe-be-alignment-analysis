@@ -30,6 +30,7 @@ urlpatterns = [
     path("api/auth/", include("accounts.urls.auth_urls")),  # 🔐 JWT login routes
     path("api/", include("accounts.urls.user_urls")),  # 🧑
     path("api/", include("store.urls")),  # NOT api/stores/
+    path("api/", include("brands.urls")),
     path("api/", include("spares.urls")),
     path("api/", include("bookings.urls")),
     path("api/marketing/", include("marketing.urls")),

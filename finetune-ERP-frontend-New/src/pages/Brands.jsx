@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import END_POINTS from '../utils/Endpoints';
 import Loader from '../components/common/Loader';
+import { useGetBrandsQuery } from '../redux/api/publicApi';
 
-export default function Index() {
-  const [brands, setBrands] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+export default function Brands() {
+  const {
+    data: brands = [],
+    isLoading: loading,
+    isError: error,
+  } = useGetBrandsQuery();
 
   useEffect(() => {
     document.title = 'Brands – Finetune';
@@ -25,22 +26,6 @@ export default function Index() {
     setMeta('description', desc);
     setMeta('og:title', 'Brands – Finetune', true);
     setMeta('og:description', desc, true);
-  }, []);
-
-  useEffect(() => {
-    const fetchBrands = async () => {
-      try {
-        const res = await axios.get(
-          `${END_POINTS.API_BASE_URL}/marketing/brands/`
-        );
-        setBrands(res.data);
-      } catch {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBrands();
   }, []);
 
   if (loading) {
@@ -81,9 +66,18 @@ export default function Index() {
       <h1 className="text-2xl font-bold mb-4 text-center text-keyline">
         Brands
       </h1>
-      <ul className="list-disc pl-5 space-y-2 max-w-xl mx-auto">
+      <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
         {brands.map((b) => (
-          <li key={b.id}>{b.name}</li>
+          <li key={b.id} className="text-center">
+            {b.logo && (
+              <img
+                src={b.logo}
+                alt={b.name}
+                className="h-16 mx-auto object-contain"
+              />
+            )}
+            <div className="mt-2 text-sm font-medium">{b.name}</div>
+          </li>
         ))}
       </ul>
     </div>

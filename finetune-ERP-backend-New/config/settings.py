@@ -111,6 +111,7 @@ INSTALLED_APPS = [
     "store",
     "attendance",
     "marketing",
+    "brands",
     "spares",
     "bookings",
     ##'django_extensions',

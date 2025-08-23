@@ -1,40 +1,24 @@
 import pytest
 from rest_framework.test import APIClient
-from accounts.models import CustomUser
 from spares.models import Spare
 
 
 @pytest.mark.django_db
-def test_anonymous_can_list_spares():
-    Spare.objects.create(name="Wheel", sku="WH1", price=10)
-    client = APIClient()
-    resp = client.get("/api/spares")
-    assert resp.status_code == 200
-    assert resp.json()["content"][0]["sku"] == "WH1"
+class TestSpareAPI:
+    def test_list_spares(self):
+        Spare.objects.create(name="Wheel", type="bike", is_available=True, sku="WH1", price=10)
+        client = APIClient()
+        resp = client.get("/api/spares/")
+        assert resp.status_code == 200
+        data = resp.json()
+        item = data["content"][0]
+        assert item["name"] == "Wheel"
 
-
-@pytest.mark.django_db
-def test_only_admin_can_create_spare():
-    client = APIClient()
-    # Anonymous should be unauthorized
-    resp = client.post("/api/spares", {"name": "Seat", "sku": "ST1", "price": 20})
-    assert resp.status_code in (401, 403)
-
-    user = CustomUser.objects.create_user(
-        username="admin", email="a@b.com", password="x", role="system_admin"
-    )
-    client.force_authenticate(user=user)
-    resp = client.post("/api/spares", {"name": "Seat", "sku": "ST1", "price": 20})
-    assert resp.status_code == 201
-    assert Spare.objects.filter(sku="ST1").exists()
-
-
-@pytest.mark.django_db
-def test_search_by_sku():
-    Spare.objects.create(name="Wheel", sku="WH1", price=10)
-    Spare.objects.create(name="Seat", sku="ST1", price=20)
-    client = APIClient()
-    resp = client.get("/api/spares?search=ST1")
-    data = resp.json()["content"]
-    assert len(data) == 1
-    assert data[0]["sku"] == "ST1"
+    def test_retrieve_spare(self):
+        spare = Spare.objects.create(name="Seat", type="bike", is_available=False, sku="ST1", price=20)
+        client = APIClient()
+        resp = client.get(f"/api/spares/{spare.id}/")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["id"] == spare.id
+        assert data["is_available"] is False

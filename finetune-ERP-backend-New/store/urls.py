@@ -1,21 +1,7 @@
-# urls.py
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import StoreViewSet
+from django.urls import path
+from .views import StoreListView, StoreDetailView
 
-router = DefaultRouter(trailing_slash=False)
-router.register(r"stores", StoreViewSet, basename="store")
-
-# Add custom endpoints for branch head management
-urlpatterns = router.urls + [
-    path(
-        "stores/<int:store_id>/assign-branch-head",
-        StoreViewSet.as_view({"post": "assign_branch_head"}),
-        name="assign-branch-head",
-    ),
-    path(
-        "stores/<int:store_id>/unassign-branch-head",
-        StoreViewSet.as_view({"post": "unassign_branch_head"}),
-        name="unassign-branch-head",
-    ),
+urlpatterns = [
+    path("stores/", StoreListView.as_view(), name="store-list"),
+    path("stores/<int:pk>/", StoreDetailView.as_view(), name="store-detail"),
 ]

@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import Loader from '../components/common/Loader';
-import END_POINTS from '../utils/Endpoints';
+import { useGetStoresQuery } from '../redux/api/publicApi';
 
 export default function Stores() {
-  const [stores, setStores] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const {
+    data: stores = [],
+    isLoading: loading,
+    isError: error,
+  } = useGetStoresQuery();
 
   useEffect(() => {
     document.title = 'Stores – Finetune';
@@ -25,22 +26,6 @@ export default function Stores() {
     setMeta('description', desc);
     setMeta('og:title', 'Stores – Finetune', true);
     setMeta('og:description', desc, true);
-  }, []);
-
-  useEffect(() => {
-    const fetchStores = async () => {
-      try {
-        const res = await axios.get(
-          `${END_POINTS.API_BASE_URL}${END_POINTS.GET_STORES}`
-        );
-        setStores(res.data?.content || []);
-      } catch {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchStores();
   }, []);
 
   if (loading) {
@@ -81,7 +66,7 @@ export default function Stores() {
             <Link to={`/stores/${s.id}`} className="font-semibold text-lg">
               {s.store_name}
             </Link>
-            <p className="text-sm text-gray-600">{s.address}</p>
+            <p className="text-sm text-gray-600">{s.store_address}</p>
           </li>
         ))}
       </ul>

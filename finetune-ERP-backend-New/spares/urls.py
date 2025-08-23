@@ -1,7 +1,7 @@
-from rest_framework.routers import DefaultRouter
-from .views import SpareViewSet
+from django.urls import path
+from .views import SpareListView, SpareDetailView
 
-router = DefaultRouter(trailing_slash=False)
-router.register(r"spares", SpareViewSet, basename="spare")
-
-urlpatterns = router.urls
+urlpatterns = [
+    path("spares/", SpareListView.as_view(), name="spare-list"),
+    path("spares/<int:pk>/", SpareDetailView.as_view(), name="spare-detail"),
+]
