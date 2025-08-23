@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import AppLoader from '../components/AppLoader';
+import Loader from '../components/common/Loader';
 import END_POINTS from '../utils/Endpoints';
 
 export default function StoreDetails() {
@@ -46,7 +46,7 @@ export default function StoreDetails() {
   if (loading) {
     return (
       <div className="p-4 pt-24 text-center">
-        <AppLoader />
+        <Loader />
       </div>
     );
   }

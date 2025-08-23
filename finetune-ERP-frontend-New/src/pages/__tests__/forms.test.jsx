@@ -9,7 +9,7 @@ import END_POINTS from '../../utils/Endpoints';
 import axios from 'axios';
 
 vi.mock('axios');
-vi.mock('react-toastify', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
+vi.mock('react-hot-toast', () => { const toast = () => {}; toast.success = vi.fn(); toast.error = vi.fn(); return { default: toast }; });
 vi.mock('react-google-recaptcha', () => ({
   __esModule: true,
   default: ({ onChange }) => {

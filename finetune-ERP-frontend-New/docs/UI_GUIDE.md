@@ -43,12 +43,13 @@ Dark mode is enabled via `class` strategy. Toggle a `dark` class on the root ele
 
 | Component | Location | Notes |
 |-----------|----------|-------|
-| `Navbar` / `EcommerceNavbar` | `src/components/common` & `src/components/ecommerce` | top navigation bars |
+| `Navbar` | `src/components/common` | top navigation bar (ecommerce variant pending consolidation) |
 | `DashboardNavbar` / `DashboardBottomNav` | `src/components/dashboard/layout` | responsive dashboard navigation with fixed bottom grid |
+| `Navbar` | `src/components/common` | top navigation bar (ecommerce variant pending consolidation) |
 | `Pagination` / `ResponsivePaginationHandler` | `src/components` | reusable pagination controls |
 | `ToggleStatusModal` & `DeleteConfirmationModal` | `src/components` | confirmation dialogs |
 | `StoreAssignModal` & `BranchHeadModal` | `src/components/Store` | assign stores or branch heads |
-| `AppLoader` | `src/components` | full‑screen loading spinner |
+| `Loader` | `src/components/common` | full-screen loading spinner |
 
 Follow these patterns when adding new components to keep styling and accessibility consistent.
 
@@ -75,8 +76,19 @@ Giveaway Redemption and Workledger tiles navigate to `/giveaway-redemption` and 
 ## Public form pattern
 
 - Apply the `.input` utility on all fields for consistent styling.
-- Display `AppLoader` during async submission and surface errors with toasts.
+- Display `Loader` during async submission and surface errors with `react-hot-toast`.
 - Include Google reCAPTCHA using `VITE_RECAPTCHA_SITE_KEY` and throttle repeat submissions for 30 seconds.
+
+## Toast system
+
+- Use `react-hot-toast` for all notifications.
+- Mount a single `<Toaster />` in `App.jsx` with theme-aware classes.
+- Avoid other toast libraries.
+
+## Icon usage
+
+- Import icons from `lucide-react`.
+- Do not mix multiple icon sets.
 
 ## SEO metadata
 

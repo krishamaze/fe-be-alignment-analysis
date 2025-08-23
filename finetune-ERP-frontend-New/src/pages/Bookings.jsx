@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
 import END_POINTS from '../utils/Endpoints';
-import AppLoader from '../components/AppLoader';
+import Loader from '../components/common/Loader';
 
 export default function Bookings() {
   const [form, setForm] = useState({
@@ -82,7 +82,7 @@ export default function Bookings() {
 
   return (
     <div className="p-4 pt-24 max-w-xl mx-auto">
-      {loading && <AppLoader />}
+      {loading && <Loader />}
       <h1 className="text-2xl font-bold mb-4">Book a Service</h1>
       <form onSubmit={submit} className="space-y-4">
         <input

@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { createStore, getStores, modifyStoreStatus, softDeleteStore, updateStore } from "../api/store";
 import { useEffect, useState } from "react";
-import AppLoader from '../components/AppLoader';
-import { toast } from "react-toastify";
+import Loader from '../components/common/Loader';
+import toast from 'react-hot-toast';
 import { MESSAGE } from "../utils/Constants";
 import NoDataFound from '../assets/images/NoDataFound.png';
 import StoreFilters from "../components/Store/StoreFilters";
@@ -209,7 +209,7 @@ const Store = () => {
     <>
       {!isEdit &&
         <div className="">
-          {isLoading && <AppLoader />}
+          {isLoading && <Loader />}
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-2xl font-bold">Stores</h1>
             <button

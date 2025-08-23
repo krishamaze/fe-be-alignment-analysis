@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import END_POINTS from '../utils/Endpoints';
-import AppLoader from '../components/AppLoader';
+import Loader from '../components/common/Loader';
 
 export default function Index() {
   const [brands, setBrands] = useState([]);
@@ -43,7 +43,7 @@ export default function Index() {
   if (loading) {
     return (
       <div className="p-4 pt-24 text-center">
-        <AppLoader />
+        <Loader />
       </div>
     );
   }

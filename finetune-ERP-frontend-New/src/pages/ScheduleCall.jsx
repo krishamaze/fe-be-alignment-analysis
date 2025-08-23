@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
 import END_POINTS from '../utils/Endpoints';
-import AppLoader from '../components/AppLoader';
+import Loader from '../components/common/Loader';
 
 export default function ScheduleCall() {
   const [form, setForm] = useState({ name: '', date: '', time: '', message: '' });
@@ -63,7 +63,7 @@ export default function ScheduleCall() {
 
   return (
     <div className="p-4 pt-24 max-w-xl mx-auto">
-      {loading && <AppLoader />}
+      {loading && <Loader />}
       <h1 className="text-2xl font-bold mb-4">Schedule a Call</h1>
       <form onSubmit={submit} className="space-y-4">
         <input
