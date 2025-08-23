@@ -6,9 +6,10 @@ from store.models import Store
 
 class CustomUser(AbstractUser):
     ROLE_CHOICES = (
-        ('system_admin', 'System Admin'),
-        ('branch_head', 'Branch Head'),
-        ('advisor', 'Advisor'),
+        ("system_admin", "System Admin"),
+        ("branch_head", "Branch Head"),
+        ("advisor", "Advisor"),
+        ("customer", "Customer"),
     )
     role = models.CharField(max_length=12, choices=ROLE_CHOICES, default='advisor')
     phone = models.CharField(max_length=10, blank=True, null=True)

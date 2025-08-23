@@ -10,6 +10,15 @@ const END_POINTS = {
   // STORE
   MODIFY_STORE: "/api/stores",
   GET_STORES: "/api/stores",
+  
+  // SPARES
+  MODIFY_SPARE: "/api/spares",
+  GET_SPARES: "/api/spares",
+
+  // BOOKINGS
+  MODIFY_BOOKING: "/api/bookings",
+  GET_BOOKINGS: "/api/bookings",
+
 
   // AUTHENTICATION
   LOGIN: '/api/auth/login',
