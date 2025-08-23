@@ -17,6 +17,7 @@ vi.mock('react-google-recaptcha', () => ({
     return <div data-testid="recaptcha" />;
   },
 }));
+vi.mock('js-cookie', () => ({ default: { get: vi.fn(() => 'token') } }));
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -108,6 +109,7 @@ describe('Bookings form', () => {
     const email = container.querySelector('input[name="email"]');
     const date = container.querySelector('input[name="date"]');
     const time = container.querySelector('input[name="time"]');
+    const issue = container.querySelector('select[name="issue"]');
     const message = container.querySelector('textarea[name="message"]');
     await act(async () => {
       name.value = 'A';
@@ -126,6 +128,10 @@ describe('Bookings form', () => {
       time.dispatchEvent(new Event('input', { bubbles: true }));
     });
     await act(async () => {
+      issue.value = 'Screen';
+      issue.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    await act(async () => {
       message.value = 'hi';
       message.dispatchEvent(new Event('input', { bubbles: true }));
     });
@@ -136,7 +142,8 @@ describe('Bookings form', () => {
     });
     expect(axios.post).toHaveBeenCalledWith(
       `${END_POINTS.API_BASE_URL}/bookings`,
-      expect.objectContaining({ captcha_token: 'tok' })
+      expect.objectContaining({ captcha_token: 'tok' }),
+      expect.objectContaining({ headers: { Authorization: 'Bearer token' } })
     );
   });
 });

@@ -1,15 +1,24 @@
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import ReCAPTCHA from 'react-google-recaptcha';
 import END_POINTS from '../utils/Endpoints';
 import AppLoader from '../components/AppLoader';
 
 export default function Bookings() {
-  const [form, setForm] = useState({ name: '', email: '', date: '', time: '', message: '' });
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    issue: '',
+    date: '',
+    time: '',
+    message: '',
+  });
   const [loading, setLoading] = useState(false);
   const [captcha, setCaptcha] = useState('');
   const [cooldown, setCooldown] = useState(false);
+  const [success, setSuccess] = useState(false);
   const recaptchaRef = useRef(null);
 
   useEffect(() => {
@@ -32,6 +41,8 @@ export default function Bookings() {
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
+  const issues = ['Screen', 'Battery', 'Other']; // TODO fetch from API
+
   const submit = async (e) => {
     e.preventDefault();
     if (cooldown) {
@@ -42,20 +53,28 @@ export default function Bookings() {
       toast.error('Captcha verification failed');
       return;
     }
+    const token = Cookies.get('token');
+    if (!token) {
+      toast.error('Please log in to book a service');
+      return;
+    }
     try {
       setLoading(true);
-      await axios.post(`${END_POINTS.API_BASE_URL}/bookings`, {
-        ...form,
-        captcha_token: captcha,
-      });
+      await axios.post(
+        `${END_POINTS.API_BASE_URL}/bookings`,
+        { ...form, captcha_token: captcha },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       toast.success('Booking submitted');
-      setForm({ name: '', email: '', date: '', time: '', message: '' });
+      setSuccess(true);
+      setForm({ name: '', email: '', issue: '', date: '', time: '', message: '' });
       recaptchaRef.current?.reset();
       setCaptcha('');
       setCooldown(true);
       setTimeout(() => setCooldown(false), 30000);
     } catch {
       toast.error('Submission failed');
+      setSuccess(false);
     } finally {
       setLoading(false);
     }
@@ -98,6 +117,20 @@ export default function Bookings() {
           className="input"
           required
         />
+        <select
+          name="issue"
+          value={form.issue}
+          onChange={onChange}
+          className="input"
+          required
+        >
+          <option value="">Select issue</option>
+          {issues.map((i) => (
+            <option key={i} value={i}>
+              {i}
+            </option>
+          ))}
+        </select>
         <textarea
           name="message"
           value={form.message}
@@ -117,6 +150,9 @@ export default function Bookings() {
         >
           Submit
         </button>
+        {success && (
+          <p className="text-green-600">Booking submitted successfully.</p>
+        )}
       </form>
     </div>
   );

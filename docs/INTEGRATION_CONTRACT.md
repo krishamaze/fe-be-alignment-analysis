@@ -67,7 +67,7 @@
   ```json
   {
     "content": [
-      { "id": 1, "name": "John", "email": "j@example.com", "date": "2024-01-01", "time": "10:00", "message": "hi", "status": "pending" }
+      { "id": 1, "name": "John", "email": "j@example.com", "issue": "screen", "date": "2024-01-01", "time": "10:00", "message": "hi", "status": "pending" }
     ]
   }
   ```
@@ -78,16 +78,23 @@
 - **Auth:** `system_admin` only
 - **Response:**
   ```json
-  { "id": 1, "name": "John", "email": "j@example.com", "date": "2024-01-01", "time": "10:00", "message": "hi", "status": "pending" }
+  { "id": 1, "name": "John", "email": "j@example.com", "issue": "screen", "date": "2024-01-01", "time": "10:00", "message": "hi", "status": "pending" }
   ```
 
 ### Create Booking
 - **URL:** `/api/bookings`
 - **Method:** `POST`
-- **Auth:** None
-- **Body:** `{ "name": string, "email": string?, "date": YYYY-MM-DD, "time": HH:MM, "message": string?, "captcha_token": string }`
-- **Response:** `201 Created` with `{ "id": number, "name": string, "email": string, "date": string, "time": string, "message": string, "status": string }`
+- **Auth:** `JWT`
+- **Body:** `{ "name": string, "email": string?, "issue": string, "date": YYYY-MM-DD, "time": HH:MM, "message": string?, "captcha_token": string }`
+- **Response:** `201 Created` with `{ "id": number, "name": string, "email": string, "issue": string, "date": string, "time": string, "message": string, "status": string }`
 - **Errors:** `400` for invalid captcha, `429` if rate limited
+#### Booking lifecycle
+```
+pending → confirmed → in_progress → completed
+            ↘
+            cancelled
+```
+Status advances automatically when the booking time passes; admins may override any state.
 ### Submit Contact Request
 - **URL:** `/api/marketing/contact/`
 - **Method:** `POST`
@@ -107,4 +114,4 @@
 ## Notes
 - Write operations (`POST`, `PUT`, `PATCH`, `DELETE`) are restricted to users with the `system_admin` role per `IsSystemAdminOrReadOnly`.
 - TODO: document pagination query parameters when backend stabilizes.
-- Contact, schedule-call, and booking forms require a valid reCAPTCHA token and are throttled at 5 requests/hour per IP.
+- Contact, schedule-call, and booking forms require a valid reCAPTCHA token. Bookings are throttled at 5 submissions/hour per user; advisors, branch heads, and system admins are exempt.

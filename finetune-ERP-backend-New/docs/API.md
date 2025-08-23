@@ -26,7 +26,7 @@ All paths are relative to `/api/` unless noted.
 | PUT/PATCH | spares/{id} | SpareViewSet.update | JWT | SystemAdmin | — |
 | DELETE | spares/{id} | SpareViewSet.destroy | JWT | SystemAdmin | — |
 | GET | bookings | BookingViewSet.list | JWT | SystemAdmin | — |
-| POST | bookings | BookingViewSet.create | None | AllowAny | 5/hour |
+| POST | bookings | BookingViewSet.create | JWT | Authenticated | 5/hour per user (staff exempt) |
 | GET | bookings/{id} | BookingViewSet.retrieve | JWT | SystemAdmin | — |
 | PUT/PATCH | bookings/{id} | BookingViewSet.update | JWT | SystemAdmin | — |
 | DELETE | bookings/{id} | BookingViewSet.destroy | JWT | SystemAdmin | — |
@@ -56,6 +56,10 @@ All paths are relative to `/api/` unless noted.
 | GET | marketing/brands | BrandListView | None | AllowAny | — |
 | POST | marketing/contact | ContactCreateView | None | AllowAny | 5/hour |
 | POST | marketing/schedule-call | ScheduleCallCreateView | None | AllowAny | 5/hour |
+
+### Booking notifications
+Configured via `BOOKING_NOTIFICATION_CHANNELS` in `config/settings.py` (comma-separated, e.g. `email,sms`).
+When enabled, new bookings send the booking ID, status and issue to the customer and store staff via email or SMS using `SMS_GATEWAY_URL`.
 
 Branch heads are created without a `store` and assigned later via `/stores/{id}/assign-branch-head`.
 
