@@ -92,4 +92,4 @@ Giveaway Redemption and Workledger tiles navigate to `/giveaway-redemption` and 
 
 ## SEO metadata
 
-- Public pages should set `document.title` and update `description` and Open Graph meta tags via `useEffect`.
+- Public pages should use `<Helmet>` from `react-helmet-async` to set the page `<title>`, description, and Open Graph meta tags.
