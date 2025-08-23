@@ -5,7 +5,7 @@
 ### List Stores
 - **URL:** `/api/stores`
 - **Method:** `GET`
-- **Auth:** Required; non-`system_admin` users have read-only access.
+- **Auth:** None; writes require `system_admin`.
 - **Response:**
   ```json
   {
@@ -25,7 +25,7 @@
 ### Retrieve Store
 - **URL:** `/api/stores/{id}`
 - **Method:** `GET`
-- **Auth:** Required; non-`system_admin` users have read-only access.
+- **Auth:** None; writes require `system_admin`.
 - **Response:**
   ```json
   {
@@ -41,7 +41,7 @@
 ### List Spares
 - **URL:** `/api/spares`
 - **Method:** `GET`
-- **Auth:** Required; non-`system_admin` users have read-only access.
+- **Auth:** None; writes require `system_admin`.
 - **Response:**
   ```json
   {
@@ -62,7 +62,7 @@
 ### List Products
 - **URL:** `/api/products`
 - **Method:** `GET`
-- **Auth:** Required; non-`system_admin` users have read-only access.
+- **Auth:** None; writes require `system_admin`.
 - **Filters:** `brand`, `category`, `min_price`, `max_price`, `search`
 - **Response:**
   ```json
@@ -76,7 +76,7 @@
 ### Retrieve Product
 - **URL:** `/api/products/{id}`
 - **Method:** `GET`
-- **Auth:** Required; non-`system_admin` users have read-only access.
+- **Auth:** None; writes require `system_admin`.
 - **Response:**
   ```json
   { "id": 1, "name": "Phone", "brand": "ACME", "category": "Mobile", "price": "100.00", "variants": [] }
@@ -85,7 +85,7 @@
 ### List Variants
 - **URL:** `/api/variants`
 - **Method:** `GET`
-- **Auth:** Required; non-`system_admin` users have read-only access.
+- **Auth:** None; writes require `system_admin`.
 - **Filters:** `product`, `min_price`, `max_price`, `search`
 - **Response:**
   ```json

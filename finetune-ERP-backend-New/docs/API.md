@@ -67,6 +67,10 @@ All paths are relative to `/api/` unless noted.
 | POST | marketing/contact | ContactCreateView | None | AllowAny | 5/hour |
 | POST | marketing/schedule-call | ScheduleCallCreateView | None | AllowAny | 5/hour |
 
+### Products & Variants
+`GET /products` supports filters: `brand`, `category`, `min_price`, `max_price`, `search`.
+`GET /variants` supports filters: `product`, `min_price`, `max_price`, `search`.
+
 ### Booking notifications
 Configured via `BOOKING_NOTIFICATION_CHANNELS` in `config/settings.py` (comma-separated, e.g. `email,sms`).
 When enabled, new bookings send the booking ID, status and issue to the customer and store staff via email or SMS using `SMS_GATEWAY_URL`.
