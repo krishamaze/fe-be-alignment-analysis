@@ -19,10 +19,10 @@ React + Vite application providing ERP and e‑commerce interfaces for finetune.
 | Route | Component |
 |-------|-----------|
 | `/marketing` | `Index.jsx` |
-| `/about` | `About.jsx` |
-| `/contact` | `Contact.jsx` |
-| `/locate` | `Locate.jsx` |
-| `/terms` | `Terms.jsx` |
+| `/about/` | `About.jsx` |
+| `/contact/` | `Contact.jsx` |
+| `/locate/` | `Locate.jsx` |
+| `/terms-and-conditions/` | `Terms.jsx` |
 | `/schedule-call` | `ScheduleCall.jsx` |
 
 ## Environment
