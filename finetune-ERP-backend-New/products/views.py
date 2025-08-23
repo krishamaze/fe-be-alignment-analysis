@@ -6,7 +6,7 @@ from .serializers import ProductSerializer, VariantSerializer
 
 
 class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all().prefetch_related('variants')
+    queryset = Product.objects.select_related('category', 'department').prefetch_related('variants')
     serializer_class = ProductSerializer
     permission_classes = [IsSystemAdminOrReadOnly]
 
@@ -17,7 +17,10 @@ class ProductViewSet(viewsets.ModelViewSet):
             qs = qs.filter(brand__iexact=brand)
         category = self.request.query_params.get('category')
         if category:
-            qs = qs.filter(category__iexact=category)
+            qs = qs.filter(category__slug=category)
+        department = self.request.query_params.get('department')
+        if department:
+            qs = qs.filter(department__slug=department)
         min_price = self.request.query_params.get('min_price')
         if min_price:
             qs = qs.filter(price__gte=min_price)

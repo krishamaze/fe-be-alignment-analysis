@@ -112,6 +112,8 @@ INSTALLED_APPS = [
     'marketing',
     'spares',
     'products',
+    'departments',
+    'categories',
     'bookings',
     ##'django_extensions',
 ]

@@ -14,6 +14,8 @@
 | `serviceapp/auth/pricemaintanence.html` | `src/pages/Spares.jsx` |
 | `serviceapp/auth/bookingsView.html` | `src/pages/Bookings.jsx` |
 | `serviceapp/auth/product_manager.html` (TODO confirm) | `src/pages/Products.jsx`, `src/pages/ProductDetails.jsx` |
+| *(legacy category template TBD)* | `src/pages/Category.jsx` |
+| *(legacy department template TBD)* | `src/pages/Department.jsx` |
 
 
 ## Deviations & Improvements
@@ -27,12 +29,14 @@
 - Index page fetches brand data from `/api/marketing/brands/` with loading, error, and empty states.
 - Stores list and details consume `/api/stores` with read-only UI and consistent loading/error/empty states.
 - Products list and details consume `/api/products` with brand/category/price filters and improved SEO.
+- Category and Department pages show product listings filtered via slugs with SEO metadata.
 
 ## SEO & Performance Notes
 
 - SEO tags verified via page source inspection.
 - SEO tests cover About, Brands, Stores, Store details, Spares, and Bookings pages.
 - SEO tests now include Products and Product details pages.
+- SEO tests cover Category and Department pages.
 - TODO: run Lighthouse to confirm performance within ±10% of legacy baseline.
 
 ## Dependencies & Blockers

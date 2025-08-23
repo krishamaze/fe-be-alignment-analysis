@@ -24,9 +24,19 @@ describe('Products page', () => {
       `${END_POINTS.API_BASE_URL}${END_POINTS.GET_PRODUCTS}`
     );
     const brand = container.querySelector('input[name="brand"]');
+    const category = container.querySelector('input[name="category"]');
+    const department = container.querySelector('input[name="department"]');
     await act(async () => {
       brand.value = 'ACME';
       brand.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    await act(async () => {
+      category.value = 'mobile';
+      category.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    await act(async () => {
+      department.value = 'electronics';
+      department.dispatchEvent(new Event('input', { bubbles: true }));
     });
     await act(async () => {
       container.querySelector('form').dispatchEvent(

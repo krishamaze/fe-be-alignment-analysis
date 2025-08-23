@@ -8,7 +8,7 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [filters, setFilters] = useState({ brand: '', category: '', min_price: '', max_price: '' });
+  const [filters, setFilters] = useState({ brand: '', category: '', department: '', min_price: '', max_price: '' });
 
   useEffect(() => {
     document.title = 'Products – Finetune';
@@ -89,6 +89,14 @@ export default function Products() {
           name="category"
           placeholder="Category"
           value={filters.category}
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
+        <input
+          type="text"
+          name="department"
+          placeholder="Department"
+          value={filters.department}
           onChange={handleChange}
           className="border p-2 rounded"
         />

@@ -11,11 +11,13 @@ import Spares from '../Spares';
 import Bookings from '../Bookings';
 import Products from '../Products';
 import ProductDetails from '../ProductDetails';
+import Category from '../Category';
+import Department from '../Department';
 import axios from 'axios';
 vi.mock('axios');
 vi.mock('react-google-recaptcha', () => ({
   __esModule: true,
-  default: () => <div data-testid="recaptcha" />,
+  default: () => <div data-testid='recaptcha' />,
 }));
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -64,7 +66,7 @@ describe('SEO meta tags', () => {
       createRoot(container).render(
         <MemoryRouter initialEntries={['/stores/1']}>
           <Routes>
-            <Route path="/stores/:id" element={<StoreDetails />} />
+            <Route path='/stores/:id' element={<StoreDetails />} />
           </Routes>
         </MemoryRouter>
       );
@@ -73,6 +75,7 @@ describe('SEO meta tags', () => {
     const desc = document.head.querySelector("meta[name='description']");
     expect(desc.getAttribute('content')).toContain('Details for Alpha Store');
   });
+
   it('sets title and description for Spares page', async () => {
     axios.get.mockResolvedValue({ data: { content: [] } });
     const container = document.createElement('div');
@@ -83,6 +86,7 @@ describe('SEO meta tags', () => {
     const desc = document.head.querySelector("meta[name='description']");
     expect(desc.getAttribute('content')).toContain('spare parts pricing');
   });
+
   it('sets title and description for Bookings page', async () => {
     const container = document.createElement('div');
     await act(async () => {
@@ -105,13 +109,13 @@ describe('SEO meta tags', () => {
   });
 
   it('sets title and description for ProductDetails page', async () => {
-    axios.get.mockResolvedValue({ data: { id: 1, name: 'Phone', brand: 'ACME', category: 'Mobile', price: '100.00', variants: [] } });
+    axios.get.mockResolvedValue({ data: { id: 1, name: 'Phone', brand: 'ACME', category: 'mobile', department: 'electronics', price: '100.00', variants: [] } });
     const container = document.createElement('div');
     await act(async () => {
       createRoot(container).render(
         <MemoryRouter initialEntries={['/products/1']}>
           <Routes>
-            <Route path="/products/:id" element={<ProductDetails />} />
+            <Route path='/products/:id' element={<ProductDetails />} />
           </Routes>
         </MemoryRouter>
       );
@@ -119,5 +123,41 @@ describe('SEO meta tags', () => {
     expect(document.title).toBe('Phone – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
     expect(desc.getAttribute('content')).toContain('Details for Phone');
+  });
+
+  it('sets title and description for Category page', async () => {
+    axios.get.mockResolvedValueOnce({ data: { id: 1, name: 'Phones', slug: 'phones' } });
+    axios.get.mockResolvedValueOnce({ data: { content: [] } });
+    const container = document.createElement('div');
+    await act(async () => {
+      createRoot(container).render(
+        <MemoryRouter initialEntries={['/category/phones']}>
+          <Routes>
+            <Route path='/category/:slug' element={<Category />} />
+          </Routes>
+        </MemoryRouter>
+      );
+    });
+    expect(document.title).toBe('Phones – Finetune');
+    const desc = document.head.querySelector("meta[name='description']");
+    expect(desc.getAttribute('content')).toContain('Products under Phones');
+  });
+
+  it('sets title and description for Department page', async () => {
+    axios.get.mockResolvedValueOnce({ data: { id: 1, name: 'Electronics', slug: 'electronics' } });
+    axios.get.mockResolvedValueOnce({ data: { content: [] } });
+    const container = document.createElement('div');
+    await act(async () => {
+      createRoot(container).render(
+        <MemoryRouter initialEntries={['/department/electronics']}>
+          <Routes>
+            <Route path='/department/:slug' element={<Department />} />
+          </Routes>
+        </MemoryRouter>
+      );
+    });
+    expect(document.title).toBe('Electronics – Finetune');
+    const desc = document.head.querySelector("meta[name='description']");
+    expect(desc.getAttribute('content')).toContain('Products in Electronics');
   });
 });

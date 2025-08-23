@@ -31,6 +31,8 @@ urlpatterns = [
     path('api/', include('store.urls')),  # NOT api/stores/
     path('api/', include('spares.urls')),
     path('api/', include('products.urls')),
+    path('api/', include('departments.urls')),
+    path('api/', include('categories.urls')),
     path('api/', include('bookings.urls')),
     path('api/marketing/', include('marketing.urls')),
     path('api/attendance/', include('attendance.urls')),

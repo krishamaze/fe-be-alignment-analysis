@@ -25,6 +25,16 @@ All paths are relative to `/api/` unless noted.
 | GET | spares/{id} | SpareViewSet.retrieve | optional | Read only | — |
 | PUT/PATCH | spares/{id} | SpareViewSet.update | JWT | SystemAdmin | — |
 | DELETE | spares/{id} | SpareViewSet.destroy | JWT | SystemAdmin | — |
+| GET | departments | DepartmentViewSet.list | optional | Read only | — |
+| POST | departments | DepartmentViewSet.create | JWT | SystemAdmin | — |
+| GET | departments/{slug} | DepartmentViewSet.retrieve | optional | Read only | — |
+| PUT/PATCH | departments/{slug} | DepartmentViewSet.update | JWT | SystemAdmin | — |
+| DELETE | departments/{slug} | DepartmentViewSet.destroy | JWT | SystemAdmin | — |
+| GET | categories | CategoryViewSet.list | optional | Read only | — |
+| POST | categories | CategoryViewSet.create | JWT | SystemAdmin | — |
+| GET | categories/{slug} | CategoryViewSet.retrieve | optional | Read only | — |
+| PUT/PATCH | categories/{slug} | CategoryViewSet.update | JWT | SystemAdmin | — |
+| DELETE | categories/{slug} | CategoryViewSet.destroy | JWT | SystemAdmin | — |
 | GET | products | ProductViewSet.list | optional | Read only | — |
 | POST | products | ProductViewSet.create | JWT | SystemAdmin | — |
 | GET | products/{id} | ProductViewSet.retrieve | optional | Read only | — |
@@ -68,7 +78,7 @@ All paths are relative to `/api/` unless noted.
 | POST | marketing/schedule-call | ScheduleCallCreateView | None | AllowAny | 5/hour |
 
 ### Products & Variants
-`GET /products` supports filters: `brand`, `category`, `min_price`, `max_price`, `search`.
+`GET /products` supports filters: `brand`, `category`, `department`, `min_price`, `max_price`, `search`.
 `GET /variants` supports filters: `product`, `min_price`, `max_price`, `search`.
 
 ### Booking notifications

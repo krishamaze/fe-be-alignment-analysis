@@ -1,10 +1,13 @@
 from django.db import models
+from categories.models import Category
+from departments.models import Department
 
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
     brand = models.CharField(max_length=100)
-    category = models.CharField(max_length=100)
+    category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, related_name='products', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)

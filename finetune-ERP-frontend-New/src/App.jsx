@@ -32,6 +32,8 @@ import Spares from './pages/Spares';
 import Bookings from './pages/Bookings';
 import Products from './pages/Products';
 import ProductDetails from './pages/ProductDetails';
+import Category from './pages/Category';
+import Department from './pages/Department';
 
 // E-commerce pages
 import Shop from './pages/ecommerce/Shop';
@@ -86,6 +88,8 @@ function AppContent() {
         <Route path="/spares" element={<Spares />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
+        <Route path="/category/:slug" element={<Category />} />
+        <Route path="/department/:slug" element={<Department />} />
         <Route path="/bookings" element={<Bookings />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/schedule-call" element={<ScheduleCall />} />

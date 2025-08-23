@@ -63,12 +63,12 @@
 - **URL:** `/api/products`
 - **Method:** `GET`
 - **Auth:** None; writes require `system_admin`.
-- **Filters:** `brand`, `category`, `min_price`, `max_price`, `search`
+- **Filters:** `brand`, `category`, `department`, `min_price`, `max_price`, `search`
 - **Response:**
   ```json
   {
     "content": [
-      { "id": 1, "name": "Phone", "brand": "ACME", "category": "Mobile", "price": "100.00" }
+      { "id": 1, "name": "Phone", "brand": "ACME", "category": "mobile", "department": "electronics", "price": "100.00" }
     ]
   }
   ```
@@ -79,7 +79,47 @@
 - **Auth:** None; writes require `system_admin`.
 - **Response:**
   ```json
-  { "id": 1, "name": "Phone", "brand": "ACME", "category": "Mobile", "price": "100.00", "variants": [] }
+  { "id": 1, "name": "Phone", "brand": "ACME", "category": "mobile", "department": "electronics", "price": "100.00", "variants": [] }
+  ```
+
+### List Departments
+- **URL:** `/api/departments`
+- **Method:** `GET`
+- **Auth:** None; writes require `system_admin`.
+- **Response:**
+  ```json
+  {
+    "content": [ { "id": 1, "name": "Electronics", "slug": "electronics" } ]
+  }
+  ```
+
+### Retrieve Department
+- **URL:** `/api/departments/{slug}`
+- **Method:** `GET`
+- **Auth:** None; writes require `system_admin`.
+- **Response:**
+  ```json
+  { "id": 1, "name": "Electronics", "slug": "electronics" }
+  ```
+
+### List Categories
+- **URL:** `/api/categories`
+- **Method:** `GET`
+- **Auth:** None; writes require `system_admin`.
+- **Response:**
+  ```json
+  {
+    "content": [ { "id": 1, "name": "Phones", "slug": "phones", "children": [] } ]
+  }
+  ```
+
+### Retrieve Category
+- **URL:** `/api/categories/{slug}`
+- **Method:** `GET`
+- **Auth:** None; writes require `system_admin`.
+- **Response:**
+  ```json
+  { "id": 1, "name": "Phones", "slug": "phones", "parent": null, "department": "electronics", "children": [] }
   ```
 
 ### List Variants

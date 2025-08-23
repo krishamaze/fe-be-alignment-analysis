@@ -19,6 +19,14 @@ const END_POINTS = {
   MODIFY_PRODUCT: "/api/products",
   GET_PRODUCTS: "/api/products",
 
+  // DEPARTMENTS
+  MODIFY_DEPARTMENT: "/api/departments",
+  GET_DEPARTMENTS: "/api/departments",
+
+  // CATEGORIES
+  MODIFY_CATEGORY: "/api/categories",
+  GET_CATEGORIES: "/api/categories",
+
   // VARIANTS
   MODIFY_VARIANT: "/api/variants",
   GET_VARIANTS: "/api/variants",
