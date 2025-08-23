@@ -13,7 +13,7 @@ This project uses GitHub Actions to enforce quality gates on every pull request.
 
 - Frontend unit tests run with `npm test` (Vitest).
 - Backend tests run with `pytest`.
-- SEO tests rely on `<Helmet>` tags for titles and descriptions. Updating page metadata often requires regenerating snapshots via `npm test -u`.
+- SEO tests rely on React 19 `<title>` and `<meta>` tags for titles and descriptions. Updating page metadata often requires regenerating snapshots via `npm test -u`.
 
 ## Lighthouse
 
@@ -27,4 +27,4 @@ Pull requests are expected to pass linting and testing jobs. Lighthouse results 
 
 ## Known Issues
 
-- React 19 with `react-helmet-async` emits a peer dependency warning. The warning is safe to ignore until upstream fixes land.
+No outstanding CI issues.
