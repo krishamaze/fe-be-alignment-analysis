@@ -92,4 +92,4 @@ Giveaway Redemption and Workledger tiles navigate to `/giveaway-redemption` and 
 
 ## SEO metadata
 
-- Public pages should use `<Helmet>` from `react-helmet-async` to set the page `<title>`, description, and Open Graph meta tags.
+- Public pages should declare `<title>`, `<meta>`, and `<link>` tags directly in the component using React 19's built-in metadata support to set the page title, description, and Open Graph meta tags.

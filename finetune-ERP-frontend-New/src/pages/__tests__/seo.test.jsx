@@ -12,7 +12,6 @@ import StoreDetails from '../StoreDetails';
 import Stores from '../Stores';
 import Spares from '../Spares';
 import Bookings from '../Bookings';
-import { HelmetProvider } from 'react-helmet-async';
 import axios from 'axios';
 vi.mock('axios');
 vi.mock('react-google-recaptcha', () => ({
@@ -33,11 +32,7 @@ describe('SEO meta tags', () => {
   it('sets title and description for About page', async () => {
     const container = document.createElement('div');
     await act(async () => {
-      createRoot(container).render(
-        <HelmetProvider>
-          <About />
-        </HelmetProvider>
-      );
+      createRoot(container).render(<About />);
     });
     expect(document.title).toBe('About – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
@@ -47,11 +42,7 @@ describe('SEO meta tags', () => {
   it('sets title and description for Contact page', async () => {
     const container = document.createElement('div');
     await act(async () => {
-      createRoot(container).render(
-        <HelmetProvider>
-          <Contact />
-        </HelmetProvider>
-      );
+      createRoot(container).render(<Contact />);
     });
     expect(document.title).toBe('Contact – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
@@ -61,11 +52,7 @@ describe('SEO meta tags', () => {
   it('sets title and description for Locate page', async () => {
     const container = document.createElement('div');
     await act(async () => {
-      createRoot(container).render(
-        <HelmetProvider>
-          <Locate />
-        </HelmetProvider>
-      );
+      createRoot(container).render(<Locate />);
     });
     expect(document.title).toBe('Locate – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
@@ -76,17 +63,15 @@ describe('SEO meta tags', () => {
     const container = document.createElement('div');
     const root = createRoot(container);
     await act(async () => {
-      root.render(
-        <HelmetProvider>
-          <Terms />
-        </HelmetProvider>
-      );
+      root.render(<Terms />);
     });
     await act(async () => {});
-    root.unmount();
     expect(document.title).toBe('Terms & Conditions – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
     expect(desc.getAttribute('content')).toContain('Agreement for repair');
+    await act(async () => {
+      root.unmount();
+    });
   });
 
   it('sets title and description for Brands page', async () => {
@@ -94,17 +79,15 @@ describe('SEO meta tags', () => {
     const container = document.createElement('div');
     const root = createRoot(container);
     await act(async () => {
-      root.render(
-        <HelmetProvider>
-          <Index />
-        </HelmetProvider>
-      );
+      root.render(<Index />);
     });
     await act(async () => {});
-    root.unmount();
     expect(document.title).toBe('Brands – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
     expect(desc.getAttribute('content')).toContain('Brands we service');
+    await act(async () => {
+      root.unmount();
+    });
   });
 
   it('sets title and description for Stores page', async () => {
@@ -112,11 +95,7 @@ describe('SEO meta tags', () => {
     axios.get.mockResolvedValue({ data: { content: [] } });
     const container = document.createElement('div');
     await act(async () => {
-      createRoot(container).render(
-        <HelmetProvider>
-          <Stores />
-        </HelmetProvider>
-      );
+      createRoot(container).render(<Stores />);
     });
     expect(document.title).toBe('Stores – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
@@ -138,13 +117,11 @@ describe('SEO meta tags', () => {
     const container = document.createElement('div');
     await act(async () => {
       createRoot(container).render(
-        <HelmetProvider>
-          <MemoryRouter initialEntries={['/stores/1']}>
-            <Routes>
-              <Route path="/stores/:id" element={<StoreDetails />} />
-            </Routes>
-          </MemoryRouter>
-        </HelmetProvider>
+        <MemoryRouter initialEntries={['/stores/1']}>
+          <Routes>
+            <Route path="/stores/:id" element={<StoreDetails />} />
+          </Routes>
+        </MemoryRouter>
       );
     });
     expect(document.title).toBe('Alpha Store – Finetune');
@@ -156,11 +133,7 @@ describe('SEO meta tags', () => {
     axios.get.mockResolvedValue({ data: { content: [] } });
     const container = document.createElement('div');
     await act(async () => {
-      createRoot(container).render(
-        <HelmetProvider>
-          <Spares />
-        </HelmetProvider>
-      );
+      createRoot(container).render(<Spares />);
     });
     expect(document.title).toBe('Spares – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
@@ -170,11 +143,7 @@ describe('SEO meta tags', () => {
     document.title = '';
     const container = document.createElement('div');
     await act(async () => {
-      createRoot(container).render(
-        <HelmetProvider>
-          <Bookings />
-        </HelmetProvider>
-      );
+      createRoot(container).render(<Bookings />);
     });
     expect(document.title).toBe('Book a Service – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
