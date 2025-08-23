@@ -20,6 +20,11 @@ All paths are relative to `/api/` unless noted.
 | DELETE | stores/{id} | StoreViewSet.destroy | JWT | SystemAdmin | — |
 | POST | stores/{id}/assign-branch-head | StoreViewSet.assign_branch_head | JWT | SystemAdmin | — |
 | POST | stores/{id}/unassign-branch-head | StoreViewSet.unassign_branch_head | JWT | SystemAdmin | — |
+| GET | spares | SpareViewSet.list | optional | Read only | — |
+| POST | spares | SpareViewSet.create | JWT | SystemAdmin | — |
+| GET | spares/{id} | SpareViewSet.retrieve | optional | Read only | — |
+| PUT/PATCH | spares/{id} | SpareViewSet.update | JWT | SystemAdmin | — |
+| DELETE | spares/{id} | SpareViewSet.destroy | JWT | SystemAdmin | — |
 | POST | attendance/check-in | CheckInView | JWT | Advisor | — |
 | POST | attendance/check-out | CheckOutView | JWT | Advisor | — |
 | GET | attendance/me/today | MeTodayView | JWT | Advisor | — |

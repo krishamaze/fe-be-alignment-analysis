@@ -38,6 +38,26 @@
   }
   ```
 
+### List Spares
+- **URL:** `/api/spares`
+- **Method:** `GET`
+- **Auth:** Required; non-`system_admin` users have read-only access.
+- **Response:**
+  ```json
+  {
+    "content": [
+      { "id": 1, "name": "Wheel", "sku": "WH1", "price": "10.00", "is_active": true }
+    ]
+  }
+  ```
+
+### Create Spare
+- **URL:** `/api/spares`
+- **Method:** `POST`
+- **Auth:** `system_admin` only
+- **Body:** `{ "name": string, "sku": string, "price": number }`
+- **Response:** `201 Created` with `{ "id": number, "name": string, "sku": string, "price": string, "is_active": boolean }`
+- **Errors:** `401` if unauthenticated, `403` if unauthorized
 ### Submit Contact Request
 - **URL:** `/api/marketing/contact/`
 - **Method:** `POST`

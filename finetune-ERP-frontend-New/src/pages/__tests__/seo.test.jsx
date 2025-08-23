@@ -7,6 +7,7 @@ import About from '../About';
 import Index from '../Index';
 import StoreDetails from '../StoreDetails';
 import Stores from '../Stores';
+import Spares from '../Spares';
 import axios from 'axios';
 vi.mock('axios');
 
@@ -64,5 +65,15 @@ describe('SEO meta tags', () => {
     expect(document.title).toBe('Alpha Store – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
     expect(desc.getAttribute('content')).toContain('Details for Alpha Store');
+  });
+  it('sets title and description for Spares page', async () => {
+    axios.get.mockResolvedValue({ data: { content: [] } });
+    const container = document.createElement('div');
+    await act(async () => {
+      createRoot(container).render(<Spares />);
+    });
+    expect(document.title).toBe('Spares – Finetune');
+    const desc = document.head.querySelector("meta[name='description']");
+    expect(desc.getAttribute('content')).toContain('spare parts pricing');
   });
 });
