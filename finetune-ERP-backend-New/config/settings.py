@@ -17,6 +17,13 @@ except ImportError:
 # ✅ Environment Settings
 SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-in-dev')  # Safe default in local
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'             # Controlled via env
+RECAPTCHA_SECRET_KEY = os.environ.get('RECAPTCHA_SECRET_KEY', '')
+BOOKING_NOTIFICATION_CHANNELS = os.environ.get(
+    'BOOKING_NOTIFICATION_CHANNELS', 'email,sms'
+).split(',')
+SMS_GATEWAY_URL = os.environ.get('SMS_GATEWAY_URL', '')
+SMS_GATEWAY_TOKEN = os.environ.get('SMS_GATEWAY_TOKEN', '')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@example.com')
 ALLOWED_HOSTS = [
     'api.finetune.store', 
     'localhost', 
@@ -68,6 +75,14 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'utils.pagination.SpringStylePagination',
     'PAGE_SIZE': 10,
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.ScopedRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'contact': '5/hour',
+        'schedule_call': '5/hour',
+        'booking': '5/hour',
+    },
 }
 
 SIMPLE_JWT = {
@@ -95,6 +110,9 @@ INSTALLED_APPS = [
     'store',
     'attendance',
     'marketing',
+    'spares',
+    'products',
+    'bookings',
     ##'django_extensions',
 ]
 

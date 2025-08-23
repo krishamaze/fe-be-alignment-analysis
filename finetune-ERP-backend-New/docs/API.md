@@ -20,6 +20,26 @@ All paths are relative to `/api/` unless noted.
 | DELETE | stores/{id} | StoreViewSet.destroy | JWT | SystemAdmin | — |
 | POST | stores/{id}/assign-branch-head | StoreViewSet.assign_branch_head | JWT | SystemAdmin | — |
 | POST | stores/{id}/unassign-branch-head | StoreViewSet.unassign_branch_head | JWT | SystemAdmin | — |
+| GET | spares | SpareViewSet.list | optional | Read only | — |
+| POST | spares | SpareViewSet.create | JWT | SystemAdmin | — |
+| GET | spares/{id} | SpareViewSet.retrieve | optional | Read only | — |
+| PUT/PATCH | spares/{id} | SpareViewSet.update | JWT | SystemAdmin | — |
+| DELETE | spares/{id} | SpareViewSet.destroy | JWT | SystemAdmin | — |
+| GET | products | ProductViewSet.list | optional | Read only | — |
+| POST | products | ProductViewSet.create | JWT | SystemAdmin | — |
+| GET | products/{id} | ProductViewSet.retrieve | optional | Read only | — |
+| PUT/PATCH | products/{id} | ProductViewSet.update | JWT | SystemAdmin | — |
+| DELETE | products/{id} | ProductViewSet.destroy | JWT | SystemAdmin | — |
+| GET | variants | VariantViewSet.list | optional | Read only | — |
+| POST | variants | VariantViewSet.create | JWT | SystemAdmin | — |
+| GET | variants/{id} | VariantViewSet.retrieve | optional | Read only | — |
+| PUT/PATCH | variants/{id} | VariantViewSet.update | JWT | SystemAdmin | — |
+| DELETE | variants/{id} | VariantViewSet.destroy | JWT | SystemAdmin | — |
+| GET | bookings | BookingViewSet.list | JWT | SystemAdmin | — |
+| POST | bookings | BookingViewSet.create | JWT | Authenticated | 5/hour per user (staff exempt) |
+| GET | bookings/{id} | BookingViewSet.retrieve | JWT | SystemAdmin | — |
+| PUT/PATCH | bookings/{id} | BookingViewSet.update | JWT | SystemAdmin | — |
+| DELETE | bookings/{id} | BookingViewSet.destroy | JWT | SystemAdmin | — |
 | POST | attendance/check-in | CheckInView | JWT | Advisor | — |
 | POST | attendance/check-out | CheckOutView | JWT | Advisor | — |
 | GET | attendance/me/today | MeTodayView | JWT | Advisor | — |
@@ -44,8 +64,12 @@ All paths are relative to `/api/` unless noted.
 | POST | token/refresh | TokenRefreshView | refresh | AllowAny | — |
 | POST | token/verify | TokenVerifyView | optional | AllowAny | — |
 | GET | marketing/brands | BrandListView | None | AllowAny | — |
-| POST | marketing/contact | ContactCreateView | None | AllowAny | TODO |
-| POST | marketing/schedule-call | ScheduleCallCreateView | None | AllowAny | TODO |
+| POST | marketing/contact | ContactCreateView | None | AllowAny | 5/hour |
+| POST | marketing/schedule-call | ScheduleCallCreateView | None | AllowAny | 5/hour |
+
+### Booking notifications
+Configured via `BOOKING_NOTIFICATION_CHANNELS` in `config/settings.py` (comma-separated, e.g. `email,sms`).
+When enabled, new bookings send the booking ID, status and issue to the customer and store staff via email or SMS using `SMS_GATEWAY_URL`.
 
 Branch heads are created without a `store` and assigned later via `/stores/{id}/assign-branch-head`.
 
