@@ -28,8 +28,6 @@ export const LayoutProvider = ({ children }) => {
   }, []);
 
   return (
-    <LayoutContext.Provider value={layout}>
-      {children}
-    </LayoutContext.Provider>
+    <LayoutContext.Provider value={layout}>{children}</LayoutContext.Provider>
   );
 };

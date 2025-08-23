@@ -32,13 +32,13 @@ Example login response:
 
 ## Route protection
 
-| Route | Requirement |
-|-------|-------------|
-| `/dashboard` | authenticated user |
-| `/dashboard/users` | role `system_admin` |
-| `/dashboard/stores` | role `system_admin` |
-| `/dashboard/settings` | role `system_admin` |
+| Route                  | Requirement                                    |
+| ---------------------- | ---------------------------------------------- |
+| `/dashboard`           | authenticated user                             |
+| `/dashboard/users`     | role `system_admin`                            |
+| `/dashboard/stores`    | role `system_admin`                            |
+| `/dashboard/settings`  | role `system_admin`                            |
 | `/giveaway-redemption` | roles `system_admin`, `branch_head`, `advisor` |
-| `/workledger/*` | roles `system_admin`, `branch_head`, `advisor` |
+| `/workledger/*`        | roles `system_admin`, `branch_head`, `advisor` |
 
 Authentication is managed by `src/redux/slice/authSlice.js`; consumers dispatch `loginUser` and `logoutUser` and read state via selectors. The `logoutUser` thunk posts to `/api/auth/logout` before clearing authentication cookies.

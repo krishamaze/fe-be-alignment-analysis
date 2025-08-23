@@ -13,11 +13,11 @@ class ContactCreateView(generics.CreateAPIView):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
     throttle_classes = [ScopedRateThrottle]
-    throttle_scope = 'contact'
+    throttle_scope = "contact"
 
 
 class ScheduleCallCreateView(generics.CreateAPIView):
     queryset = ScheduleCall.objects.all()
     serializer_class = ScheduleCallSerializer
     throttle_classes = [ScopedRateThrottle]
-    throttle_scope = 'schedule_call'
+    throttle_scope = "schedule_call"

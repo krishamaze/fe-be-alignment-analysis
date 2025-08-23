@@ -5,13 +5,15 @@ This project uses GitHub Actions to enforce quality gates on every pull request.
 ## Linting & Formatting
 
 - **ESLint** checks the frontend source via `npm run lint`.
-- **Prettier** ensures consistent formatting. An auto-fix job runs `npm run format` and commits any changes. The lint job verifies with `npm run format:check`.
-- **Black** formats Python code in the backend. The auto-fix job runs `black .` and commits fixes, while the lint job runs `black . --check`.
+- **Prettier** ensures consistent formatting. Run `prettier . --write` to fix issues and `npm run format:check` to verify.
+- **Black** formats Python code in the backend. Run `black .` to auto-fix and `black . --check` in CI.
+- If formatting fails locally, rerun the appropriate formatter and commit the changes.
 
 ## Testing
 
 - Frontend unit tests run with `npm test` (Vitest).
 - Backend tests run with `pytest`.
+- SEO tests rely on `<Helmet>` tags for titles and descriptions. Updating page metadata often requires regenerating snapshots via `npm test -u`.
 
 ## Lighthouse
 
@@ -22,3 +24,7 @@ This project uses GitHub Actions to enforce quality gates on every pull request.
 ## Merge Expectations
 
 Pull requests are expected to pass linting and testing jobs. Lighthouse results are advisory and do not block merges.
+
+## Known Issues
+
+- React 19 with `react-helmet-async` emits a peer dependency warning. The warning is safe to ignore until upstream fixes land.

@@ -56,7 +56,5 @@ class StoreGeofence(models.Model):
 
     def __str__(self) -> str:
         return (
-            f"{self.store} ⦿ ({self.latitude}, {self.longitude}) "
-            f"r={self.radius_m}m"
+            f"{self.store} ⦿ ({self.latitude}, {self.longitude}) " f"r={self.radius_m}m"
         )
-

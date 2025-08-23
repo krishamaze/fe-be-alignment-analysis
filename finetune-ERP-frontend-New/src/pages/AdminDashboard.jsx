@@ -8,8 +8,18 @@ import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
 import GenericDashboard from './GenericDashboard';
 
 const adminFeatures = [
-  { title: 'Workledger', icon: <HiOutlineClipboardDocumentList size={28} />, status: 'live', to: '/workledger' },
-  { title: 'Giveaway Redemption', icon: <HiOutlineClipboardCheck size={28} />, status: 'live', to: '/giveaway-redemption' },
+  {
+    title: 'Workledger',
+    icon: <HiOutlineClipboardDocumentList size={28} />,
+    status: 'live',
+    to: '/workledger',
+  },
+  {
+    title: 'Giveaway Redemption',
+    icon: <HiOutlineClipboardCheck size={28} />,
+    status: 'live',
+    to: '/giveaway-redemption',
+  },
   { title: 'Invoice', icon: <HiOutlineClipboardCheck size={28} /> },
   { title: 'Price Check', icon: <HiOutlineQrcode size={28} /> },
   { title: 'EMI Info' },

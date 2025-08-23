@@ -6,18 +6,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0004_customuser_deleted'),
+        ("accounts", "0004_customuser_deleted"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='customuser',
-            name='hourly_rate',
-            field=models.DecimalField(blank=True, decimal_places=2, max_digits=8, null=True),
+            model_name="customuser",
+            name="hourly_rate",
+            field=models.DecimalField(
+                blank=True, decimal_places=2, max_digits=8, null=True
+            ),
         ),
         migrations.AlterField(
-            model_name='customuser',
-            name='is_active',
+            model_name="customuser",
+            name="is_active",
             field=models.BooleanField(default=True),
         ),
     ]

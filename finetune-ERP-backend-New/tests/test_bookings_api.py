@@ -77,7 +77,9 @@ def test_booking_invalid_captcha(monkeypatch):
 
 @pytest.mark.django_db
 def test_booking_list_admin_only(monkeypatch):
-    Booking.objects.create(name="A", email="a@b.com", issue="screen", date="2024-01-01", time="09:00")
+    Booking.objects.create(
+        name="A", email="a@b.com", issue="screen", date="2024-01-01", time="09:00"
+    )
     client = APIClient()
     # anonymous should not access list
     resp = client.get("/api/bookings")
@@ -123,7 +125,10 @@ def test_booking_staff_bypasses_throttle(monkeypatch):
 @override_settings(
     BOOKING_NOTIFICATION_CHANNELS=["email", "sms"],
     SMS_GATEWAY_URL="http://sms",
-    REST_FRAMEWORK={**settings.REST_FRAMEWORK, "DEFAULT_THROTTLE_RATES": {"booking": "5/hour"}},
+    REST_FRAMEWORK={
+        **settings.REST_FRAMEWORK,
+        "DEFAULT_THROTTLE_RATES": {"booking": "5/hour"},
+    },
 )
 def test_booking_notifications(monkeypatch):
     sent = {}
@@ -140,7 +145,11 @@ def test_booking_notifications(monkeypatch):
     monkeypatch.setattr("bookings.notifications.requests.post", _sms)
     client = APIClient()
     user = CustomUser.objects.create_user(
-        username="cust", email="c@example.com", password="x", role="customer", phone="1234567890"
+        username="cust",
+        email="c@example.com",
+        password="x",
+        role="customer",
+        phone="1234567890",
     )
     client.force_authenticate(user=user)
     data = {

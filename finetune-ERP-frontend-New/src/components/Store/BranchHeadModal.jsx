@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hook';
 import { getUsers } from '../../api/user';
-import { assignBranchHeadToStore, unassignBranchHeadFromStore } from '../../api/store';
+import {
+  assignBranchHeadToStore,
+  unassignBranchHeadFromStore,
+} from '../../api/store';
 import toast from 'react-hot-toast';
 
 const BranchHeadModal = ({ isOpen, onClose, store }) => {
@@ -19,17 +22,20 @@ const BranchHeadModal = ({ isOpen, onClose, store }) => {
 
   if (!isOpen) return null;
 
-  const availableBranchHeads = userData.filter((user) =>
-    user.role === 'branch_head' &&
-    user.is_active &&
-    !user.deleted &&
-    (!user.headed_store || user.headed_store === store?.id)
+  const availableBranchHeads = userData.filter(
+    (user) =>
+      user.role === 'branch_head' &&
+      user.is_active &&
+      !user.deleted &&
+      (!user.headed_store || user.headed_store === store?.id)
   );
 
   const handleAssign = async () => {
     if (!selectedUserId) return;
     setLoading(true);
-    const response = await dispatch(assignBranchHeadToStore({ storeId: store.id, userId: selectedUserId }));
+    const response = await dispatch(
+      assignBranchHeadToStore({ storeId: store.id, userId: selectedUserId })
+    );
     setLoading(false);
     if (response.meta.requestStatus === 'fulfilled') {
       toast.success('Branch head assigned');
@@ -41,7 +47,12 @@ const BranchHeadModal = ({ isOpen, onClose, store }) => {
 
   const handleUnassign = async () => {
     setLoading(true);
-    const response = await dispatch(unassignBranchHeadFromStore({ storeId: store.id, userId: store.branch_head }));
+    const response = await dispatch(
+      unassignBranchHeadFromStore({
+        storeId: store.id,
+        userId: store.branch_head,
+      })
+    );
     setLoading(false);
     if (response.meta.requestStatus === 'fulfilled') {
       toast.success('Branch head unassigned');
@@ -62,10 +73,10 @@ const BranchHeadModal = ({ isOpen, onClose, store }) => {
         >
           <option value="">Select branch head</option>
           {availableBranchHeads.map((user) => (
-            <option 
-              key={user.id} 
+            <option
+              key={user.id}
               value={user.id}
-              className={user.store ? "bg-red-100" : "bg-green-100"}
+              className={user.store ? 'bg-red-100' : 'bg-green-100'}
             >
               {`${user.first_name} ${user.last_name}`}
               {user.store_name ? ` | ${user.store_name}` : ' | Unassigned'}
@@ -89,10 +100,7 @@ const BranchHeadModal = ({ isOpen, onClose, store }) => {
           >
             {loading ? 'Processing...' : 'Assign'}
           </button>
-          <button
-            onClick={onClose}
-            className="px-4 py-2 border rounded"
-          >
+          <button onClick={onClose} className="px-4 py-2 border rounded">
             Cancel
           </button>
         </div>

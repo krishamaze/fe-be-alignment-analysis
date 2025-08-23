@@ -30,7 +30,9 @@ export default function Stores() {
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        const res = await axios.get(`${END_POINTS.API_BASE_URL}${END_POINTS.GET_STORES}`);
+        const res = await axios.get(
+          `${END_POINTS.API_BASE_URL}${END_POINTS.GET_STORES}`
+        );
         setStores(res.data?.content || []);
       } catch {
         setError(true);
@@ -51,22 +53,31 @@ export default function Stores() {
 
   if (error) {
     return (
-      <div className="p-4 pt-24 text-center text-red-600">Failed to load stores.</div>
+      <div className="p-4 pt-24 text-center text-red-600">
+        Failed to load stores.
+      </div>
     );
   }
 
   if (stores.length === 0) {
     return (
-      <div className="p-4 pt-24 text-center text-gray-600">No stores available.</div>
+      <div className="p-4 pt-24 text-center text-gray-600">
+        No stores available.
+      </div>
     );
   }
 
   return (
     <div className="p-4 pt-24">
-      <h1 className="text-2xl font-bold mb-4 text-center text-keyline">Stores</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center text-keyline">
+        Stores
+      </h1>
       <ul className="space-y-4 max-w-xl mx-auto">
         {stores.map((s) => (
-          <li key={s.id} className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow">
+          <li
+            key={s.id}
+            className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow"
+          >
             <Link to={`/stores/${s.id}`} className="font-semibold text-lg">
               {s.store_name}
             </Link>

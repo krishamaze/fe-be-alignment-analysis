@@ -8,8 +8,18 @@ import {
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
 
 const advisorFeatures = [
-  { title: 'Workledger', icon: <HiOutlineClipboardDocumentList size={28} />, status: 'live', to: '/workledger' },
-  { title: 'Giveaway Redemption', icon: <HiOutlineClipboardCheck size={28} />, status: 'live', to: '/giveaway-redemption' },
+  {
+    title: 'Workledger',
+    icon: <HiOutlineClipboardDocumentList size={28} />,
+    status: 'live',
+    to: '/workledger',
+  },
+  {
+    title: 'Giveaway Redemption',
+    icon: <HiOutlineClipboardCheck size={28} />,
+    status: 'live',
+    to: '/giveaway-redemption',
+  },
   { title: 'Invoice', icon: <HiOutlineClipboardCheck size={28} /> },
   { title: 'Price Check', icon: <HiOutlineQrcode size={28} /> },
   { title: 'EMI Info' },
@@ -21,5 +31,7 @@ const advisorFeatures = [
 ];
 
 export default function AdvisorDashboard() {
-  return <GenericDashboard title="Advisor Dashboard" features={advisorFeatures} />;
+  return (
+    <GenericDashboard title="Advisor Dashboard" features={advisorFeatures} />
+  );
 }

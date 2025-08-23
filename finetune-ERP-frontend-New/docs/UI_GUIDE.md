@@ -41,15 +41,15 @@ Dark mode is enabled via `class` strategy. Toggle a `dark` class on the root ele
 
 ## Reusable components
 
-| Component | Location | Notes |
-|-----------|----------|-------|
-| `Navbar` | `src/components/common` | top navigation bar (ecommerce variant pending consolidation) |
-| `DashboardNavbar` / `DashboardBottomNav` | `src/components/dashboard/layout` | responsive dashboard navigation with fixed bottom grid |
-| `Navbar` | `src/components/common` | top navigation bar (ecommerce variant pending consolidation) |
-| `Pagination` / `ResponsivePaginationHandler` | `src/components` | reusable pagination controls |
-| `ToggleStatusModal` & `DeleteConfirmationModal` | `src/components` | confirmation dialogs |
-| `StoreAssignModal` & `BranchHeadModal` | `src/components/Store` | assign stores or branch heads |
-| `Loader` | `src/components/common` | full-screen loading spinner |
+| Component                                       | Location                          | Notes                                                        |
+| ----------------------------------------------- | --------------------------------- | ------------------------------------------------------------ |
+| `Navbar`                                        | `src/components/common`           | top navigation bar (ecommerce variant pending consolidation) |
+| `DashboardNavbar` / `DashboardBottomNav`        | `src/components/dashboard/layout` | responsive dashboard navigation with fixed bottom grid       |
+| `Navbar`                                        | `src/components/common`           | top navigation bar (ecommerce variant pending consolidation) |
+| `Pagination` / `ResponsivePaginationHandler`    | `src/components`                  | reusable pagination controls                                 |
+| `ToggleStatusModal` & `DeleteConfirmationModal` | `src/components`                  | confirmation dialogs                                         |
+| `StoreAssignModal` & `BranchHeadModal`          | `src/components/Store`            | assign stores or branch heads                                |
+| `Loader`                                        | `src/components/common`           | full-screen loading spinner                                  |
 
 Follow these patterns when adding new components to keep styling and accessibility consistent.
 
@@ -68,9 +68,9 @@ Giveaway Redemption and Workledger tiles navigate to `/giveaway-redemption` and 
 - **Do use keylines for:** button outlines, input borders on hover/focus, card borders, badge outlines, active tab indicators, focus rings, dividers, progress indicators, and icon strokes.
 - **Don't use brand color for:** large fills, panel backgrounds, text backgrounds, disabled states, or body text.
 - **Interactive states:**
-  - *Hover:* add a 3–6% tint of the brand color to the neutral background.
-  - *Active:* increase keyline width by 0.5–1px or add a subtle inset shadow.
-  - *Focus:* show a brand-colored ring offset 2–3px from the element.
+  - _Hover:_ add a 3–6% tint of the brand color to the neutral background.
+  - _Active:_ increase keyline width by 0.5–1px or add a subtle inset shadow.
+  - _Focus:_ show a brand-colored ring offset 2–3px from the element.
 - **Primary CTA:** solid black button with white text; all other elements rely on brand keylines.
 
 ## Public form pattern

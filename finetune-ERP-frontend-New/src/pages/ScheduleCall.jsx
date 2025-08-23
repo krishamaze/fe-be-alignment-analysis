@@ -6,7 +6,12 @@ import END_POINTS from '../utils/Endpoints';
 import Loader from '../components/common/Loader';
 
 export default function ScheduleCall() {
-  const [form, setForm] = useState({ name: '', date: '', time: '', message: '' });
+  const [form, setForm] = useState({
+    name: '',
+    date: '',
+    time: '',
+    message: '',
+  });
   const [loading, setLoading] = useState(false);
   const [captcha, setCaptcha] = useState('');
   const [cooldown, setCooldown] = useState(false);

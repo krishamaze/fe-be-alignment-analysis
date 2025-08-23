@@ -13,7 +13,9 @@ export default function StoreDetails() {
   useEffect(() => {
     const fetchStore = async () => {
       try {
-        const res = await axios.get(`${END_POINTS.API_BASE_URL}${END_POINTS.GET_STORES}/${id}`);
+        const res = await axios.get(
+          `${END_POINTS.API_BASE_URL}${END_POINTS.GET_STORES}/${id}`
+        );
         setStore(res.data);
       } catch {
         setError(true);
@@ -25,9 +27,13 @@ export default function StoreDetails() {
   }, [id]);
 
   useEffect(() => {
-    const name = store?.store_name ? `${store.store_name} – Finetune` : 'Store – Finetune';
+    const name = store?.store_name
+      ? `${store.store_name} – Finetune`
+      : 'Store – Finetune';
     document.title = name;
-    const desc = store?.store_name ? `Details for ${store.store_name}.` : 'Store details.';
+    const desc = store?.store_name
+      ? `Details for ${store.store_name}.`
+      : 'Store details.';
     const setMeta = (key, val, property = false) => {
       const attr = property ? 'property' : 'name';
       let tag = document.head.querySelector(`meta[${attr}='${key}']`);
@@ -53,21 +59,29 @@ export default function StoreDetails() {
 
   if (error) {
     return (
-      <div className="p-4 pt-24 text-center text-red-600">Failed to load store.</div>
+      <div className="p-4 pt-24 text-center text-red-600">
+        Failed to load store.
+      </div>
     );
   }
 
   if (!store) {
     return (
-      <div className="p-4 pt-24 text-center text-gray-600">Store not found.</div>
+      <div className="p-4 pt-24 text-center text-gray-600">
+        Store not found.
+      </div>
     );
   }
 
   return (
     <div className="p-4 pt-24 max-w-xl mx-auto space-y-2">
       <h1 className="text-2xl font-bold text-keyline">{store.store_name}</h1>
-      <p><span className="font-semibold">Code:</span> {store.code}</p>
-      <p><span className="font-semibold">Address:</span> {store.address}</p>
+      <p>
+        <span className="font-semibold">Code:</span> {store.code}
+      </p>
+      <p>
+        <span className="font-semibold">Address:</span> {store.address}
+      </p>
     </div>
   );
 }
