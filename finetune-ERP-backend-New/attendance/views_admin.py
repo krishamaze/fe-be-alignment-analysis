@@ -99,7 +99,9 @@ class AdvisorScheduleListCreateView(AdminBaseView):
         serializer.is_valid(raise_exception=True)
         obj = serializer.save()
         idem_remember(request, "schedule-create", obj)
-        return Response(AdvisorScheduleAdminSerializer(obj).data, status=status.HTTP_201_CREATED)
+        return Response(
+            AdvisorScheduleAdminSerializer(obj).data, status=status.HTTP_201_CREATED
+        )
 
 
 class AdvisorScheduleDetailView(AdminBaseView):
@@ -122,7 +124,9 @@ class AdvisorScheduleDetailView(AdminBaseView):
             obj = get_object_or_404(AdvisorSchedule, pk=existing.object_pk)
             return Response(AdvisorScheduleAdminSerializer(obj).data)
         obj = self.get_object(pk)
-        serializer = AdvisorScheduleAdminSerializer(obj, data=request.data, partial=partial)
+        serializer = AdvisorScheduleAdminSerializer(
+            obj, data=request.data, partial=partial
+        )
         serializer.is_valid(raise_exception=True)
         obj = serializer.save()
         idem_remember(request, f"schedule-update-{pk}", obj)

@@ -2,7 +2,11 @@ from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import AllowAny
 from accounts.models import CustomUser
-from accounts.serializers import RegisterUserSerializer, MyTokenObtainPairSerializer, CustomUserSerializer
+from accounts.serializers import (
+    RegisterUserSerializer,
+    MyTokenObtainPairSerializer,
+    CustomUserSerializer,
+)
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -10,15 +14,19 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, BasePermission
 from accounts.permissions import IsSystemAdminUser
 
+
 class MyTokenObtainPairView(TokenObtainPairView):
     permission_classes = [AllowAny]
     serializer_class = MyTokenObtainPairSerializer
 
 
 class RegisterUserView(CreateAPIView):
-    permission_classes = [IsSystemAdminUser]  # Only system admins can register new users
+    permission_classes = [
+        IsSystemAdminUser
+    ]  # Only system admins can register new users
     queryset = CustomUser.objects.all()
     serializer_class = RegisterUserSerializer
+
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
@@ -26,15 +34,24 @@ class LogoutView(APIView):
     def post(self, request):
         refresh_token = request.data.get("refresh")
         if not refresh_token:
-            return Response({"error": "Refresh token is required"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Refresh token is required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         try:
             token = RefreshToken(refresh_token)
             token.blacklist()
-            return Response({"detail": "Logout successful"}, status=status.HTTP_205_RESET_CONTENT)
+            return Response(
+                {"detail": "Logout successful"}, status=status.HTTP_205_RESET_CONTENT
+            )
         except Exception as e:
-            return Response({"error": f"Logout failed: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
-        
+            return Response(
+                {"error": f"Logout failed: {str(e)}"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+
 class MeAPIView(RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer

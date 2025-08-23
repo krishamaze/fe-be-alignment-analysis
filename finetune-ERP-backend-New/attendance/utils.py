@@ -32,7 +32,9 @@ def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     return radius * c
 
 
-def within_radius_m(lat: float, lon: float, geofence: Optional['StoreGeofence']) -> bool:
+def within_radius_m(
+    lat: float, lon: float, geofence: Optional["StoreGeofence"]
+) -> bool:
     """
     Return True if ``(lat, lon)`` is within ``geofence.radius_m`` of geofence center.
 
@@ -43,12 +45,15 @@ def within_radius_m(lat: float, lon: float, geofence: Optional['StoreGeofence'])
     if not geofence or not geofence.is_active:
         return False
 
-    distance_m = haversine_km(
-        lat,
-        lon,
-        float(geofence.latitude),
-        float(geofence.longitude),
-    ) * 1000
+    distance_m = (
+        haversine_km(
+            lat,
+            lon,
+            float(geofence.latitude),
+            float(geofence.longitude),
+        )
+        * 1000
+    )
 
     return distance_m <= geofence.radius_m
 
@@ -85,5 +90,3 @@ def idem_remember(request, endpoint: str, obj):
         endpoint=endpoint,
         defaults={"object_pk": str(getattr(obj, "pk", ""))},
     )
-
-

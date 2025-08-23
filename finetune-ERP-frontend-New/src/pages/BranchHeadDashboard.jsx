@@ -8,8 +8,18 @@ import {
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
 
 const branchHeadFeatures = [
-  { title: 'Workledger', icon: <HiOutlineClipboardDocumentList size={28} />, status: 'live', to: '/workledger' },
-  { title: 'Giveaway Redemption', icon: <HiOutlineClipboardCheck size={28} />, status: 'live', to: '/giveaway-redemption' },
+  {
+    title: 'Workledger',
+    icon: <HiOutlineClipboardDocumentList size={28} />,
+    status: 'live',
+    to: '/workledger',
+  },
+  {
+    title: 'Giveaway Redemption',
+    icon: <HiOutlineClipboardCheck size={28} />,
+    status: 'live',
+    to: '/giveaway-redemption',
+  },
   { title: 'Invoice', icon: <HiOutlineClipboardCheck size={28} /> },
   { title: 'Price Check', icon: <HiOutlineQrcode size={28} /> },
   { title: 'EMI Info' },
@@ -21,5 +31,10 @@ const branchHeadFeatures = [
 ];
 
 export default function BranchHeadDashboard() {
-  return <GenericDashboard title="Branch Head Dashboard" features={branchHeadFeatures} />;
+  return (
+    <GenericDashboard
+      title="Branch Head Dashboard"
+      features={branchHeadFeatures}
+    />
+  );
 }

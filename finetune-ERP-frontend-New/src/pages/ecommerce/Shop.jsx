@@ -3,7 +3,13 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { products, categories, searchProducts } from '../../utils/mockData';
 import { addToCart } from '../../redux/slice/cartSlice';
-import { HiOutlineSearch, HiOutlineFilter, HiOutlineHeart, HiOutlineShoppingCart, HiOutlineStar } from 'react-icons/hi';
+import {
+  HiOutlineSearch,
+  HiOutlineFilter,
+  HiOutlineHeart,
+  HiOutlineShoppingCart,
+  HiOutlineStar,
+} from 'react-icons/hi';
 import toast from 'react-hot-toast';
 
 function Shop() {
@@ -27,12 +33,15 @@ function Shop() {
 
     // Category filter
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(product => product.category === selectedCategory);
+      filtered = filtered.filter(
+        (product) => product.category === selectedCategory
+      );
     }
 
     // Price range filter
-    filtered = filtered.filter(product => 
-      product.price >= priceRange[0] && product.price <= priceRange[1]
+    filtered = filtered.filter(
+      (product) =>
+        product.price >= priceRange[0] && product.price <= priceRange[1]
     );
 
     // Sort products
@@ -61,7 +70,7 @@ function Shop() {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(price);
   };
 
@@ -81,7 +90,9 @@ function Shop() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Shop Now</h1>
-          <p className="text-gray-600">Discover amazing products at great prices</p>
+          <p className="text-gray-600">
+            Discover amazing products at great prices
+          </p>
         </div>
 
         {/* Search and Filters */}
@@ -131,14 +142,16 @@ function Shop() {
             <div className="mt-4 lg:hidden space-y-4">
               {/* Category Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Category
+                </label>
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                 >
                   <option value="all">All Categories</option>
-                  {categories.map(category => (
+                  {categories.map((category) => (
                     <option key={category.id} value={category.id}>
                       {category.name}
                     </option>
@@ -149,7 +162,8 @@ function Shop() {
               {/* Price Range */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Price Range: ₹{formatPrice(priceRange[0])} - ₹{formatPrice(priceRange[1])}
+                  Price Range: ₹{formatPrice(priceRange[0])} - ₹
+                  {formatPrice(priceRange[1])}
                 </label>
                 <input
                   type="range"
@@ -157,7 +171,9 @@ function Shop() {
                   max="300000"
                   step="10000"
                   value={priceRange[1]}
-                  onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+                  onChange={(e) =>
+                    setPriceRange([priceRange[0], parseInt(e.target.value)])
+                  }
                   className="w-full"
                 />
               </div>
@@ -170,11 +186,15 @@ function Shop() {
           {/* Sidebar Filters */}
           <div className="w-64 flex-shrink-0">
             <div className="bg-white rounded-lg shadow-sm p-6 sticky top-24">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Filters</h3>
-              
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Filters
+              </h3>
+
               {/* Category Filter */}
               <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-700 mb-3">Category</h4>
+                <h4 className="text-sm font-medium text-gray-700 mb-3">
+                  Category
+                </h4>
                 <div className="space-y-2">
                   <label className="flex items-center">
                     <input
@@ -187,7 +207,7 @@ function Shop() {
                     />
                     <span className="text-sm">All Categories</span>
                   </label>
-                  {categories.map(category => (
+                  {categories.map((category) => (
                     <label key={category.id} className="flex items-center">
                       <input
                         type="radio"
@@ -205,7 +225,9 @@ function Shop() {
 
               {/* Price Range */}
               <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-700 mb-3">Price Range</h4>
+                <h4 className="text-sm font-medium text-gray-700 mb-3">
+                  Price Range
+                </h4>
                 <div className="space-y-2">
                   <input
                     type="range"
@@ -213,11 +235,14 @@ function Shop() {
                     max="300000"
                     step="10000"
                     value={priceRange[1]}
-                    onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+                    onChange={(e) =>
+                      setPriceRange([priceRange[0], parseInt(e.target.value)])
+                    }
                     className="w-full"
                   />
                   <div className="text-sm text-gray-600">
-                    ₹{formatPrice(priceRange[0])} - ₹{formatPrice(priceRange[1])}
+                    ₹{formatPrice(priceRange[0])} - ₹
+                    {formatPrice(priceRange[1])}
                   </div>
                 </div>
               </div>
@@ -233,7 +258,10 @@ function Shop() {
           <div className="flex-1">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
-                <div key={product.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                <div
+                  key={product.id}
+                  className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                >
                   {/* Product Image */}
                   <div className="relative aspect-square overflow-hidden">
                     <img
@@ -261,7 +289,7 @@ function Shop() {
                         {product.name}
                       </h3>
                     </Link>
-                    
+
                     <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                       {product.description}
                     </p>
@@ -314,8 +342,12 @@ function Shop() {
             {filteredProducts.length === 0 && (
               <div className="text-center py-12">
                 <div className="text-gray-400 text-6xl mb-4">🔍</div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
-                <p className="text-gray-600">Try adjusting your search or filters</p>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  No products found
+                </h3>
+                <p className="text-gray-600">
+                  Try adjusting your search or filters
+                </p>
               </div>
             )}
           </div>
@@ -325,7 +357,10 @@ function Shop() {
         <div className="lg:hidden">
           <div className="grid grid-cols-2 gap-4">
             {filteredProducts.map((product) => (
-              <div key={product.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
+              <div
+                key={product.id}
+                className="bg-white rounded-lg shadow-sm overflow-hidden"
+              >
                 {/* Product Image */}
                 <div className="relative aspect-square overflow-hidden">
                   <img
@@ -347,11 +382,13 @@ function Shop() {
                       {product.name}
                     </h3>
                   </Link>
-                  
+
                   {/* Rating */}
                   <div className="flex items-center gap-1 mb-2">
                     <HiOutlineStar className="w-3 h-3 text-yellow-400 fill-current" />
-                    <span className="text-xs text-gray-600">{product.rating}</span>
+                    <span className="text-xs text-gray-600">
+                      {product.rating}
+                    </span>
                   </div>
 
                   {/* Price */}
@@ -382,7 +419,9 @@ function Shop() {
           {filteredProducts.length === 0 && (
             <div className="text-center py-8">
               <div className="text-gray-400 text-4xl mb-2">🔍</div>
-              <h3 className="text-base font-medium text-gray-900 mb-1">No products found</h3>
+              <h3 className="text-base font-medium text-gray-900 mb-1">
+                No products found
+              </h3>
               <p className="text-sm text-gray-600">Try adjusting your search</p>
             </div>
           )}
@@ -392,4 +431,4 @@ function Shop() {
   );
 }
 
-export default Shop; 
+export default Shop;

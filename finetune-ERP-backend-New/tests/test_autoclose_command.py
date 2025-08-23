@@ -3,6 +3,7 @@ from datetime import date
 from django.core.management import call_command
 from attendance.models import Attendance, AdvisorSchedule
 
+
 @pytest.mark.django_db
 def test_night_shift_absent_created_and_idempotent(advisor1, night_shift, store_s1):
     AdvisorSchedule.objects.create(
@@ -19,8 +20,11 @@ def test_night_shift_absent_created_and_idempotent(advisor1, night_shift, store_
     call_command("attendance_autoclose", date="2025-08-12")
     assert Attendance.objects.filter(user=advisor1, date=date(2025, 8, 12)).count() == 1
 
+
 @pytest.mark.django_db
-def test_open_attendance_finalized_and_idempotent(advisor1, day_shift, store_s1, localdt):
+def test_open_attendance_finalized_and_idempotent(
+    advisor1, day_shift, store_s1, localdt
+):
     att = Attendance.objects.create(
         user=advisor1,
         store=store_s1,

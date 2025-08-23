@@ -22,10 +22,7 @@ export default function Terms() {
           name="description"
           content="Agreement for repair and service terms."
         />
-        <meta
-          property="og:title"
-          content="Terms &amp; Conditions – Finetune"
-        />
+        <meta property="og:title" content="Terms &amp; Conditions – Finetune" />
         <meta
           property="og:description"
           content="Agreement for repair and service terms."
@@ -39,56 +36,54 @@ export default function Terms() {
         tablet, computer and/or any accessories (“Device”).
       </p>
       <p>
-        1.2 References to “us”, “we” and “our” refer to Finetune and references to
-        “you” and “your” are to you, the person addressed on this form.
+        1.2 References to “us”, “we” and “our” refer to Finetune and references
+        to “you” and “your” are to you, the person addressed on this form.
       </p>
       <p className="font-bold">All repairs (unless otherwise stated)</p>
       <p>
-        2.1 This Agreement shall commence from the date you book a repair and shall
-        continue until we have repaired or otherwise returned your Device.
+        2.1 This Agreement shall commence from the date you book a repair and
+        shall continue until we have repaired or otherwise returned your Device.
       </p>
       <p>
-        2.2 We shall make reasonable efforts to repair your Device subject to the
-        availability of parts required and/or the terms of any relevant guarantee or
-        warranty.
+        2.2 We shall make reasonable efforts to repair your Device subject to
+        the availability of parts required and/or the terms of any relevant
+        guarantee or warranty.
       </p>
       <p>
         2.3 We shall use Genuine, OEM or High Quality compatible parts for the
         repairs of all Devices.
       </p>
       <p>
-        2.4 We may require the passcode of your Device in order to test it before
-        and after the Service.
+        2.4 We may require the passcode of your Device in order to test it
+        before and after the Service.
       </p>
       <p>
-        2.5 Any time estimate for completion of the service is an estimate only and
-        does not form any obligation under this Agreement.
+        2.5 Any time estimate for completion of the service is an estimate only
+        and does not form any obligation under this Agreement.
       </p>
       <p>
-        2.6 We shall notify you when the Device has been repaired. If not collected
-        by day 90 the device may be recycled to cover costs.
+        2.6 We shall notify you when the Device has been repaired. If not
+        collected by day 90 the device may be recycled to cover costs.
       </p>
       <p>
-        2.7 If we are unable to complete the Service for any reason, or the Service
-        will incur further costs payable by you beyond that initially estimated, we
-        will notify you immediately. If no fault is found or you do not accept the
-        revised estimate, we will return your Device unrepaired and may charge an
-        inspection fee.
+        2.7 If we are unable to complete the Service for any reason, or the
+        Service will incur further costs payable by you beyond that initially
+        estimated, we will notify you immediately. If no fault is found or you
+        do not accept the revised estimate, we will return your Device
+        unrepaired and may charge an inspection fee.
       </p>
       <p>
-        2.8 The cost of repair will be calculated in accordance with our standard
-        charges as published from time to time.
+        2.8 The cost of repair will be calculated in accordance with our
+        standard charges as published from time to time.
       </p>
       <p>
-        2.9 We shall be entitled to keep your Device until all charges payable have
-        been paid. We may charge an additional fee for storage.
+        2.9 We shall be entitled to keep your Device until all charges payable
+        have been paid. We may charge an additional fee for storage.
       </p>
+      <p>2.10 Use of our service may void your manufacturer’s warranty.</p>
       <p>
-        2.10 Use of our service may void your manufacturer’s warranty.
-      </p>
-      <p>
-        2.11 Finetune may install warranty seals following the repair. Any tampering
-        of the seals will void our warranty.
+        2.11 Finetune may install warranty seals following the repair. Any
+        tampering of the seals will void our warranty.
       </p>
       <p>
         2.12 Our products and repairs are covered by the warranty terms outlined
@@ -105,7 +100,10 @@ export default function Terms() {
       </ul>
       <address className="not-italic mt-4 text-sm text-gray-700">
         Cheran Plaza K.G Chavadi Road, Ettimadai, Pirivu, near KK MAHAAL,
-        Coimbatore, Tamil Nadu 641105. Phone: <a href="tel:+919791151863" className="text-keyline">+91 97911 51863</a>
+        Coimbatore, Tamil Nadu 641105. Phone:{' '}
+        <a href="tel:+919791151863" className="text-keyline">
+          +91 97911 51863
+        </a>
       </address>
     </div>
   );

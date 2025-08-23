@@ -4,7 +4,15 @@ import { useParams, Link } from 'react-router-dom';
 import { getProductById } from '../../utils/mockData';
 import { addToCart } from '../../redux/slice/cartSlice';
 import Payment from '../../components/ecommerce/Payment';
-import { Star, ShoppingCart, Heart, Truck, ShieldCheck, RefreshCw, ArrowLeft } from 'lucide-react';
+import {
+  Star,
+  ShoppingCart,
+  Heart,
+  Truck,
+  ShieldCheck,
+  RefreshCw,
+  ArrowLeft,
+} from 'lucide-react';
 import toast from 'react-hot-toast';
 
 function ProductDetail() {
@@ -23,7 +31,11 @@ function ProductDetail() {
   useEffect(() => {
     // Generate order ID when payment is shown
     if (showPayment) {
-      setOrderId('ORD' + Date.now() + Math.random().toString(36).substr(2, 5).toUpperCase());
+      setOrderId(
+        'ORD' +
+          Date.now() +
+          Math.random().toString(36).substr(2, 5).toUpperCase()
+      );
     }
   }, [showPayment]);
 
@@ -31,7 +43,7 @@ function ProductDetail() {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(price);
   };
 
@@ -61,9 +73,16 @@ function ProductDetail() {
     return (
       <div className="min-h-screen bg-surface dark:bg-primary pt-20 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-primary/40 dark:text-surface/40 text-display-xl mb-4">❌</div>
-          <h3 className="text-heading-md font-medium text-primary dark:text-surface mb-2">Product not found</h3>
-          <Link to="/shop" className="text-body-md text-primary/70 dark:text-surface/70 hover:text-secondary">
+          <div className="text-primary/40 dark:text-surface/40 text-display-xl mb-4">
+            ❌
+          </div>
+          <h3 className="text-heading-md font-medium text-primary dark:text-surface mb-2">
+            Product not found
+          </h3>
+          <Link
+            to="/shop"
+            className="text-body-md text-primary/70 dark:text-surface/70 hover:text-secondary"
+          >
             Back to Shop
           </Link>
         </div>
@@ -98,9 +117,14 @@ function ProductDetail() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-body-sm text-primary/60 dark:text-surface/60 mb-8">
-          <Link to="/shop" className="hover:text-secondary">Shop</Link>
+          <Link to="/shop" className="hover:text-secondary">
+            Shop
+          </Link>
           <span>•</span>
-          <Link to={`/categories/${product.category}`} className="hover:text-secondary capitalize">
+          <Link
+            to={`/categories/${product.category}`}
+            className="hover:text-secondary capitalize"
+          >
             {product.category}
           </Link>
           <span>•</span>
@@ -122,8 +146,12 @@ function ProductDetail() {
           {/* Product Info */}
           <div className="space-y-6">
             <div>
-              <h1 className="text-heading-xl font-bold text-primary dark:text-surface mb-2">{product.name}</h1>
-              <p className="text-primary/60 dark:text-surface/60 text-body-md">{product.description}</p>
+              <h1 className="text-heading-xl font-bold text-primary dark:text-surface mb-2">
+                {product.name}
+              </h1>
+              <p className="text-primary/60 dark:text-surface/60 text-body-md">
+                {product.description}
+              </p>
             </div>
 
             {/* Rating */}
@@ -140,8 +168,12 @@ function ProductDetail() {
                   />
                 ))}
               </div>
-              <span className="text-body-sm text-primary/60 dark:text-surface/60">{product.rating} out of 5</span>
-              <span className="text-body-sm text-primary/50 dark:text-surface/50">({product.reviews} reviews)</span>
+              <span className="text-body-sm text-primary/60 dark:text-surface/60">
+                {product.rating} out of 5
+              </span>
+              <span className="text-body-sm text-primary/50 dark:text-surface/50">
+                ({product.reviews} reviews)
+              </span>
             </div>
 
             {/* Price */}
@@ -170,11 +202,18 @@ function ProductDetail() {
 
             {/* Specifications */}
             <div>
-              <h3 className="text-heading-lg font-semibold text-primary dark:text-surface mb-3">Specifications</h3>
+              <h3 className="text-heading-lg font-semibold text-primary dark:text-surface mb-3">
+                Specifications
+              </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {Object.entries(product.specs).map(([key, value]) => (
-                  <div key={key} className="flex justify-between py-2 border-b border-primary/10 dark:border-surface/10">
-                    <span className="text-primary/60 dark:text-surface/60 capitalize">{key.replace(/([A-Z])/g, ' $1')}:</span>
+                  <div
+                    key={key}
+                    className="flex justify-between py-2 border-b border-primary/10 dark:border-surface/10"
+                  >
+                    <span className="text-primary/60 dark:text-surface/60 capitalize">
+                      {key.replace(/([A-Z])/g, ' $1')}:
+                    </span>
                     <span className="font-medium">{value}</span>
                   </div>
                 ))}
@@ -230,26 +269,42 @@ function ProductDetail() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-primary/20 dark:border-surface/20">
               <div className="text-center">
                 <Truck className="w-8 h-8 text-keyline mx-auto mb-2" />
-                <h4 className="font-medium text-primary dark:text-surface text-body-md">Free Shipping</h4>
-                <p className="text-body-sm text-primary/60 dark:text-surface/60">On orders above ₹999</p>
+                <h4 className="font-medium text-primary dark:text-surface text-body-md">
+                  Free Shipping
+                </h4>
+                <p className="text-body-sm text-primary/60 dark:text-surface/60">
+                  On orders above ₹999
+                </p>
               </div>
               <div className="text-center">
                 <ShieldCheck className="w-8 h-8 text-success mx-auto mb-2" />
-                <h4 className="font-medium text-primary dark:text-surface text-body-md">Genuine Product</h4>
-                <p className="text-body-sm text-primary/60 dark:text-surface/60">100% authentic</p>
+                <h4 className="font-medium text-primary dark:text-surface text-body-md">
+                  Genuine Product
+                </h4>
+                <p className="text-body-sm text-primary/60 dark:text-surface/60">
+                  100% authentic
+                </p>
               </div>
               <div className="text-center">
                 <RefreshCw className="w-8 h-8 text-secondary mx-auto mb-2" />
-                <h4 className="font-medium text-primary dark:text-surface text-body-md">Easy Returns</h4>
-                <p className="text-body-sm text-primary/60 dark:text-surface/60">30-day return policy</p>
+                <h4 className="font-medium text-primary dark:text-surface text-body-md">
+                  Easy Returns
+                </h4>
+                <p className="text-body-sm text-primary/60 dark:text-surface/60">
+                  30-day return policy
+                </p>
               </div>
             </div>
 
             {/* Stock Status */}
             <div className="pt-4 border-t border-primary/20 dark:border-surface/20">
               <div className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${product.inStock ? 'bg-success' : 'bg-error'}`}></div>
-                <span className={`${product.inStock ? 'text-success' : 'text-error'} text-body-md`}>
+                <div
+                  className={`w-3 h-3 rounded-full ${product.inStock ? 'bg-success' : 'bg-error'}`}
+                ></div>
+                <span
+                  className={`${product.inStock ? 'text-success' : 'text-error'} text-body-md`}
+                >
                   {product.inStock ? 'In Stock' : 'Out of Stock'}
                 </span>
               </div>
@@ -259,7 +314,9 @@ function ProductDetail() {
 
         {/* Related Products Section */}
         <div className="mt-16">
-          <h2 className="text-heading-lg font-bold text-primary dark:text-surface mb-8">You might also like</h2>
+          <h2 className="text-heading-lg font-bold text-primary dark:text-surface mb-8">
+            You might also like
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* TODO: Add related products */}
           </div>
@@ -269,4 +326,4 @@ function ProductDetail() {
   );
 }
 
-export default ProductDetail; 
+export default ProductDetail;

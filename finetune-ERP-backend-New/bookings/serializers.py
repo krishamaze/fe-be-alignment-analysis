@@ -25,12 +25,12 @@ class BookingSerializer(serializers.ModelSerializer):
 
     def validate_captcha_token(self, value):
         response = requests.post(
-            'https://www.google.com/recaptcha/api/siteverify',
-            data={'secret': settings.RECAPTCHA_SECRET_KEY, 'response': value},
+            "https://www.google.com/recaptcha/api/siteverify",
+            data={"secret": settings.RECAPTCHA_SECRET_KEY, "response": value},
             timeout=5,
         )
-        if not response.json().get('success'):
-            raise serializers.ValidationError('Invalid captcha')
+        if not response.json().get("success"):
+            raise serializers.ValidationError("Invalid captcha")
         return value
 
     def create(self, validated_data):

@@ -74,13 +74,16 @@ describe('SEO meta tags', () => {
 
   it('sets title and description for Terms page', async () => {
     const container = document.createElement('div');
+    const root = createRoot(container);
     await act(async () => {
-      createRoot(container).render(
+      root.render(
         <HelmetProvider>
           <Terms />
         </HelmetProvider>
       );
     });
+    await act(async () => {});
+    root.unmount();
     expect(document.title).toBe('Terms & Conditions – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
     expect(desc.getAttribute('content')).toContain('Agreement for repair');
@@ -89,9 +92,16 @@ describe('SEO meta tags', () => {
   it('sets title and description for Brands page', async () => {
     document.title = '';
     const container = document.createElement('div');
+    const root = createRoot(container);
     await act(async () => {
-      createRoot(container).render(<Index />);
+      root.render(
+        <HelmetProvider>
+          <Index />
+        </HelmetProvider>
+      );
     });
+    await act(async () => {});
+    root.unmount();
     expect(document.title).toBe('Brands – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
     expect(desc.getAttribute('content')).toContain('Brands we service');
@@ -110,12 +120,21 @@ describe('SEO meta tags', () => {
     });
     expect(document.title).toBe('Stores – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
-    expect(desc.getAttribute('content')).toContain('Browse Finetune service branches');
+    expect(desc.getAttribute('content')).toContain(
+      'Browse Finetune service branches'
+    );
   });
 
   it('sets title and description for StoreDetails page', async () => {
     document.title = '';
-    axios.get.mockResolvedValue({ data: { id: 1, store_name: 'Alpha Store', code: 'ST1', address: '123 St' } });
+    axios.get.mockResolvedValue({
+      data: {
+        id: 1,
+        store_name: 'Alpha Store',
+        code: 'ST1',
+        address: '123 St',
+      },
+    });
     const container = document.createElement('div');
     await act(async () => {
       createRoot(container).render(
@@ -159,6 +178,8 @@ describe('SEO meta tags', () => {
     });
     expect(document.title).toBe('Book a Service – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
-    expect(desc.getAttribute('content')).toContain('Schedule a service booking');
+    expect(desc.getAttribute('content')).toContain(
+      'Schedule a service booking'
+    );
   });
 });

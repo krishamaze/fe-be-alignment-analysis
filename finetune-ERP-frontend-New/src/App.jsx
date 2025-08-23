@@ -39,33 +39,35 @@ import Partners from './pages/ecommerce/Partners';
 import HelpCentre from './pages/ecommerce/HelpCentre';
 import Legal from './pages/ecommerce/Legal';
 
-
 function AppContent() {
   const token = useAppSelector(selectAuthToken);
   const role = useAppSelector(selectAuthRole);
   const location = useLocation();
 
   // Check if current route is e-commerce related
-  const isEcommerceRoute = location.pathname === "/" ||
-                          location.pathname.startsWith('/shop') ||
-                          location.pathname.startsWith('/categories') ||
-                          location.pathname.startsWith('/partners') ||
-                          location.pathname.startsWith('/help') ||
-                          location.pathname.startsWith('/legal') ||
-                          location.pathname.startsWith('/signup') ||
-                          location.pathname.startsWith('/teamlogin') ||
-                          location.pathname.startsWith('/login');
+  const isEcommerceRoute =
+    location.pathname === '/' ||
+    location.pathname.startsWith('/shop') ||
+    location.pathname.startsWith('/categories') ||
+    location.pathname.startsWith('/partners') ||
+    location.pathname.startsWith('/help') ||
+    location.pathname.startsWith('/legal') ||
+    location.pathname.startsWith('/signup') ||
+    location.pathname.startsWith('/teamlogin') ||
+    location.pathname.startsWith('/login');
 
   return (
     <>
-      {!location.pathname.startsWith('/dashboard') && (
-        isEcommerceRoute ? <EcommerceNavbar /> : <Navbar />
-      )}
+      {!location.pathname.startsWith('/dashboard') &&
+        (isEcommerceRoute ? <EcommerceNavbar /> : <Navbar />)}
       <Routes>
         <Route path="/" element={<Hero />} />
-        <Route path="/teamlogin" element={token ? <Navigate to="/dashboard" /> : <TeamLogin />} />
+        <Route
+          path="/teamlogin"
+          element={token ? <Navigate to="/dashboard" /> : <TeamLogin />}
+        />
         <Route path="/signup" element={<Signup />} />
-        
+
         {/* E-commerce routes */}
         <Route path="/shop" element={<Shop />} />
         <Route path="/product/:productId" element={<ProductDetail />} />
@@ -88,9 +90,12 @@ function AppContent() {
         <Route
           path="/workledger/*"
           element={
-            token && ['system_admin', 'branch_head', 'advisor'].includes(role)
-              ? <FocusLayout title="Workledger" />
-              : <Navigate to="/teamlogin" />
+            token &&
+            ['system_admin', 'branch_head', 'advisor'].includes(role) ? (
+              <FocusLayout title="Workledger" />
+            ) : (
+              <Navigate to="/teamlogin" />
+            )
           }
         >
           <Route index element={<Workledger />} />
@@ -100,20 +105,25 @@ function AppContent() {
         <Route
           path="/giveaway-redemption"
           element={
-            token && ['system_admin', 'branch_head', 'advisor'].includes(role)
-              ? <FocusLayout title="Giveaway Redemption" />
-              : <Navigate to="/teamlogin" />
+            token &&
+            ['system_admin', 'branch_head', 'advisor'].includes(role) ? (
+              <FocusLayout title="Giveaway Redemption" />
+            ) : (
+              <Navigate to="/teamlogin" />
+            )
           }
         >
           <Route index element={<GiveawayRedemption />} />
         </Route>
 
-        <Route path="/dashboard" element={token ? <Dashboard /> : <Navigate to="/teamlogin" />}> 
-        
+        <Route
+          path="/dashboard"
+          element={token ? <Dashboard /> : <Navigate to="/teamlogin" />}
+        >
           {['system_admin'].includes(role) && (
             <>
               {/* <Route path="stores/add" element={<AddStore />} /> */}
-              <Route path="users" element={<User />} /> 
+              <Route path="users" element={<User />} />
               {/* <Route path="users/add" element={<AddUser />} /> */}
               <Route path="stores" element={<Store />} />
               <Route path="settings" element={<Settings />} />
@@ -129,7 +139,12 @@ function AppContent() {
 export default function App() {
   return (
     <BrowserRouter>
-      <Toaster toastOptions={{ className: 'bg-surface dark:bg-primary text-primary dark:text-surface' }} />
+      <Toaster
+        toastOptions={{
+          className:
+            'bg-surface dark:bg-primary text-primary dark:text-surface',
+        }}
+      />
       <AppContent />
     </BrowserRouter>
   );

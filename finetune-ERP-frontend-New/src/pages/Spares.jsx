@@ -31,7 +31,9 @@ export default function Spares() {
 
   const fetchSpares = async () => {
     try {
-      const res = await axios.get(`${END_POINTS.API_BASE_URL}${END_POINTS.GET_SPARES}`);
+      const res = await axios.get(
+        `${END_POINTS.API_BASE_URL}${END_POINTS.GET_SPARES}`
+      );
       setSpares(res.data?.content || []);
     } catch {
       setError(true);
@@ -52,7 +54,10 @@ export default function Spares() {
     e.preventDefault();
     setSaving(true);
     try {
-      await axios.post(`${END_POINTS.API_BASE_URL}${END_POINTS.MODIFY_SPARE}`, form);
+      await axios.post(
+        `${END_POINTS.API_BASE_URL}${END_POINTS.MODIFY_SPARE}`,
+        form
+      );
       toast.success('Spare saved');
       setForm({ name: '', sku: '', price: '' });
       fetchSpares();
@@ -73,15 +78,21 @@ export default function Spares() {
 
   if (error) {
     return (
-      <div className="p-4 pt-24 text-center text-red-600">Failed to load spares.</div>
+      <div className="p-4 pt-24 text-center text-red-600">
+        Failed to load spares.
+      </div>
     );
   }
 
   return (
     <div className="p-4 pt-24">
-      <h1 className="text-2xl font-bold mb-4 text-center text-keyline">Spares</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center text-keyline">
+        Spares
+      </h1>
       {spares.length === 0 ? (
-        <div className="text-center text-gray-600 mb-6">No spares available.</div>
+        <div className="text-center text-gray-600 mb-6">
+          No spares available.
+        </div>
       ) : (
         <ul className="space-y-4 max-w-xl mx-auto mb-6">
           {spares.map((s) => (

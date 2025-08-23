@@ -34,8 +34,8 @@ export default function Locate() {
       <section className="text-center max-w-3xl mx-auto">
         <h1 className="text-3xl font-bold">Locate us</h1>
         <p className="text-gray-700 mt-4">
-          Currently we are located at two locations in south India. Refer below for
-          the location and the Google maps.
+          Currently we are located at two locations in south India. Refer below
+          for the location and the Google maps.
         </p>
       </section>
       <section className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 items-center">
@@ -47,13 +47,33 @@ export default function Locate() {
         ></iframe>
         <address className="not-italic space-y-1">
           <h3 className="text-xl font-bold text-keyline">Coimbatore</h3>
-          <p>Cheran Plaza K.G Chavadi Road,<br />Ettimadai, Pirivu,<br />near KK MAHAAL,<br />Coimbatore,<br />Tamil Nadu 641105.</p>
+          <p>
+            Cheran Plaza K.G Chavadi Road,
+            <br />
+            Ettimadai, Pirivu,
+            <br />
+            near KK MAHAAL,
+            <br />
+            Coimbatore,
+            <br />
+            Tamil Nadu 641105.
+          </p>
         </address>
       </section>
       <section className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 items-center">
         <address className="not-italic space-y-1">
           <h3 className="text-xl font-bold text-keyline">Kerala</h3>
-          <p>Cheran Plaza K.G Chavadi Road,<br />Ettimadai, Pirivu,<br />near KK MAHAAL,<br />Coimbatore,<br />Tamil Nadu 641105.</p>
+          <p>
+            Cheran Plaza K.G Chavadi Road,
+            <br />
+            Ettimadai, Pirivu,
+            <br />
+            near KK MAHAAL,
+            <br />
+            Coimbatore,
+            <br />
+            Tamil Nadu 641105.
+          </p>
         </address>
         <iframe
           className="w-full h-64 border-0"

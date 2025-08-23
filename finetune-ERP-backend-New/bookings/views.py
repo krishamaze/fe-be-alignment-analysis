@@ -7,7 +7,7 @@ from .notifications import send_booking_notifications
 
 
 class BookingViewSet(viewsets.ModelViewSet):
-    queryset = Booking.objects.all().order_by('-date_created')
+    queryset = Booking.objects.all().order_by("-date_created")
     serializer_class = BookingSerializer
     permission_classes = [IsSystemAdminOrBookingCreate]
     throttle_classes = [BookingRateThrottle]

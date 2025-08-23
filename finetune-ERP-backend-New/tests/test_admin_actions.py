@@ -40,7 +40,9 @@ class AttendanceAdminActionTests(TestCase):
             role="advisor",
             store=self.store1,
         )
-        self.shift = Shift.objects.create(name="Day", start_time=time(9, 0), end_time=time(17, 0))
+        self.shift = Shift.objects.create(
+            name="Day", start_time=time(9, 0), end_time=time(17, 0)
+        )
         self.attendance = Attendance.objects.create(
             user=self.advisor,
             store=self.store1,

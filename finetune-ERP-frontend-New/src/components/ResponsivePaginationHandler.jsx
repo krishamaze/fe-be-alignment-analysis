@@ -30,11 +30,7 @@ const ResponsivePaginationHandler = ({
     if (!isMobile) return;
 
     const onScroll = () => {
-      if (
-        isAtBottom() &&
-        !loadingRef.current &&
-        size < totalElements
-      ) {
+      if (isAtBottom() && !loadingRef.current && size < totalElements) {
         loadingRef.current = true;
         onMobilePageChange(size + 10);
       }
@@ -62,7 +58,9 @@ const ResponsivePaginationHandler = ({
       {isMobile ? (
         <div className="h-10 w-full flex justify-center items-center">
           {size < totalElements ? (
-            <span className="text-gray-400 text-sm">Scroll to load more...</span>
+            <span className="text-gray-400 text-sm">
+              Scroll to load more...
+            </span>
           ) : (
             <span className="text-gray-400 text-sm">No more results</span>
           )}

@@ -67,7 +67,14 @@ export default function Bookings() {
       );
       toast.success('Booking submitted');
       setSuccess(true);
-      setForm({ name: '', email: '', issue: '', date: '', time: '', message: '' });
+      setForm({
+        name: '',
+        email: '',
+        issue: '',
+        date: '',
+        time: '',
+        message: '',
+      });
       recaptchaRef.current?.reset();
       setCaptcha('');
       setCooldown(true);

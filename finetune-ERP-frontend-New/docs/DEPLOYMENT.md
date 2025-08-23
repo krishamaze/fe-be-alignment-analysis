@@ -14,16 +14,16 @@ Optimised for static hosts such as [Vercel](https://vercel.com); see `vercel.jso
 
 ## Environment matrix
 
-| Environment | App URL | API URL |
-|-------------|---------|---------|
-| Local dev | http://localhost:5173 | https://finetunetechcrafterp-dev.up.railway.app |
-| Staging | TODO | TODO |
-| Production | TODO | TODO |
+| Environment | App URL               | API URL                                         |
+| ----------- | --------------------- | ----------------------------------------------- |
+| Local dev   | http://localhost:5173 | https://finetunetechcrafterp-dev.up.railway.app |
+| Staging     | TODO                  | TODO                                            |
+| Production  | TODO                  | TODO                                            |
 
 ## Environment variables
 
-| Variable | Purpose |
-|----------|---------|
+| Variable                  | Purpose                                    |
+| ------------------------- | ------------------------------------------ |
 | `VITE_RECAPTCHA_SITE_KEY` | Google reCAPTCHA site key for public forms |
 
 ## Caching

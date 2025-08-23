@@ -46,9 +46,7 @@ export default function About() {
             Cheran Plaza K.G Chavadi Road, Ettimadai, Pirivu, near KK MAHAAL,
             Coimbatore, Tamil Nadu 641105.
           </address>
-          <p>
-            We pledge to take the best quality service to every individual.
-          </p>
+          <p>We pledge to take the best quality service to every individual.</p>
           <p className="mt-4 font-semibold text-center text-keyline">
             Book your service from anywhere and anytime.
           </p>

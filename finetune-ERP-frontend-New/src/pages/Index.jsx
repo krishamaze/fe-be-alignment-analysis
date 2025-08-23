@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Helmet } from 'react-helmet-async';
 import END_POINTS from '../utils/Endpoints';
 import Loader from '../components/common/Loader';
 
@@ -29,7 +30,9 @@ export default function Index() {
   useEffect(() => {
     const fetchBrands = async () => {
       try {
-        const res = await axios.get(`${END_POINTS.API_BASE_URL}/marketing/brands/`);
+        const res = await axios.get(
+          `${END_POINTS.API_BASE_URL}/marketing/brands/`
+        );
         setBrands(res.data);
       } catch {
         setError(true);
@@ -50,19 +53,34 @@ export default function Index() {
 
   if (error) {
     return (
-      <div className="p-4 pt-24 text-center text-red-600">Failed to load brands.</div>
+      <div className="p-4 pt-24 text-center text-red-600">
+        Failed to load brands.
+      </div>
     );
   }
 
   if (brands.length === 0) {
     return (
-      <div className="p-4 pt-24 text-center text-gray-600">No brands available.</div>
+      <div className="p-4 pt-24 text-center text-gray-600">
+        No brands available.
+      </div>
     );
   }
 
   return (
     <div className="p-4 pt-24">
-      <h1 className="text-2xl font-bold mb-4 text-center text-keyline">Brands</h1>
+      <Helmet>
+        <title>Brands – Finetune</title>
+        <meta name="description" content="Brands we service and support." />
+        <meta property="og:title" content="Brands – Finetune" />
+        <meta
+          property="og:description"
+          content="Brands we service and support."
+        />
+      </Helmet>
+      <h1 className="text-2xl font-bold mb-4 text-center text-keyline">
+        Brands
+      </h1>
       <ul className="list-disc pl-5 space-y-2 max-w-xl mx-auto">
         {brands.map((b) => (
           <li key={b.id}>{b.name}</li>

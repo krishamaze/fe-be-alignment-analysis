@@ -10,14 +10,17 @@ from accounts.permissions import IsSystemAdminUser
 
 class AdminUserViewSet(viewsets.ModelViewSet):
     """System admin: Manage users"""
-    queryset = CustomUser.objects.filter(deleted=False).select_related('store')
+
+    queryset = CustomUser.objects.filter(deleted=False).select_related("store")
     permission_classes = [IsAuthenticated, IsSystemAdminUser]
 
     def get_serializer_class(self):
-        return RegisterUserSerializer if self.action == 'create' else CustomUserSerializer
+        return (
+            RegisterUserSerializer if self.action == "create" else CustomUserSerializer
+        )
 
     def create(self, request, *args, **kwargs):
-        if request.data.get('role') == 'branch_head' and 'store' in request.data:
+        if request.data.get("role") == "branch_head" and "store" in request.data:
             return Response(
                 {"error": "Assign branch heads via /stores/<id>/assign-branch-head."},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -31,7 +34,10 @@ class AdminUserViewSet(viewsets.ModelViewSet):
         user = self.get_object()
 
         if user == request.user:
-            return Response({"error": "You cannot delete yourself."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "You cannot delete yourself."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         user.deleted = True
         user.is_active = False
@@ -44,13 +50,16 @@ class AdminUserViewSet(viewsets.ModelViewSet):
         user = self.get_object()
 
         # Don’t disable yourself (covers PUT/PATCH if is_active present)
-        if user == request.user and 'is_active' in request.data:
-            requested_active = request.data.get('is_active')
+        if user == request.user and "is_active" in request.data:
+            requested_active = request.data.get("is_active")
             # Treat "false"/"0"/False as disable attempt
-            if str(requested_active).lower() in ('false', '0'):
-                return Response({"error": "You cannot disable yourself."}, status=status.HTTP_400_BAD_REQUEST)
+            if str(requested_active).lower() in ("false", "0"):
+                return Response(
+                    {"error": "You cannot disable yourself."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
-        if 'store' in request.data and user.role == 'branch_head':
+        if "store" in request.data and user.role == "branch_head":
             return Response(
                 {"error": "Assign branch heads via /stores/<id>/assign-branch-head."},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -66,35 +75,44 @@ class AdminUserViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
 
         # Search
-        search_query = self.request.query_params.get('search')
+        search_query = self.request.query_params.get("search")
         if search_query:
             queryset = queryset.filter(
-                Q(username__icontains=search_query) |
-                Q(email__icontains=search_query) |
-                Q(first_name__icontains=search_query) |
-                Q(last_name__icontains=search_query) |
-                Q(phone__icontains=search_query) |
-                Q(store__store_name__icontains=search_query)
+                Q(username__icontains=search_query)
+                | Q(email__icontains=search_query)
+                | Q(first_name__icontains=search_query)
+                | Q(last_name__icontains=search_query)
+                | Q(phone__icontains=search_query)
+                | Q(store__store_name__icontains=search_query)
             ).distinct()
 
         # Role (single value)
-        role = self.request.query_params.get('role')
+        role = self.request.query_params.get("role")
         if role:
             queryset = queryset.filter(role=role)
 
         # Store
-        store_id = self.request.query_params.get('store')
+        store_id = self.request.query_params.get("store")
         if store_id:
             queryset = queryset.filter(store=store_id)
 
         # is_active — safe parse
-        is_active = self.request.query_params.get('is_active')
-        if is_active and is_active.lower() in ('true', 'false'):
-            queryset = queryset.filter(is_active=(is_active.lower() == 'true'))
+        is_active = self.request.query_params.get("is_active")
+        if is_active and is_active.lower() in ("true", "false"):
+            queryset = queryset.filter(is_active=(is_active.lower() == "true"))
 
         # Ordering — whitelist
-        allowed_ordering = {'username', '-username', 'date_joined', '-date_joined', 'id', '-id'}
-        ordering = self.request.query_params.get('ordering', '-date_joined')
-        queryset = queryset.order_by(ordering if ordering in allowed_ordering else '-date_joined')
+        allowed_ordering = {
+            "username",
+            "-username",
+            "date_joined",
+            "-date_joined",
+            "id",
+            "-id",
+        }
+        ordering = self.request.query_params.get("ordering", "-date_joined")
+        queryset = queryset.order_by(
+            ordering if ordering in allowed_ordering else "-date_joined"
+        )
 
         return queryset

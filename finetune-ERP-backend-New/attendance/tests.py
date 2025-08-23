@@ -33,12 +33,8 @@ class AttendanceModelTests(TestCase):
     def test_compute_worked_minutes_rounding(self):
         """Worked minutes are rounded to the nearest 5."""
 
-        check_in = timezone.make_aware(
-            datetime.combine(date(2025, 1, 1), time(9, 0))
-        )
-        check_out = timezone.make_aware(
-            datetime.combine(date(2025, 1, 1), time(9, 7))
-        )
+        check_in = timezone.make_aware(datetime.combine(date(2025, 1, 1), time(9, 0)))
+        check_out = timezone.make_aware(datetime.combine(date(2025, 1, 1), time(9, 7)))
         attendance = Attendance(
             user=self.user,
             store=self.store,
@@ -52,9 +48,7 @@ class AttendanceModelTests(TestCase):
     def test_apply_grace_and_status(self):
         """Grace and status computation works as expected."""
 
-        check_in = timezone.make_aware(
-            datetime.combine(date(2025, 1, 1), time(9, 20))
-        )
+        check_in = timezone.make_aware(datetime.combine(date(2025, 1, 1), time(9, 20)))
         check_out = timezone.make_aware(
             datetime.combine(date(2025, 1, 1), time(16, 40))
         )
@@ -94,20 +88,27 @@ class AttendanceModelTests(TestCase):
         self.assertEqual(attendance.early_out_minutes, 0)
         self.assertEqual(attendance.status, "PRESENT")
         self.assertFalse(attendance.is_open)
- 
+
 
 class MeTodayAPITests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.store = Store.objects.create(store_name="S1", code="S1")
         self.user = CustomUser.objects.create_user(
-            username="adv", password="pw", role="advisor", store=self.store, email="adv@example.com"
+            username="adv",
+            password="pw",
+            role="advisor",
+            store=self.store,
+            email="adv@example.com",
         )
         self.shift = Shift.objects.create(
             name="Day", start_time=time(9, 0), end_time=time(17, 0), is_overnight=False
         )
         AdvisorSchedule.objects.create(
-            user=self.user, rule_type="fixed", anchor_monday=date(2024, 1, 1), default_shift=self.shift
+            user=self.user,
+            rule_type="fixed",
+            anchor_monday=date(2024, 1, 1),
+            default_shift=self.shift,
         )
         self.client.force_authenticate(self.user)
 

@@ -8,8 +8,9 @@ from .serializers import StoreSerializer
 from .permissions import IsSystemAdminOrReadOnly
 from accounts.models import CustomUser
 
+
 class StoreViewSet(viewsets.ModelViewSet):
-     # Hide soft-deleted by default
+    # Hide soft-deleted by default
     queryset = Store.objects.filter(deleted=False)
     serializer_class = StoreSerializer
     permission_classes = [IsSystemAdminOrReadOnly]
@@ -29,9 +30,9 @@ class StoreViewSet(viewsets.ModelViewSet):
         s = self.request.query_params.get("search")
         if s:
             qs = qs.filter(
-                Q(store_name__icontains=s) |
-                Q(code__icontains=s) |
-                Q(address__icontains=s)
+                Q(store_name__icontains=s)
+                | Q(code__icontains=s)
+                | Q(address__icontains=s)
             ).distinct()
 
         is_active = self.request.query_params.get("is_active")
@@ -45,7 +46,10 @@ class StoreViewSet(viewsets.ModelViewSet):
 
         # Handle 'branch_head_status' parameter
         branch_head_status = self.request.query_params.get("branch_head_status")
-        if branch_head_status and branch_head_status.lower() in ("assigned", "unassigned"):
+        if branch_head_status and branch_head_status.lower() in (
+            "assigned",
+            "unassigned",
+        ):
             if branch_head_status.lower() == "assigned":
                 qs = qs.filter(branch_head__isnull=False)
             else:
@@ -57,53 +61,71 @@ class StoreViewSet(viewsets.ModelViewSet):
             if ids:
                 qs = qs.filter(id__in=ids)
 
-        allowed = {"store_name", "-store_name", "code", "-code", "id", "-id", "is_active", "-is_active"}
+        allowed = {
+            "store_name",
+            "-store_name",
+            "code",
+            "-code",
+            "id",
+            "-id",
+            "is_active",
+            "-is_active",
+        }
         ordering = self.request.query_params.get("ordering", "store_name")
         qs = qs.order_by(ordering if ordering in allowed else "store_name")
         return qs
 
-    @action(detail=True, methods=['post'], url_path='assign-branch-head')
+    @action(detail=True, methods=["post"], url_path="assign-branch-head")
     def assign_branch_head(self, request, pk=None):
         """Assign a branch head to a store"""
         store = self.get_object()
-        user_id = request.data.get('user_id')
+        user_id = request.data.get("user_id")
 
         if not user_id:
-            return Response({'error': 'user_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "user_id is required"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         try:
             with transaction.atomic():
                 store = Store.objects.select_for_update().get(pk=store.pk)
                 user = CustomUser.objects.select_for_update().get(
-                    id=user_id, role='branch_head', is_active=True, deleted=False
+                    id=user_id, role="branch_head", is_active=True, deleted=False
                 )
 
                 if store.branch_head_id == user.id and user.store_id == store.id:
-                    return Response(StoreSerializer(store).data, status=status.HTTP_200_OK)
+                    return Response(
+                        StoreSerializer(store).data, status=status.HTTP_200_OK
+                    )
 
                 if user.store_id and user.store_id != store.id:
                     other = user.store.store_name if user.store else user.store_id
                     return Response(
-                        {'error': f'User is already assigned to {other}'},
+                        {"error": f"User is already assigned to {other}"},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
 
                 if store.branch_head and store.branch_head_id != user.id:
-                    current_head = CustomUser.objects.select_for_update().get(pk=store.branch_head_id)
+                    current_head = CustomUser.objects.select_for_update().get(
+                        pk=store.branch_head_id
+                    )
                     current_head.store = None
-                    current_head.save(update_fields=['store'])
+                    current_head.save(update_fields=["store"])
 
                 user.store = store
-                user.save(update_fields=['store'])
+                user.save(update_fields=["store"])
                 store.branch_head = user
-                store.save(update_fields=['branch_head'])
+                store.save(update_fields=["branch_head"])
 
             return Response(StoreSerializer(store).data, status=status.HTTP_200_OK)
 
         except CustomUser.DoesNotExist:
-            return Response({'error': 'Branch head not found or invalid'}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "Branch head not found or invalid"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
-    @action(detail=True, methods=['post'], url_path='unassign-branch-head')
+    @action(detail=True, methods=["post"], url_path="unassign-branch-head")
     def unassign_branch_head(self, request, pk=None):
         """Unassign branch head from a store"""
         store = self.get_object()
@@ -115,8 +137,8 @@ class StoreViewSet(viewsets.ModelViewSet):
 
             user = CustomUser.objects.select_for_update().get(pk=store.branch_head_id)
             user.store = None
-            user.save(update_fields=['store'])
+            user.save(update_fields=["store"])
             store.branch_head = None
-            store.save(update_fields=['branch_head'])
+            store.save(update_fields=["branch_head"])
 
         return Response(StoreSerializer(store).data, status=status.HTTP_200_OK)

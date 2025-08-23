@@ -7,19 +7,32 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0001_initial'),
-        ('store', '0001_initial'),
+        ("accounts", "0001_initial"),
+        ("store", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='customuser',
-            name='store',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='store.store'),
+            model_name="customuser",
+            name="store",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="store.store",
+            ),
         ),
         migrations.AlterField(
-            model_name='customuser',
-            name='role',
-            field=models.CharField(choices=[('admin', 'Admin'), ('branch_head', 'Branch Head'), ('advisor', 'Advisor')], default='advisr', max_length=12),
+            model_name="customuser",
+            name="role",
+            field=models.CharField(
+                choices=[
+                    ("admin", "Admin"),
+                    ("branch_head", "Branch Head"),
+                    ("advisor", "Advisor"),
+                ],
+                default="advisr",
+                max_length=12,
+            ),
         ),
     ]
