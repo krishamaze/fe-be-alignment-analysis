@@ -13,8 +13,7 @@ import { useLocation } from 'react-router-dom';
 // import AddUser from './pages/AddUser';
 import User from './pages/User';
 import GiveawayRedemption from './pages/GiveawayRedemption';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Toaster } from 'react-hot-toast';
 import Store from './pages/Store';
 import Settings from './pages/Settings';
 import FocusLayout from './components/layout/FocusLayout';
@@ -130,7 +129,7 @@ function AppContent() {
 export default function App() {
   return (
     <BrowserRouter>
-    <ToastContainer />
+      <Toaster toastOptions={{ className: 'bg-surface dark:bg-primary text-primary dark:text-surface' }} />
       <AppContent />
     </BrowserRouter>
   );

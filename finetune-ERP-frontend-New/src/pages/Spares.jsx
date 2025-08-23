@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { toast } from 'react-toastify';
-import AppLoader from '../components/AppLoader';
+import toast from 'react-hot-toast';
+import Loader from '../components/common/Loader';
 import END_POINTS from '../utils/Endpoints';
 
 export default function Spares() {
@@ -66,7 +66,7 @@ export default function Spares() {
   if (loading) {
     return (
       <div className="p-4 pt-24 text-center">
-        <AppLoader />
+        <Loader />
       </div>
     );
   }
@@ -100,7 +100,7 @@ export default function Spares() {
           placeholder="Name"
           value={form.name}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
+          className="input"
           required
         />
         <input
@@ -109,7 +109,7 @@ export default function Spares() {
           placeholder="SKU"
           value={form.sku}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
+          className="input"
           required
         />
         <input
@@ -118,7 +118,7 @@ export default function Spares() {
           placeholder="Price"
           value={form.price}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
+          className="input"
           required
         />
         <button

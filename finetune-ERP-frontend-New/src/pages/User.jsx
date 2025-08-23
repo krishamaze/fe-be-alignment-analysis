@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { getUsers, modifyUserStatus, softDeleteUser, updateUser } from '../api/user';
 import NoDataFound from "../assets/images/NoDataFound.png";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import toast from 'react-hot-toast';
 import { useAppDispatch, useAppSelector } from '../redux/hook';
 import { getStores } from '../api/store';
 import { createUser } from '../api/user';
 import { MESSAGE } from '../utils/Constants';
-import AppLoader from '../components/AppLoader';
+import Loader from '../components/common/Loader';
 import { MdToggleOff, MdToggleOn } from 'react-icons/md';
 import ToggleStatusModal from '../components/ToggleStatusModal';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
@@ -256,7 +255,7 @@ const UserList = () => {
     <div className="relative">
       {!isEdit &&
         <div className="p-6">
-          {isLoading && <AppLoader />}
+          {isLoading && <Loader />}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">        
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full sm:w-auto">              
               <div className="flex items-center justify-between sm:justify-start w-full sm:w-auto">

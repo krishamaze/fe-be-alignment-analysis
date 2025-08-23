@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
 import END_POINTS from '../utils/Endpoints';
-import AppLoader from '../components/AppLoader';
+import Loader from '../components/common/Loader';
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', mobile_no: '', message: '' });
@@ -63,7 +63,7 @@ export default function Contact() {
 
   return (
     <div className="p-4 pt-24 max-w-xl mx-auto">
-      {loading && <AppLoader />}
+      {loading && <Loader />}
       <h1 className="text-2xl font-bold mb-4">Contact Us</h1>
       <address className="not-italic mb-4 text-gray-700">
         Cheran Plaza K.G Chavadi Road, Ettimadai, Pirivu, near KK MAHAAL,
