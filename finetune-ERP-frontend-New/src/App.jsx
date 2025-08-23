@@ -75,14 +75,14 @@ function AppContent() {
         <Route path="/help" element={<HelpCentre />} />
         <Route path="/legal" element={<Legal />} />
         <Route path="/marketing" element={<IndexPage />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/locate" element={<Locate />} />
+        <Route path="/about/" element={<About />} />
+        <Route path="/contact/" element={<Contact />} />
+        <Route path="/locate/" element={<Locate />} />
         <Route path="/stores" element={<Stores />} />
         <Route path="/stores/:id" element={<StoreDetails />} />
         <Route path="/spares" element={<Spares />} />
         <Route path="/bookings" element={<Bookings />} />
-        <Route path="/terms" element={<Terms />} />
+        <Route path="/terms-and-conditions/" element={<Terms />} />
         <Route path="/schedule-call" element={<ScheduleCall />} />
 
         <Route

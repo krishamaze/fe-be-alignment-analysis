@@ -1,26 +1,36 @@
+import { Helmet } from 'react-helmet-async';
 import { useEffect } from 'react';
 
 export default function Terms() {
   useEffect(() => {
-    document.title = 'Terms & Conditions – Finetune';
     const desc = 'Agreement for repair and service terms.';
-    const setMeta = (key, val, property = false) => {
-      const attr = property ? 'property' : 'name';
-      let tag = document.head.querySelector(`meta[${attr}='${key}']`);
-      if (!tag) {
-        tag = document.createElement('meta');
-        tag.setAttribute(attr, key);
-        document.head.appendChild(tag);
-      }
-      tag.setAttribute('content', val);
-    };
-    setMeta('description', desc);
-    setMeta('og:title', 'Terms & Conditions – Finetune', true);
-    setMeta('og:description', desc, true);
+    document.title = 'Terms & Conditions – Finetune';
+    let tag = document.head.querySelector("meta[name='description']");
+    if (!tag) {
+      tag = document.createElement('meta');
+      tag.setAttribute('name', 'description');
+      document.head.appendChild(tag);
+    }
+    tag.setAttribute('content', desc);
   }, []);
 
   return (
     <div className="p-4 pt-24 max-w-3xl mx-auto space-y-4">
+      <Helmet>
+        <title>Terms &amp; Conditions – Finetune</title>
+        <meta
+          name="description"
+          content="Agreement for repair and service terms."
+        />
+        <meta
+          property="og:title"
+          content="Terms &amp; Conditions – Finetune"
+        />
+        <meta
+          property="og:description"
+          content="Agreement for repair and service terms."
+        />
+      </Helmet>
       <h1 className="text-3xl font-bold text-center">Terms &amp; Conditions</h1>
       <h3 className="text-xl font-semibold">Agreement for Repair</h3>
       <p>

@@ -15,9 +15,9 @@ function Navbar() {
   const isLoginPage = location.pathname === '/teamlogin';
   // Navigation links
   const navLinks = [
-    { name: 'About', href: '/about' },
-    { name: 'Locate', href: '/locate' },
-    { name: 'Contact', href: '/contact' },
+    { name: 'About', href: '/about/' },
+    { name: 'Locate', href: '/locate/' },
+    { name: 'Contact', href: '/contact/' },
     ...(isLoginPage ? [] : [{ name: 'Login', href: loginTarget }]),
   ];
 

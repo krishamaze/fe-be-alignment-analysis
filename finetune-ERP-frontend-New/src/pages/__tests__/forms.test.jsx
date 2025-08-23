@@ -3,6 +3,7 @@ import { describe, it, expect, afterEach, vi } from 'vitest';
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import Contact from '../Contact';
+import { HelmetProvider } from 'react-helmet-async';
 import ScheduleCall from '../ScheduleCall';
 import Bookings from '../Bookings';
 import END_POINTS from '../../utils/Endpoints';
@@ -13,7 +14,7 @@ vi.mock('react-hot-toast', () => { const toast = () => {}; toast.success = vi.fn
 vi.mock('react-google-recaptcha', () => ({
   __esModule: true,
   default: ({ onChange }) => {
-    onChange('tok');
+    setTimeout(() => onChange('tok'), 0);
     return <div data-testid="recaptcha" />;
   },
 }));
@@ -26,22 +27,26 @@ afterEach(() => {
 });
 
 describe('Contact form', () => {
-  it('posts form data with captcha', async () => {
-    axios.post.mockResolvedValue({});
+  it('posts form data to placeholder handler', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValue({ ok: true });
     const container = document.createElement('div');
     await act(async () => {
-      createRoot(container).render(<Contact />);
+      createRoot(container).render(
+        <HelmetProvider>
+          <Contact />
+        </HelmetProvider>
+      );
     });
     const name = container.querySelector('input[name="name"]');
-    const mobile = container.querySelector('input[name="mobile_no"]');
+    const email = container.querySelector('input[name="email"]');
     const message = container.querySelector('textarea[name="message"]');
     await act(async () => {
       name.value = 'A';
       name.dispatchEvent(new Event('input', { bubbles: true }));
     });
     await act(async () => {
-      mobile.value = '123';
-      mobile.dispatchEvent(new Event('input', { bubbles: true }));
+      email.value = 'a@b.com';
+      email.dispatchEvent(new Event('input', { bubbles: true }));
     });
     await act(async () => {
       message.value = 'hi';
@@ -52,9 +57,9 @@ describe('Contact form', () => {
         new Event('submit', { bubbles: true, cancelable: true })
       );
     });
-    expect(axios.post).toHaveBeenCalledWith(
-      `${END_POINTS.API_BASE_URL}/marketing/contact/`,
-      expect.objectContaining({ captcha_token: 'tok' })
+    expect(fetch).toHaveBeenCalledWith(
+      '/api/contact',
+      expect.objectContaining({ method: 'POST' })
     );
   });
 });

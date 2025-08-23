@@ -1,22 +1,17 @@
+import { Helmet } from 'react-helmet-async';
 import { useEffect } from 'react';
 
 export default function Locate() {
   useEffect(() => {
-    document.title = 'Locate – Finetune';
     const desc = 'Find our service branches and directions.';
-    const setMeta = (key, val, property = false) => {
-      const attr = property ? 'property' : 'name';
-      let tag = document.head.querySelector(`meta[${attr}='${key}']`);
-      if (!tag) {
-        tag = document.createElement('meta');
-        tag.setAttribute(attr, key);
-        document.head.appendChild(tag);
-      }
-      tag.setAttribute('content', val);
-    };
-    setMeta('description', desc);
-    setMeta('og:title', 'Locate – Finetune', true);
-    setMeta('og:description', desc, true);
+    document.title = 'Locate – Finetune';
+    let tag = document.head.querySelector("meta[name='description']");
+    if (!tag) {
+      tag = document.createElement('meta');
+      tag.setAttribute('name', 'description');
+      document.head.appendChild(tag);
+    }
+    tag.setAttribute('content', desc);
   }, []);
 
   const mapSrc =
@@ -24,6 +19,18 @@ export default function Locate() {
 
   return (
     <div className="p-4 pt-24 space-y-16">
+      <Helmet>
+        <title>Locate – Finetune</title>
+        <meta
+          name="description"
+          content="Find our service branches and directions."
+        />
+        <meta property="og:title" content="Locate – Finetune" />
+        <meta
+          property="og:description"
+          content="Find our service branches and directions."
+        />
+      </Helmet>
       <section className="text-center max-w-3xl mx-auto">
         <h1 className="text-3xl font-bold">Locate us</h1>
         <p className="text-gray-700 mt-4">
