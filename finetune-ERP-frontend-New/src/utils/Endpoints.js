@@ -33,6 +33,14 @@ const END_POINTS = {
   GET_UNITS: '/api/units',
   GET_QUALITIES: '/api/qualities',
 
+  // REPAIRS
+  MODIFY_ISSUE: '/api/issues',
+  GET_ISSUES: '/api/issues',
+  MODIFY_OTHER_ISSUE: '/api/other-issues',
+  GET_OTHER_ISSUES: '/api/other-issues',
+  MODIFY_QUESTION: '/api/questions',
+  GET_QUESTIONS: '/api/questions',
+
   // AUTHENTICATION
   LOGIN: '/api/auth/login',
   REFRESH_TOKEN: '/api/token/refresh',
