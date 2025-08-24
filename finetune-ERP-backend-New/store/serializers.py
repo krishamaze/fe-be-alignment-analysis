@@ -1,11 +1,10 @@
 from rest_framework import serializers
 from .models import Store
-from accounts.models import CustomUser
 
 
 class StoreSerializer(serializers.ModelSerializer):
-    branch_head_name = serializers.SerializerMethodField()
-    branch_head_email = serializers.SerializerMethodField()
+    authority_name = serializers.SerializerMethodField()
+    authority_email = serializers.SerializerMethodField()
 
     class Meta:
         model = Store
@@ -14,28 +13,38 @@ class StoreSerializer(serializers.ModelSerializer):
             "store_name",
             "code",
             "address",
+            "phone",
+            "store_type",
             "is_active",
-            "branch_head",
-            "branch_head_name",
-            "branch_head_email",
+            "authority",
+            "authority_name",
+            "authority_email",
         ]
 
-        # ``branch_head`` related fields are admin-only
-        # and are stripped from representations for
-        # non-system_admin users.
-
-    def get_branch_head_name(self, obj):
-        if obj.branch_head:
-            return f"{obj.branch_head.first_name} {obj.branch_head.last_name}".strip()
+    def get_authority_name(self, obj):
+        if obj.authority:
+            return f"{obj.authority.first_name} {obj.authority.last_name}".strip()
         return None
 
-    def get_branch_head_email(self, obj):
-        return obj.branch_head.email if obj.branch_head else None
+    def get_authority_email(self, obj):
+        return obj.authority.email if obj.authority else None
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
         request = self.context.get("request")
         if not request or getattr(request.user, "role", None) != "system_admin":
-            for field in ("branch_head", "branch_head_name", "branch_head_email"):
+            for field in ("authority", "authority_name", "authority_email"):
                 data.pop(field, None)
         return data
+
+    def validate(self, attrs):
+        store_type = attrs.get("store_type", getattr(self.instance, "store_type", None))
+        authority = attrs.get("authority", getattr(self.instance, "authority", None))
+        if store_type == "BRANCH":
+            if authority is None:
+                raise serializers.ValidationError({"authority": "Branch stores require a branch head."})
+            if authority.role != "branch_head":
+                raise serializers.ValidationError({"authority": "Authority must be a branch head."})
+        elif store_type == "HQ" and authority and authority.role != "system_admin":
+            raise serializers.ValidationError({"authority": "HQ authority must be a system admin."})
+        return attrs

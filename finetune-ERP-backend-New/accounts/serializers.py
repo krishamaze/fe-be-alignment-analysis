@@ -41,12 +41,6 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         return user
 
     def validate(self, attrs):
-        role = attrs.get("role")
-        store = attrs.get("store")
-        if role == "branch_head" and store is not None:
-            raise serializers.ValidationError(
-                {"store": "Assign branch heads via /stores/<id>/assign-branch-head."}
-            )
         return super().validate(attrs)
 
 
