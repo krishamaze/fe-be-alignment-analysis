@@ -7,6 +7,8 @@ import {
   HiOutlineUsers,
   HiOutlineGift,
   HiOutlineTag,
+  HiOutlineCube,
+  HiOutlineSquares2X2,
   HiOutlineArrowRightOnRectangle,
   HiOutlineBars3,
   HiOutlineXMark,
@@ -47,6 +49,16 @@ export default function DashboardBottomNav({ role, navOpen, setNavOpen }) {
       to: '/dashboard/brands',
       icon: <HiOutlineTag size={18} />,
       label: 'Brands',
+    },
+    {
+      to: '/dashboard/products',
+      icon: <HiOutlineCube size={18} />,
+      label: 'Products',
+    },
+    {
+      to: '/dashboard/variants',
+      icon: <HiOutlineSquares2X2 size={18} />,
+      label: 'Variants',
     },
     {
       to: '/dashboard/users',
