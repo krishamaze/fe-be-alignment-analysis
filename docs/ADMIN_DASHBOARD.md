@@ -36,3 +36,11 @@
 - Navigate to `/dashboard/bookings`
 - SystemAdmins can approve, progress, complete, cancel, or reject bookings.
 - Cancelling or rejecting prompts for a reason, which is displayed in the table for reference.
+
+## Event Logs
+- Navigate to `/dashboard/logs`
+- View immutable audit entries with filters for entity type, actor, and date range.
+
+## Notifications
+- Bell icon in the top navbar opens recent notifications.
+- Entries link to relevant bookings or entities when available.

@@ -73,3 +73,7 @@
 - `GET /api/bookings/{id}/` – system_admin only detail
 - `PATCH /api/bookings/{id}/` – system_admin only status update (reason required for `cancelled`/`rejected`)
   - Transitions: pending→approved/rejected/cancelled, approved→in_progress/cancelled, in_progress→completed/cancelled
+
+## Event Logs
+- `GET /api/logs/` – system_admin only list
+  - Filters: `entity_type`, `actor`, `start`, `end`

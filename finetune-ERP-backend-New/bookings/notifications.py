@@ -1,14 +1,11 @@
 from django.conf import settings
-from django.core.mail import send_mail
-import requests
 from accounts.models import CustomUser
+from utils.notification_service import NotificationService
 
 
 def send_booking_notifications(booking):
     channels = getattr(settings, "BOOKING_NOTIFICATION_CHANNELS", [])
-    content = f"Booking #{booking.id} for {booking.issue} is {booking.status}"
-    if booking.reason:
-        content += f". Reason: {booking.reason}"
+    context = {"booking": booking}
 
     staff_qs = CustomUser.objects.filter(
         role__in=["advisor", "branch_head", "system_admin"]
@@ -23,29 +20,19 @@ def send_booking_notifications(booking):
         if user.phone:
             phones.append(user.phone)
 
-    if "email" in channels and emails:
-        try:
-            send_mail(
-                "Booking Submitted",
-                content,
-                settings.DEFAULT_FROM_EMAIL,
-                emails,
-                fail_silently=True,
+    subject = "Booking Update"
+    if "email" in channels:
+        for email in emails:
+            NotificationService.send_email(
+                email,
+                subject,
+                "emails/booking_notification.html",
+                context,
             )
-        except Exception:
-            pass
-
-    if "sms" in channels and settings.SMS_GATEWAY_URL:
+    if "sms" in channels:
         for phone in phones:
-            try:
-                requests.post(
-                    settings.SMS_GATEWAY_URL,
-                    data={
-                        "to": phone,
-                        "token": getattr(settings, "SMS_GATEWAY_TOKEN", ""),
-                        "message": content,
-                    },
-                    timeout=5,
-                )
-            except requests.RequestException:
-                continue
+            NotificationService.send_sms(
+                phone,
+                "sms/booking_notification.txt",
+                context,
+            )
