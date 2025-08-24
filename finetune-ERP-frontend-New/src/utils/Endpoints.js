@@ -21,6 +21,8 @@ const END_POINTS = {
 
   // BOOKINGS
   MODIFY_BOOKING: '/api/bookings',
+  GET_PRODUCTS: '/api/products',
+  GET_VARIANTS: '/api/variants',
   GET_BOOKINGS: '/api/bookings',
 
   // AUTHENTICATION
