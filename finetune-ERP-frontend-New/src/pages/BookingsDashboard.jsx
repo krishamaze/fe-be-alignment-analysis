@@ -35,11 +35,36 @@ export default function BookingsDashboard() {
               <td className="p-2 border">{b.name}</td>
               <td className="p-2 border">{b.status}</td>
               <td className="p-2 border space-x-2">
-                <button onClick={() => changeStatus(b.id, 'approved')} className="text-blue-600">Approve</button>
-                <button onClick={() => changeStatus(b.id, 'in_progress')} className="text-yellow-600">In Progress</button>
-                <button onClick={() => changeStatus(b.id, 'completed')} className="text-green-600">Complete</button>
-                <button onClick={() => changeStatus(b.id, 'cancelled')} className="text-red-600">Cancel</button>
-                <button onClick={() => changeStatus(b.id, 'rejected')} className="text-gray-600">Reject</button>
+                <button
+                  onClick={() => changeStatus(b.id, 'approved')}
+                  className="text-blue-600"
+                >
+                  Approve
+                </button>
+                <button
+                  onClick={() => changeStatus(b.id, 'in_progress')}
+                  className="text-yellow-600"
+                >
+                  In Progress
+                </button>
+                <button
+                  onClick={() => changeStatus(b.id, 'completed')}
+                  className="text-green-600"
+                >
+                  Complete
+                </button>
+                <button
+                  onClick={() => changeStatus(b.id, 'cancelled')}
+                  className="text-red-600"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => changeStatus(b.id, 'rejected')}
+                  className="text-gray-600"
+                >
+                  Reject
+                </button>
               </td>
             </tr>
           ))}

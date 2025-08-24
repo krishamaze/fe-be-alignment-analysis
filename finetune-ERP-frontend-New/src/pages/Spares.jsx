@@ -77,9 +77,13 @@ export default function Spares() {
 
   return (
     <div className="p-4 pt-24">
-      <h1 className="text-2xl font-bold mb-4 text-center text-keyline">Spares</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center text-keyline">
+        Spares
+      </h1>
       {spares.length === 0 ? (
-        <div className="text-center text-gray-600 mb-6">No spares available.</div>
+        <div className="text-center text-gray-600 mb-6">
+          No spares available.
+        </div>
       ) : (
         <ul className="space-y-4 max-w-xl mx-auto mb-6">
           {spares.map((s) => (
@@ -91,7 +95,10 @@ export default function Spares() {
               )}
               {isAdmin && (
                 <div className="mt-2 space-x-2">
-                  <button className="text-blue-600" onClick={() => handleEdit(s)}>
+                  <button
+                    className="text-blue-600"
+                    onClick={() => handleEdit(s)}
+                  >
                     Edit
                   </button>
                   <button
