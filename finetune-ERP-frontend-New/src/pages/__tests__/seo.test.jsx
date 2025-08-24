@@ -27,6 +27,7 @@ vi.mock('../../api/erpApi', () => ({
   useCreateSpareMutation: () => [() => {}],
   useUpdateSpareMutation: () => [() => {}],
   useDeleteSpareMutation: () => [() => {}],
+  useGetBookingsQuery: () => ({ data: { content: [] }, isLoading: false }),
   useCreateBookingMutation: () => [() => {}],
 }));
 

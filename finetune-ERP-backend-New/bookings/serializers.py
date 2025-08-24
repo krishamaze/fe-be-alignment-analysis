@@ -24,6 +24,7 @@ class BookingSerializer(serializers.ModelSerializer):
             "date",
             "time",
             "message",
+            "reason",
             "status",
             "captcha_token",
         ]
@@ -59,6 +60,8 @@ class BookingSerializer(serializers.ModelSerializer):
         new_status = validated_data.get("status", instance.status)
         if new_status != instance.status and new_status not in instance.allowed_transitions():
             raise serializers.ValidationError({"status": "Invalid transition"})
+        if new_status in ["cancelled", "rejected"] and not validated_data.get("reason"):
+            raise serializers.ValidationError({"reason": "This field is required."})
         return super().update(instance, validated_data)
 
     def to_representation(self, instance):

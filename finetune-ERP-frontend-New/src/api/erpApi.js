@@ -310,11 +310,19 @@ export const erpApi = createApi({
       }),
       invalidatesTags: ['Booking'],
     }),
-    updateBooking: builder.mutation({
-      query: ({ id, ...patch }) => ({
+    cancelBooking: builder.mutation({
+      query: ({ id, reason }) => ({
         url: `${END_POINTS.MODIFY_BOOKING}/${id}`,
         method: 'PATCH',
-        body: patch,
+        body: { status: 'cancelled', reason },
+      }),
+      invalidatesTags: ['Booking'],
+    }),
+    updateBookingStatus: builder.mutation({
+      query: ({ id, status, reason }) => ({
+        url: `${END_POINTS.MODIFY_BOOKING}/${id}`,
+        method: 'PATCH',
+        body: { status, reason },
       }),
       invalidatesTags: ['Booking'],
     }),
@@ -366,5 +374,6 @@ export const {
   useDeleteVariantMutation,
   useGetBookingsQuery,
   useCreateBookingMutation,
-  useUpdateBookingMutation,
+  useCancelBookingMutation,
+  useUpdateBookingStatusMutation,
 } = erpApi;
