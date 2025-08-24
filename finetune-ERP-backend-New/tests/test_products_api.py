@@ -231,3 +231,47 @@ def test_taxonomy_endpoints_and_product_filter():
     assert len(resp.json()["content"]) == 1
     resp = client.get(f"/api/products?subcategory={sub.slug}")
     assert len(resp.json()["content"]) == 1
+
+
+@pytest.mark.django_db
+def test_slug_immutable_model_level():
+    brand = Brand.objects.create(name="B1")
+    dept = Department.objects.create(name="Electronics")
+    cat = Category.objects.create(name="Phones", department=dept)
+    sub = SubCategory.objects.create(name="Smartphones", category=cat)
+    product = Product.objects.create(name="P1", brand=brand, subcategory=sub, price=1, stock=1)
+    old_slug = product.slug
+    product.slug = "changed"
+    product.save()
+    assert product.slug == old_slug
+    variant = Variant.objects.create(product=product, variant_name="V1", price=1, stock=1)
+    v_old = variant.slug
+    variant.slug = "new"
+    variant.save()
+    assert variant.slug == v_old
+
+
+@pytest.mark.django_db
+def test_price_filter_and_ordering_and_redirect():
+    brand = Brand.objects.create(name="B1")
+    dept = Department.objects.create(name="Electronics")
+    cat = Category.objects.create(name="Phones", department=dept)
+    sub = SubCategory.objects.create(name="Smartphones", category=cat)
+    p1 = Product.objects.create(name="P1", brand=brand, subcategory=sub, price=5, stock=1)
+    p2 = Product.objects.create(name="P2", brand=brand, subcategory=sub, price=10, stock=1)
+    client = APIClient()
+    resp = client.get("/api/products?min_price=6")
+    slugs = [item["slug"] for item in resp.json()["content"]]
+    assert p2.slug in slugs and p1.slug not in slugs
+    resp = client.get("/api/products?max_price=6")
+    slugs = [item["slug"] for item in resp.json()["content"]]
+    assert p1.slug in slugs and p2.slug not in slugs
+    resp = client.get("/api/products?ordering=-price")
+    prices = [float(item["price"]) for item in resp.json()["content"]]
+    assert prices == sorted(prices, reverse=True)
+    resp = client.get("/api/products?ordering=-date_created")
+    slugs = [item["slug"] for item in resp.json()["content"]]
+    assert slugs[0] == p2.slug
+    resp = client.get(f"/api/productdetail/{p1.slug}/{brand.name}/", follow=False)
+    assert resp.status_code == 301
+    assert resp.headers["Location"].endswith(p1.get_absolute_url())
