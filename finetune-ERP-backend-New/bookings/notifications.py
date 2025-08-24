@@ -7,6 +7,8 @@ from accounts.models import CustomUser
 def send_booking_notifications(booking):
     channels = getattr(settings, "BOOKING_NOTIFICATION_CHANNELS", [])
     content = f"Booking #{booking.id} for {booking.issue} is {booking.status}"
+    if booking.reason:
+        content += f". Reason: {booking.reason}"
 
     staff_qs = CustomUser.objects.filter(
         role__in=["advisor", "branch_head", "system_admin"]
