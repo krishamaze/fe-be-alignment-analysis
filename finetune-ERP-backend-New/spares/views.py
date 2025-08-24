@@ -10,6 +10,8 @@ class SpareViewSet(viewsets.ModelViewSet):
     serializer_class = SpareSerializer
     permission_classes = [IsSystemAdminOrReadOnly]
 
+    # TODO: restrict nested relations (SpareVariety, Quality) when models exist
+
     def get_queryset(self):
         qs = super().get_queryset()
         search = self.request.query_params.get("search")
