@@ -38,6 +38,7 @@ class Booking(models.Model):
     date = models.DateField()
     time = models.TimeField()
     message = models.TextField(blank=True)
+    reason = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=12, choices=STATUS_CHOICES, default="pending")
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
@@ -47,7 +48,7 @@ class Booking(models.Model):
 
     def allowed_transitions(self):
         return {
-            "pending": ["approved", "rejected"],
+            "pending": ["approved", "rejected", "cancelled"],
             "approved": ["in_progress", "cancelled"],
             "in_progress": ["completed", "cancelled"],
             "completed": [],

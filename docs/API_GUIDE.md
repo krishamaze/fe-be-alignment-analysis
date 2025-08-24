@@ -71,4 +71,5 @@
 - `POST /api/bookings/` – public create (captcha + throttling)
 - `GET /api/bookings/` – system_admin only list
 - `GET /api/bookings/{id}/` – system_admin only detail
-- `PATCH /api/bookings/{id}/` – system_admin only status update
+- `PATCH /api/bookings/{id}/` – system_admin only status update (reason required for `cancelled`/`rejected`)
+  - Transitions: pending→approved/rejected/cancelled, approved→in_progress/cancelled, in_progress→completed/cancelled
