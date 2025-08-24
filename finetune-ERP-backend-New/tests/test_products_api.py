@@ -2,14 +2,18 @@ import pytest
 from rest_framework.test import APIClient
 from accounts.models import CustomUser
 from marketing.models import Brand
-from catalog.models import Category, Product, Variant
+from catalog.models import Department, Category, SubCategory, Product, Variant
 
 
 @pytest.mark.django_db
 def test_product_list_and_detail_by_slug():
     brand = Brand.objects.create(name="B1")
-    cat = Category.objects.create(name="Phones", slug="phones")
-    product = Product.objects.create(name="P1", brand=brand, category=cat, price=10, stock=5)
+    dept = Department.objects.create(name="Electronics")
+    cat = Category.objects.create(name="Phones", department=dept)
+    sub = SubCategory.objects.create(name="Smartphones", category=cat)
+    product = Product.objects.create(
+        name="P1", brand=brand, subcategory=sub, price=10, stock=5
+    )
     client = APIClient()
     resp = client.get("/api/products")
     assert resp.status_code == 200
@@ -23,9 +27,25 @@ def test_product_list_and_detail_by_slug():
 def test_product_filter_brand_availability():
     brand1 = Brand.objects.create(name="B1")
     brand2 = Brand.objects.create(name="B2")
-    cat = Category.objects.create(name="Phones", slug="phones")
-    Product.objects.create(name="P1", brand=brand1, category=cat, price=10, stock=5, availability=True)
-    Product.objects.create(name="P2", brand=brand2, category=cat, price=20, stock=0, availability=False)
+    dept = Department.objects.create(name="Electronics")
+    cat = Category.objects.create(name="Phones", department=dept)
+    sub = SubCategory.objects.create(name="Smartphones", category=cat)
+    Product.objects.create(
+        name="P1",
+        brand=brand1,
+        subcategory=sub,
+        price=10,
+        stock=5,
+        availability=True,
+    )
+    Product.objects.create(
+        name="P2",
+        brand=brand2,
+        subcategory=sub,
+        price=20,
+        stock=0,
+        availability=False,
+    )
     client = APIClient()
     resp = client.get(f"/api/products?brand={brand1.id}")
     assert len(resp.json()["content"]) == 1
@@ -36,8 +56,12 @@ def test_product_filter_brand_availability():
 @pytest.mark.django_db
 def test_variant_list_and_detail():
     brand = Brand.objects.create(name="B1")
-    cat = Category.objects.create(name="Phones", slug="phones")
-    product = Product.objects.create(name="P1", brand=brand, category=cat, price=10, stock=5)
+    dept = Department.objects.create(name="Electronics")
+    cat = Category.objects.create(name="Phones", department=dept)
+    sub = SubCategory.objects.create(name="Smartphones", category=cat)
+    product = Product.objects.create(
+        name="P1", brand=brand, subcategory=sub, price=10, stock=5
+    )
     v1 = Variant.objects.create(product=product, variant_name="V1", price=5, stock=1)
     Variant.objects.create(product=product, variant_name="V2", price=6, stock=1)
     client = APIClient()
@@ -52,7 +76,9 @@ def test_variant_list_and_detail():
 @pytest.mark.django_db
 def test_admin_crud_and_validations():
     brand = Brand.objects.create(name="B1")
-    cat = Category.objects.create(name="Phones", slug="phones")
+    dept = Department.objects.create(name="Electronics")
+    cat = Category.objects.create(name="Phones", department=dept)
+    sub = SubCategory.objects.create(name="Smartphones", category=cat)
     admin = CustomUser.objects.create_user(
         username="admin", email="a@b.com", password="x", role="system_admin"
     )
@@ -64,7 +90,7 @@ def test_admin_crud_and_validations():
         {
             "name": "P1",
             "brand": brand.id,
-            "category": cat.id,
+            "subcategory": sub.id,
             "price": 10,
             "stock": 5,
             "availability": True,
@@ -80,7 +106,7 @@ def test_admin_crud_and_validations():
         {
             "name": "P1",
             "brand": brand.id,
-            "category": cat.id,
+            "subcategory": sub.id,
             "price": -1,
             "stock": 5,
             "availability": True,
@@ -95,7 +121,7 @@ def test_admin_crud_and_validations():
         {
             "name": "P2",
             "brand": brand.id,
-            "category": cat.id,
+            "subcategory": sub.id,
             "price": 5,
             "stock": 0,
             "availability": True,
@@ -109,7 +135,7 @@ def test_admin_crud_and_validations():
         {
             "name": "P2",
             "brand": brand.id,
-            "category": cat.id,
+            "subcategory": sub.id,
             "price": 5,
             "stock": 0,
             "availability": False,
@@ -170,3 +196,38 @@ def test_admin_crud_and_validations():
     # Delete product
     resp = client.delete(f"/api/products/{slug}")
     assert resp.status_code == 204
+
+
+@pytest.mark.django_db
+def test_taxonomy_endpoints_and_product_filter():
+    dept = Department.objects.create(name="Electronics")
+    cat = Category.objects.create(name="Phones", department=dept)
+    sub = SubCategory.objects.create(name="Smartphones", category=cat)
+    brand = Brand.objects.create(name="B1")
+    Product.objects.create(name="P1", brand=brand, subcategory=sub, price=1, stock=1)
+    client = APIClient()
+
+    resp = client.get("/api/departments")
+    assert resp.status_code == 200
+    assert resp.json()["content"][0]["slug"] == dept.slug
+    resp = client.get(f"/api/departments/{dept.slug}")
+    assert resp.status_code == 200
+
+    resp = client.get(f"/api/categories?department={dept.slug}")
+    assert resp.status_code == 200
+    assert resp.json()["content"][0]["slug"] == cat.slug
+    resp = client.get(f"/api/categories/{cat.slug}")
+    assert resp.status_code == 200
+
+    resp = client.get(f"/api/subcategories?category={cat.slug}")
+    assert resp.status_code == 200
+    assert resp.json()["content"][0]["slug"] == sub.slug
+    resp = client.get(f"/api/subcategories/{sub.slug}")
+    assert resp.status_code == 200
+
+    resp = client.get(f"/api/products?department={dept.slug}")
+    assert len(resp.json()["content"]) == 1
+    resp = client.get(f"/api/products?category={cat.slug}")
+    assert len(resp.json()["content"]) == 1
+    resp = client.get(f"/api/products?subcategory={sub.slug}")
+    assert len(resp.json()["content"]) == 1
