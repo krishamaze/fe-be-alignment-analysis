@@ -51,6 +51,9 @@ export default function BookingsDashboard() {
         <thead>
           <tr>
             <th className="p-2 border">Name</th>
+            <th className="p-2 border">Issues</th>
+            <th className="p-2 border">Other Issues</th>
+            <th className="p-2 border">Responses</th>
             <th className="p-2 border">Status</th>
             <th className="p-2 border">Reason</th>
             <th className="p-2 border">Actions</th>
@@ -60,6 +63,39 @@ export default function BookingsDashboard() {
           {bookings.map((b) => (
             <tr key={b.id} className="border-t">
               <td className="p-2 border">{b.name}</td>
+              <td className="p-2 border">
+                {b.issues?.length
+                  ? b.issues.map((i) => (
+                      <span
+                        key={i.id || i}
+                        className="mr-1 inline-block rounded bg-gray-100 px-2 py-1"
+                      >
+                        {i.name || i}
+                      </span>
+                    ))
+                  : '-'}
+              </td>
+              <td className="p-2 border">
+                {b.other_issues?.length
+                  ? b.other_issues.map((o) => (
+                      <span
+                        key={o}
+                        className="mr-1 inline-block rounded bg-gray-100 px-2 py-1"
+                      >
+                        {o}
+                      </span>
+                    ))
+                  : '-'}
+              </td>
+              <td className="p-2 border">
+                {b.responses?.length
+                  ? b.responses.map((r) => (
+                      <div key={r.question} className="mb-1">
+                        <span className="font-medium">{r.question}</span>: {r.answer}
+                      </div>
+                    ))
+                  : '-'}
+              </td>
               <td className="p-2 border">{b.status}</td>
               <td className="p-2 border">{b.reason || '-'}</td>
               <td className="p-2 border space-x-2">

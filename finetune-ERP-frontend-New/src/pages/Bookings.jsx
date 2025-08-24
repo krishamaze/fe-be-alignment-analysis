@@ -3,17 +3,26 @@ import toast from 'react-hot-toast';
 import Loader from '../components/common/Loader';
 import ReCaptchaWrapper from '../components/common/ReCaptchaWrapper';
 import MyBookings from '../components/MyBookings';
-import { useCreateBookingMutation, useGetBookingsQuery } from '../api/erpApi';
+import MultiSelectIssues from '../components/repairs/MultiSelectIssues';
+import Questionnaire from '../components/repairs/Questionnaire';
+import {
+  useCreateBookingMutation,
+  useGetBookingsQuery,
+  useGetIssuesQuery,
+  useGetQuestionsQuery,
+} from '../api/erpApi';
 
 export default function Bookings() {
   const [form, setForm] = useState({
     name: '',
     email: '',
-    issue: '',
     date: '',
     time: '',
     message: '',
   });
+  const [selectedIssues, setSelectedIssues] = useState([]);
+  const [otherIssues, setOtherIssues] = useState('');
+  const [responses, setResponses] = useState({});
   const [loading, setLoading] = useState(false);
   const [captcha, setCaptcha] = useState('');
   const [cooldown, setCooldown] = useState(false);
@@ -22,6 +31,10 @@ export default function Bookings() {
   const [createBooking] = useCreateBookingMutation();
   const { data: bookingsData, refetch } = useGetBookingsQuery(undefined, {
     skip: !result,
+  });
+  const { data: issuesData } = useGetIssuesQuery();
+  const { data: questionsData } = useGetQuestionsQuery({
+    question_set_name: 'INTAKE_DEFAULT',
   });
 
   useEffect(() => {
@@ -44,8 +57,6 @@ export default function Bookings() {
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const issues = ['Screen', 'Battery', 'Other']; // TODO fetch from API
-
   const submit = async (e) => {
     e.preventDefault();
     if (cooldown) {
@@ -59,19 +70,29 @@ export default function Bookings() {
     try {
       setLoading(true);
       const resp = await createBooking({
-        ...form,
+        booking: { name: form.name, email: form.email },
+        details: {
+          date: form.date,
+          time: form.time,
+          message: form.message,
+        },
+        issues: selectedIssues,
+        other_issues: otherIssues
+          .split(',')
+          .map((o) => o.trim())
+          .filter(Boolean),
+        responses: Object.entries(responses).map(([question, answer]) => ({
+          question,
+          answer,
+        })),
         captcha_token: captcha,
       }).unwrap();
       toast.success('Booking submitted');
       setResult(resp);
-      setForm({
-        name: '',
-        email: '',
-        issue: '',
-        date: '',
-        time: '',
-        message: '',
-      });
+      setForm({ name: '', email: '', date: '', time: '', message: '' });
+      setSelectedIssues([]);
+      setOtherIssues('');
+      setResponses({});
       recaptchaRef.current?.reset();
       setCaptcha('');
       setCooldown(true);
@@ -133,20 +154,23 @@ export default function Bookings() {
           className="input"
           required
         />
-        <select
-          name="issue"
-          value={form.issue}
-          onChange={onChange}
+        <MultiSelectIssues
+          issues={issuesData || []}
+          value={selectedIssues}
+          onChange={setSelectedIssues}
+        />
+        <input
+          name="otherIssues"
+          value={otherIssues}
+          onChange={(e) => setOtherIssues(e.target.value)}
+          placeholder="Other issues (comma separated)"
           className="input"
-          required
-        >
-          <option value="">Select issue</option>
-          {issues.map((i) => (
-            <option key={i} value={i}>
-              {i}
-            </option>
-          ))}
-        </select>
+        />
+        <Questionnaire
+          questions={questionsData || []}
+          responses={responses}
+          onChange={setResponses}
+        />
         <textarea
           name="message"
           value={form.message}
