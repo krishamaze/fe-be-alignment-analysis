@@ -1,6 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import Loader from '../components/common/Loader';
+import END_POINTS from '../utils/Endpoints';
 
 export default function Locate() {
+  const [hqs, setHqs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
   useEffect(() => {
     const desc = 'Find our service branches and directions.';
     document.title = 'Locate – Finetune';
@@ -13,8 +20,21 @@ export default function Locate() {
     tag.setAttribute('content', desc);
   }, []);
 
-  const mapSrc =
-    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.048636922242!2d76.90755181460692!3d10.883905392248625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba85cac2b10ccf9%3A0x13cfec71425cc8a3!2sFineTune!5e0!3m2!1sen!2sin!4v1642964889913!5m2!1sen!2sin';
+  useEffect(() => {
+    const fetchHqs = async () => {
+      try {
+        const res = await axios.get(
+          `${END_POINTS.API_BASE_URL}${END_POINTS.GET_STORES}?store_type=HQ`
+        );
+        setHqs(res.data?.content || []);
+      } catch {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchHqs();
+  }, []);
 
   return (
     <>
@@ -32,54 +52,40 @@ export default function Locate() {
         <section className="text-center max-w-3xl mx-auto">
           <h1 className="text-3xl font-bold">Locate us</h1>
           <p className="text-gray-700 mt-4">
-            Currently we are located at two locations in south India. Refer
-            below for the location and the Google maps.
+            Find our head offices below.
           </p>
         </section>
-        <section className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 items-center">
-          <iframe
-            className="w-full h-64 border-0"
-            src={mapSrc}
-            allowFullScreen=""
-            loading="lazy"
-          ></iframe>
-          <address className="not-italic space-y-1">
-            <h3 className="text-xl font-bold text-keyline">Coimbatore</h3>
-            <p>
-              Cheran Plaza K.G Chavadi Road,
-              <br />
-              Ettimadai, Pirivu,
-              <br />
-              near KK MAHAAL,
-              <br />
-              Coimbatore,
-              <br />
-              Tamil Nadu 641105.
-            </p>
-          </address>
-        </section>
-        <section className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 items-center">
-          <address className="not-italic space-y-1">
-            <h3 className="text-xl font-bold text-keyline">Kerala</h3>
-            <p>
-              Cheran Plaza K.G Chavadi Road,
-              <br />
-              Ettimadai, Pirivu,
-              <br />
-              near KK MAHAAL,
-              <br />
-              Coimbatore,
-              <br />
-              Tamil Nadu 641105.
-            </p>
-          </address>
-          <iframe
-            className="w-full h-64 border-0"
-            src={mapSrc}
-            allowFullScreen=""
-            loading="lazy"
-          ></iframe>
-        </section>
+
+        {loading && (
+          <div className="text-center">
+            <Loader />
+          </div>
+        )}
+
+        {error && (
+          <p className="text-center text-red-600">Failed to load locations.</p>
+        )}
+
+        {!loading && !error && (
+          <section className="max-w-5xl mx-auto space-y-8">
+            {hqs.map((hq) => (
+              <address key={hq.id} className="not-italic">
+                <h3 className="text-xl font-bold text-keyline">
+                  {hq.store_name}
+                </h3>
+                <p className="text-gray-700">
+                  {hq.address}
+                  {hq.phone && (
+                    <>
+                      <br />
+                      {hq.phone}
+                    </>
+                  )}
+                </p>
+              </address>
+            ))}
+          </section>
+        )}
       </div>
     </>
   );

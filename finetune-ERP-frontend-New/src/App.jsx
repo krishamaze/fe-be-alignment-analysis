@@ -18,6 +18,8 @@ import Store from './pages/Store';
 import BrandDashboard from './pages/BrandDashboard';
 import BookingsDashboard from './pages/BookingsDashboard';
 import Settings from './pages/Settings';
+import ProductsDashboard from './pages/ProductsDashboard';
+import VariantsDashboard from './pages/VariantsDashboard';
 import FocusLayout from './components/layout/FocusLayout';
 import Workledger from './pages/Workledger';
 import WorkledgerDetails from './pages/WorkledgerDetails';
@@ -34,6 +36,8 @@ import Bookings from './pages/Bookings';
 
 // E-commerce pages
 import Shop from './pages/ecommerce/Shop';
+import DepartmentsPage from './pages/ecommerce/DepartmentsPage';
+import DepartmentCategoriesPage from './pages/ecommerce/DepartmentCategoriesPage';
 import CategoryPage from './pages/ecommerce/CategoryPage';
 import ProductDetail from './pages/ecommerce/ProductDetail';
 import CartPage from './pages/ecommerce/CartPage';
@@ -50,7 +54,7 @@ function AppContent() {
   const isEcommerceRoute =
     location.pathname === '/' ||
     location.pathname.startsWith('/shop') ||
-    location.pathname.startsWith('/categories') ||
+    location.pathname.startsWith('/departments') ||
     location.pathname.startsWith('/partners') ||
     location.pathname.startsWith('/help') ||
     location.pathname.startsWith('/legal') ||
@@ -73,7 +77,15 @@ function AppContent() {
         {/* E-commerce routes */}
         <Route path="/shop" element={<Shop />} />
         <Route path="/product/:slug" element={<ProductDetail />} />
-        <Route path="/categories/:categoryId" element={<CategoryPage />} />
+        <Route path="/departments" element={<DepartmentsPage />} />
+        <Route
+          path="/departments/:deptSlug/categories"
+          element={<DepartmentCategoriesPage />}
+        />
+        <Route
+          path="/departments/:deptSlug/:catSlug/:subcatSlug/products"
+          element={<CategoryPage />}
+        />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/partners" element={<Partners />} />
         <Route path="/help" element={<HelpCentre />} />
@@ -129,6 +141,8 @@ function AppContent() {
               {/* <Route path="users/add" element={<AddUser />} /> */}
               <Route path="stores" element={<Store />} />
               <Route path="brands" element={<BrandDashboard />} />
+              <Route path="products" element={<ProductsDashboard />} />
+              <Route path="variants" element={<VariantsDashboard />} />
               <Route path="bookings" element={<BookingsDashboard />} />
               <Route path="settings" element={<Settings />} />
             </>
