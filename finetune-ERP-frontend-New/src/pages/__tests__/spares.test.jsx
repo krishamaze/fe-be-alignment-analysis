@@ -1,58 +1,34 @@
 // @vitest-environment jsdom
-import { describe, it, expect, afterEach, vi } from 'vitest';
-import { act } from 'react';
-import { createRoot } from 'react-dom/client';
-import axios from 'axios';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { vi, test, expect } from 'vitest';
 import Spares from '../Spares';
-import END_POINTS from '../../utils/Endpoints';
 
-vi.mock('axios');
-vi.mock('react-hot-toast', () => {
-  const toast = () => {};
-  toast.success = vi.fn();
-  toast.error = vi.fn();
-  return { default: toast };
-});
+const createMock = vi.fn().mockResolvedValue({ unwrap: () => Promise.resolve() });
 
-globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+vi.mock('../../api/erpApi', () => ({
+  useGetSparesQuery: () => ({ data: { content: [] }, isLoading: false }),
+  useCreateSpareMutation: () => [createMock],
+  useUpdateSpareMutation: () => [vi.fn()],
+  useDeleteSpareMutation: () => [vi.fn()],
+}));
 
-afterEach(() => {
-  vi.resetAllMocks();
-});
+vi.mock('../../redux/hook', () => ({
+  useAppSelector: () => 'system_admin',
+}));
 
-describe('Spares page', () => {
-  it('fetches list and posts new spare', async () => {
-    axios.get.mockResolvedValue({ data: { content: [] } });
-    axios.post.mockResolvedValue({});
-    const container = document.createElement('div');
-    await act(async () => {
-      createRoot(container).render(<Spares />);
-    });
-    expect(axios.get).toHaveBeenCalledWith(
-      `${END_POINTS.API_BASE_URL}${END_POINTS.GET_SPARES}`
-    );
-    const name = container.querySelector('input[name="name"]');
-    const sku = container.querySelector('input[name="sku"]');
-    const price = container.querySelector('input[name="price"]');
-    await act(async () => {
-      name.value = 'Seat';
-      name.dispatchEvent(new Event('input', { bubbles: true }));
-    });
-    await act(async () => {
-      sku.value = 'ST1';
-      sku.dispatchEvent(new Event('input', { bubbles: true }));
-    });
-    await act(async () => {
-      price.value = '20';
-      price.dispatchEvent(new Event('input', { bubbles: true }));
-    });
-    await act(async () => {
-      container
-        .querySelector('form')
-        .dispatchEvent(
-          new Event('submit', { bubbles: true, cancelable: true })
-        );
-    });
-    expect(axios.post).toHaveBeenCalled();
+test('creates spare via form', async () => {
+  render(<Spares />);
+  fireEvent.change(screen.getByPlaceholderText('Name'), {
+    target: { value: 'S1', name: 'name' },
   });
+  fireEvent.change(screen.getByPlaceholderText('SKU'), {
+    target: { value: 'SKU1', name: 'sku' },
+  });
+  fireEvent.change(screen.getByPlaceholderText('Price'), {
+    target: { value: '5', name: 'price' },
+  });
+  fireEvent.submit(
+    screen.getByRole('button', { name: /add spare/i }).closest('form')
+  );
+  expect(createMock).toHaveBeenCalled();
 });

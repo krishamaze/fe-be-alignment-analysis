@@ -18,6 +18,15 @@ vi.mock('react-google-recaptcha', () => ({
   __esModule: true,
   default: () => <div data-testid="recaptcha" />,
 }));
+vi.mock('../../redux/hook', () => ({
+  useAppSelector: () => 'system_admin',
+}));
+vi.mock('../../api/erpApi', () => ({
+  useGetSparesQuery: () => ({ data: { content: [] }, isLoading: false }),
+  useCreateSpareMutation: () => [() => {}],
+  useUpdateSpareMutation: () => [() => {}],
+  useDeleteSpareMutation: () => [() => {}],
+}));
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
