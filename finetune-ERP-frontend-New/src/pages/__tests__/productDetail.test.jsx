@@ -13,6 +13,8 @@ vi.mock('../../api/erpApi', () => ({
       slug: 'p1',
       price: 10,
       availability: true,
+      unit_name: 'Piece',
+      unit_slug: 'piece',
     },
     isLoading: false,
   }),
@@ -25,6 +27,8 @@ vi.mock('../../api/erpApi', () => ({
           slug: 'p1-v1',
           price: 5,
           availability: true,
+          unit_name: 'Piece',
+          unit_slug: 'piece',
         },
       ],
     },
@@ -40,5 +44,6 @@ test('renders product detail by slug', () => {
     </MemoryRouter>
   );
   expect(screen.getByText('P1')).toBeDefined();
-  expect(screen.getByText('V1 - ₹5')).toBeDefined();
+  expect(screen.getByText('V1 - ₹5 per Piece')).toBeDefined();
+  expect(screen.getByText('₹10 per Piece')).toBeDefined();
 });

@@ -1,25 +1,29 @@
 from rest_framework import viewsets
 from store.permissions import IsSystemAdminOrReadOnly
-from .models import Department, Category, SubCategory, Product, Variant
+from .models import Department, Category, SubCategory, Product, Variant, Unit, Quality
 from .serializers import (
     DepartmentSerializer,
     CategorySerializer,
     SubCategorySerializer,
     ProductSerializer,
     VariantSerializer,
+    UnitSerializer,
+    QualitySerializer,
 )
 
 
-class DepartmentViewSet(viewsets.ReadOnlyModelViewSet):
+class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all().order_by("name")
     serializer_class = DepartmentSerializer
     lookup_field = "slug"
+    permission_classes = [IsSystemAdminOrReadOnly]
 
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all().order_by("name")
     serializer_class = CategorySerializer
     lookup_field = "slug"
+    permission_classes = [IsSystemAdminOrReadOnly]
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -29,10 +33,11 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
         return qs
 
 
-class SubCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+class SubCategoryViewSet(viewsets.ModelViewSet):
     queryset = SubCategory.objects.all().order_by("name")
     serializer_class = SubCategorySerializer
     lookup_field = "slug"
+    permission_classes = [IsSystemAdminOrReadOnly]
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -84,3 +89,15 @@ class VariantViewSet(viewsets.ModelViewSet):
         if product:
             qs = qs.filter(product__slug=product)
         return qs
+
+
+class UnitViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Unit.objects.all().order_by("name")
+    serializer_class = UnitSerializer
+    lookup_field = "slug"
+
+
+class QualityViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Quality.objects.all().order_by("name")
+    serializer_class = QualitySerializer
+    lookup_field = "slug"

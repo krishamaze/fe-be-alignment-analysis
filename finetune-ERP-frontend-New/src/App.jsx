@@ -20,6 +20,7 @@ import BookingsDashboard from './pages/BookingsDashboard';
 import Settings from './pages/Settings';
 import ProductsDashboard from './pages/ProductsDashboard';
 import VariantsDashboard from './pages/VariantsDashboard';
+import TaxonomyDashboard from './pages/TaxonomyDashboard';
 import FocusLayout from './components/layout/FocusLayout';
 import Workledger from './pages/Workledger';
 import WorkledgerDetails from './pages/WorkledgerDetails';
@@ -143,6 +144,7 @@ function AppContent() {
               <Route path="brands" element={<BrandDashboard />} />
               <Route path="products" element={<ProductsDashboard />} />
               <Route path="variants" element={<VariantsDashboard />} />
+              <Route path="taxonomy" element={<TaxonomyDashboard />} />
               <Route path="bookings" element={<BookingsDashboard />} />
               <Route path="settings" element={<Settings />} />
             </>
