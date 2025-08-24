@@ -21,7 +21,7 @@
 - **Response:** `201 Created` with brand object
 
 ### List Stores
-- **URL:** `/api/stores`
+- **URL:** `/api/stores?store_type=BRANCH|HQ`
 - **Method:** `GET`
 - **Auth:** Required; non-`system_admin` users have read-only access.
 - **Response:**
@@ -32,7 +32,9 @@
         "id": 1,
         "store_name": "Sample Store",
         "code": "ST001",
-        "address": "123 Main St"
+        "address": "123 Main St",
+        "phone": "+1-234",
+        "store_type": "BRANCH"
       }
     ]
   }
@@ -49,8 +51,10 @@
     "store_name": "Sample Store",
     "code": "ST001",
     "address": "123 Main St",
-    "branch_head_name": "Jane Doe",
-  "branch_head_email": "jane@example.com"
+    "phone": "+1-234",
+    "store_type": "HQ",
+    "authority_name": "Jane Doe",
+    "authority_email": "jane@example.com"
   }
   ```
 

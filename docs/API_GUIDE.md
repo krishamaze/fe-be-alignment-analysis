@@ -8,7 +8,7 @@
 - `DELETE /api/brands/{id}/` – system_admin only
 
 ## Stores
-- `GET /api/stores` – public list (branch head details hidden)
+- `GET /api/stores?store_type=BRANCH|HQ` – public list (authority details hidden; defaults to active branches)
 - `POST /api/stores` – system_admin only
 - `GET /api/stores/{id}` – public detail
 - `PUT /api/stores/{id}` – system_admin only

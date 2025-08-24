@@ -31,7 +31,7 @@ export default function Stores() {
     const fetchStores = async () => {
       try {
         const res = await axios.get(
-          `${END_POINTS.API_BASE_URL}${END_POINTS.GET_STORES}`
+          `${END_POINTS.API_BASE_URL}${END_POINTS.GET_STORES}?store_type=BRANCH`
         );
         setStores(res.data?.content || []);
       } catch {
@@ -81,7 +81,15 @@ export default function Stores() {
             <Link to={`/stores/${s.id}`} className="font-semibold text-lg">
               {s.store_name}
             </Link>
-            <p className="text-sm text-gray-600">{s.address}</p>
+            <p className="text-sm text-gray-600">
+              {s.address}
+              {s.phone && (
+                <>
+                  <br />
+                  {s.phone}
+                </>
+              )}
+            </p>
           </li>
         ))}
       </ul>
