@@ -18,6 +18,9 @@ export const erpApi = createApi({
     'Unit',
     'Quality',
     'Log',
+    'Issue',
+    'OtherIssue',
+    'Question',
   ],
   endpoints: (builder) => ({
     getBrands: builder.query({
@@ -327,6 +330,87 @@ export const erpApi = createApi({
       }),
       invalidatesTags: ['Booking'],
     }),
+    getIssues: builder.query({
+      query: () => ({ url: END_POINTS.GET_ISSUES }),
+      providesTags: ['Issue'],
+    }),
+    createIssue: builder.mutation({
+      query: (body) => ({
+        url: END_POINTS.MODIFY_ISSUE,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Issue'],
+    }),
+    updateIssue: builder.mutation({
+      query: ({ id, body }) => ({
+        url: `${END_POINTS.MODIFY_ISSUE}/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Issue'],
+    }),
+    deleteIssue: builder.mutation({
+      query: (id) => ({
+        url: `${END_POINTS.MODIFY_ISSUE}/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Issue'],
+    }),
+    getOtherIssues: builder.query({
+      query: () => ({ url: END_POINTS.GET_OTHER_ISSUES }),
+      providesTags: ['OtherIssue'],
+    }),
+    createOtherIssue: builder.mutation({
+      query: (body) => ({
+        url: END_POINTS.MODIFY_OTHER_ISSUE,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['OtherIssue'],
+    }),
+    updateOtherIssue: builder.mutation({
+      query: ({ id, body }) => ({
+        url: `${END_POINTS.MODIFY_OTHER_ISSUE}/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['OtherIssue'],
+    }),
+    deleteOtherIssue: builder.mutation({
+      query: (id) => ({
+        url: `${END_POINTS.MODIFY_OTHER_ISSUE}/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['OtherIssue'],
+    }),
+    getQuestions: builder.query({
+      query: (params) => ({ url: END_POINTS.GET_QUESTIONS, params }),
+      providesTags: ['Question'],
+    }),
+    createQuestion: builder.mutation({
+      query: (body) => ({
+        url: END_POINTS.MODIFY_QUESTION,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Question'],
+    }),
+    updateQuestion: builder.mutation({
+      query: ({ id, body }) => ({
+        url: `${END_POINTS.MODIFY_QUESTION}/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Question'],
+    }),
+    deleteQuestion: builder.mutation({
+      query: (id) => ({
+        url: `${END_POINTS.MODIFY_QUESTION}/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Question'],
+    }),
     getLogs: builder.query({
       query: (params) => ({ url: '/api/logs/', params }),
       providesTags: ['Log'],
@@ -381,5 +465,17 @@ export const {
   useCreateBookingMutation,
   useCancelBookingMutation,
   useUpdateBookingStatusMutation,
+  useGetIssuesQuery,
+  useCreateIssueMutation,
+  useUpdateIssueMutation,
+  useDeleteIssueMutation,
+  useGetOtherIssuesQuery,
+  useCreateOtherIssueMutation,
+  useUpdateOtherIssueMutation,
+  useDeleteOtherIssueMutation,
+  useGetQuestionsQuery,
+  useCreateQuestionMutation,
+  useUpdateQuestionMutation,
+  useDeleteQuestionMutation,
   useGetLogsQuery,
 } = erpApi;
