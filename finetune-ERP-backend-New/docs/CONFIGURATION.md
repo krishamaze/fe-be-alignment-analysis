@@ -17,3 +17,4 @@ Settings live in `config/settings.py` and pull from environment variables.
 ## CORS & CSRF
 - `CORS_ALLOW_ALL_ORIGINS` enabled but explicit `CORS_ALLOWED_ORIGINS` and `CSRF_TRUSTED_ORIGINS` are set.
 - Cookies are sent with `SameSite=None` and `Secure` for cross‑origin access.
+- Vercel deployments (`https://fe-be-alignment-analysis.vercel.app` and `https://*.vercel.app` for previews) are trusted CSRF origins.

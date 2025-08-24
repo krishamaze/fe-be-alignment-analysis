@@ -66,7 +66,14 @@
   ```json
   {
     "content": [
-      { "id": 1, "name": "Wheel", "sku": "WH1", "is_active": true }
+      {
+        "id": 1,
+        "name": "Wheel",
+        "sku": "WH1",
+        "quality_slug": "premium",
+        "quality_name": "Premium",
+        "is_active": true
+      }
     ]
   }
   ```
@@ -75,8 +82,8 @@
 - **URL:** `/api/spares`
 - **Method:** `POST`
 - **Auth:** `system_admin` only
-- **Body:** `{ "name": string, "sku": string, "price": number }`
-- **Response:** `201 Created` with `{ "id": number, "name": string, "sku": string, "price": string, "is_active": boolean }`
+- **Body:** `{ "name": string, "sku": string, "price": number, "quality": number | null }`
+- **Response:** `201 Created` with `{ "id": number, "name": string, "sku": string, "price": string, "quality": number | null, "quality_slug": string | null, "quality_name": string | null, "is_active": boolean }`
 - **Errors:** `401` if unauthenticated, `403` if unauthorized
 
 ### List Departments
@@ -85,6 +92,26 @@
 - **Auth:** None
 - **Response:** `{"content": [ { "id": 1, "name": "Electronics", "slug": "electronics" } ]}`
 
+### Create Department
+- **URL:** `/api/departments`
+- **Method:** `POST`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string }`
+- **Response:** `201 Created` with `{ "id": number, "name": string, "slug": string }`
+
+### Update Department
+- **URL:** `/api/departments/{slug}`
+- **Method:** `PUT`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string }` (slug immutable)
+- **Response:** `200 OK` with updated department
+
+### Delete Department
+- **URL:** `/api/departments/{slug}`
+- **Method:** `DELETE`
+- **Auth:** `system_admin`
+- **Response:** `204 No Content`
+
 ### List Categories
 - **URL:** `/api/categories`
 - **Method:** `GET`
@@ -92,12 +119,52 @@
 - **Query Params:** `department` (department slug)
 - **Response:** `{"content": [ { "id": 1, "name": "Phones", "slug": "phones" } ]}`
 
+### Create Category
+- **URL:** `/api/categories`
+- **Method:** `POST`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string, "department": number }`
+- **Response:** `201 Created` with `{ "id": number, "name": string, "slug": string, "department": number }`
+
+### Update Category
+- **URL:** `/api/categories/{slug}`
+- **Method:** `PUT`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string, "department": number }` (slug immutable)
+- **Response:** `200 OK` with updated category
+
+### Delete Category
+- **URL:** `/api/categories/{slug}`
+- **Method:** `DELETE`
+- **Auth:** `system_admin`
+- **Response:** `204 No Content`
+
 ### List SubCategories
 - **URL:** `/api/subcategories`
 - **Method:** `GET`
 - **Auth:** None
 - **Query Params:** `category` (category slug)
 - **Response:** `{"content": [ { "id": 1, "name": "Smartphones", "slug": "smartphones" } ]}`
+
+### Create SubCategory
+- **URL:** `/api/subcategories`
+- **Method:** `POST`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string, "category": number }`
+- **Response:** `201 Created` with `{ "id": number, "name": string, "slug": string, "category": number }`
+
+### Update SubCategory
+- **URL:** `/api/subcategories/{slug}`
+- **Method:** `PUT`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string, "category": number }` (slug immutable)
+- **Response:** `200 OK` with updated subcategory
+
+### Delete SubCategory
+- **URL:** `/api/subcategories/{slug}`
+- **Method:** `DELETE`
+- **Auth:** `system_admin`
+- **Response:** `204 No Content`
 
 ### List Products
 - **URL:** `/api/products`
@@ -114,6 +181,8 @@
         "brand": "Finetune",
         "slug": "phone",
         "price": "10.00",
+        "unit_slug": "piece",
+        "unit_name": "Piece",
         "availability": true,
         "subcategory_slug": "smartphones"
       }
@@ -125,7 +194,7 @@
 - **URL:** `/api/products`
 - **Method:** `POST`
 - **Auth:** `system_admin` only
-- **Body:** `{ "name": string, "brand": number, "subcategory": number, "price": number, "stock": number, "availability": boolean }`
+- **Body:** `{ "name": string, "brand": number, "subcategory": number, "price": number, "stock": number, "availability": boolean, "unit": number | null }`
 - **Response:** `201 Created` with `{ "id": number, "slug": string, ... }`
 - **Errors:** `400` for validation (negative price, availability mismatch)
 

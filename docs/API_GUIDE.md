@@ -21,13 +21,30 @@
 - `PUT /api/spares/{id}` – system_admin only
 - `DELETE /api/spares/{id}` – system_admin only
 
+## Units
+- `GET /api/units` – public list
+- `GET /api/units/{slug}` – public detail
+
+## Qualities
+- `GET /api/qualities` – public list
+- `GET /api/qualities/{slug}` – public detail
+
 ## Taxonomy
 - `GET /api/departments` – public list
+- `POST /api/departments` – system_admin only
 - `GET /api/departments/{slug}` – public detail
+- `PUT /api/departments/{slug}` – system_admin only (slug immutable)
+- `DELETE /api/departments/{slug}` – system_admin only
 - `GET /api/categories?department=slug` – public list filtered by department
+- `POST /api/categories` – system_admin only
 - `GET /api/categories/{slug}` – public detail
+- `PUT /api/categories/{slug}` – system_admin only (slug immutable)
+- `DELETE /api/categories/{slug}` – system_admin only
 - `GET /api/subcategories?category=slug` – public list filtered by category
+- `POST /api/subcategories` – system_admin only
 - `GET /api/subcategories/{slug}` – public detail
+- `PUT /api/subcategories/{slug}` – system_admin only (slug immutable)
+- `DELETE /api/subcategories/{slug}` – system_admin only
 
 ## Products
 - `GET /api/products` – public list (filter by `brand`, `availability`, `department`, `category`, `subcategory`)

@@ -25,14 +25,19 @@ function ProductDetail() {
       </Helmet>
       <h1 className="text-2xl font-bold">{product.name}</h1>
       <p className="text-gray-600">{product.brand}</p>
-      <p className="text-xl">₹{product.price}</p>
+      <p className="text-xl">
+        ₹{product.price}
+        {product.unit_name ? ` per ${product.unit_name}` : ''}
+      </p>
       <p>{product.availability ? 'In stock' : 'Out of stock'}</p>
       {variants.length > 0 && (
         <div>
           <h2 className="font-semibold mt-4">Variants</h2>
           <ul className="list-disc ml-5">
             {variants.map((v) => (
-              <li key={v.id}>{`${v.variant_name} - ₹${v.price}`}</li>
+              <li key={v.id}>
+                {`${v.variant_name} - ₹${v.price}${v.unit_name ? ` per ${v.unit_name}` : ''}`}
+              </li>
             ))}
           </ul>
         </div>
