@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import ReCAPTCHA from 'react-google-recaptcha';
 import Loader from '../components/common/Loader';
+import ReCaptchaWrapper from '../components/common/ReCaptchaWrapper';
 import { useCreateBookingMutation } from '../api/erpApi';
 
 export default function Bookings() {
@@ -144,11 +144,7 @@ export default function Bookings() {
           placeholder="Message (optional)"
           className="input"
         />
-        <ReCAPTCHA
-          ref={recaptchaRef}
-          sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || ''}
-          onChange={setCaptcha}
-        />
+        <ReCaptchaWrapper ref={recaptchaRef} onChange={setCaptcha} />
         <button
           type="submit"
           disabled={loading}
