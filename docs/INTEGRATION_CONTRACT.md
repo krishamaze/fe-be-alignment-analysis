@@ -2,6 +2,24 @@
 
 ## Endpoints
 
+### List Brands
+- **URL:** `/api/brands/`
+- **Method:** `GET`
+- **Auth:** None
+- **Response:**
+  ```json
+  {
+    "content": [ { "id": 1, "name": "Finetune" } ]
+  }
+  ```
+
+### Create Brand
+- **URL:** `/api/brands/`
+- **Method:** `POST`
+- **Auth:** `system_admin`
+- **Body:** `name`, `logo`
+- **Response:** `201 Created` with brand object
+
 ### List Stores
 - **URL:** `/api/stores`
 - **Method:** `GET`
@@ -14,9 +32,7 @@
         "id": 1,
         "store_name": "Sample Store",
         "code": "ST001",
-        "address": "123 Main St",
-        "branch_head_name": "Jane Doe",
-        "branch_head_email": "jane@example.com"
+        "address": "123 Main St"
       }
     ]
   }
@@ -46,7 +62,7 @@
   ```json
   {
     "content": [
-      { "id": 1, "name": "Wheel", "sku": "WH1", "price": "10.00", "is_active": true }
+      { "id": 1, "name": "Wheel", "sku": "WH1", "is_active": true }
     ]
   }
   ```

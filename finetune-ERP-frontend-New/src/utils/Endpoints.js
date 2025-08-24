@@ -11,6 +11,10 @@ const END_POINTS = {
   MODIFY_STORE: '/api/stores',
   GET_STORES: '/api/stores',
 
+  // BRAND
+  MODIFY_BRAND: '/api/brands',
+  GET_BRANDS: '/api/brands',
+
   // SPARES
   MODIFY_SPARE: '/api/spares',
   GET_SPARES: '/api/spares',

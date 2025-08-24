@@ -15,6 +15,7 @@ import User from './pages/User';
 import GiveawayRedemption from './pages/GiveawayRedemption';
 import { Toaster } from 'react-hot-toast';
 import Store from './pages/Store';
+import BrandDashboard from './pages/BrandDashboard';
 import Settings from './pages/Settings';
 import FocusLayout from './components/layout/FocusLayout';
 import Workledger from './pages/Workledger';
@@ -126,6 +127,7 @@ function AppContent() {
               <Route path="users" element={<User />} />
               {/* <Route path="users/add" element={<AddUser />} /> */}
               <Route path="stores" element={<Store />} />
+              <Route path="brands" element={<BrandDashboard />} />
               <Route path="settings" element={<Settings />} />
             </>
           )}
