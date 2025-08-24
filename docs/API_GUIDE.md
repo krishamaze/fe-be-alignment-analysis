@@ -53,7 +53,7 @@
 - `DELETE /api/subcategories/{slug}` – system_admin only
 
 ## Products
-- `GET /api/products` – public list (filter by `brand`, `availability`, `department`, `category`, `subcategory`)
+- `GET /api/products` – public list (filter by `brand`, `availability`, `department`, `category`, `subcategory`, `min_price`, `max_price`; order with `ordering=price| -price | -date_created`)
 - `POST /api/products` – system_admin only
 - `GET /api/products/{slug}` – public detail
 - `PUT /api/products/{slug}` – system_admin only (slug immutable)

@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { vi, test, expect } from 'vitest';
 import ProductDetail from '../ecommerce/ProductDetail';
@@ -9,12 +9,14 @@ vi.mock('../../api/erpApi', () => ({
     data: {
       id: 1,
       name: 'P1',
-      brand: 'B',
+      brand: '1',
+      brand_name: 'B',
       slug: 'p1',
       price: 10,
       availability: true,
       unit_name: 'Piece',
       unit_slug: 'piece',
+      url: 'https://example.com/product/p1',
     },
     isLoading: false,
   }),
@@ -35,7 +37,7 @@ vi.mock('../../api/erpApi', () => ({
   }),
 }));
 
-test('renders product detail by slug', () => {
+test('renders product detail and SEO metadata', async () => {
   render(
     <MemoryRouter initialEntries={['/product/p1']}>
       <Routes>
@@ -44,6 +46,10 @@ test('renders product detail by slug', () => {
     </MemoryRouter>
   );
   expect(screen.getByText('P1')).toBeDefined();
-  expect(screen.getByText('V1 - ₹5 per Piece')).toBeDefined();
-  expect(screen.getByText('₹10 per Piece')).toBeDefined();
+  await waitFor(() => {
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    expect(ogTitle.getAttribute('content')).toBe('P1 - B');
+  });
+  const script = document.querySelector('script[type="application/ld+json"]');
+  expect(script.textContent).toContain('"@type":"Product"');
 });

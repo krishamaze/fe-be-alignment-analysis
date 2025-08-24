@@ -14,17 +14,38 @@ function ProductDetail() {
   if (isLoading) return <div className="p-4">Loading...</div>;
   if (!product) return <div className="p-4">Product not found</div>;
 
+  const metaTitle = `${product.name} - ${product.brand_name || product.brand}`;
+  const metaDesc = `Buy ${product.name} from ${product.brand_name || product.brand}`;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    brand: { '@type': 'Brand', name: product.brand_name || product.brand },
+    offers: {
+      '@type': 'Offer',
+      price: product.price,
+      priceCurrency: 'INR',
+      availability: product.availability
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+    },
+    url: product.url,
+  };
+
   return (
     <div className="p-4 space-y-4">
       <Helmet>
-        <title>{`${product.name} - ${product.brand}`}</title>
-        <meta
-          name="description"
-          content={`Buy ${product.name} from ${product.brand}`}
-        />
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDesc} />
+        <link rel="canonical" href={product.url} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDesc} />
+        <meta property="og:image" content={product.image || ''} />
+        <meta property="og:url" content={product.url} />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
       <h1 className="text-2xl font-bold">{product.name}</h1>
-      <p className="text-gray-600">{product.brand}</p>
+      <p className="text-gray-600">{product.brand_name || product.brand}</p>
       <p className="text-xl">
         ₹{product.price}
         {product.unit_name ? ` per ${product.unit_name}` : ''}
