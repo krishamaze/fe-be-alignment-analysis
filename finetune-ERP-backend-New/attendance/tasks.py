@@ -21,6 +21,7 @@ from .models import Attendance, resolve_planned_shift
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _local_tz():
     """Return the project's configured local timezone."""
 
@@ -41,6 +42,7 @@ def _shift_bounds(att: Attendance) -> Tuple[datetime, datetime]:
 # ---------------------------------------------------------------------------
 # Core functions
 # ---------------------------------------------------------------------------
+
 
 def mark_absent_for_date(target_date: date) -> int:
     """Create :class:`Attendance` rows marked ABSENT for a given day.
@@ -176,5 +178,3 @@ def autoclose_for_date(target_date: date) -> Dict[str, int]:
     finalized = finalize_open_for_date(target_date)
     absents = mark_absent_for_date(target_date)
     return {"finalized": finalized, "absents_created": absents}
-
-

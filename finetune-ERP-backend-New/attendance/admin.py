@@ -245,7 +245,10 @@ class AttendanceAdmin(admin.ModelAdmin):
     # ---- admin actions -----------------------------------------------------
     @admin.action(description="Approve latest pending request")
     def approve_latest(self, request, queryset):
-        if not (request.user.is_superuser or getattr(request.user, "role", "") in {"system_admin", "branch_head"}):
+        if not (
+            request.user.is_superuser
+            or getattr(request.user, "role", "") in {"system_admin", "branch_head"}
+        ):
             self.message_user(request, "Not allowed", level=messages.ERROR)
             return
         for att in queryset:
@@ -269,7 +272,10 @@ class AttendanceAdmin(admin.ModelAdmin):
 
     @admin.action(description="Reject latest pending request")
     def reject_latest(self, request, queryset):
-        if not (request.user.is_superuser or getattr(request.user, "role", "") in {"system_admin", "branch_head"}):
+        if not (
+            request.user.is_superuser
+            or getattr(request.user, "role", "") in {"system_admin", "branch_head"}
+        ):
             self.message_user(request, "Not allowed", level=messages.ERROR)
             return
         for att in queryset:
@@ -338,7 +344,10 @@ class AttendanceRequestAdmin(admin.ModelAdmin):
     # ---- bulk actions ------------------------------------------------------
     @admin.action(description="Approve selected")
     def approve_selected(self, request, queryset):
-        if not (request.user.is_superuser or getattr(request.user, "role", "") in {"system_admin", "branch_head"}):
+        if not (
+            request.user.is_superuser
+            or getattr(request.user, "role", "") in {"system_admin", "branch_head"}
+        ):
             self.message_user(request, "Not allowed", level=messages.ERROR)
             return
         for req in queryset:
@@ -356,7 +365,10 @@ class AttendanceRequestAdmin(admin.ModelAdmin):
 
     @admin.action(description="Reject selected")
     def reject_selected(self, request, queryset):
-        if not (request.user.is_superuser or getattr(request.user, "role", "") in {"system_admin", "branch_head"}):
+        if not (
+            request.user.is_superuser
+            or getattr(request.user, "role", "") in {"system_admin", "branch_head"}
+        ):
             self.message_user(request, "Not allowed", level=messages.ERROR)
             return
         for req in queryset:
@@ -405,6 +417,7 @@ class AttendanceRequestAdmin(admin.ModelAdmin):
 # Utilities
 # ---------------------------------------------------------------------------
 
+
 def admin_image_thumb(filefield, width=80):
     """Render a small image preview for admin list/detail pages."""
 
@@ -420,4 +433,3 @@ def admin_image_thumb(filefield, width=80):
         if url
         else "-"
     )
-

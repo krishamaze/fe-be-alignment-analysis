@@ -6,6 +6,5 @@ class IsSystemAdminUser(BasePermission):
         return (
             request.user
             and request.user.is_authenticated
-            and request.user.role.lower() == 'system_admin'
+            and request.user.role.lower() == "system_admin"
         )
-

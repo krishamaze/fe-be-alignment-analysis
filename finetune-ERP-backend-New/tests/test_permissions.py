@@ -118,4 +118,3 @@ class PermissionTests(TestCase):
                 self._get_request(self.advisor1), None, self.att2
             )
         )
-

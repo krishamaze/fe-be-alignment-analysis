@@ -4,8 +4,8 @@ import math
 
 
 class SpringStylePagination(PageNumberPagination):
-    page_query_param = 'page'
-    page_size_query_param = 'size'
+    page_query_param = "page"
+    page_size_query_param = "size"
     page_size = 10
     max_page_size = 100
 
@@ -25,18 +25,17 @@ class SpringStylePagination(PageNumberPagination):
         total_pages = math.ceil(total_elements / page_size) if page_size else 1
         number_of_elements = len(data)
 
-        return Response({
-            "content": data,
-            "pageable": {
-                "pageNumber": page_number,
-                "pageSize": page_size
-            },
-            "last": not self.page.has_next(),
-            "totalPages": total_pages,
-            "totalElements": total_elements,
-            "size": page_size,
-            "number": page_number,
-            "first": not self.page.has_previous(),
-            "numberOfElements": number_of_elements,
-            "empty": number_of_elements == 0
-        })
+        return Response(
+            {
+                "content": data,
+                "pageable": {"pageNumber": page_number, "pageSize": page_size},
+                "last": not self.page.has_next(),
+                "totalPages": total_pages,
+                "totalElements": total_elements,
+                "size": page_size,
+                "number": page_number,
+                "first": not self.page.has_previous(),
+                "numberOfElements": number_of_elements,
+                "empty": number_of_elements == 0,
+            }
+        )

@@ -1,0 +1,61 @@
+name: lint
+
+on:
+  pull_request:
+
+jobs:
+  format:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install frontend dependencies
+        working-directory: finetune-ERP-frontend-New
+        run: npm ci
+      - name: Run Prettier
+        working-directory: finetune-ERP-frontend-New
+        run: npm run format
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install backend dependencies
+        working-directory: finetune-ERP-backend-New
+        run: pip install -r requirements-test.txt
+      - name: Run Black
+        working-directory: finetune-ERP-backend-New
+        run: black .
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: apply formatting"
+
+  lint:
+    runs-on: ubuntu-latest
+    needs: format
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install frontend dependencies
+        working-directory: finetune-ERP-frontend-New
+        run: npm ci
+      - name: ESLint
+        working-directory: finetune-ERP-frontend-New
+        run: npm run lint
+      - name: Prettier check
+        working-directory: finetune-ERP-frontend-New
+        run: npm run format:check
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install backend dependencies
+        working-directory: finetune-ERP-backend-New
+        run: pip install -r requirements-test.txt
+      - name: Black check
+        working-directory: finetune-ERP-backend-New
+        run: black . --check

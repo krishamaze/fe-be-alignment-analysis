@@ -5,13 +5,25 @@ import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
 
 const tiles = {
   system_admin: [
-    { title: 'TODO: System admin action', icon: <HiOutlineClipboardDocumentList size={28} />, disabled: true },
+    {
+      title: 'TODO: System admin action',
+      icon: <HiOutlineClipboardDocumentList size={28} />,
+      disabled: true,
+    },
   ],
   branch_head: [
-    { title: 'TODO: Branch head action', icon: <HiOutlineClipboardDocumentList size={28} />, disabled: true },
+    {
+      title: 'TODO: Branch head action',
+      icon: <HiOutlineClipboardDocumentList size={28} />,
+      disabled: true,
+    },
   ],
   advisor: [
-    { title: 'TODO: Advisor action', icon: <HiOutlineClipboardDocumentList size={28} />, disabled: true },
+    {
+      title: 'TODO: Advisor action',
+      icon: <HiOutlineClipboardDocumentList size={28} />,
+      disabled: true,
+    },
   ],
 };
 

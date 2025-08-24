@@ -5,7 +5,11 @@ import {
   HiOutlineArrowRightOnRectangle,
 } from 'react-icons/hi2';
 import { useAppDispatch, useAppSelector } from '../../../redux/hook';
-import { selectAuthUser, selectAuthRole, logoutUser } from '../../../redux/slice/authSlice';
+import {
+  selectAuthUser,
+  selectAuthRole,
+  logoutUser,
+} from '../../../redux/slice/authSlice';
 import Logo from '../../common/Logo';
 
 function DashboardNavbar() {
@@ -17,13 +21,16 @@ function DashboardNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
-      dispatch(logoutUser()).finally(() => {
-        navigate('/teamlogin');
-      });
+    dispatch(logoutUser()).finally(() => {
+      navigate('/teamlogin');
+    });
   };
 
   return (
-    <nav id="dashboard-navbar" className="bg-white shadow-md fixed top-0 w-full z-20">
+    <nav
+      id="dashboard-navbar"
+      className="bg-white shadow-md fixed top-0 w-full z-20"
+    >
       <div className="max-w-[1200px] mx-auto px-6 flex justify-between items-center h-16">
         {/* Left: Logo */}
         <div className="flex items-center gap-4">

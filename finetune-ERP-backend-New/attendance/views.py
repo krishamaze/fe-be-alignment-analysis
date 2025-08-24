@@ -53,7 +53,9 @@ class DummyCSVRenderer(BaseRenderer):
     format = "csv"
     charset = "utf-8"
 
-    def render(self, data, accepted_media_type=None, renderer_context=None):  # pragma: no cover - simple
+    def render(
+        self, data, accepted_media_type=None, renderer_context=None
+    ):  # pragma: no cover - simple
         return data
 
 
@@ -122,6 +124,7 @@ def _append_note(att: Attendance, note: Optional[str]) -> None:
 # ---------------------------------------------------------------------------
 # Report helper utilities
 # ---------------------------------------------------------------------------
+
 
 def parse_month_param(request):
     """
@@ -210,17 +213,24 @@ class CheckInView(APIView):
         user = request.user
         store = getattr(user, "store", None)
         if not store:
-            return Response({"detail": "User store not set."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "User store not set."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         today = get_local_today()
         planned_shift = resolve_planned_shift(user, today)
         shift = get_shift_or_planned(user, data.get("shift_id"))
         if not shift:
-            return Response({"detail": "No planned shift for today."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "No planned shift for today."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         att = ensure_open_attendance(user, store, today, shift)
         if att.check_in:
-            return Response({"detail": "Already checked in."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "Already checked in."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         # Photo validation
         require_selfie(data.get("photo"))
@@ -232,7 +242,11 @@ class CheckInView(APIView):
         att.check_in_lon = data.get("lon")
 
         note = data.get("note")
-        if data.get("shift_id") and planned_shift and shift.id != getattr(planned_shift, "id", None):
+        if (
+            data.get("shift_id")
+            and planned_shift
+            and shift.id != getattr(planned_shift, "id", None)
+        ):
             _append_note(att, "Shift override from planned schedule")
         _append_note(att, note)
 
@@ -252,7 +266,8 @@ class CheckInView(APIView):
 
         # Late beyond grace
         shift_start = timezone.make_aware(
-            datetime.combine(att.date, shift.start_time), timezone.get_current_timezone()
+            datetime.combine(att.date, shift.start_time),
+            timezone.get_current_timezone(),
         )
         if now > shift_start + timedelta(minutes=15):
             if not AttendanceRequest.objects.filter(
@@ -295,9 +310,15 @@ class CheckOutView(APIView):
         try:
             att = Attendance.objects.get(id=data["attendance_id"], user=user)
         except Attendance.DoesNotExist:
-            return Response({"detail": "Attendance not found."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "Attendance not found."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
-        if att.status not in {"OPEN", "PENDING_APPROVAL"} or not att.check_in or att.check_out:
+        if (
+            att.status not in {"OPEN", "PENDING_APPROVAL"}
+            or not att.check_in
+            or att.check_out
+        ):
             return Response(
                 {"detail": "Attendance not open for checkout."},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -359,12 +380,16 @@ class MeTodayView(APIView):
         attendance_id = None
 
         if planned_shift:
-            start = timezone.make_aware(datetime.combine(today, planned_shift.start_time))
+            start = timezone.make_aware(
+                datetime.combine(today, planned_shift.start_time)
+            )
             end = timezone.make_aware(datetime.combine(today, planned_shift.end_time))
             if planned_shift.is_overnight or end <= start:
                 end += timedelta(days=1)
             shift_window = {"start": start.isoformat(), "end": end.isoformat()}
-            can_check_in_from = (start - timedelta(minutes=early_checkin_window_min)).isoformat()
+            can_check_in_from = (
+                start - timedelta(minutes=early_checkin_window_min)
+            ).isoformat()
 
             if attendance:
                 attendance_id = attendance.id
@@ -468,7 +493,9 @@ class ApprovalsApproveView(APIView):
         qs = manager_scoped_queryset(request.user)
         obj = get_object_or_404(qs, pk=pk)
         obj.approve(actor=request.user)
-        return Response(AttendanceRequestSerializer(obj).data, status=status.HTTP_200_OK)
+        return Response(
+            AttendanceRequestSerializer(obj).data, status=status.HTTP_200_OK
+        )
 
 
 class ApprovalsRejectView(APIView):
@@ -480,7 +507,9 @@ class ApprovalsRejectView(APIView):
         qs = manager_scoped_queryset(request.user)
         obj = get_object_or_404(qs, pk=pk)
         obj.reject(actor=request.user)
-        return Response(AttendanceRequestSerializer(obj).data, status=status.HTTP_200_OK)
+        return Response(
+            AttendanceRequestSerializer(obj).data, status=status.HTTP_200_OK
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -499,12 +528,9 @@ class StoreMonthlyReportView(APIView):
         except ValueError as exc:  # pragma: no cover - defensive
             return Response({"detail": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
-        qs = (
-            Attendance.objects.filter(
-                store_id=store_id, date__gte=month_start, date__lte=month_end
-            )
-            .select_related("user", "user__payroll_profile", "shift")
-        )
+        qs = Attendance.objects.filter(
+            store_id=store_id, date__gte=month_start, date__lte=month_end
+        ).select_related("user", "user__payroll_profile", "shift")
 
         qs = (
             qs.values(
@@ -621,9 +647,13 @@ class MeMonthlyReportView(APIView):
         except ValueError as exc:  # pragma: no cover - defensive
             return Response({"detail": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
-        qs = Attendance.objects.filter(
-            user=user, date__gte=month_start, date__lte=month_end
-        ).select_related("shift").order_by("date")
+        qs = (
+            Attendance.objects.filter(
+                user=user, date__gte=month_start, date__lte=month_end
+            )
+            .select_related("shift")
+            .order_by("date")
+        )
 
         agg = qs.aggregate(
             total_shifts=Count("id"),
@@ -702,4 +732,3 @@ __all__ = [
     "StoreMonthlyReportView",
     "MeMonthlyReportView",
 ]
-

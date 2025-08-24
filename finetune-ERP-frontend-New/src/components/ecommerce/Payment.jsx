@@ -1,5 +1,10 @@
 import { useState } from 'react';
-import { HiOutlineCreditCard, HiOutlinePhone, HiOutlineQrcode, HiOutlineCheckCircle } from 'react-icons/hi';
+import {
+  HiOutlineCreditCard,
+  HiOutlinePhone,
+  HiOutlineQrcode,
+  HiOutlineCheckCircle,
+} from 'react-icons/hi';
 
 function Payment({ amount, orderId, onSuccess, onFailure }) {
   const [paymentMethod, setPaymentMethod] = useState('upi');
@@ -19,7 +24,7 @@ function Payment({ amount, orderId, onSuccess, onFailure }) {
     try {
       // Simulate PhonePe API call
       const response = await simulatePhonePePayment();
-      
+
       if (response.success) {
         setPaymentStatus('success');
         setTimeout(() => {
@@ -47,7 +52,7 @@ function Payment({ amount, orderId, onSuccess, onFailure }) {
         resolve({
           success: isSuccess,
           transactionId: isSuccess ? 'TXN' + Date.now() : null,
-          error: isSuccess ? null : 'Payment declined by bank'
+          error: isSuccess ? null : 'Payment declined by bank',
         });
       }, 3000);
     });
@@ -69,7 +74,7 @@ function Payment({ amount, orderId, onSuccess, onFailure }) {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(amount);
   };
 
@@ -80,14 +85,18 @@ function Payment({ amount, orderId, onSuccess, onFailure }) {
           <div className="text-center py-8">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-keyline mx-auto mb-4"></div>
             <p className="text-gray-600">Processing payment...</p>
-            <p className="text-sm text-gray-500 mt-2">Please don't close this window</p>
+            <p className="text-sm text-gray-500 mt-2">
+              Please don't close this window
+            </p>
           </div>
         );
       case 'success':
         return (
           <div className="text-center py-8">
             <HiOutlineCheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-green-600 mb-2">Payment Successful!</h3>
+            <h3 className="text-xl font-semibold text-green-600 mb-2">
+              Payment Successful!
+            </h3>
             <p className="text-gray-600">Your order has been confirmed</p>
           </div>
         );
@@ -97,8 +106,12 @@ function Payment({ amount, orderId, onSuccess, onFailure }) {
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-red-600 text-2xl">✕</span>
             </div>
-            <h3 className="text-xl font-semibold text-red-600 mb-2">Payment Failed</h3>
-            <p className="text-gray-600">Please try again with a different method</p>
+            <h3 className="text-xl font-semibold text-red-600 mb-2">
+              Payment Failed
+            </h3>
+            <p className="text-gray-600">
+              Please try again with a different method
+            </p>
           </div>
         );
       default:
@@ -135,14 +148,18 @@ function Payment({ amount, orderId, onSuccess, onFailure }) {
         </div>
         <div className="flex justify-between items-center mt-2">
           <span className="text-gray-600">Amount:</span>
-          <span className="text-xl font-bold text-gray-900">{formatAmount(amount)}</span>
+          <span className="text-xl font-bold text-gray-900">
+            {formatAmount(amount)}
+          </span>
         </div>
       </div>
 
       {/* Payment Methods */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Choose Payment Method</h3>
-        
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Choose Payment Method
+        </h3>
+
         <div className="space-y-3">
           <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
             <input
@@ -157,7 +174,9 @@ function Payment({ amount, orderId, onSuccess, onFailure }) {
               <HiOutlineQrcode className="w-6 h-6 text-keyline" />
               <div>
                 <div className="font-medium">UPI Payment</div>
-                <div className="text-sm text-gray-500">Pay using any UPI app</div>
+                <div className="text-sm text-gray-500">
+                  Pay using any UPI app
+                </div>
               </div>
             </div>
           </label>
@@ -175,7 +194,9 @@ function Payment({ amount, orderId, onSuccess, onFailure }) {
               <HiOutlinePhone className="w-6 h-6 text-keyline" />
               <div>
                 <div className="font-medium">Phone Number</div>
-                <div className="text-sm text-gray-500">Pay using phone number</div>
+                <div className="text-sm text-gray-500">
+                  Pay using phone number
+                </div>
               </div>
             </div>
           </label>
@@ -237,7 +258,9 @@ function Payment({ amount, orderId, onSuccess, onFailure }) {
 
       {/* Payment Methods Info */}
       <div className="mt-6 pt-4 border-t border-gray-200">
-        <h4 className="text-sm font-medium text-gray-900 mb-2">Supported UPI Apps:</h4>
+        <h4 className="text-sm font-medium text-gray-900 mb-2">
+          Supported UPI Apps:
+        </h4>
         <div className="flex items-center gap-2 text-xs text-gray-600">
           <span>PhonePe</span>
           <span>•</span>
@@ -252,4 +275,4 @@ function Payment({ amount, orderId, onSuccess, onFailure }) {
   );
 }
 
-export default Payment; 
+export default Payment;

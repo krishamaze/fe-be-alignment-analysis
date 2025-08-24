@@ -1,23 +1,29 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { assignBranchHeadToStore, createStore, getStores, modifyStoreStatus, softDeleteStore, unassignBranchHeadFromStore, updateStore } from '../../api/store'
+import { createSlice } from '@reduxjs/toolkit';
+import {
+  assignBranchHeadToStore,
+  createStore,
+  getStores,
+  modifyStoreStatus,
+  softDeleteStore,
+  unassignBranchHeadFromStore,
+  updateStore,
+} from '../../api/store';
 
 const initialState = {
   isLoading: false,
   error: null,
-  stores : [],
+  stores: [],
   totalPages: 0,
   currentPage: 0,
   totalElements: 0,
-  pageSize: 0
-}
+  pageSize: 0,
+};
 
 const storeSlice = createSlice({
-  name: "storeSlice",
+  name: 'storeSlice',
   initialState,
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
-   
     builder
       .addCase(createStore.pending, (state) => {
         state.isLoading = true;
@@ -30,7 +36,7 @@ const storeSlice = createSlice({
         state.error = action.error.message;
       });
 
-       builder
+    builder
       .addCase(updateStore.pending, (state) => {
         state.isLoading = true;
       })
@@ -59,7 +65,7 @@ const storeSlice = createSlice({
         state.error = action.error.message;
       });
 
-      builder
+    builder
       .addCase(modifyStoreStatus.pending, (state) => {
         state.isLoading = true;
       })
@@ -71,26 +77,30 @@ const storeSlice = createSlice({
         state.error = action.error.message;
       });
 
-       builder
+    builder
       .addCase(softDeleteStore.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(softDeleteStore.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.stores = state.stores.filter((store) => store.id !== action.payload.id);
+        state.stores = state.stores.filter(
+          (store) => store.id !== action.payload.id
+        );
       })
       .addCase(softDeleteStore.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       });
 
-      builder
+    builder
       .addCase(assignBranchHeadToStore.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(assignBranchHeadToStore.fulfilled, (state, action) => {
         state.isLoading = false;
-        const index = state.stores.findIndex((store) => store.id === action.payload.id);
+        const index = state.stores.findIndex(
+          (store) => store.id === action.payload.id
+        );
         if (index !== -1) {
           state.stores[index] = action.payload;
         }
@@ -100,13 +110,15 @@ const storeSlice = createSlice({
         state.error = action.error.message;
       });
 
-       builder
+    builder
       .addCase(unassignBranchHeadFromStore.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(unassignBranchHeadFromStore.fulfilled, (state, action) => {
         state.isLoading = false;
-        const index = state.stores.findIndex((store) => store.id === action.payload.id);
+        const index = state.stores.findIndex(
+          (store) => store.id === action.payload.id
+        );
         if (index !== -1) {
           state.stores[index] = action.payload;
         }
@@ -115,7 +127,6 @@ const storeSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message;
       });
-
   },
 });
 
