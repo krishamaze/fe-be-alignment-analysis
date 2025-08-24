@@ -103,9 +103,17 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
+        if not self.pk:
+            if not self.slug:
+                self.slug = slugify(self.name)
+        else:
+            # prevent slug changes after first save
+            original = Product.objects.get(pk=self.pk)
+            self.slug = original.slug
         super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return f"/product/{self.slug}"
 
     def __str__(self) -> str:
         return self.name
@@ -122,10 +130,17 @@ class Variant(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            base = f"{self.product.slug}-{self.variant_name}"
-            self.slug = slugify(base)
+        if not self.pk:
+            if not self.slug:
+                base = f"{self.product.slug}-{self.variant_name}"
+                self.slug = slugify(base)
+        else:
+            original = Variant.objects.get(pk=self.pk)
+            self.slug = original.slug
         super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return f"/variant/{self.slug}"
 
     def __str__(self) -> str:
         return f"{self.product.name} - {self.variant_name}"
