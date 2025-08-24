@@ -72,7 +72,7 @@ function AppContent() {
 
         {/* E-commerce routes */}
         <Route path="/shop" element={<Shop />} />
-        <Route path="/product/:productId" element={<ProductDetail />} />
+        <Route path="/product/:slug" element={<ProductDetail />} />
         <Route path="/categories/:categoryId" element={<CategoryPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/partners" element={<Partners />} />

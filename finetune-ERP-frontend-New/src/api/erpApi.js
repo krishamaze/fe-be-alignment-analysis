@@ -5,7 +5,7 @@ import END_POINTS from '../utils/Endpoints';
 export const erpApi = createApi({
   reducerPath: 'erpApi',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Brand', 'Store', 'Spare', 'Booking'],
+  tagTypes: ['Brand', 'Store', 'Spare', 'Booking', 'Product', 'Variant'],
   endpoints: (builder) => ({
     getBrands: builder.query({
       query: () => ({ url: END_POINTS.GET_BRANDS }),
@@ -88,6 +88,23 @@ export const erpApi = createApi({
       }),
       invalidatesTags: ['Spare'],
     }),
+    getProducts: builder.query({
+      query: (params) => ({ url: END_POINTS.GET_PRODUCTS, params }),
+      providesTags: ['Product'],
+    }),
+    getProductBySlug: builder.query({
+      query: (slug) => ({ url: `${END_POINTS.GET_PRODUCTS}/${slug}` }),
+      providesTags: ['Product'],
+    }),
+    getVariants: builder.query({
+      query: (params) => ({ url: END_POINTS.GET_VARIANTS, params }),
+      providesTags: ['Variant'],
+    }),
+    getVariantBySlug: builder.query({
+      query: (slug) => ({ url: `${END_POINTS.GET_VARIANTS}/${slug}` }),
+      providesTags: ['Variant'],
+    }),
+
     getBookings: builder.query({
       query: (params) => ({ url: END_POINTS.GET_BOOKINGS, params }),
       providesTags: ['Booking'],
@@ -124,6 +141,10 @@ export const {
   useCreateSpareMutation,
   useUpdateSpareMutation,
   useDeleteSpareMutation,
+  useGetProductsQuery,
+  useGetProductBySlugQuery,
+  useGetVariantsQuery,
+  useGetVariantBySlugQuery,
   useGetBookingsQuery,
   useCreateBookingMutation,
   useUpdateBookingMutation,
