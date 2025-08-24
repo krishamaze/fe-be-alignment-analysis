@@ -3,6 +3,11 @@ import LogsDashboard from '../LogsDashboard';
 import { vi, describe, it, expect } from 'vitest';
 
 vi.mock('../../api/erpApi', () => ({
+  erpApi: {
+    reducerPath: 'api',
+    reducer: () => ({}),
+    middleware: () => (next) => (action) => next(action),
+  },
   useGetLogsQuery: () => ({
     data: [
       {
@@ -23,5 +28,7 @@ describe('LogsDashboard', () => {
     expect(screen.getByText('Event Logs')).toBeTruthy();
     expect(screen.getByPlaceholderText('Entity Type')).toBeTruthy();
     expect(screen.getByText('booking')).toBeTruthy();
+    expect(screen.getByText('Export CSV')).toBeTruthy();
+    expect(screen.getByText('Export JSON')).toBeTruthy();
   });
 });

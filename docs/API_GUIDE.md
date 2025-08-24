@@ -77,3 +77,4 @@
 ## Event Logs
 - `GET /api/logs/` – system_admin only list
   - Filters: `entity_type`, `actor`, `start`, `end`
+- `GET /api/logs/export?format=csv|json` – system_admin only export (same filters)
