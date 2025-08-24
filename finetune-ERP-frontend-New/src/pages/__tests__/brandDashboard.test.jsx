@@ -3,7 +3,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, test, expect } from 'vitest';
 import BrandDashboard from '../BrandDashboard';
 
-const createMock = vi.fn().mockResolvedValue({ unwrap: () => Promise.resolve() });
+const createMock = vi
+  .fn()
+  .mockResolvedValue({ unwrap: () => Promise.resolve() });
 
 vi.mock('../../api/erpApi', () => ({
   useGetBrandsQuery: () => ({ data: { content: [] }, isLoading: false }),
@@ -17,6 +19,8 @@ test('submits new brand', async () => {
   fireEvent.change(screen.getByPlaceholderText('Name'), {
     target: { value: 'New', name: 'name' },
   });
-  fireEvent.submit(screen.getByRole('button', { name: /create/i }).closest('form'));
+  fireEvent.submit(
+    screen.getByRole('button', { name: /create/i }).closest('form')
+  );
   expect(createMock).toHaveBeenCalled();
 });

@@ -3,7 +3,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, test, expect } from 'vitest';
 import Spares from '../Spares';
 
-const createMock = vi.fn().mockResolvedValue({ unwrap: () => Promise.resolve() });
+const createMock = vi
+  .fn()
+  .mockResolvedValue({ unwrap: () => Promise.resolve() });
 
 vi.mock('../../api/erpApi', () => ({
   useGetSparesQuery: () => ({ data: { content: [] }, isLoading: false }),

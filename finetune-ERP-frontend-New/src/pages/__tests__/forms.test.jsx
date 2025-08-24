@@ -24,7 +24,9 @@ vi.mock('react-google-recaptcha', () => ({
     return <div data-testid="recaptcha" />;
   },
 }));
-const bookingCreateMock = vi.fn().mockResolvedValue({ unwrap: () => Promise.resolve({ id: 1, status: 'pending' }) });
+const bookingCreateMock = vi.fn().mockResolvedValue({
+  unwrap: () => Promise.resolve({ id: 1, status: 'pending' }),
+});
 vi.mock('../../api/erpApi', () => ({
   useCreateBookingMutation: () => [bookingCreateMock],
 }));

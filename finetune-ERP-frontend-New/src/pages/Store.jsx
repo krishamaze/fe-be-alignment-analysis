@@ -12,7 +12,12 @@ export default function Store() {
   const [createStore] = useCreateStoreMutation();
   const [updateStore] = useUpdateStoreMutation();
   const [deleteStore] = useDeleteStoreMutation();
-  const [form, setForm] = useState({ id: null, store_name: '', address: '', code: '' });
+  const [form, setForm] = useState({
+    id: null,
+    store_name: '',
+    address: '',
+    code: '',
+  });
 
   const stores = data?.content || [];
 
@@ -38,7 +43,12 @@ export default function Store() {
   };
 
   const handleEdit = (s) => {
-    setForm({ id: s.id, store_name: s.store_name, address: s.address || '', code: s.code });
+    setForm({
+      id: s.id,
+      store_name: s.store_name,
+      address: s.address || '',
+      code: s.code,
+    });
   };
 
   const handleDelete = async (id) => {
@@ -58,13 +68,19 @@ export default function Store() {
       <h1 className="text-2xl font-bold mb-4">Stores</h1>
       <ul className="space-y-2 mb-6">
         {stores.map((s) => (
-          <li key={s.id} className="flex items-center justify-between border p-2 rounded">
+          <li
+            key={s.id}
+            className="flex items-center justify-between border p-2 rounded"
+          >
             <span>{s.store_name}</span>
             <div className="space-x-2">
               <button className="text-blue-600" onClick={() => handleEdit(s)}>
                 Edit
               </button>
-              <button className="text-red-600" onClick={() => handleDelete(s.id)}>
+              <button
+                className="text-red-600"
+                onClick={() => handleDelete(s.id)}
+              >
                 Delete
               </button>
             </div>

@@ -60,13 +60,13 @@ export default function BrandDashboard() {
       <h1 className="text-2xl font-bold mb-4">Brands</h1>
       <ul className="space-y-2 mb-6">
         {brands.map((b) => (
-          <li key={b.id} className="flex items-center justify-between border p-2 rounded">
+          <li
+            key={b.id}
+            className="flex items-center justify-between border p-2 rounded"
+          >
             <span>{b.name}</span>
             <div className="space-x-2">
-              <button
-                className="text-blue-600"
-                onClick={() => handleEdit(b)}
-              >
+              <button className="text-blue-600" onClick={() => handleEdit(b)}>
                 Edit
               </button>
               <button
@@ -90,10 +90,7 @@ export default function BrandDashboard() {
           required
         />
         <input type="file" name="logo" onChange={handleChange} />
-        <button
-          type="submit"
-          className="px-4 py-2 bg-black text-white rounded"
-        >
+        <button type="submit" className="px-4 py-2 bg-black text-white rounded">
           {form.id ? 'Update' : 'Create'}
         </button>
       </form>
