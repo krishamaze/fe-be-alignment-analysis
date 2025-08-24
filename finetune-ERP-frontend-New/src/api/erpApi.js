@@ -102,13 +102,82 @@ export const erpApi = createApi({
       query: () => ({ url: END_POINTS.GET_DEPARTMENTS }),
       providesTags: ['Department'],
     }),
+    createDepartment: builder.mutation({
+      query: (body) => ({
+        url: END_POINTS.MODIFY_DEPARTMENT,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Department'],
+    }),
+    updateDepartment: builder.mutation({
+      query: ({ slug, body }) => ({
+        url: `${END_POINTS.MODIFY_DEPARTMENT}/${slug}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Department'],
+    }),
+    deleteDepartment: builder.mutation({
+      query: (slug) => ({
+        url: `${END_POINTS.MODIFY_DEPARTMENT}/${slug}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Department'],
+    }),
     getCategories: builder.query({
       query: (params) => ({ url: END_POINTS.GET_CATEGORIES, params }),
       providesTags: ['Category'],
     }),
+    createCategory: builder.mutation({
+      query: (body) => ({
+        url: END_POINTS.MODIFY_CATEGORY,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Category'],
+    }),
+    updateCategory: builder.mutation({
+      query: ({ slug, body }) => ({
+        url: `${END_POINTS.MODIFY_CATEGORY}/${slug}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Category'],
+    }),
+    deleteCategory: builder.mutation({
+      query: (slug) => ({
+        url: `${END_POINTS.MODIFY_CATEGORY}/${slug}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Category'],
+    }),
     getSubCategories: builder.query({
       query: (params) => ({ url: END_POINTS.GET_SUBCATEGORIES, params }),
       providesTags: ['SubCategory'],
+    }),
+    createSubCategory: builder.mutation({
+      query: (body) => ({
+        url: END_POINTS.MODIFY_SUBCATEGORY,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['SubCategory'],
+    }),
+    updateSubCategory: builder.mutation({
+      query: ({ slug, body }) => ({
+        url: `${END_POINTS.MODIFY_SUBCATEGORY}/${slug}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['SubCategory'],
+    }),
+    deleteSubCategory: builder.mutation({
+      query: (slug) => ({
+        url: `${END_POINTS.MODIFY_SUBCATEGORY}/${slug}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['SubCategory'],
     }),
     getProducts: builder.query({
       query: (params) => ({ url: END_POINTS.GET_PRODUCTS, params }),
@@ -210,8 +279,17 @@ export const {
   useUpdateSpareMutation,
   useDeleteSpareMutation,
   useGetDepartmentsQuery,
+  useCreateDepartmentMutation,
+  useUpdateDepartmentMutation,
+  useDeleteDepartmentMutation,
   useGetCategoriesQuery,
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
   useGetSubCategoriesQuery,
+  useCreateSubCategoryMutation,
+  useUpdateSubCategoryMutation,
+  useDeleteSubCategoryMutation,
   useGetProductsQuery,
   useGetProductBySlugQuery,
   useCreateProductMutation,

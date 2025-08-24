@@ -19,3 +19,7 @@
 ## Variants
 - Navigate to `/dashboard/variants`
 - Manage product variants linked by product slug.
+
+## Taxonomy
+- Navigate to `/dashboard/taxonomy`
+- Manage departments, categories and subcategories with full CRUD.
