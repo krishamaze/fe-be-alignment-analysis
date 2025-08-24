@@ -15,9 +15,10 @@ function Navbar() {
   const isLoginPage = location.pathname === '/teamlogin';
   // Navigation links
   const navLinks = [
-    { name: 'About Us', href: '#about' },
-    { name: 'Locate Us', href: '#' },
-    ...(isLoginPage ? [] : [{ name: 'Login', href: loginTarget }])
+    { name: 'About', href: '/about/' },
+    { name: 'Locate', href: '/locate/' },
+    { name: 'Contact', href: '/contact/' },
+    ...(isLoginPage ? [] : [{ name: 'Login', href: loginTarget }]),
   ];
 
   // Close on outside click
@@ -46,13 +47,15 @@ function Navbar() {
   }, [isOpen]);
 
   return (
-    <header className="bg-white shadow-md fixed top-0 left-0 w-screen z-10" style={{ height: 'var(--navbar-height)' }}>
+    <header
+      className="bg-white shadow-md fixed top-0 left-0 w-screen z-10"
+      style={{ height: 'var(--navbar-height)' }}
+    >
       <nav className="max-w-[1200px] mx-auto flex items-center justify-between px-6 h-full">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <Logo />
         </div>
-
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex items-center gap-8 text-gray-700 font-medium">
@@ -60,19 +63,16 @@ function Navbar() {
             <li className="hover:text-keyline" key={link.name}>
               {link.name === 'Login' ? (
                 <Link to={loginTarget}>
-                  <button className='bg-black text-white px-4 py-1 rounded hover:bg-gray-800'>
+                  <button className="bg-black text-white px-4 py-1 rounded hover:bg-gray-800">
                     {token ? 'Dashboard' : 'Login'}
                   </button>
                 </Link>
               ) : (
-                <a href={link.href}>{link.name}</a>
+                <Link to={link.href}>{link.name}</Link>
               )}
             </li>
           ))}
         </ul>
-
-
-
 
         {/* Mobile Menu Button */}
         <div className="md:hidden">
@@ -92,27 +92,23 @@ function Navbar() {
           ref={menuRef}
           className="md:hidden bg-white px-6 py-4 space-y-3 shadow-md"
         >
-          {navLinks.map((link) => (
+          {navLinks.map((link) =>
             link.name === 'Login' ? (
-              <Link
-                key={link.name}
-                to={loginTarget}
-              >
-                <button className='w-full bg-black text-white px-4 py-2 rounded hover:bg-gray-800'>
+              <Link key={link.name} to={loginTarget}>
+                <button className="w-full bg-black text-white px-4 py-2 rounded hover:bg-gray-800">
                   {token ? 'Dashboard' : 'Login'}
                 </button>
               </Link>
             ) : (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
+                to={link.href}
                 className="block text-gray-700 hover:text-keyline"
               >
                 {link.name}
-              </a>
+              </Link>
             )
-          ))}
-
+          )}
         </div>
       )}
     </header>

@@ -7,19 +7,20 @@ class Store(models.Model):
     store_name = models.CharField(max_length=100)
     address = models.CharField(max_length=255, blank=True)
     code = models.CharField(max_length=10, unique=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    store_type = models.CharField(
+        max_length=6,
+        choices=[("HQ", "Head Office"), ("BRANCH", "Branch")],
+        default="BRANCH",
+    )
     is_active = models.BooleanField(default=True)
     deleted = models.BooleanField(default=False)
-    branch_head = models.OneToOneField(
+    authority = models.ForeignKey(
         settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
-        related_name="headed_store",
-        limit_choices_to={
-            "role": "branch_head",
-            "deleted": False,
-            "is_active": True,
-        },
+        related_name="managed_stores",
     )
 
     def __str__(self) -> str:
@@ -56,7 +57,5 @@ class StoreGeofence(models.Model):
 
     def __str__(self) -> str:
         return (
-            f"{self.store} ⦿ ({self.latitude}, {self.longitude}) "
-            f"r={self.radius_m}m"
+            f"{self.store} ⦿ ({self.latitude}, {self.longitude}) " f"r={self.radius_m}m"
         )
-

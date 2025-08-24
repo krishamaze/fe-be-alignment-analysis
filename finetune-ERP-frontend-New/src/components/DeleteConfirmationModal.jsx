@@ -1,4 +1,9 @@
-const DeleteConfirmationModal = ({ isOpen, onClose, handleDeleteAction, value }) => {
+const DeleteConfirmationModal = ({
+  isOpen,
+  onClose,
+  handleDeleteAction,
+  value,
+}) => {
   if (!isOpen) return null;
 
   return (
@@ -8,7 +13,8 @@ const DeleteConfirmationModal = ({ isOpen, onClose, handleDeleteAction, value })
           Confirm Deletion
         </h2>
         <p className="text-sm text-gray-600 mb-6">
-          Are you sure you want to delete this item? This action cannot be undone.
+          Are you sure you want to delete this item? This action cannot be
+          undone.
         </p>
         <div className="flex justify-end space-x-2">
           <button

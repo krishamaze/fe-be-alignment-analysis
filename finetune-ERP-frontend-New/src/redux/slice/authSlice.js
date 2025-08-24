@@ -187,9 +187,12 @@ const authSlice = createSlice({
 
 export const { clearError, logout, setCredentials } = authSlice.actions;
 
-export const selectAuthToken = (state) => state.auth.token || getCookie('token');
-export const selectAuthUser = (state) => state.auth.user || parseCookieJSON('user');
+export const selectAuthToken = (state) =>
+  state.auth.token || getCookie('token');
+export const selectAuthUser = (state) =>
+  state.auth.user || parseCookieJSON('user');
 export const selectAuthStatus = (state) => state.auth.status;
-export const selectAuthRole = (state) => (state.auth.user || parseCookieJSON('user'))?.role;
+export const selectAuthRole = (state) =>
+  (state.auth.user || parseCookieJSON('user'))?.role;
 
 export default authSlice.reducer;

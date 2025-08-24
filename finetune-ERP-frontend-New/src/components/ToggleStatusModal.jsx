@@ -8,7 +8,8 @@ const ToggleStatusModal = ({ isOpen, onClose, handleToggleStatus, value }) => {
           {value.is_active ? 'Deactivate Item?' : 'Activate Item?'}
         </h2>
         <p className="text-sm text-gray-600 mb-6">
-          Are you sure you want to {value.is_active ? 'deactivate' : 'activate'} this item?
+          Are you sure you want to {value.is_active ? 'deactivate' : 'activate'}{' '}
+          this item?
         </p>
         <div className="flex justify-end space-x-2">
           <button

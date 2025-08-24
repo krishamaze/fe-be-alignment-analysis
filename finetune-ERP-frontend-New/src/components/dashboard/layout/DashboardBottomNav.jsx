@@ -6,6 +6,9 @@ import {
   HiOutlineBuildingStorefront,
   HiOutlineUsers,
   HiOutlineGift,
+  HiOutlineTag,
+  HiOutlineCube,
+  HiOutlineSquares2X2,
   HiOutlineArrowRightOnRectangle,
   HiOutlineBars3,
   HiOutlineXMark,
@@ -21,29 +24,84 @@ export default function DashboardBottomNav({ role, navOpen, setNavOpen }) {
   const [moreOpen, setMoreOpen] = useState(false);
 
   const handleLogout = () => {
-      dispatch(logoutUser()).finally(() => {
-        navigate('/teamlogin');
-      });
+    dispatch(logoutUser()).finally(() => {
+      navigate('/teamlogin');
+    });
   };
 
   const adminNavItems = [
-    { to: '/dashboard', icon: <HiOutlineComputerDesktop size={18} />, label: 'Dashboard' },
-    { to: '/dashboard/settings', icon: <HiOutlineCog size={18} />, label: 'Settings' },
-    { to: '/dashboard/stores', icon: <HiOutlineBuildingStorefront size={18} />, label: 'Stores' },
-    { to: '/dashboard/users', icon: <HiOutlineUsers size={18} />, label: 'Users' },
-    { to: '/giveaway-redemption', icon: <HiOutlineGift size={18} />, label: 'Giveaway' },
+    {
+      to: '/dashboard',
+      icon: <HiOutlineComputerDesktop size={18} />,
+      label: 'Dashboard',
+    },
+    {
+      to: '/dashboard/settings',
+      icon: <HiOutlineCog size={18} />,
+      label: 'Settings',
+    },
+    {
+      to: '/dashboard/stores',
+      icon: <HiOutlineBuildingStorefront size={18} />,
+      label: 'Stores',
+    },
+    {
+      to: '/dashboard/brands',
+      icon: <HiOutlineTag size={18} />,
+      label: 'Brands',
+    },
+    {
+      to: '/dashboard/products',
+      icon: <HiOutlineCube size={18} />,
+      label: 'Products',
+    },
+    {
+      to: '/dashboard/variants',
+      icon: <HiOutlineSquares2X2 size={18} />,
+      label: 'Variants',
+    },
+    {
+      to: '/dashboard/users',
+      icon: <HiOutlineUsers size={18} />,
+      label: 'Users',
+    },
+    {
+      to: '/giveaway-redemption',
+      icon: <HiOutlineGift size={18} />,
+      label: 'Giveaway',
+    },
   ];
 
   const allNavItems = {
     system_admin: adminNavItems,
     branch_head: [
-      { to: '/dashboard', icon: <HiOutlineComputerDesktop size={18} />, label: 'Dashboard' },
-      { to: '/dashboard/settings', icon: <HiOutlineCog size={18} />, label: 'Settings' },
-      { to: '/dashboard/stores', icon: <HiOutlineBuildingStorefront size={18} />, label: 'Stores' },
+      {
+        to: '/dashboard',
+        icon: <HiOutlineComputerDesktop size={18} />,
+        label: 'Dashboard',
+      },
+      {
+        to: '/dashboard/settings',
+        icon: <HiOutlineCog size={18} />,
+        label: 'Settings',
+      },
+      {
+        to: '/dashboard/stores',
+        icon: <HiOutlineBuildingStorefront size={18} />,
+        label: 'Stores',
+      },
     ],
     advisor: [
-      { to: '/dashboard', icon: <HiOutlineComputerDesktop size={18} />, label: 'Dashboard' },
-      { to: '/dashboard/stores', icon: <HiOutlineBuildingStorefront size={18} />, label: 'Stores' },
+      {
+        to: '/dashboard',
+        icon: <HiOutlineComputerDesktop size={18} />,
+        label: 'Dashboard',
+      },
+      {
+        to: '/dashboard/stores',
+        icon: <HiOutlineBuildingStorefront size={18} />,
+        label: 'Stores',
+      },
     ],
   };
 

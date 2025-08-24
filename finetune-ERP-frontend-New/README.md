@@ -16,31 +16,34 @@ React + Vite application providing ERP and e‑commerce interfaces for finetune.
 5. **Preview build**: `npm run preview`
 
 ### Marketing pages
-| Route | Component |
-|-------|-----------|
-| `/marketing` | `Index.jsx` |
-| `/about` | `About.jsx` |
-| `/contact` | `Contact.jsx` |
-| `/locate` | `Locate.jsx` |
-| `/terms` | `Terms.jsx` |
+
+| Route                    | Component          |
+| ------------------------ | ------------------ |
+| `/marketing`             | `Index.jsx`        |
+| `/about/`                | `About.jsx`        |
+| `/contact/`              | `Contact.jsx`      |
+| `/locate/`               | `Locate.jsx`       |
+| `/terms-and-conditions/` | `Terms.jsx`        |
+| `/schedule-call`         | `ScheduleCall.jsx` |
 
 ## Environment
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| _none_   | API base URL is hard coded in [`src/utils/Endpoints.js`](src/utils/Endpoints.js) | `https://finetunetechcrafterp-dev.up.railway.app` |
+| Variable                  | Description                                                                      | Example                                           |
+| ------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------- |
+| _none_                    | API base URL is hard coded in [`src/utils/Endpoints.js`](src/utils/Endpoints.js) | `https://finetunetechcrafterp-dev.up.railway.app` |
+| `VITE_RECAPTCHA_SITE_KEY` | Google reCAPTCHA site key used by `ReCaptchaWrapper` in public forms            | `test-site-key`                                   |
 
 Backend service lives in a separate repository (TODO: link) and expects requests against the base URL above.
 
 ## Scripts
 
-| Script | Purpose |
-|--------|---------|
-| `npm run dev` | start local dev server |
-| `npm run build` | build production bundle |
-| `npm run preview` | preview built assets |
-| `npm run lint` | run ESLint |
-| `npm test` | run Vitest suite |
+| Script            | Purpose                 |
+| ----------------- | ----------------------- |
+| `npm run dev`     | start local dev server  |
+| `npm run build`   | build production bundle |
+| `npm run preview` | preview built assets    |
+| `npm run lint`    | run ESLint              |
+| `npm test`        | run Vitest suite        |
 
 ## Folder structure
 
@@ -62,4 +65,3 @@ Backend service lives in a separate repository (TODO: link) and expects requests
 3. **API requests fail** → confirm the backend at `https://finetunetechcrafterp-dev.up.railway.app` is reachable.
 4. **Immediate redirect to login** → clear invalid tokens from cookies.
 5. **Missing styles** → ensure `src/index.css` imports Tailwind directives and that Vite restarted after editing config.
-

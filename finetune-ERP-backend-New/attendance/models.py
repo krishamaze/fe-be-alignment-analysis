@@ -369,9 +369,7 @@ class Attendance(AttendanceBase):
             if (self.shift.is_overnight or self.shift.end_time <= self.shift.start_time)
             else self.date
         )
-        end = timezone.make_aware(
-            datetime.combine(end_date, self.shift.end_time), tz
-        )
+        end = timezone.make_aware(datetime.combine(end_date, self.shift.end_time), tz)
         return start, end
 
     def apply_grace_and_status(
@@ -395,8 +393,7 @@ class Attendance(AttendanceBase):
                 0,
                 int(
                     (
-                        self.check_in
-                        - (start_dt + timedelta(minutes=grace_minutes))
+                        self.check_in - (start_dt + timedelta(minutes=grace_minutes))
                     ).total_seconds()
                     // 60
                 ),
@@ -497,9 +494,7 @@ class AttendanceRequest(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(
-                fields=["status", "type"], name="attendance__status_type_idx"
-            ),
+            models.Index(fields=["status", "type"], name="attendance__status_type_idx"),
             models.Index(fields=["created_at"], name="attendance__created_at_idx"),
         ]
         ordering = ["-created_at"]
@@ -590,6 +585,7 @@ class AttendanceRequest(models.Model):
             raise ValidationError(errors)
         super().clean()
 
+
 def resolve_planned_shift(user, target_date: date) -> Optional["Shift"]:
     """Resolve the planned :class:`Shift` for a user on a given date.
 
@@ -651,4 +647,3 @@ def finalize_attendance(sender, instance: Attendance, created, update_fields, **
     if instance.check_out:
         instance.apply_grace_and_status()
         instance.save(update_fields=list(computed_fields))
-

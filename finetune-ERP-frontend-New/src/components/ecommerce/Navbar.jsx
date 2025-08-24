@@ -5,13 +5,19 @@ import { useAppSelector } from '../../redux/hook';
 import { selectAuthToken } from '../../redux/slice/authSlice';
 import { toggleCart } from '../../redux/slice/cartSlice';
 import Logo from '../common/Logo';
-import { HiOutlineShoppingCart, HiOutlineUser, HiOutlineMenu, HiOutlineX, HiOutlineChevronDown } from 'react-icons/hi';
+import {
+  HiOutlineShoppingCart,
+  HiOutlineUser,
+  HiOutlineMenu,
+  HiOutlineX,
+  HiOutlineChevronDown,
+} from 'react-icons/hi';
 import Cart from './Cart';
 
 function EcommerceNavbar() {
   const token = useAppSelector(selectAuthToken);
   const dispatch = useDispatch();
-  const { itemCount } = useAppSelector(state => state.cart);
+  const { itemCount } = useAppSelector((state) => state.cart);
   const [isOpen, setIsOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const menuRef = useRef(null);
@@ -28,29 +34,33 @@ function EcommerceNavbar() {
   ];
 
   const categories = [
-    { 
-      name: 'Mobiles', 
-      href: '/categories/mobiles', 
+    {
+      name: 'Mobiles',
+      href: '/categories/mobiles',
       icon: '📱',
-      image: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=150&h=100&fit=crop'
+      image:
+        'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=150&h=100&fit=crop',
     },
-    { 
-      name: 'Laptops', 
-      href: '/categories/laptops', 
+    {
+      name: 'Laptops',
+      href: '/categories/laptops',
       icon: '💻',
-      image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=150&h=100&fit=crop'
+      image:
+        'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=150&h=100&fit=crop',
     },
-    { 
-      name: 'Accessories', 
-      href: '/categories/accessories', 
+    {
+      name: 'Accessories',
+      href: '/categories/accessories',
       icon: '🔧',
-      image: 'https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=150&h=100&fit=crop'
+      image:
+        'https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=150&h=100&fit=crop',
     },
-    { 
-      name: 'Headphones', 
-      href: '/categories/headphones', 
+    {
+      name: 'Headphones',
+      href: '/categories/headphones',
       icon: '🎧',
-      image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&h=100&fit=crop'
+      image:
+        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&h=100&fit=crop',
     },
   ];
 
@@ -87,7 +97,10 @@ function EcommerceNavbar() {
   }, [isOpen, isCategoriesOpen]);
 
   return (
-    <header className="bg-white shadow-lg fixed top-0 left-0 w-screen z-50" style={{ height: 'var(--navbar-height)' }}>
+    <header
+      className="bg-white shadow-lg fixed top-0 left-0 w-screen z-50"
+      style={{ height: 'var(--navbar-height)' }}
+    >
       <nav className="max-w-[1400px] mx-auto flex items-center justify-between px-4 lg:px-6 h-full">
         {/* Logo */}
         <div className="flex items-center gap-2">
@@ -105,11 +118,21 @@ function EcommerceNavbar() {
                     className="flex items-center gap-1 hover:text-keyline transition-colors"
                   >
                     {link.name}
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
                     </svg>
                   </button>
-                  
+
                   {/* Categories Dropdown */}
                   {isCategoriesOpen && (
                     <div
@@ -131,7 +154,9 @@ function EcommerceNavbar() {
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                               />
                             </div>
-                            <span className="text-sm font-medium text-gray-700">{category.name}</span>
+                            <span className="text-sm font-medium text-gray-700">
+                              {category.name}
+                            </span>
                           </Link>
                         ))}
                       </div>
@@ -139,7 +164,10 @@ function EcommerceNavbar() {
                   )}
                 </div>
               ) : (
-                <Link to={link.href} className="hover:text-keyline transition-colors">
+                <Link
+                  to={link.href}
+                  className="hover:text-keyline transition-colors"
+                >
                   {link.name}
                 </Link>
               )}
@@ -151,7 +179,7 @@ function EcommerceNavbar() {
         <div className="hidden lg:flex items-center gap-4">
           {/* Cart Icon */}
           <div className="relative">
-            <button 
+            <button
               onClick={() => dispatch(toggleCart())}
               className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
@@ -162,7 +190,7 @@ function EcommerceNavbar() {
                 </span>
               )}
             </button>
-            <Link 
+            <Link
               to="/cart"
               className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-600 hover:text-keyline whitespace-nowrap"
             >
@@ -196,7 +224,7 @@ function EcommerceNavbar() {
 
         {/* Mobile Menu Button */}
         <div className="lg:hidden flex items-center gap-3">
-          <button 
+          <button
             onClick={() => dispatch(toggleCart())}
             className="relative p-2"
           >
@@ -207,7 +235,7 @@ function EcommerceNavbar() {
               </span>
             )}
           </button>
-          
+
           <button
             ref={buttonRef}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -232,7 +260,9 @@ function EcommerceNavbar() {
             {/* Categories Section */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-gray-900 text-sm">Categories</h3>
+                <h3 className="font-semibold text-gray-900 text-sm">
+                  Categories
+                </h3>
                 <HiOutlineChevronDown className="w-4 h-4 text-gray-500" />
               </div>
               <div className="grid grid-cols-2 gap-2">
@@ -250,7 +280,9 @@ function EcommerceNavbar() {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <span className="font-medium text-sm text-gray-700">{category.name}</span>
+                    <span className="font-medium text-sm text-gray-700">
+                      {category.name}
+                    </span>
                   </Link>
                 ))}
               </div>
@@ -258,24 +290,32 @@ function EcommerceNavbar() {
 
             {/* Quick Actions */}
             <div className="space-y-2">
-              <h3 className="font-semibold text-gray-900 text-sm mb-2">Quick Actions</h3>
-              {navLinks.filter(link => !link.hasDropdown).map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.href}
-                  className="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <span className="text-gray-700 font-medium text-sm">{link.name}</span>
-                  <HiOutlineChevronDown className="w-3 h-3 text-gray-500 rotate-[-90deg]" />
-                </Link>
-              ))}
+              <h3 className="font-semibold text-gray-900 text-sm mb-2">
+                Quick Actions
+              </h3>
+              {navLinks
+                .filter((link) => !link.hasDropdown)
+                .map((link) => (
+                  <Link
+                    key={link.name}
+                    to={link.href}
+                    className="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <span className="text-gray-700 font-medium text-sm">
+                      {link.name}
+                    </span>
+                    <HiOutlineChevronDown className="w-3 h-3 text-gray-500 rotate-[-90deg]" />
+                  </Link>
+                ))}
             </div>
 
             {/* Cart Summary */}
             <div className="bg-gray-50 rounded-lg p-3">
               <div className="flex items-center justify-between mb-2">
-                <span className="font-medium text-gray-900 text-sm">Cart Items</span>
+                <span className="font-medium text-gray-900 text-sm">
+                  Cart Items
+                </span>
                 <span className="bg-black text-white text-xs font-medium px-2 py-1 rounded-full">
                   {itemCount}
                 </span>
@@ -324,4 +364,4 @@ function EcommerceNavbar() {
   );
 }
 
-export default EcommerceNavbar; 
+export default EcommerceNavbar;

@@ -1,5 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { assignStoreToUser, getUsers, unassignStoreFromUser } from '../../api/user'
+import { createSlice } from '@reduxjs/toolkit';
+import {
+  assignStoreToUser,
+  getUsers,
+  unassignStoreFromUser,
+} from '../../api/user';
 
 const initialState = {
   userData: [],
@@ -8,16 +12,14 @@ const initialState = {
   totalPages: 0,
   currentPage: 0,
   totalElements: 0,
-  pageSize: 0
-}
+  pageSize: 0,
+};
 
 const UserSlice = createSlice({
-  name: "UserSlice",
+  name: 'UserSlice',
   initialState,
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
-   
     builder
       .addCase(getUsers.pending, (state) => {
         state.isLoading = true;
@@ -58,7 +60,6 @@ const UserSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message;
       });
-
   },
 });
 
