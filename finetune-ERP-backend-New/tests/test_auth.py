@@ -39,3 +39,16 @@ def test_login_with_store(store_s1):
     assert data["username"] == "withstore"
     assert data["role"] == "advisor"
     assert data["store"] == store_s1.id
+
+
+@pytest.mark.django_db
+def test_login_throttle():
+    client = APIClient()
+    for _ in range(5):
+        client.post(
+            "/api/auth/login", {"username": "bad", "password": "pw"}, format="json"
+        )
+    resp = client.post(
+        "/api/auth/login", {"username": "bad", "password": "pw"}, format="json"
+    )
+    assert resp.status_code == 429

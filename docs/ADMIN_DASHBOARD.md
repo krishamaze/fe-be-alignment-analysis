@@ -40,6 +40,7 @@
 ## Event Logs
 - Navigate to `/dashboard/logs`
 - View immutable audit entries with filters for entity type, actor, and date range.
+- Use the export dropdown to download logs as CSV or JSON.
 
 ## Notifications
 - Bell icon in the top navbar opens recent notifications.
