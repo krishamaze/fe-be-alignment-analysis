@@ -35,7 +35,20 @@
 ## Bookings
 - Navigate to `/dashboard/bookings`
 - SystemAdmins can approve, progress, complete, cancel, or reject bookings.
+- Related issues, other issues and customer responses are visible for each booking.
 - Cancelling or rejecting prompts for a reason, which is displayed in the table for reference.
+
+## Issues
+- Navigate to `/dashboard/issues`
+- SystemAdmins manage repair issue options.
+
+## Other Issues
+- Navigate to `/dashboard/otherissues`
+- SystemAdmins manage free-text issue presets.
+
+## Questions
+- Navigate to `/dashboard/questions`
+- SystemAdmins manage booking questionnaire items.
 
 ## Event Logs
 - Navigate to `/dashboard/logs`

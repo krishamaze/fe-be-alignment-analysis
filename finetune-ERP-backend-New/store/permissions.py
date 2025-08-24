@@ -13,3 +13,10 @@ class IsSystemAdminOrBookingCreate(permissions.BasePermission):
         if getattr(view, "action", None) == "create":
             return True
         return request.user.is_authenticated and request.user.role == "system_admin"
+
+
+class IsSystemAdminOrCustomerCreate(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if getattr(view, "action", None) == "create":
+            return True
+        return request.user.is_authenticated and request.user.role == "system_admin"
