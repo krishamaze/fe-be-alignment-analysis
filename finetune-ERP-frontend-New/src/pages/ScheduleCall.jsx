@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import ReCAPTCHA from 'react-google-recaptcha';
 import END_POINTS from '../utils/Endpoints';
 import Loader from '../components/common/Loader';
+import ReCaptchaWrapper from '../components/common/ReCaptchaWrapper';
 
 export default function ScheduleCall() {
   const [form, setForm] = useState({
@@ -102,11 +102,7 @@ export default function ScheduleCall() {
           placeholder="Message (optional)"
           className="input"
         />
-        <ReCAPTCHA
-          ref={recaptchaRef}
-          sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || ''}
-          onChange={setCaptcha}
-        />
+        <ReCaptchaWrapper ref={recaptchaRef} onChange={setCaptcha} />
         <button
           type="submit"
           disabled={loading}

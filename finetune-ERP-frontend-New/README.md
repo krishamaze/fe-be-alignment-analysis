@@ -31,7 +31,7 @@ React + Vite application providing ERP and e‑commerce interfaces for finetune.
 | Variable                  | Description                                                                      | Example                                           |
 | ------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------- |
 | _none_                    | API base URL is hard coded in [`src/utils/Endpoints.js`](src/utils/Endpoints.js) | `https://finetunetechcrafterp-dev.up.railway.app` |
-| `VITE_RECAPTCHA_SITE_KEY` | Google reCAPTCHA site key for public forms                                       | `test-site-key`                                   |
+| `VITE_RECAPTCHA_SITE_KEY` | Google reCAPTCHA site key used by `ReCaptchaWrapper` in public forms            | `test-site-key`                                   |
 
 Backend service lives in a separate repository (TODO: link) and expects requests against the base URL above.
 

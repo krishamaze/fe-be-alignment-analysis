@@ -8,6 +8,8 @@ import Bookings from '../Bookings';
 import END_POINTS from '../../utils/Endpoints';
 import axios from 'axios';
 
+import.meta.env.VITE_RECAPTCHA_SITE_KEY = 'test-site-key';
+
 vi.mock('axios');
 vi.mock('react-hot-toast', () => {
   const toast = () => {};
