@@ -23,3 +23,11 @@
 ## Taxonomy
 - Navigate to `/dashboard/taxonomy`
 - Manage departments, categories and subcategories with full CRUD.
+
+## Units
+- Navigate to `/dashboard/units`
+- SystemAdmins can create, update, or delete units. Slugs are auto-generated.
+
+## Qualities
+- Navigate to `/dashboard/qualities`
+- SystemAdmins can create, update, or delete qualities. Slugs are auto-generated.

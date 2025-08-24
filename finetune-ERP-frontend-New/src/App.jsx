@@ -21,6 +21,8 @@ import Settings from './pages/Settings';
 import ProductsDashboard from './pages/ProductsDashboard';
 import VariantsDashboard from './pages/VariantsDashboard';
 import TaxonomyDashboard from './pages/TaxonomyDashboard';
+import UnitsDashboard from './pages/UnitsDashboard';
+import QualitiesDashboard from './pages/QualitiesDashboard';
 import FocusLayout from './components/layout/FocusLayout';
 import Workledger from './pages/Workledger';
 import WorkledgerDetails from './pages/WorkledgerDetails';
@@ -145,6 +147,8 @@ function AppContent() {
               <Route path="products" element={<ProductsDashboard />} />
               <Route path="variants" element={<VariantsDashboard />} />
               <Route path="taxonomy" element={<TaxonomyDashboard />} />
+              <Route path="units" element={<UnitsDashboard />} />
+              <Route path="qualities" element={<QualitiesDashboard />} />
               <Route path="bookings" element={<BookingsDashboard />} />
               <Route path="settings" element={<Settings />} />
             </>

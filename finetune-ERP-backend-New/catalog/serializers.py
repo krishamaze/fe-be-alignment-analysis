@@ -17,12 +17,32 @@ class UnitSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "slug"]
         read_only_fields = ["id", "slug"]
 
+    def validate_name(self, value):
+        if not value.strip():
+            raise serializers.ValidationError("This field may not be blank.")
+        qs = Unit.objects.filter(name__iexact=value)
+        if self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise serializers.ValidationError("Unit with this name already exists")
+        return value
+
 
 class QualitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Quality
         fields = ["id", "name", "slug"]
         read_only_fields = ["id", "slug"]
+
+    def validate_name(self, value):
+        if not value.strip():
+            raise serializers.ValidationError("This field may not be blank.")
+        qs = Quality.objects.filter(name__iexact=value)
+        if self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise serializers.ValidationError("Quality with this name already exists")
+        return value
 
 
 class DepartmentSerializer(serializers.ModelSerializer):

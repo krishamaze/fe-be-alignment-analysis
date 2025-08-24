@@ -185,9 +185,55 @@ export const erpApi = createApi({
       query: () => ({ url: END_POINTS.GET_UNITS }),
       providesTags: ['Unit'],
     }),
+    createUnit: builder.mutation({
+      query: (body) => ({
+        url: END_POINTS.GET_UNITS,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Unit'],
+    }),
+    updateUnit: builder.mutation({
+      query: ({ slug, body }) => ({
+        url: `${END_POINTS.GET_UNITS}/${slug}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Unit'],
+    }),
+    deleteUnit: builder.mutation({
+      query: (slug) => ({
+        url: `${END_POINTS.GET_UNITS}/${slug}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Unit'],
+    }),
     getQualities: builder.query({
       query: () => ({ url: END_POINTS.GET_QUALITIES }),
       providesTags: ['Quality'],
+    }),
+    createQuality: builder.mutation({
+      query: (body) => ({
+        url: END_POINTS.GET_QUALITIES,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Quality'],
+    }),
+    updateQuality: builder.mutation({
+      query: ({ slug, body }) => ({
+        url: `${END_POINTS.GET_QUALITIES}/${slug}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Quality'],
+    }),
+    deleteQuality: builder.mutation({
+      query: (slug) => ({
+        url: `${END_POINTS.GET_QUALITIES}/${slug}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Quality'],
     }),
     getProducts: builder.query({
       query: (params) => ({ url: END_POINTS.GET_PRODUCTS, params }),
@@ -301,7 +347,13 @@ export const {
   useUpdateSubCategoryMutation,
   useDeleteSubCategoryMutation,
   useGetUnitsQuery,
+  useCreateUnitMutation,
+  useUpdateUnitMutation,
+  useDeleteUnitMutation,
   useGetQualitiesQuery,
+  useCreateQualityMutation,
+  useUpdateQualityMutation,
+  useDeleteQualityMutation,
   useGetProductsQuery,
   useGetProductBySlugQuery,
   useCreateProductMutation,
