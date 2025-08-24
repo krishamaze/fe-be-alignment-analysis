@@ -23,11 +23,17 @@
 
 ## Products
 - `GET /api/products` – public list (filter by `brand`, `availability`)
+- `POST /api/products` – system_admin only
 - `GET /api/products/{slug}` – public detail
+- `PUT /api/products/{slug}` – system_admin only (slug immutable)
+- `DELETE /api/products/{slug}` – system_admin only
 
 ## Variants
 - `GET /api/variants` – public list (filter by `product` slug)
+- `POST /api/variants` – system_admin only
 - `GET /api/variants/{slug}` – public detail
+- `PUT /api/variants/{slug}` – system_admin only (slug immutable)
+- `DELETE /api/variants/{slug}` – system_admin only
 
 
 ## Bookings
