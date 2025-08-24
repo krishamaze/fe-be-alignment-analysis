@@ -1,6 +1,28 @@
 from rest_framework import serializers
 from marketing.models import Brand
-from .models import Department, Category, SubCategory, Product, Variant
+from .models import (
+    Department,
+    Category,
+    SubCategory,
+    Product,
+    Variant,
+    Unit,
+    Quality,
+)
+
+
+class UnitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Unit
+        fields = ["id", "name", "slug"]
+        read_only_fields = ["id", "slug"]
+
+
+class QualitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Quality
+        fields = ["id", "name", "slug"]
+        read_only_fields = ["id", "slug"]
 
 
 class DepartmentSerializer(serializers.ModelSerializer):
@@ -100,6 +122,11 @@ class ProductSerializer(serializers.ModelSerializer):
     department_slug = serializers.CharField(
         source="subcategory.category.department.slug", read_only=True
     )
+    unit = serializers.PrimaryKeyRelatedField(
+        queryset=Unit.objects.all(), required=False, allow_null=True
+    )
+    unit_name = serializers.CharField(source="unit.name", read_only=True)
+    unit_slug = serializers.CharField(source="unit.slug", read_only=True)
 
     class Meta:
         model = Product
@@ -119,8 +146,11 @@ class ProductSerializer(serializers.ModelSerializer):
             "price",
             "stock",
             "availability",
+            "unit",
+            "unit_name",
+            "unit_slug",
         ]
-        read_only_fields = ["id", "slug"]
+        read_only_fields = ["id", "slug", "unit_name", "unit_slug"]
 
     def validate_price(self, value):
         if value < 0:
@@ -145,6 +175,8 @@ class VariantSerializer(serializers.ModelSerializer):
         queryset=Product.objects.all(), slug_field="slug"
     )
     product_name = serializers.CharField(source="product.name", read_only=True)
+    unit_name = serializers.CharField(source="product.unit.name", read_only=True)
+    unit_slug = serializers.CharField(source="product.unit.slug", read_only=True)
 
     class Meta:
         model = Variant
@@ -157,8 +189,10 @@ class VariantSerializer(serializers.ModelSerializer):
             "price",
             "stock",
             "availability",
+            "unit_name",
+            "unit_slug",
         ]
-        read_only_fields = ["id", "slug"]
+        read_only_fields = ["id", "slug", "unit_name", "unit_slug"]
 
     def validate_price(self, value):
         if value < 0:

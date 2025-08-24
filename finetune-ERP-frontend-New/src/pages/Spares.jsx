@@ -90,6 +90,11 @@ export default function Spares() {
             <li key={s.id} className="p-4 border rounded-lg shadow-sm">
               <div className="font-semibold">{s.name}</div>
               <div className="text-sm text-gray-600">SKU: {s.sku}</div>
+              {s.quality_name && (
+                <div className="text-sm text-gray-600">
+                  Quality: {s.quality_name}
+                </div>
+              )}
               {isAdmin && (
                 <div className="text-sm text-gray-600">₹{s.price}</div>
               )}

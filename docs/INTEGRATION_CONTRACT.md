@@ -66,7 +66,14 @@
   ```json
   {
     "content": [
-      { "id": 1, "name": "Wheel", "sku": "WH1", "is_active": true }
+      {
+        "id": 1,
+        "name": "Wheel",
+        "sku": "WH1",
+        "quality_slug": "premium",
+        "quality_name": "Premium",
+        "is_active": true
+      }
     ]
   }
   ```
@@ -75,8 +82,8 @@
 - **URL:** `/api/spares`
 - **Method:** `POST`
 - **Auth:** `system_admin` only
-- **Body:** `{ "name": string, "sku": string, "price": number }`
-- **Response:** `201 Created` with `{ "id": number, "name": string, "sku": string, "price": string, "is_active": boolean }`
+- **Body:** `{ "name": string, "sku": string, "price": number, "quality": number | null }`
+- **Response:** `201 Created` with `{ "id": number, "name": string, "sku": string, "price": string, "quality": number | null, "quality_slug": string | null, "quality_name": string | null, "is_active": boolean }`
 - **Errors:** `401` if unauthenticated, `403` if unauthorized
 
 ### List Departments
@@ -174,6 +181,8 @@
         "brand": "Finetune",
         "slug": "phone",
         "price": "10.00",
+        "unit_slug": "piece",
+        "unit_name": "Piece",
         "availability": true,
         "subcategory_slug": "smartphones"
       }
@@ -185,7 +194,7 @@
 - **URL:** `/api/products`
 - **Method:** `POST`
 - **Auth:** `system_admin` only
-- **Body:** `{ "name": string, "brand": number, "subcategory": number, "price": number, "stock": number, "availability": boolean }`
+- **Body:** `{ "name": string, "brand": number, "subcategory": number, "price": number, "stock": number, "availability": boolean, "unit": number | null }`
 - **Response:** `201 Created` with `{ "id": number, "slug": string, ... }`
 - **Errors:** `400` for validation (negative price, availability mismatch)
 

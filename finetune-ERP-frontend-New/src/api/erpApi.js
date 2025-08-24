@@ -15,6 +15,8 @@ export const erpApi = createApi({
     'Department',
     'Category',
     'SubCategory',
+    'Unit',
+    'Quality',
   ],
   endpoints: (builder) => ({
     getBrands: builder.query({
@@ -179,6 +181,14 @@ export const erpApi = createApi({
       }),
       invalidatesTags: ['SubCategory'],
     }),
+    getUnits: builder.query({
+      query: () => ({ url: END_POINTS.GET_UNITS }),
+      providesTags: ['Unit'],
+    }),
+    getQualities: builder.query({
+      query: () => ({ url: END_POINTS.GET_QUALITIES }),
+      providesTags: ['Quality'],
+    }),
     getProducts: builder.query({
       query: (params) => ({ url: END_POINTS.GET_PRODUCTS, params }),
       providesTags: ['Product'],
@@ -290,6 +300,8 @@ export const {
   useCreateSubCategoryMutation,
   useUpdateSubCategoryMutation,
   useDeleteSubCategoryMutation,
+  useGetUnitsQuery,
+  useGetQualitiesQuery,
   useGetProductsQuery,
   useGetProductBySlugQuery,
   useCreateProductMutation,

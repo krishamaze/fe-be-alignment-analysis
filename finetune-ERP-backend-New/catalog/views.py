@@ -1,12 +1,14 @@
 from rest_framework import viewsets
 from store.permissions import IsSystemAdminOrReadOnly
-from .models import Department, Category, SubCategory, Product, Variant
+from .models import Department, Category, SubCategory, Product, Variant, Unit, Quality
 from .serializers import (
     DepartmentSerializer,
     CategorySerializer,
     SubCategorySerializer,
     ProductSerializer,
     VariantSerializer,
+    UnitSerializer,
+    QualitySerializer,
 )
 
 
@@ -87,3 +89,15 @@ class VariantViewSet(viewsets.ModelViewSet):
         if product:
             qs = qs.filter(product__slug=product)
         return qs
+
+
+class UnitViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Unit.objects.all().order_by("name")
+    serializer_class = UnitSerializer
+    lookup_field = "slug"
+
+
+class QualityViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Quality.objects.all().order_by("name")
+    serializer_class = QualitySerializer
+    lookup_field = "slug"
