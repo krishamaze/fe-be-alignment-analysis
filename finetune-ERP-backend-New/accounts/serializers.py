@@ -48,10 +48,14 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        # Add custom fields to response
-        data["username"] = self.user.username
-        data["role"] = self.user.role
-        data["store"] = self.user.store_id if self.user.store else None
+        # Add custom fields to response using safe attribute access
+        data["username"] = getattr(self.user, "username", None)
+        data["role"] = getattr(self.user, "role", None)
+
+        store_id = getattr(self.user, "store_id", None)
+        if store_id and not Store.objects.filter(id=store_id).exists():
+            store_id = None
+        data["store"] = store_id
 
         return data
 

@@ -154,6 +154,45 @@ def test_status_change_requires_admin(monkeypatch):
 
 
 @pytest.mark.django_db
+def test_cancel_and_reject_require_reason(monkeypatch):
+    monkeypatch.setattr(requests, "post", _captcha_ok)
+    client = APIClient()
+    data = {
+        "name": "John",
+        "email": "j@example.com",
+        "issue": "screen",
+        "date": "2024-01-01",
+        "time": "10:00",
+        "message": "hi",
+        "captcha_token": "tok",
+    }
+    resp = client.post("/api/bookings", data)
+    booking_id = resp.json()["id"]
+    user = CustomUser.objects.create_user(
+        username="admin", email="a@b.com", password="x", role="system_admin"
+    )
+    client.force_authenticate(user=user)
+    # reject without reason
+    resp = client.patch(f"/api/bookings/{booking_id}", {"status": "rejected"})
+    assert resp.status_code == 400
+    resp = client.patch(
+        f"/api/bookings/{booking_id}",
+        {"status": "rejected", "reason": "invalid"},
+    )
+    assert resp.status_code == 200
+    # new booking for cancel test
+    resp = client.post("/api/bookings", data)
+    booking_id = resp.json()["id"]
+    resp = client.patch(f"/api/bookings/{booking_id}", {"status": "cancelled"})
+    assert resp.status_code == 400
+    resp = client.patch(
+        f"/api/bookings/{booking_id}",
+        {"status": "cancelled", "reason": "customer request"},
+    )
+    assert resp.status_code == 200
+
+
+@pytest.mark.django_db
 @override_settings(
     BOOKING_NOTIFICATION_CHANNELS=["email", "sms"],
     SMS_GATEWAY_URL="http://sms",
@@ -195,4 +234,17 @@ def test_booking_notifications(monkeypatch):
     }
     resp = client.post("/api/bookings", data)
     assert resp.status_code == 201
+    booking_id = resp.json()["id"]
+    # cancel with reason to trigger notification
+    admin = CustomUser.objects.create_user(
+        username="admin", email="a@b.com", password="x", role="system_admin"
+    )
+    client.force_authenticate(user=admin)
+    sent.clear()
+    resp = client.patch(
+        f"/api/bookings/{booking_id}",
+        {"status": "cancelled", "reason": "changed plans"},
+    )
+    assert resp.status_code == 200
     assert "email" in sent and "sms" in sent
+    assert "changed plans" in sent["email"][1]

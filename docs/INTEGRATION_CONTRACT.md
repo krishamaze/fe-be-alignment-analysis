@@ -348,10 +348,17 @@
 #### Booking lifecycle
 ```
 pending → approved → in_progress → completed
-          ↘             ↘
-          rejected       cancelled
+    ↘       ↘             ↘
+  rejected  cancelled     cancelled
+  cancelled
 ```
-Status advances automatically when the booking time passes; admins may override any state.
+Status advances automatically when the booking time passes; admins may override any state. Cancelling or rejecting a booking requires providing a `reason` field.
+
+### Update Booking Status
+- **URL:** `/api/bookings/{id}`
+- **Method:** `PATCH`
+- **Body:** `{ "status": string, "reason": string? }`
+- **Notes:** `reason` is mandatory when `status` is `cancelled` or `rejected`.
 ### Submit Contact Request
 - **URL:** `/api/marketing/contact/`
 - **Method:** `POST`
