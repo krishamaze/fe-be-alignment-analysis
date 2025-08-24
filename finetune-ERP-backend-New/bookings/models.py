@@ -32,7 +32,10 @@ class Booking(models.Model):
     verification_flags = models.JSONField(default=dict, blank=True)
     name = models.CharField(max_length=255)
     email = models.EmailField(blank=True)
-    issue = models.CharField(max_length=100, blank=True)
+    # Deprecated: use BookingDetails.issues instead
+    issue = models.CharField(
+        max_length=100, blank=True, help_text="Deprecated. Use BookingDetails.issues"
+    )
     address = models.TextField(blank=True)
     remarks = models.TextField(blank=True)
     date = models.DateField()
