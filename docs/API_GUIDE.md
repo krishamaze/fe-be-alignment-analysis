@@ -8,7 +8,7 @@
 - `DELETE /api/brands/{id}/` – system_admin only
 
 ## Stores
-- `GET /api/stores` – public list (branch head details hidden)
+- `GET /api/stores?store_type=BRANCH|HQ` – public list (authority details hidden; defaults to active branches)
 - `POST /api/stores` – system_admin only
 - `GET /api/stores/{id}` – public detail
 - `PUT /api/stores/{id}` – system_admin only
@@ -21,13 +21,27 @@
 - `PUT /api/spares/{id}` – system_admin only
 - `DELETE /api/spares/{id}` – system_admin only
 
+## Taxonomy
+- `GET /api/departments` – public list
+- `GET /api/departments/{slug}` – public detail
+- `GET /api/categories?department=slug` – public list filtered by department
+- `GET /api/categories/{slug}` – public detail
+- `GET /api/subcategories?category=slug` – public list filtered by category
+- `GET /api/subcategories/{slug}` – public detail
+
 ## Products
-- `GET /api/products` – public list (filter by `brand`, `availability`)
+- `GET /api/products` – public list (filter by `brand`, `availability`, `department`, `category`, `subcategory`)
+- `POST /api/products` – system_admin only
 - `GET /api/products/{slug}` – public detail
+- `PUT /api/products/{slug}` – system_admin only (slug immutable)
+- `DELETE /api/products/{slug}` – system_admin only
 
 ## Variants
 - `GET /api/variants` – public list (filter by `product` slug)
+- `POST /api/variants` – system_admin only
 - `GET /api/variants/{slug}` – public detail
+- `PUT /api/variants/{slug}` – system_admin only (slug immutable)
+- `DELETE /api/variants/{slug}` – system_admin only
 
 
 ## Bookings

@@ -5,7 +5,17 @@ import END_POINTS from '../utils/Endpoints';
 export const erpApi = createApi({
   reducerPath: 'erpApi',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Brand', 'Store', 'Spare', 'Booking', 'Product', 'Variant'],
+  tagTypes: [
+    'Brand',
+    'Store',
+    'Spare',
+    'Booking',
+    'Product',
+    'Variant',
+    'Department',
+    'Category',
+    'SubCategory',
+  ],
   endpoints: (builder) => ({
     getBrands: builder.query({
       query: () => ({ url: END_POINTS.GET_BRANDS }),
@@ -88,6 +98,18 @@ export const erpApi = createApi({
       }),
       invalidatesTags: ['Spare'],
     }),
+    getDepartments: builder.query({
+      query: () => ({ url: END_POINTS.GET_DEPARTMENTS }),
+      providesTags: ['Department'],
+    }),
+    getCategories: builder.query({
+      query: (params) => ({ url: END_POINTS.GET_CATEGORIES, params }),
+      providesTags: ['Category'],
+    }),
+    getSubCategories: builder.query({
+      query: (params) => ({ url: END_POINTS.GET_SUBCATEGORIES, params }),
+      providesTags: ['SubCategory'],
+    }),
     getProducts: builder.query({
       query: (params) => ({ url: END_POINTS.GET_PRODUCTS, params }),
       providesTags: ['Product'],
@@ -96,6 +118,29 @@ export const erpApi = createApi({
       query: (slug) => ({ url: `${END_POINTS.GET_PRODUCTS}/${slug}` }),
       providesTags: ['Product'],
     }),
+    createProduct: builder.mutation({
+      query: (body) => ({
+        url: END_POINTS.GET_PRODUCTS,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Product'],
+    }),
+    updateProduct: builder.mutation({
+      query: ({ slug, body }) => ({
+        url: `${END_POINTS.GET_PRODUCTS}/${slug}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Product'],
+    }),
+    deleteProduct: builder.mutation({
+      query: (slug) => ({
+        url: `${END_POINTS.GET_PRODUCTS}/${slug}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Product'],
+    }),
     getVariants: builder.query({
       query: (params) => ({ url: END_POINTS.GET_VARIANTS, params }),
       providesTags: ['Variant'],
@@ -103,6 +148,29 @@ export const erpApi = createApi({
     getVariantBySlug: builder.query({
       query: (slug) => ({ url: `${END_POINTS.GET_VARIANTS}/${slug}` }),
       providesTags: ['Variant'],
+    }),
+    createVariant: builder.mutation({
+      query: (body) => ({
+        url: END_POINTS.GET_VARIANTS,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Variant'],
+    }),
+    updateVariant: builder.mutation({
+      query: ({ slug, body }) => ({
+        url: `${END_POINTS.GET_VARIANTS}/${slug}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Variant'],
+    }),
+    deleteVariant: builder.mutation({
+      query: (slug) => ({
+        url: `${END_POINTS.GET_VARIANTS}/${slug}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Variant'],
     }),
 
     getBookings: builder.query({
@@ -141,10 +209,19 @@ export const {
   useCreateSpareMutation,
   useUpdateSpareMutation,
   useDeleteSpareMutation,
+  useGetDepartmentsQuery,
+  useGetCategoriesQuery,
+  useGetSubCategoriesQuery,
   useGetProductsQuery,
   useGetProductBySlugQuery,
+  useCreateProductMutation,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
   useGetVariantsQuery,
   useGetVariantBySlugQuery,
+  useCreateVariantMutation,
+  useUpdateVariantMutation,
+  useDeleteVariantMutation,
   useGetBookingsQuery,
   useCreateBookingMutation,
   useUpdateBookingMutation,

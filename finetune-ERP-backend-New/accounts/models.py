@@ -24,8 +24,8 @@ class CustomUser(AbstractUser):
     def clean(self):
         super().clean()
         if self.role == "branch_head" and self.store_id:
-            branch_head_id = getattr(self.store, "branch_head_id", None)
-            if branch_head_id and branch_head_id != self.id:
+            authority_id = getattr(self.store, "authority_id", None)
+            if authority_id and authority_id != self.id:
                 raise ValidationError(
                     {"store": "Store already has a different branch head"}
                 )

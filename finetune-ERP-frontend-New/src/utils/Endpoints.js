@@ -24,6 +24,9 @@ const END_POINTS = {
   GET_PRODUCTS: '/api/products',
   GET_VARIANTS: '/api/variants',
   GET_BOOKINGS: '/api/bookings',
+  GET_DEPARTMENTS: '/api/departments',
+  GET_CATEGORIES: '/api/categories',
+  GET_SUBCATEGORIES: '/api/subcategories',
 
   // AUTHENTICATION
   LOGIN: '/api/auth/login',
