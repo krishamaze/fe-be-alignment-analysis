@@ -40,7 +40,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://finetunetechcraft-erp-git-axios-f-efe947-finetunetechs-projects.vercel.app",
     "https://finetunetechcraft-erp-git-feature-ca76ad-finetunetechs-projects.vercel.app",
     "https://finetunetechcrafterp-dev.up.railway.app",
-    "https://fe-be-alignment-analysis.vercel.app/stores",
+    "https://fe-be-alignment-analysis.vercel.app",
 ]
 
 
