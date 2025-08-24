@@ -30,7 +30,17 @@ const bookingCreateMock = vi.fn().mockResolvedValue({
 vi.mock('../../api/erpApi', () => ({
   useCreateBookingMutation: () => [bookingCreateMock],
   useGetBookingsQuery: () => ({ data: { content: [] }, isLoading: false }),
+  useGetIssuesQuery: () => ({ data: [{ id: 1, name: 'Screen' }], isLoading: false }),
+  useGetQuestionsQuery: () => ({ data: [], isLoading: false }),
 }));
+
+class ResizeObserverMock {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+global.ResizeObserver = ResizeObserverMock;
+window.ResizeObserver = ResizeObserverMock;
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -126,7 +136,6 @@ describe('Bookings form', () => {
     const email = container.querySelector('input[name="email"]');
     const date = container.querySelector('input[name="date"]');
     const time = container.querySelector('input[name="time"]');
-    const issue = container.querySelector('select[name="issue"]');
     const message = container.querySelector('textarea[name="message"]');
     await act(async () => {
       name.value = 'A';
@@ -145,8 +154,9 @@ describe('Bookings form', () => {
       time.dispatchEvent(new Event('input', { bubbles: true }));
     });
     await act(async () => {
-      issue.value = 'Screen';
-      issue.dispatchEvent(new Event('input', { bubbles: true }));
+      container.querySelector('button[aria-haspopup="listbox"]').click();
+      const option = document.querySelector('li');
+      option.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     });
     await act(async () => {
       message.value = 'hi';

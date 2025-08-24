@@ -37,6 +37,9 @@ import Stores from './pages/Stores';
 import StoreDetails from './pages/StoreDetails';
 import Spares from './pages/Spares';
 import Bookings from './pages/Bookings';
+import IssuesDashboard from './pages/IssuesDashboard';
+import OtherIssuesDashboard from './pages/OtherIssuesDashboard';
+import QuestionsDashboard from './pages/QuestionsDashboard';
 
 // E-commerce pages
 import Shop from './pages/ecommerce/Shop';
@@ -151,6 +154,11 @@ function AppContent() {
               <Route path="units" element={<UnitsDashboard />} />
               <Route path="qualities" element={<QualitiesDashboard />} />
               <Route path="bookings" element={<BookingsDashboard />} />
+              <Route path="repairs">
+                <Route path="issues" element={<IssuesDashboard />} />
+                <Route path="other-issues" element={<OtherIssuesDashboard />} />
+                <Route path="questions" element={<QuestionsDashboard />} />
+              </Route>
               <Route path="settings" element={<Settings />} />
               <Route path="logs" element={<LogsDashboard />} />
             </>

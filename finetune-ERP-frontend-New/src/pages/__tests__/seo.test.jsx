@@ -29,6 +29,8 @@ vi.mock('../../api/erpApi', () => ({
   useDeleteSpareMutation: () => [() => {}],
   useGetBookingsQuery: () => ({ data: { content: [] }, isLoading: false }),
   useCreateBookingMutation: () => [() => {}],
+  useGetIssuesQuery: () => ({ data: [], isLoading: false }),
+  useGetQuestionsQuery: () => ({ data: [], isLoading: false }),
 }));
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
