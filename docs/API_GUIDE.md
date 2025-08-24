@@ -68,11 +68,31 @@
 
 
 ## Bookings
-- `POST /api/bookings/` – public create (captcha + throttling)
+- `POST /api/bookings/` – public create (captcha + throttling). Supports nested `details` and `responses`:
+  ```json
+  {
+    "name": "John",
+    "email": "j@example.com",
+    "date": "2024-01-01",
+    "time": "10:00",
+    "captcha_token": "...",
+    "details": {"issues": [1,2], "brand": "Apple", "product": "iPhone"},
+    "responses": [{"question_set_name": "A", "question": "Is it working?", "response": "Yes"}]
+  }
+  ```
 - `GET /api/bookings/` – system_admin only list
 - `GET /api/bookings/{id}/` – system_admin only detail
 - `PATCH /api/bookings/{id}/` – system_admin only status update (reason required for `cancelled`/`rejected`)
   - Transitions: pending→approved/rejected/cancelled, approved→in_progress/cancelled, in_progress→completed/cancelled
+
+## Issues & Questions
+- `GET /api/issues/`, `POST /api/issues/` – list public, create/update/delete system_admin only
+- `GET /api/otherissues/`, `POST /api/otherissues/` – same rules
+- `GET /api/questions/`, `POST /api/questions/` – same rules
+
+## Responses
+- `POST /api/responses/` – public create for a booking
+- `GET /api/responses/` – system_admin only list
 
 ## Event Logs
 - `GET /api/logs/` – system_admin only list

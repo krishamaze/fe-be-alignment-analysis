@@ -1,7 +1,17 @@
-from rest_framework import viewsets
-from .models import Booking
-from .serializers import BookingSerializer
-from store.permissions import IsSystemAdminOrBookingCreate
+from rest_framework import viewsets, mixins
+from .models import Booking, Issue, OtherIssue, Question, CustomerResponse
+from .serializers import (
+    BookingSerializer,
+    IssueSerializer,
+    OtherIssueSerializer,
+    QuestionSerializer,
+    CustomerResponseSerializer,
+)
+from store.permissions import (
+    IsSystemAdminOrBookingCreate,
+    IsSystemAdminOrReadOnly,
+    IsSystemAdminOrCustomerCreate,
+)
 from .throttles import BookingRateThrottle
 from .notifications import send_booking_notifications
 
@@ -21,3 +31,29 @@ class BookingViewSet(viewsets.ModelViewSet):
         booking = serializer.save()
         if booking.status != old_status:
             send_booking_notifications(booking)
+
+
+class IssueViewSet(viewsets.ModelViewSet):
+    queryset = Issue.objects.all().order_by("-date_created")
+    serializer_class = IssueSerializer
+    permission_classes = [IsSystemAdminOrReadOnly]
+
+
+class OtherIssueViewSet(viewsets.ModelViewSet):
+    queryset = OtherIssue.objects.all().order_by("-id")
+    serializer_class = OtherIssueSerializer
+    permission_classes = [IsSystemAdminOrReadOnly]
+
+
+class QuestionViewSet(viewsets.ModelViewSet):
+    queryset = Question.objects.all().order_by("-id")
+    serializer_class = QuestionSerializer
+    permission_classes = [IsSystemAdminOrReadOnly]
+
+
+class CustomerResponseViewSet(
+    mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+):
+    queryset = CustomerResponse.objects.all().order_by("id")
+    serializer_class = CustomerResponseSerializer
+    permission_classes = [IsSystemAdminOrCustomerCreate]
