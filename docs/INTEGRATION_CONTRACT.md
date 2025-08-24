@@ -21,7 +21,7 @@
 - **Response:** `201 Created` with brand object
 
 ### List Stores
-- **URL:** `/api/stores`
+- **URL:** `/api/stores?store_type=BRANCH|HQ`
 - **Method:** `GET`
 - **Auth:** Required; non-`system_admin` users have read-only access.
 - **Response:**
@@ -32,7 +32,9 @@
         "id": 1,
         "store_name": "Sample Store",
         "code": "ST001",
-        "address": "123 Main St"
+        "address": "123 Main St",
+        "phone": "+1-234",
+        "store_type": "BRANCH"
       }
     ]
   }
@@ -49,8 +51,10 @@
     "store_name": "Sample Store",
     "code": "ST001",
     "address": "123 Main St",
-    "branch_head_name": "Jane Doe",
-  "branch_head_email": "jane@example.com"
+    "phone": "+1-234",
+    "store_type": "HQ",
+    "authority_name": "Jane Doe",
+    "authority_email": "jane@example.com"
   }
   ```
 
@@ -89,6 +93,27 @@
   }
   ```
 
+### Create Product
+- **URL:** `/api/products`
+- **Method:** `POST`
+- **Auth:** `system_admin` only
+- **Body:** `{ "name": string, "brand": number, "category": number, "price": number, "stock": number, "availability": boolean }`
+- **Response:** `201 Created` with `{ "id": number, "slug": string, ... }`
+- **Errors:** `400` for validation (negative price, availability mismatch)
+
+### Update Product
+- **URL:** `/api/products/{slug}`
+- **Method:** `PUT`
+- **Auth:** `system_admin` only
+- **Body:** same as create (slug immutable)
+- **Response:** `200 OK`
+
+### Delete Product
+- **URL:** `/api/products/{slug}`
+- **Method:** `DELETE`
+- **Auth:** `system_admin` only
+- **Response:** `204 No Content`
+
 ### Retrieve Product
 - **URL:** `/api/products/{slug}`
 - **Method:** `GET`
@@ -97,6 +122,26 @@
   ```json
   { "id": 1, "name": "Phone", "brand": "Finetune", "slug": "phone", "price": "10.00", "availability": true, "category": "Phones" }
   ```
+
+### Create Variant
+- **URL:** `/api/variants`
+- **Method:** `POST`
+- **Auth:** `system_admin` only
+- **Body:** `{ "product": string(slug), "variant_name": string, "price": number, "stock": number, "availability": boolean }`
+- **Response:** `201 Created` with `{ "id": number, "slug": string, ... }`
+
+### Update Variant
+- **URL:** `/api/variants/{slug}`
+- **Method:** `PUT`
+- **Auth:** `system_admin` only
+- **Body:** same as create (slug immutable)
+- **Response:** `200 OK`
+
+### Delete Variant
+- **URL:** `/api/variants/{slug}`
+- **Method:** `DELETE`
+- **Auth:** `system_admin` only
+- **Response:** `204 No Content`
 
 ### List Variants
 - **URL:** `/api/variants`

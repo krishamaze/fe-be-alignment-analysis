@@ -20,11 +20,6 @@ class AdminUserViewSet(viewsets.ModelViewSet):
         )
 
     def create(self, request, *args, **kwargs):
-        if request.data.get("role") == "branch_head" and "store" in request.data:
-            return Response(
-                {"error": "Assign branch heads via /stores/<id>/assign-branch-head."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -58,12 +53,6 @@ class AdminUserViewSet(viewsets.ModelViewSet):
                     {"error": "You cannot disable yourself."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-
-        if "store" in request.data and user.role == "branch_head":
-            return Response(
-                {"error": "Assign branch heads via /stores/<id>/assign-branch-head."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
 
         return super().update(request, *args, **kwargs)
 

@@ -96,6 +96,29 @@ export const erpApi = createApi({
       query: (slug) => ({ url: `${END_POINTS.GET_PRODUCTS}/${slug}` }),
       providesTags: ['Product'],
     }),
+    createProduct: builder.mutation({
+      query: (body) => ({
+        url: END_POINTS.GET_PRODUCTS,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Product'],
+    }),
+    updateProduct: builder.mutation({
+      query: ({ slug, body }) => ({
+        url: `${END_POINTS.GET_PRODUCTS}/${slug}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Product'],
+    }),
+    deleteProduct: builder.mutation({
+      query: (slug) => ({
+        url: `${END_POINTS.GET_PRODUCTS}/${slug}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Product'],
+    }),
     getVariants: builder.query({
       query: (params) => ({ url: END_POINTS.GET_VARIANTS, params }),
       providesTags: ['Variant'],
@@ -103,6 +126,29 @@ export const erpApi = createApi({
     getVariantBySlug: builder.query({
       query: (slug) => ({ url: `${END_POINTS.GET_VARIANTS}/${slug}` }),
       providesTags: ['Variant'],
+    }),
+    createVariant: builder.mutation({
+      query: (body) => ({
+        url: END_POINTS.GET_VARIANTS,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Variant'],
+    }),
+    updateVariant: builder.mutation({
+      query: ({ slug, body }) => ({
+        url: `${END_POINTS.GET_VARIANTS}/${slug}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Variant'],
+    }),
+    deleteVariant: builder.mutation({
+      query: (slug) => ({
+        url: `${END_POINTS.GET_VARIANTS}/${slug}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Variant'],
     }),
 
     getBookings: builder.query({
@@ -143,8 +189,14 @@ export const {
   useDeleteSpareMutation,
   useGetProductsQuery,
   useGetProductBySlugQuery,
+  useCreateProductMutation,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
   useGetVariantsQuery,
   useGetVariantBySlugQuery,
+  useCreateVariantMutation,
+  useUpdateVariantMutation,
+  useDeleteVariantMutation,
   useGetBookingsQuery,
   useCreateBookingMutation,
   useUpdateBookingMutation,
