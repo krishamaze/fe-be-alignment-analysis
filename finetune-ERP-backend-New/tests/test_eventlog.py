@@ -37,3 +37,18 @@ def test_eventlog_filtering(admin_user):
     assert resp.status_code == 200
     data = resp.json()
     assert len(data) >= 1
+
+
+@pytest.mark.django_db
+def test_eventlog_export(admin_user, advisor1):
+    api = APIClient()
+    api.force_authenticate(user=admin_user)
+    resp = api.get("/api/logs/export/?format=json")
+    assert resp.status_code == 200
+    assert isinstance(resp.json(), list)
+    resp = api.get("/api/logs/export/?format=csv")
+    assert resp.status_code == 200
+    assert resp["Content-Type"].startswith("text/csv")
+    api.force_authenticate(user=advisor1)
+    resp = api.get("/api/logs/export/?format=json")
+    assert resp.status_code == 403

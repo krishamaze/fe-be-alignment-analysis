@@ -13,11 +13,13 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, BasePermission
 from accounts.permissions import IsSystemAdminUser
+from accounts.throttles import LoginRateThrottle
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
     permission_classes = [AllowAny]
     serializer_class = MyTokenObtainPairSerializer
+    throttle_classes = [LoginRateThrottle]
 
 
 class RegisterUserView(CreateAPIView):

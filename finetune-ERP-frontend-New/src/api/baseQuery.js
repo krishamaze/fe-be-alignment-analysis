@@ -1,5 +1,6 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import Cookies from 'js-cookie';
+import toast from 'react-hot-toast';
 import END_POINTS from '../utils/Endpoints';
 import { logout, setCredentials } from '../redux/slice/authSlice';
 
@@ -50,10 +51,15 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
         result = await rawBaseQuery(args, api, extraOptions);
       } else {
         api.dispatch(logout());
+        toast.error('Session expired. Please log in again.');
       }
     } else {
       api.dispatch(logout());
+      toast.error('Session expired. Please log in again.');
     }
+  }
+  if (result.error?.status === 429) {
+    toast.error('Too many requests. Please try again later.');
   }
   return result;
 };
