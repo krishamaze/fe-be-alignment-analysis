@@ -86,7 +86,9 @@ REST_FRAMEWORK = {
         "contact": "5/hour",
         "schedule_call": "5/hour",
         "booking": "5/hour",
+        "login": "5/min",
     },
+    "URL_FORMAT_OVERRIDE": "alt",
 }
 
 SIMPLE_JWT = {

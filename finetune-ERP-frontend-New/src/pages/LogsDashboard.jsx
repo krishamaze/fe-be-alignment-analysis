@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { useGetLogsQuery } from '../api/erpApi';
+import { baseQueryWithReauth } from '../api/baseQuery';
+import store from '../redux/store';
+import toast from 'react-hot-toast';
 
 function LogsDashboard() {
   const [filters, setFilters] = useState({
@@ -15,9 +18,45 @@ function LogsDashboard() {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
+  const handleExport = async (format) => {
+    const params = { ...filters, format };
+    const api = { dispatch: store.dispatch, getState: store.getState };
+    const result = await baseQueryWithReauth(
+      {
+        url: '/api/logs/export/',
+        params,
+        responseHandler: format === 'csv' ? 'text' : undefined,
+      },
+      api
+    );
+    if (result.error) {
+      toast.error('Export failed');
+      return;
+    }
+    const content = format === 'csv' ? result.data : JSON.stringify(result.data);
+    const blob = new Blob([content], {
+      type: format === 'csv' ? 'text/csv' : 'application/json',
+    });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `event_logs.${format}`;
+    link.click();
+  };
+
   return (
     <div className="p-4">
-      <h1 className="text-xl font-semibold mb-4">Event Logs</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-xl font-semibold">Event Logs</h1>
+        <select
+          onChange={(e) => e.target.value && handleExport(e.target.value)}
+          className="border p-1"
+        >
+          <option value="">Export</option>
+          <option value="csv">Export CSV</option>
+          <option value="json">Export JSON</option>
+        </select>
+      </div>
       <div className="flex flex-wrap gap-2 mb-4">
         <input
           type="text"
