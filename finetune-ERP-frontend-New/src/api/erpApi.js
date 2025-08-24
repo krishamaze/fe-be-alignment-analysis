@@ -5,7 +5,17 @@ import END_POINTS from '../utils/Endpoints';
 export const erpApi = createApi({
   reducerPath: 'erpApi',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Brand', 'Store', 'Spare', 'Booking', 'Product', 'Variant'],
+  tagTypes: [
+    'Brand',
+    'Store',
+    'Spare',
+    'Booking',
+    'Product',
+    'Variant',
+    'Department',
+    'Category',
+    'SubCategory',
+  ],
   endpoints: (builder) => ({
     getBrands: builder.query({
       query: () => ({ url: END_POINTS.GET_BRANDS }),
@@ -87,6 +97,18 @@ export const erpApi = createApi({
         method: 'DELETE',
       }),
       invalidatesTags: ['Spare'],
+    }),
+    getDepartments: builder.query({
+      query: () => ({ url: END_POINTS.GET_DEPARTMENTS }),
+      providesTags: ['Department'],
+    }),
+    getCategories: builder.query({
+      query: (params) => ({ url: END_POINTS.GET_CATEGORIES, params }),
+      providesTags: ['Category'],
+    }),
+    getSubCategories: builder.query({
+      query: (params) => ({ url: END_POINTS.GET_SUBCATEGORIES, params }),
+      providesTags: ['SubCategory'],
     }),
     getProducts: builder.query({
       query: (params) => ({ url: END_POINTS.GET_PRODUCTS, params }),
@@ -187,6 +209,9 @@ export const {
   useCreateSpareMutation,
   useUpdateSpareMutation,
   useDeleteSpareMutation,
+  useGetDepartmentsQuery,
+  useGetCategoriesQuery,
+  useGetSubCategoriesQuery,
   useGetProductsQuery,
   useGetProductBySlugQuery,
   useCreateProductMutation,

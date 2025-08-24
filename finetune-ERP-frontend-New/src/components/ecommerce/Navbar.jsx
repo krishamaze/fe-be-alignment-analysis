@@ -27,7 +27,7 @@ function EcommerceNavbar() {
   // Navigation links
   const navLinks = [
     { name: 'Shop Now', href: '/shop' },
-    { name: 'All Categories', href: '/categories', hasDropdown: true },
+    { name: 'Departments', href: '/departments' },
     { name: 'Partners', href: '/partners' },
     { name: 'Help Centre', href: '/help' },
     { name: 'Legal', href: '/legal' },

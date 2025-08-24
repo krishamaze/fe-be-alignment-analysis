@@ -79,16 +79,44 @@
 - **Response:** `201 Created` with `{ "id": number, "name": string, "sku": string, "price": string, "is_active": boolean }`
 - **Errors:** `401` if unauthenticated, `403` if unauthorized
 
+### List Departments
+- **URL:** `/api/departments`
+- **Method:** `GET`
+- **Auth:** None
+- **Response:** `{"content": [ { "id": 1, "name": "Electronics", "slug": "electronics" } ]}`
+
+### List Categories
+- **URL:** `/api/categories`
+- **Method:** `GET`
+- **Auth:** None
+- **Query Params:** `department` (department slug)
+- **Response:** `{"content": [ { "id": 1, "name": "Phones", "slug": "phones" } ]}`
+
+### List SubCategories
+- **URL:** `/api/subcategories`
+- **Method:** `GET`
+- **Auth:** None
+- **Query Params:** `category` (category slug)
+- **Response:** `{"content": [ { "id": 1, "name": "Smartphones", "slug": "smartphones" } ]}`
+
 ### List Products
 - **URL:** `/api/products`
 - **Method:** `GET`
 - **Auth:** None
-- **Query Params:** `brand` (brand id), `availability` (true/false)
+- **Query Params:** `brand` (brand id), `availability` (true/false), `department`, `category`, `subcategory` (slugs)
 - **Response:**
   ```json
   {
     "content": [
-      { "id": 1, "name": "Phone", "brand": "Finetune", "slug": "phone", "price": "10.00", "availability": true, "category": "Phones" }
+      {
+        "id": 1,
+        "name": "Phone",
+        "brand": "Finetune",
+        "slug": "phone",
+        "price": "10.00",
+        "availability": true,
+        "subcategory_slug": "smartphones"
+      }
     ]
   }
   ```
@@ -97,7 +125,7 @@
 - **URL:** `/api/products`
 - **Method:** `POST`
 - **Auth:** `system_admin` only
-- **Body:** `{ "name": string, "brand": number, "category": number, "price": number, "stock": number, "availability": boolean }`
+- **Body:** `{ "name": string, "brand": number, "subcategory": number, "price": number, "stock": number, "availability": boolean }`
 - **Response:** `201 Created` with `{ "id": number, "slug": string, ... }`
 - **Errors:** `400` for validation (negative price, availability mismatch)
 
