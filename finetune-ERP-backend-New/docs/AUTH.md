@@ -3,12 +3,14 @@
 The API uses JSON Web Tokens via `rest_framework_simplejwt`.
 
 ## JWT flow
-1. **Login** – `POST /api/auth/login` with `username` and `password` returns `access` (60 min) and `refresh` (7 days) tokens.
+1. **Login** – `POST /api/auth/login` with `username` and `password` returns `access` (60 min), `refresh` (7 days), and echoes back `username`, `role`, and `store` (which may be `null`).
 2. **Refresh** – `POST /api/token/refresh` with a refresh token rotates it and issues a new pair.
 3. **Verify** – `POST /api/token/verify` checks if a token is valid.
 4. **Logout** – `POST /api/auth/logout` blacklists a refresh token.
 
 Tokens are sent in the `Authorization: Bearer <access>` header.
+
+`store` is `null` when the user is not associated with any store or the related store has been deleted.
 
 ## Roles
 `CustomUser.role` defines project roles:
