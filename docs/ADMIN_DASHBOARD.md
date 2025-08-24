@@ -31,3 +31,8 @@
 ## Qualities
 - Navigate to `/dashboard/qualities`
 - SystemAdmins can create, update, or delete qualities. Slugs are auto-generated.
+
+## Bookings
+- Navigate to `/dashboard/bookings`
+- SystemAdmins can approve, progress, complete, cancel, or reject bookings.
+- Cancelling or rejecting prompts for a reason, which is displayed in the table for reference.
