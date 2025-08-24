@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import Loader from '../components/common/Loader';
 import ReCaptchaWrapper from '../components/common/ReCaptchaWrapper';
-import { useCreateBookingMutation } from '../api/erpApi';
+import MyBookings from '../components/MyBookings';
+import { useCreateBookingMutation, useGetBookingsQuery } from '../api/erpApi';
 
 export default function Bookings() {
   const [form, setForm] = useState({
@@ -19,6 +20,9 @@ export default function Bookings() {
   const [result, setResult] = useState(null);
   const recaptchaRef = useRef(null);
   const [createBooking] = useCreateBookingMutation();
+  const { data: bookingsData, refetch } = useGetBookingsQuery(undefined, {
+    skip: !result,
+  });
 
   useEffect(() => {
     document.title = 'Book a Service – Finetune';
@@ -87,6 +91,7 @@ export default function Bookings() {
         <p>
           Your booking ID is {result.id}. Current status: {result.status}.
         </p>
+        <MyBookings bookings={bookingsData?.content || []} refetch={refetch} />
       </div>
     );
   }

@@ -29,6 +29,7 @@ const bookingCreateMock = vi.fn().mockResolvedValue({
 });
 vi.mock('../../api/erpApi', () => ({
   useCreateBookingMutation: () => [bookingCreateMock],
+  useGetBookingsQuery: () => ({ data: { content: [] }, isLoading: false }),
 }));
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
