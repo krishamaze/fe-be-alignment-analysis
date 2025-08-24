@@ -6,22 +6,35 @@ from .models import Booking
 
 class BookingSerializer(serializers.ModelSerializer):
     captcha_token = serializers.CharField(write_only=True)
-    issue = serializers.CharField()
 
     class Meta:
         model = Booking
         fields = [
             "id",
+            "store",
+            "attendant",
+            "order_id",
+            "priority",
+            "verification_flags",
             "name",
             "email",
             "issue",
+            "address",
+            "remarks",
             "date",
             "time",
             "message",
             "status",
             "captcha_token",
         ]
-        read_only_fields = ["id"]
+        read_only_fields = [
+            "id",
+            "store",
+            "attendant",
+            "order_id",
+            "priority",
+            "verification_flags",
+        ]
 
     def validate_captcha_token(self, value):
         response = requests.post(
@@ -37,10 +50,16 @@ class BookingSerializer(serializers.ModelSerializer):
         validated_data.pop("captcha_token", None)
         validated_data.pop("status", None)
         request = self.context.get("request")
-        if request:
+        if request and request.user.is_authenticated:
             validated_data["user"] = request.user
         validated_data["status"] = "pending"
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        new_status = validated_data.get("status", instance.status)
+        if new_status != instance.status and new_status not in instance.allowed_transitions():
+            raise serializers.ValidationError({"status": "Invalid transition"})
+        return super().update(instance, validated_data)
 
     def to_representation(self, instance):
         instance.update_status_if_needed()

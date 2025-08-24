@@ -100,15 +100,15 @@
 ### Create Booking
 - **URL:** `/api/bookings`
 - **Method:** `POST`
-- **Auth:** `JWT`
-- **Body:** `{ "name": string, "email": string?, "issue": string, "date": YYYY-MM-DD, "time": HH:MM, "message": string?, "captcha_token": string }`
+- **Auth:** None
+- **Body:** `{ "name": string, "email": string?, "issue": string, "date": YYYY-MM-DD, "time": HH:MM, "message": string?, "address": string?, "remarks": string?, "captcha_token": string }`
 - **Response:** `201 Created` with `{ "id": number, "name": string, "email": string, "issue": string, "date": string, "time": string, "message": string, "status": string }`
-- **Errors:** `400` for invalid captcha, `429` if rate limited
+- **Errors:** `400` for invalid captcha, `429` if rate limited`
 #### Booking lifecycle
 ```
-pending → confirmed → in_progress → completed
-            ↘
-            cancelled
+pending → approved → in_progress → completed
+          ↘             ↘
+          rejected       cancelled
 ```
 Status advances automatically when the booking time passes; admins may override any state.
 ### Submit Contact Request

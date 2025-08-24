@@ -15,3 +15,9 @@ class BookingViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         booking = serializer.save()
         send_booking_notifications(booking)
+
+    def perform_update(self, serializer):
+        old_status = serializer.instance.status
+        booking = serializer.save()
+        if booking.status != old_status:
+            send_booking_notifications(booking)

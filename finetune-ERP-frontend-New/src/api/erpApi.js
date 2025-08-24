@@ -5,7 +5,7 @@ import END_POINTS from '../utils/Endpoints';
 export const erpApi = createApi({
   reducerPath: 'erpApi',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Brand', 'Store', 'Spare'],
+  tagTypes: ['Brand', 'Store', 'Spare', 'Booking'],
   endpoints: (builder) => ({
     getBrands: builder.query({
       query: () => ({ url: END_POINTS.GET_BRANDS }),
@@ -88,6 +88,26 @@ export const erpApi = createApi({
       }),
       invalidatesTags: ['Spare'],
     }),
+    getBookings: builder.query({
+      query: (params) => ({ url: END_POINTS.GET_BOOKINGS, params }),
+      providesTags: ['Booking'],
+    }),
+    createBooking: builder.mutation({
+      query: (body) => ({
+        url: END_POINTS.MODIFY_BOOKING,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Booking'],
+    }),
+    updateBooking: builder.mutation({
+      query: ({ id, ...patch }) => ({
+        url: `${END_POINTS.MODIFY_BOOKING}/${id}`,
+        method: 'PATCH',
+        body: patch,
+      }),
+      invalidatesTags: ['Booking'],
+    }),
   }),
 });
 
@@ -104,4 +124,7 @@ export const {
   useCreateSpareMutation,
   useUpdateSpareMutation,
   useDeleteSpareMutation,
+  useGetBookingsQuery,
+  useCreateBookingMutation,
+  useUpdateBookingMutation,
 } = erpApi;
