@@ -10,16 +10,18 @@ from .serializers import (
 )
 
 
-class DepartmentViewSet(viewsets.ReadOnlyModelViewSet):
+class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all().order_by("name")
     serializer_class = DepartmentSerializer
     lookup_field = "slug"
+    permission_classes = [IsSystemAdminOrReadOnly]
 
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all().order_by("name")
     serializer_class = CategorySerializer
     lookup_field = "slug"
+    permission_classes = [IsSystemAdminOrReadOnly]
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -29,10 +31,11 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
         return qs
 
 
-class SubCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+class SubCategoryViewSet(viewsets.ModelViewSet):
     queryset = SubCategory.objects.all().order_by("name")
     serializer_class = SubCategorySerializer
     lookup_field = "slug"
+    permission_classes = [IsSystemAdminOrReadOnly]
 
     def get_queryset(self):
         qs = super().get_queryset()

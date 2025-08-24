@@ -85,6 +85,26 @@
 - **Auth:** None
 - **Response:** `{"content": [ { "id": 1, "name": "Electronics", "slug": "electronics" } ]}`
 
+### Create Department
+- **URL:** `/api/departments`
+- **Method:** `POST`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string }`
+- **Response:** `201 Created` with `{ "id": number, "name": string, "slug": string }`
+
+### Update Department
+- **URL:** `/api/departments/{slug}`
+- **Method:** `PUT`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string }` (slug immutable)
+- **Response:** `200 OK` with updated department
+
+### Delete Department
+- **URL:** `/api/departments/{slug}`
+- **Method:** `DELETE`
+- **Auth:** `system_admin`
+- **Response:** `204 No Content`
+
 ### List Categories
 - **URL:** `/api/categories`
 - **Method:** `GET`
@@ -92,12 +112,52 @@
 - **Query Params:** `department` (department slug)
 - **Response:** `{"content": [ { "id": 1, "name": "Phones", "slug": "phones" } ]}`
 
+### Create Category
+- **URL:** `/api/categories`
+- **Method:** `POST`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string, "department": number }`
+- **Response:** `201 Created` with `{ "id": number, "name": string, "slug": string, "department": number }`
+
+### Update Category
+- **URL:** `/api/categories/{slug}`
+- **Method:** `PUT`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string, "department": number }` (slug immutable)
+- **Response:** `200 OK` with updated category
+
+### Delete Category
+- **URL:** `/api/categories/{slug}`
+- **Method:** `DELETE`
+- **Auth:** `system_admin`
+- **Response:** `204 No Content`
+
 ### List SubCategories
 - **URL:** `/api/subcategories`
 - **Method:** `GET`
 - **Auth:** None
 - **Query Params:** `category` (category slug)
 - **Response:** `{"content": [ { "id": 1, "name": "Smartphones", "slug": "smartphones" } ]}`
+
+### Create SubCategory
+- **URL:** `/api/subcategories`
+- **Method:** `POST`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string, "category": number }`
+- **Response:** `201 Created` with `{ "id": number, "name": string, "slug": string, "category": number }`
+
+### Update SubCategory
+- **URL:** `/api/subcategories/{slug}`
+- **Method:** `PUT`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string, "category": number }` (slug immutable)
+- **Response:** `200 OK` with updated subcategory
+
+### Delete SubCategory
+- **URL:** `/api/subcategories/{slug}`
+- **Method:** `DELETE`
+- **Auth:** `system_admin`
+- **Response:** `204 No Content`
 
 ### List Products
 - **URL:** `/api/products`
