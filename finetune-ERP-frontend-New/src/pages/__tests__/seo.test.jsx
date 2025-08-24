@@ -13,6 +13,7 @@ import Stores from '../Stores';
 import Spares from '../Spares';
 import Bookings from '../Bookings';
 import axios from 'axios';
+import.meta.env.VITE_RECAPTCHA_SITE_KEY = 'test-site-key';
 vi.mock('axios');
 vi.mock('react-google-recaptcha', () => ({
   __esModule: true,
@@ -26,6 +27,7 @@ vi.mock('../../api/erpApi', () => ({
   useCreateSpareMutation: () => [() => {}],
   useUpdateSpareMutation: () => [() => {}],
   useDeleteSpareMutation: () => [() => {}],
+  useCreateBookingMutation: () => [() => {}],
 }));
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
