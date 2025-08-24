@@ -20,3 +20,9 @@
 - `GET /api/spares/{id}` – public detail
 - `PUT /api/spares/{id}` – system_admin only
 - `DELETE /api/spares/{id}` – system_admin only
+
+## Bookings
+- `POST /api/bookings/` – public create (captcha + throttling)
+- `GET /api/bookings/` – system_admin only list
+- `GET /api/bookings/{id}/` – system_admin only detail
+- `PATCH /api/bookings/{id}/` – system_admin only status update
