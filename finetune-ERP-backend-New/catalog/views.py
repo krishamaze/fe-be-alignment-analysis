@@ -91,13 +91,15 @@ class VariantViewSet(viewsets.ModelViewSet):
         return qs
 
 
-class UnitViewSet(viewsets.ReadOnlyModelViewSet):
+class UnitViewSet(viewsets.ModelViewSet):
     queryset = Unit.objects.all().order_by("name")
     serializer_class = UnitSerializer
     lookup_field = "slug"
+    permission_classes = [IsSystemAdminOrReadOnly]
 
 
-class QualityViewSet(viewsets.ReadOnlyModelViewSet):
+class QualityViewSet(viewsets.ModelViewSet):
     queryset = Quality.objects.all().order_by("name")
     serializer_class = QualitySerializer
     lookup_field = "slug"
+    permission_classes = [IsSystemAdminOrReadOnly]

@@ -86,6 +86,58 @@
 - **Response:** `201 Created` with `{ "id": number, "name": string, "sku": string, "price": string, "quality": number | null, "quality_slug": string | null, "quality_name": string | null, "is_active": boolean }`
 - **Errors:** `401` if unauthenticated, `403` if unauthorized
 
+### List Units
+- **URL:** `/api/units`
+- **Method:** `GET`
+- **Auth:** None
+- **Response:** `{"content": [ { "id": 1, "name": "Piece", "slug": "piece" } ]}`
+
+### Create Unit
+- **URL:** `/api/units`
+- **Method:** `POST`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string }`
+- **Response:** `201 Created` with `{ "id": number, "name": string, "slug": string }`
+
+### Update Unit
+- **URL:** `/api/units/{slug}`
+- **Method:** `PUT`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string }` (slug immutable)
+- **Response:** `200 OK` with updated unit
+
+### Delete Unit
+- **URL:** `/api/units/{slug}`
+- **Method:** `DELETE`
+- **Auth:** `system_admin`
+- **Response:** `204 No Content`
+
+### List Qualities
+- **URL:** `/api/qualities`
+- **Method:** `GET`
+- **Auth:** None
+- **Response:** `{"content": [ { "id": 1, "name": "Premium", "slug": "premium" } ]}`
+
+### Create Quality
+- **URL:** `/api/qualities`
+- **Method:** `POST`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string }`
+- **Response:** `201 Created` with `{ "id": number, "name": string, "slug": string }`
+
+### Update Quality
+- **URL:** `/api/qualities/{slug}`
+- **Method:** `PUT`
+- **Auth:** `system_admin`
+- **Body:** `{ "name": string }` (slug immutable)
+- **Response:** `200 OK` with updated quality
+
+### Delete Quality
+- **URL:** `/api/qualities/{slug}`
+- **Method:** `DELETE`
+- **Auth:** `system_admin`
+- **Response:** `204 No Content`
+
 ### List Departments
 - **URL:** `/api/departments`
 - **Method:** `GET`
