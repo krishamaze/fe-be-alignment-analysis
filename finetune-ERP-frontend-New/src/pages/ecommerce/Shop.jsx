@@ -1,31 +1,112 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useGetProductsQuery } from '../../api/erpApi';
+import {
+  useGetProductsQuery,
+  useGetBrandsQuery,
+  useGetDepartmentsQuery,
+  useGetCategoriesQuery,
+  useGetSubCategoriesQuery,
+} from '../../api/erpApi';
 
 function Shop() {
-  const [brand, setBrand] = useState('');
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [department, setDepartment] = useState('');
+  const [category, setCategory] = useState('');
+  const [subcategory, setSubcategory] = useState('');
   const [onlyAvailable, setOnlyAvailable] = useState(false);
-  const { data, isLoading } = useGetProductsQuery({
-    ...(brand && { brand }),
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
+  const [ordering, setOrdering] = useState('-date_created');
+
+  const { data: brandData } = useGetBrandsQuery();
+  const brandOptions = brandData?.content ?? brandData ?? [];
+  const { data: deptData } = useGetDepartmentsQuery();
+  const deptOptions = deptData?.content ?? [];
+  const { data: catData } = useGetCategoriesQuery(
+    department ? { department } : undefined
+  );
+  const catOptions = catData?.content ?? [];
+  const { data: subData } = useGetSubCategoriesQuery(
+    category ? { category } : undefined
+  );
+  const subOptions = subData?.content ?? [];
+
+  const params = {
+    ...(selectedBrands[0] && { brand: selectedBrands[0] }),
     ...(onlyAvailable && { availability: true }),
-  });
+    ...(department && { department }),
+    ...(category && { category }),
+    ...(subcategory && { subcategory }),
+    ...(minPrice > 0 && { min_price: minPrice }),
+    ...(maxPrice > 0 && { max_price: maxPrice }),
+    ...(ordering && { ordering }),
+  };
+  const { data, isLoading } = useGetProductsQuery(params);
   const products = data?.content ?? [];
-  const brands = [...new Set(products.map((p) => p.brand))];
+
+  const toggleBrand = (id) => {
+    setSelectedBrands((prev) =>
+      prev.includes(id) ? prev.filter((b) => b !== id) : [...prev, id]
+    );
+  };
 
   if (isLoading) return <div className="p-4">Loading...</div>;
 
   return (
     <div className="p-4 space-y-4">
-      <div className="flex gap-4">
+      <div className="space-y-4 md:flex md:gap-4 md:space-y-0">
+        <div className="flex flex-wrap gap-2">
+          {brandOptions.map((b) => (
+            <label key={b.id} className="flex items-center gap-1 text-sm">
+              <input
+                type="checkbox"
+                checked={selectedBrands.includes(b.id)}
+                onChange={() => toggleBrand(b.id)}
+              />
+              {b.name}
+            </label>
+          ))}
+        </div>
         <select
-          value={brand}
-          onChange={(e) => setBrand(e.target.value)}
-          className="border p-2 rounded"
+          value={department}
+          onChange={(e) => {
+            setDepartment(e.target.value);
+            setCategory('');
+            setSubcategory('');
+          }}
+          className="border p-2 rounded flex-1"
         >
-          <option value="">All Brands</option>
-          {brands.map((b) => (
-            <option key={b} value={b}>
-              {b}
+          <option value="">All Departments</option>
+          {deptOptions.map((d) => (
+            <option key={d.slug} value={d.slug}>
+              {d.name}
+            </option>
+          ))}
+        </select>
+        <select
+          value={category}
+          onChange={(e) => {
+            setCategory(e.target.value);
+            setSubcategory('');
+          }}
+          className="border p-2 rounded flex-1"
+        >
+          <option value="">All Categories</option>
+          {catOptions.map((c) => (
+            <option key={c.slug} value={c.slug}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+        <select
+          value={subcategory}
+          onChange={(e) => setSubcategory(e.target.value)}
+          className="border p-2 rounded flex-1"
+        >
+          <option value="">All SubCategories</option>
+          {subOptions.map((s) => (
+            <option key={s.slug} value={s.slug}>
+              {s.name}
             </option>
           ))}
         </select>
@@ -35,8 +116,33 @@ function Shop() {
             checked={onlyAvailable}
             onChange={(e) => setOnlyAvailable(e.target.checked)}
           />
-          Only available
+          Available
         </label>
+        <div className="flex items-center gap-2">
+          <input
+            type="range"
+            min="0"
+            max="100000"
+            value={minPrice}
+            onChange={(e) => setMinPrice(Number(e.target.value))}
+          />
+          <input
+            type="range"
+            min="0"
+            max="100000"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(Number(e.target.value))}
+          />
+        </div>
+        <select
+          value={ordering}
+          onChange={(e) => setOrdering(e.target.value)}
+          className="border p-2 rounded"
+        >
+          <option value="-date_created">Newest</option>
+          <option value="price">Price: Low to High</option>
+          <option value="-price">Price: High to Low</option>
+        </select>
       </div>
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((p) => (
@@ -44,7 +150,7 @@ function Shop() {
             <Link to={`/product/${p.slug}`} className="font-semibold">
               {p.name}
             </Link>
-            <p className="text-sm text-gray-500">{p.brand}</p>
+            <p className="text-sm text-gray-500">{p.brand_name}</p>
             <p className="mt-2">₹{p.price}</p>
             {!p.availability && (
               <p className="text-red-500 text-sm">Out of stock</p>

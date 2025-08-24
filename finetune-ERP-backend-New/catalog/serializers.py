@@ -147,6 +147,7 @@ class ProductSerializer(serializers.ModelSerializer):
     )
     unit_name = serializers.CharField(source="unit.name", read_only=True)
     unit_slug = serializers.CharField(source="unit.slug", read_only=True)
+    url = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -169,8 +170,9 @@ class ProductSerializer(serializers.ModelSerializer):
             "unit",
             "unit_name",
             "unit_slug",
+            "url",
         ]
-        read_only_fields = ["id", "slug", "unit_name", "unit_slug"]
+        read_only_fields = ["id", "slug", "unit_name", "unit_slug", "url"]
 
     def validate_price(self, value):
         if value < 0:
@@ -189,6 +191,11 @@ class ProductSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Stock must be > 0 when available")
         return value
 
+    def get_url(self, obj):
+        request = self.context.get("request")
+        url = obj.get_absolute_url()
+        return request.build_absolute_uri(url) if request else url
+
 
 class VariantSerializer(serializers.ModelSerializer):
     product = serializers.SlugRelatedField(
@@ -197,6 +204,7 @@ class VariantSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source="product.name", read_only=True)
     unit_name = serializers.CharField(source="product.unit.name", read_only=True)
     unit_slug = serializers.CharField(source="product.unit.slug", read_only=True)
+    url = serializers.SerializerMethodField()
 
     class Meta:
         model = Variant
@@ -211,8 +219,9 @@ class VariantSerializer(serializers.ModelSerializer):
             "availability",
             "unit_name",
             "unit_slug",
+            "url",
         ]
-        read_only_fields = ["id", "slug", "unit_name", "unit_slug"]
+        read_only_fields = ["id", "slug", "unit_name", "unit_slug", "url"]
 
     def validate_price(self, value):
         if value < 0:
@@ -230,3 +239,8 @@ class VariantSerializer(serializers.ModelSerializer):
         if value and (stock is None or stock <= 0):
             raise serializers.ValidationError("Stock must be > 0 when available")
         return value
+
+    def get_url(self, obj):
+        request = self.context.get("request")
+        url = obj.get_absolute_url()
+        return request.build_absolute_uri(url) if request else url

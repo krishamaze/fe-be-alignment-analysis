@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404, redirect
 from rest_framework import viewsets
 from store.permissions import IsSystemAdminOrReadOnly
 from .models import Department, Category, SubCategory, Product, Variant, Unit, Quality
@@ -74,6 +75,21 @@ class ProductViewSet(viewsets.ModelViewSet):
         department = self.request.query_params.get("department")
         if department:
             qs = qs.filter(subcategory__category__department__slug=department)
+        min_price = self.request.query_params.get("min_price")
+        if min_price is not None:
+            qs = qs.filter(price__gte=min_price)
+        max_price = self.request.query_params.get("max_price")
+        if max_price is not None:
+            qs = qs.filter(price__lte=max_price)
+        ordering = self.request.query_params.get("ordering")
+        if ordering:
+            mapping = {
+                "date_created": "created_at",
+                "-date_created": "-created_at",
+            }
+            field = mapping.get(ordering, ordering)
+            if field in ["price", "-price", "created_at", "-created_at"]:
+                qs = qs.order_by(field)
         return qs
 
 
@@ -103,3 +119,8 @@ class QualityViewSet(viewsets.ModelViewSet):
     serializer_class = QualitySerializer
     lookup_field = "slug"
     permission_classes = [IsSystemAdminOrReadOnly]
+
+
+def legacy_product_redirect(request, model, brand):
+    product = get_object_or_404(Product, slug=model, brand__name__iexact=brand)
+    return redirect(product.get_absolute_url(), permanent=True)
