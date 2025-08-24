@@ -11,5 +11,5 @@ class IsSystemAdminOrReadOnly(permissions.BasePermission):
 class IsSystemAdminOrBookingCreate(permissions.BasePermission):
     def has_permission(self, request, view):
         if getattr(view, "action", None) == "create":
-            return request.user.is_authenticated
+            return True
         return request.user.is_authenticated and request.user.role == "system_admin"

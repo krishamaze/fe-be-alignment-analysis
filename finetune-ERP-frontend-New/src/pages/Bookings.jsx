@@ -1,10 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
-import END_POINTS from '../utils/Endpoints';
 import Loader from '../components/common/Loader';
+import { useCreateBookingMutation } from '../api/erpApi';
 
 export default function Bookings() {
   const [form, setForm] = useState({
@@ -18,8 +16,9 @@ export default function Bookings() {
   const [loading, setLoading] = useState(false);
   const [captcha, setCaptcha] = useState('');
   const [cooldown, setCooldown] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [result, setResult] = useState(null);
   const recaptchaRef = useRef(null);
+  const [createBooking] = useCreateBookingMutation();
 
   useEffect(() => {
     document.title = 'Book a Service – Finetune';
@@ -53,20 +52,11 @@ export default function Bookings() {
       toast.error('Captcha verification failed');
       return;
     }
-    const token = Cookies.get('token');
-    if (!token) {
-      toast.error('Please log in to book a service');
-      return;
-    }
     try {
       setLoading(true);
-      await axios.post(
-        `${END_POINTS.API_BASE_URL}/bookings`,
-        { ...form, captcha_token: captcha },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const resp = await createBooking({ ...form, captcha_token: captcha }).unwrap();
       toast.success('Booking submitted');
-      setSuccess(true);
+      setResult(resp);
       setForm({
         name: '',
         email: '',
@@ -81,11 +71,20 @@ export default function Bookings() {
       setTimeout(() => setCooldown(false), 30000);
     } catch {
       toast.error('Submission failed');
-      setSuccess(false);
+      setResult(null);
     } finally {
       setLoading(false);
     }
   };
+
+  if (result) {
+    return (
+      <div className="p-4 pt-24 max-w-xl mx-auto">
+        <h1 className="text-2xl font-bold mb-4">Booking Submitted</h1>
+        <p>Your booking ID is {result.id}. Current status: {result.status}.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 pt-24 max-w-xl mx-auto">
@@ -157,9 +156,6 @@ export default function Bookings() {
         >
           Submit
         </button>
-        {success && (
-          <p className="text-green-600">Booking submitted successfully.</p>
-        )}
       </form>
     </div>
   );
