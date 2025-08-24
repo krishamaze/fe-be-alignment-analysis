@@ -75,6 +75,53 @@
 - **Response:** `201 Created` with `{ "id": number, "name": string, "sku": string, "price": string, "is_active": boolean }`
 - **Errors:** `401` if unauthenticated, `403` if unauthorized
 
+### List Products
+- **URL:** `/api/products`
+- **Method:** `GET`
+- **Auth:** None
+- **Query Params:** `brand` (brand id), `availability` (true/false)
+- **Response:**
+  ```json
+  {
+    "content": [
+      { "id": 1, "name": "Phone", "brand": "Finetune", "slug": "phone", "price": "10.00", "availability": true, "category": "Phones" }
+    ]
+  }
+  ```
+
+### Retrieve Product
+- **URL:** `/api/products/{slug}`
+- **Method:** `GET`
+- **Auth:** None
+- **Response:**
+  ```json
+  { "id": 1, "name": "Phone", "brand": "Finetune", "slug": "phone", "price": "10.00", "availability": true, "category": "Phones" }
+  ```
+
+### List Variants
+- **URL:** `/api/variants`
+- **Method:** `GET`
+- **Auth:** None
+- **Query Params:** `product` (product slug)
+- **Response:**
+  ```json
+  {
+    "content": [
+      { "id": 1, "product": "phone", "variant_name": "64GB", "slug": "phone-64gb", "price": "5.00", "availability": true }
+    ]
+  }
+  ```
+
+### Retrieve Variant
+- **URL:** `/api/variants/{slug}`
+- **Method:** `GET`
+- **Auth:** None
+- **Response:**
+  ```json
+  { "id": 1, "product": "phone", "variant_name": "64GB", "slug": "phone-64gb", "price": "5.00", "availability": true }
+  ```
+
+
 ### List Bookings
 - **URL:** `/api/bookings`
 - **Method:** `GET`

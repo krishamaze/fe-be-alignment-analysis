@@ -13,7 +13,7 @@ jobs:
           node-version: 20
       - name: Install frontend dependencies
         working-directory: finetune-ERP-frontend-New
-        run: npm ci
+        run: npm ci --include=dev
       - name: Vitest
         working-directory: finetune-ERP-frontend-New
         run: npm test
@@ -21,8 +21,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install backend dependencies
-        working-directory: finetune-ERP-backend-New
-        run: pip install -r requirements-test.txt
+        run: pip install -r requirements-dev.txt
       - name: Pytest
         working-directory: finetune-ERP-backend-New
         run: pytest

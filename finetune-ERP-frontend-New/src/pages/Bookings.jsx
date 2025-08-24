@@ -54,7 +54,10 @@ export default function Bookings() {
     }
     try {
       setLoading(true);
-      const resp = await createBooking({ ...form, captcha_token: captcha }).unwrap();
+      const resp = await createBooking({
+        ...form,
+        captcha_token: captcha,
+      }).unwrap();
       toast.success('Booking submitted');
       setResult(resp);
       setForm({
@@ -81,7 +84,9 @@ export default function Bookings() {
     return (
       <div className="p-4 pt-24 max-w-xl mx-auto">
         <h1 className="text-2xl font-bold mb-4">Booking Submitted</h1>
-        <p>Your booking ID is {result.id}. Current status: {result.status}.</p>
+        <p>
+          Your booking ID is {result.id}. Current status: {result.status}.
+        </p>
       </div>
     );
   }
