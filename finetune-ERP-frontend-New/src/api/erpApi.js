@@ -17,6 +17,7 @@ export const erpApi = createApi({
     'SubCategory',
     'Unit',
     'Quality',
+    'Log',
   ],
   endpoints: (builder) => ({
     getBrands: builder.query({
@@ -326,6 +327,10 @@ export const erpApi = createApi({
       }),
       invalidatesTags: ['Booking'],
     }),
+    getLogs: builder.query({
+      query: (params) => ({ url: '/api/logs/', params }),
+      providesTags: ['Log'],
+    }),
   }),
 });
 
@@ -376,4 +381,5 @@ export const {
   useCreateBookingMutation,
   useCancelBookingMutation,
   useUpdateBookingStatusMutation,
+  useGetLogsQuery,
 } = erpApi;

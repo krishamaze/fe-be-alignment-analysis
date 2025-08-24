@@ -23,6 +23,7 @@ import VariantsDashboard from './pages/VariantsDashboard';
 import TaxonomyDashboard from './pages/TaxonomyDashboard';
 import UnitsDashboard from './pages/UnitsDashboard';
 import QualitiesDashboard from './pages/QualitiesDashboard';
+import LogsDashboard from './pages/LogsDashboard';
 import FocusLayout from './components/layout/FocusLayout';
 import Workledger from './pages/Workledger';
 import WorkledgerDetails from './pages/WorkledgerDetails';
@@ -151,6 +152,7 @@ function AppContent() {
               <Route path="qualities" element={<QualitiesDashboard />} />
               <Route path="bookings" element={<BookingsDashboard />} />
               <Route path="settings" element={<Settings />} />
+              <Route path="logs" element={<LogsDashboard />} />
             </>
           )}
         </Route>

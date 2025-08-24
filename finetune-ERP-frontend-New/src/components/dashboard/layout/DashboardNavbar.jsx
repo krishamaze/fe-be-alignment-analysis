@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   HiOutlineUserCircle,
   HiOutlineArrowRightOnRectangle,
+  HiOutlineBell,
 } from 'react-icons/hi2';
 import { useAppDispatch, useAppSelector } from '../../../redux/hook';
 import {
@@ -11,6 +12,7 @@ import {
   logoutUser,
 } from '../../../redux/slice/authSlice';
 import Logo from '../../common/Logo';
+import NotificationsPanel from '../../common/NotificationsPanel';
 
 function DashboardNavbar() {
   const user = useAppSelector(selectAuthUser);
@@ -19,6 +21,7 @@ function DashboardNavbar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
 
   const handleLogout = () => {
     dispatch(logoutUser()).finally(() => {
@@ -47,29 +50,41 @@ function DashboardNavbar() {
           </span>
         </div>
 
-        {/* Right: Profile menu */}
-        <div className="relative">
+        {/* Right: Notifications and Profile menu */}
+        <div className="flex items-center gap-4 relative">
           <button
             type="button"
-            aria-label="Profile menu"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="flex items-center focus:outline-none"
+            aria-label="Notifications"
+            onClick={() => setNotifOpen(!notifOpen)}
+            className="focus:outline-none"
           >
-            <HiOutlineUserCircle className="text-2xl text-gray-600" />
+            <HiOutlineBell className="text-2xl text-gray-600" />
           </button>
-          {menuOpen && (
-            <div className="absolute right-0 mt-2 w-32 bg-white border border-keyline rounded shadow-md">
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                <HiOutlineArrowRightOnRectangle className="mr-2" />
-                Logout
-              </button>
-            </div>
-          )}
+          {notifOpen && <NotificationsPanel />}
+
+          <div className="relative">
+            <button
+              type="button"
+              aria-label="Profile menu"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="flex items-center focus:outline-none"
+            >
+              <HiOutlineUserCircle className="text-2xl text-gray-600" />
+            </button>
+            {menuOpen && (
+              <div className="absolute right-0 mt-2 w-32 bg-white border border-keyline rounded shadow-md">
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  <HiOutlineArrowRightOnRectangle className="mr-2" />
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </nav>
