@@ -42,6 +42,7 @@ class SubCategoryViewSet(viewsets.ReadOnlyModelViewSet):
         return qs
 
 
+
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all().order_by("name")
     serializer_class = ProductSerializer
