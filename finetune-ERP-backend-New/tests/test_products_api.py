@@ -1,5 +1,6 @@
 import pytest
 from rest_framework.test import APIClient
+from accounts.models import CustomUser
 from marketing.models import Brand
 from catalog.models import Category, Product, Variant
 
@@ -46,3 +47,126 @@ def test_variant_list_and_detail():
     resp = client.get(f"/api/variants/{v1.slug}")
     assert resp.status_code == 200
     assert resp.json()["slug"] == v1.slug
+
+
+@pytest.mark.django_db
+def test_admin_crud_and_validations():
+    brand = Brand.objects.create(name="B1")
+    cat = Category.objects.create(name="Phones", slug="phones")
+    admin = CustomUser.objects.create_user(
+        username="admin", email="a@b.com", password="x", role="system_admin"
+    )
+    client = APIClient()
+
+    # Anonymous create forbidden
+    resp = client.post(
+        "/api/products",
+        {
+            "name": "P1",
+            "brand": brand.id,
+            "category": cat.id,
+            "price": 10,
+            "stock": 5,
+            "availability": True,
+        },
+        format="json",
+    )
+    assert resp.status_code in (401, 403)
+
+    client.force_authenticate(user=admin)
+    # Negative price
+    resp = client.post(
+        "/api/products",
+        {
+            "name": "P1",
+            "brand": brand.id,
+            "category": cat.id,
+            "price": -1,
+            "stock": 5,
+            "availability": True,
+        },
+        format="json",
+    )
+    assert resp.status_code == 400
+
+    # Availability vs stock
+    resp = client.post(
+        "/api/products",
+        {
+            "name": "P2",
+            "brand": brand.id,
+            "category": cat.id,
+            "price": 5,
+            "stock": 0,
+            "availability": True,
+        },
+        format="json",
+    )
+    assert resp.status_code == 400
+
+    resp = client.post(
+        "/api/products",
+        {
+            "name": "P2",
+            "brand": brand.id,
+            "category": cat.id,
+            "price": 5,
+            "stock": 0,
+            "availability": False,
+        },
+        format="json",
+    )
+    assert resp.status_code == 201
+    slug = resp.json()["slug"]
+
+    # Update should not change slug
+    resp = client.patch(
+        f"/api/products/{slug}",
+        {"slug": "new-slug", "name": "New"},
+        format="json",
+    )
+    assert resp.status_code == 200
+    prod = Product.objects.get(slug=slug)
+    assert prod.name == "New"
+    assert prod.slug == slug
+
+    # Variant validations and slug immutability
+    resp = client.post(
+        "/api/variants",
+        {
+            "product": slug,
+            "variant_name": "V1",
+            "price": 1,
+            "stock": 0,
+            "availability": True,
+        },
+        format="json",
+    )
+    assert resp.status_code == 400
+
+    resp = client.post(
+        "/api/variants",
+        {
+            "product": slug,
+            "variant_name": "V1",
+            "price": 1,
+            "stock": 0,
+            "availability": False,
+        },
+        format="json",
+    )
+    assert resp.status_code == 201
+    v_slug = resp.json()["slug"]
+    resp = client.patch(
+        f"/api/variants/{v_slug}",
+        {"slug": "new", "price": 2},
+        format="json",
+    )
+    assert resp.status_code == 200
+    var = Variant.objects.get(slug=v_slug)
+    assert var.price == 2
+    assert var.slug == v_slug
+
+    # Delete product
+    resp = client.delete(f"/api/products/{slug}")
+    assert resp.status_code == 204
