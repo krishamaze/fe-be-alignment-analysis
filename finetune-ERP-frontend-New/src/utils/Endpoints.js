@@ -30,6 +30,8 @@ const END_POINTS = {
   GET_CATEGORIES: '/api/categories',
   MODIFY_SUBCATEGORY: '/api/subcategories',
   GET_SUBCATEGORIES: '/api/subcategories',
+  GET_UNITS: '/api/units',
+  GET_QUALITIES: '/api/qualities',
 
   // AUTHENTICATION
   LOGIN: '/api/auth/login',

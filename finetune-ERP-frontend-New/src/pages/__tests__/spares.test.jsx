@@ -8,7 +8,14 @@ const createMock = vi
   .mockResolvedValue({ unwrap: () => Promise.resolve() });
 
 vi.mock('../../api/erpApi', () => ({
-  useGetSparesQuery: () => ({ data: { content: [] }, isLoading: false }),
+  useGetSparesQuery: () => ({
+    data: {
+      content: [
+        { id: 1, name: 'S1', sku: 'SKU1', price: '5', quality_name: 'OEM' },
+      ],
+    },
+    isLoading: false,
+  }),
   useCreateSpareMutation: () => [createMock],
   useUpdateSpareMutation: () => [vi.fn()],
   useDeleteSpareMutation: () => [vi.fn()],
@@ -18,19 +25,26 @@ vi.mock('../../redux/hook', () => ({
   useAppSelector: () => 'system_admin',
 }));
 
+test('renders quality label', () => {
+  render(<Spares />);
+  expect(screen.getByText('Quality: OEM')).toBeDefined();
+});
+
 test('creates spare via form', async () => {
   render(<Spares />);
-  fireEvent.change(screen.getByPlaceholderText('Name'), {
+  const [nameInput] = screen.getAllByPlaceholderText('Name');
+  const [skuInput] = screen.getAllByPlaceholderText('SKU');
+  const [priceInput] = screen.getAllByPlaceholderText('Price');
+  fireEvent.change(nameInput, {
     target: { value: 'S1', name: 'name' },
   });
-  fireEvent.change(screen.getByPlaceholderText('SKU'), {
+  fireEvent.change(skuInput, {
     target: { value: 'SKU1', name: 'sku' },
   });
-  fireEvent.change(screen.getByPlaceholderText('Price'), {
+  fireEvent.change(priceInput, {
     target: { value: '5', name: 'price' },
   });
-  fireEvent.submit(
-    screen.getByRole('button', { name: /add spare/i }).closest('form')
-  );
+  const [submitBtn] = screen.getAllByRole('button', { name: /add spare/i });
+  fireEvent.submit(submitBtn.closest('form'));
   expect(createMock).toHaveBeenCalled();
 });

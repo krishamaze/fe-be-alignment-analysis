@@ -21,6 +21,14 @@
 - `PUT /api/spares/{id}` – system_admin only
 - `DELETE /api/spares/{id}` – system_admin only
 
+## Units
+- `GET /api/units` – public list
+- `GET /api/units/{slug}` – public detail
+
+## Qualities
+- `GET /api/qualities` – public list
+- `GET /api/qualities/{slug}` – public detail
+
 ## Taxonomy
 - `GET /api/departments` – public list
 - `POST /api/departments` – system_admin only
