@@ -16,6 +16,7 @@ import GiveawayRedemption from './pages/GiveawayRedemption';
 import { Toaster } from 'react-hot-toast';
 import Store from './pages/Store';
 import BrandDashboard from './pages/BrandDashboard';
+import BookingsDashboard from './pages/BookingsDashboard';
 import Settings from './pages/Settings';
 import FocusLayout from './components/layout/FocusLayout';
 import Workledger from './pages/Workledger';
@@ -128,6 +129,7 @@ function AppContent() {
               {/* <Route path="users/add" element={<AddUser />} /> */}
               <Route path="stores" element={<Store />} />
               <Route path="brands" element={<BrandDashboard />} />
+              <Route path="bookings" element={<BookingsDashboard />} />
               <Route path="settings" element={<Settings />} />
             </>
           )}

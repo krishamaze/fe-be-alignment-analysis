@@ -22,7 +22,10 @@ vi.mock('react-google-recaptcha', () => ({
     return <div data-testid="recaptcha" />;
   },
 }));
-vi.mock('js-cookie', () => ({ default: { get: vi.fn(() => 'token') } }));
+const bookingCreateMock = vi.fn().mockResolvedValue({ unwrap: () => Promise.resolve({ id: 1, status: 'pending' }) });
+vi.mock('../../api/erpApi', () => ({
+  useCreateBookingMutation: () => [bookingCreateMock],
+}));
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -151,10 +154,8 @@ describe('Bookings form', () => {
           new Event('submit', { bubbles: true, cancelable: true })
         );
     });
-    expect(axios.post).toHaveBeenCalledWith(
-      `${END_POINTS.API_BASE_URL}/bookings`,
-      expect.objectContaining({ captcha_token: 'tok' }),
-      expect.objectContaining({ headers: { Authorization: 'Bearer token' } })
+    expect(bookingCreateMock).toHaveBeenCalledWith(
+      expect.objectContaining({ captcha_token: 'tok' })
     );
   });
 });

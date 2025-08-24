@@ -30,7 +30,7 @@ def _captcha_fail(*args, **kwargs):
         "DEFAULT_THROTTLE_RATES": {"booking": "1/min"},
     }
 )
-def test_booking_creation_requires_login(monkeypatch):
+def test_booking_creation_public(monkeypatch):
     client = APIClient()
     monkeypatch.setattr(requests, "post", _captcha_ok)
     data = {
@@ -42,13 +42,6 @@ def test_booking_creation_requires_login(monkeypatch):
         "message": "hi",
         "captcha_token": "tok",
     }
-    resp = client.post("/api/bookings", data)
-    assert resp.status_code in (401, 403)
-
-    user = CustomUser.objects.create_user(
-        username="cust", email="c@example.com", password="x", role="customer"
-    )
-    client.force_authenticate(user=user)
     resp = client.post("/api/bookings", data)
     assert resp.status_code == 201
     assert Booking.objects.count() == 1
@@ -67,10 +60,6 @@ def test_booking_invalid_captcha(monkeypatch):
         "message": "hi",
         "captcha_token": "bad",
     }
-    user = CustomUser.objects.create_user(
-        username="cust", email="c@example.com", password="x", role="customer"
-    )
-    client.force_authenticate(user=user)
     resp = client.post("/api/bookings", data)
     assert resp.status_code == 400
 
@@ -119,6 +108,49 @@ def test_booking_staff_bypasses_throttle(monkeypatch):
     }
     for _ in range(6):
         assert client.post("/api/bookings", data).status_code == 201
+
+
+@pytest.mark.django_db
+def test_invalid_status_transition(monkeypatch):
+    monkeypatch.setattr(requests, "post", _captcha_ok)
+    client = APIClient()
+    data = {
+        "name": "John",
+        "email": "j@example.com",
+        "issue": "screen",
+        "date": "2024-01-01",
+        "time": "10:00",
+        "message": "hi",
+        "captcha_token": "tok",
+    }
+    resp = client.post("/api/bookings", data)
+    booking_id = resp.json()["id"]
+    user = CustomUser.objects.create_user(
+        username="admin", email="a@b.com", password="x", role="system_admin"
+    )
+    client.force_authenticate(user=user)
+    resp = client.patch(f"/api/bookings/{booking_id}", {"status": "completed"})
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_status_change_requires_admin(monkeypatch):
+    monkeypatch.setattr(requests, "post", _captcha_ok)
+    client = APIClient()
+    data = {
+        "name": "John",
+        "email": "j@example.com",
+        "issue": "screen",
+        "date": "2024-01-01",
+        "time": "10:00",
+        "message": "hi",
+        "captcha_token": "tok",
+    }
+    resp = client.post("/api/bookings", data)
+    booking_id = resp.json()["id"]
+    # attempt to update without admin
+    resp = client.patch(f"/api/bookings/{booking_id}", {"status": "approved"})
+    assert resp.status_code in (401, 403)
 
 
 @pytest.mark.django_db
