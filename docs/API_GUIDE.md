@@ -24,10 +24,16 @@
 ## Units
 - `GET /api/units` – public list
 - `GET /api/units/{slug}` – public detail
+- `POST /api/units` – system_admin only
+- `PUT /api/units/{slug}` – system_admin only (slug immutable)
+- `DELETE /api/units/{slug}` – system_admin only
 
 ## Qualities
 - `GET /api/qualities` – public list
 - `GET /api/qualities/{slug}` – public detail
+- `POST /api/qualities` – system_admin only
+- `PUT /api/qualities/{slug}` – system_admin only (slug immutable)
+- `DELETE /api/qualities/{slug}` – system_admin only
 
 ## Taxonomy
 - `GET /api/departments` – public list
