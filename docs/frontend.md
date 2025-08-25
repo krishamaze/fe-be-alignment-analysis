@@ -39,4 +39,6 @@
  
 ### Bookings UX
 
-TODO: add screenshots of the booking form before and after submission.
+![Booking intake payload](assets/booking-intake.png)
+
+TODO: replace placeholder image with real booking intake payload screenshot.
