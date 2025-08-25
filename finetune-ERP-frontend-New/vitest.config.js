@@ -5,5 +5,6 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'jsdom', // emulate DOM APIs for component tests
+    setupFiles: './setupTests.js',
   },
 });
