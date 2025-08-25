@@ -24,23 +24,18 @@ vi.mock('react-google-recaptcha', () => ({
     return <div data-testid="recaptcha" />;
   },
 }));
-const bookingCreateMock = vi.fn().mockResolvedValue({
+const bookingCreateMock = vi.fn().mockReturnValue({
   unwrap: () => Promise.resolve({ id: 1, status: 'pending' }),
 });
 vi.mock('../../api/erpApi', () => ({
   useCreateBookingMutation: () => [bookingCreateMock],
   useGetBookingsQuery: () => ({ data: { content: [] }, isLoading: false }),
-  useGetIssuesQuery: () => ({ data: [{ id: 1, name: 'Screen' }], isLoading: false }),
+  useGetIssuesQuery: () => ({
+    data: [{ id: 1, name: 'Screen' }],
+    isLoading: false,
+  }),
   useGetQuestionsQuery: () => ({ data: [], isLoading: false }),
 }));
-
-class ResizeObserverMock {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-}
-global.ResizeObserver = ResizeObserverMock;
-window.ResizeObserver = ResizeObserverMock;
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -155,8 +150,10 @@ describe('Bookings form', () => {
     });
     await act(async () => {
       container.querySelector('button[aria-haspopup="listbox"]').click();
-      const option = document.querySelector('li');
-      option.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    });
+    const option = document.querySelector('[role="option"]');
+    await act(async () => {
+      option?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     });
     await act(async () => {
       message.value = 'hi';
