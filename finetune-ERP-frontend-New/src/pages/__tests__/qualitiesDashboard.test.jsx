@@ -38,7 +38,9 @@ test('updates quality and refreshes table', async () => {
   fireEvent.change(screen.getByPlaceholderText('Name'), {
     target: { value: 'New', name: 'name' },
   });
-  fireEvent.submit(screen.getByRole('button', { name: /update/i }).closest('form'));
+  fireEvent.submit(
+    screen.getByRole('button', { name: /update/i }).closest('form')
+  );
   await waitFor(() => expect(updateMock).toHaveBeenCalled());
   expect(getMock.mock.calls.length).toBeGreaterThan(initial);
   expect(toast.success).toHaveBeenCalled();

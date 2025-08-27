@@ -1,7 +1,11 @@
 import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 
-export default function MultiSelectIssues({ issues = [], value = [], onChange }) {
+export default function MultiSelectIssues({
+  issues = [],
+  value = [],
+  onChange,
+}) {
   const selectedLabels = value
     .map((id) => issues.find((i) => i.id === id)?.name)
     .filter(Boolean);
@@ -12,7 +16,12 @@ export default function MultiSelectIssues({ issues = [], value = [], onChange })
         <Listbox.Button className="input">
           {selectedLabels.length ? selectedLabels.join(', ') : 'Select issues'}
         </Listbox.Button>
-        <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+        <Transition
+          as={Fragment}
+          leave="transition ease-in duration-100"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
           <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded bg-white shadow">
             {issues.map((issue) => (
               <Listbox.Option
@@ -23,7 +32,9 @@ export default function MultiSelectIssues({ issues = [], value = [], onChange })
                 }
               >
                 {({ selected }) => (
-                  <span className={selected ? 'font-medium' : 'font-normal'}>{issue.name}</span>
+                  <span className={selected ? 'font-medium' : 'font-normal'}>
+                    {issue.name}
+                  </span>
                 )}
               </Listbox.Option>
             ))}
