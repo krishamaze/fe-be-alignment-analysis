@@ -42,3 +42,14 @@
 ![Booking intake payload](assets/booking-intake.png)
 
 TODO: replace placeholder image with real booking intake payload screenshot.
+
+## Invoicing & Payments
+
+- Added `InvoicesDashboard.jsx` and `PaymentsDashboard.jsx` for system admins.
+- `BookingsDashboard.jsx` now links to invoice creation and displays related invoices and payments.
+- New components: `InvoiceForm`, `ReceiptForm`, `InvoiceTable`, `PaymentsTable`.
+- API layer exposes `/api/invoices`, `/api/payments`, and `/api/invoices/:id/pdf`.
+
+![Invoices screenshot](assets/invoices-dashboard.png)
+
+TODO: replace placeholder screenshot after deployment.

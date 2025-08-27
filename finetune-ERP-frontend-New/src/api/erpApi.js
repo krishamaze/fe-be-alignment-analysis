@@ -21,6 +21,8 @@ export const erpApi = createApi({
     'Issue',
     'OtherIssue',
     'Question',
+    'Invoice',
+    'Payment',
   ],
   endpoints: (builder) => ({
     getBrands: builder.query({
@@ -411,6 +413,36 @@ export const erpApi = createApi({
       }),
       invalidatesTags: ['Question'],
     }),
+    getInvoices: builder.query({
+      query: () => ({ url: '/api/invoices/' }),
+      providesTags: ['Invoice'],
+    }),
+    createInvoice: builder.mutation({
+      query: (body) => ({
+        url: '/api/invoices/',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Invoice'],
+    }),
+    getInvoicePdf: builder.query({
+      query: (id) => ({
+        url: `/api/invoices/${id}/pdf/`,
+        responseHandler: (response) => response.blob(),
+      }),
+    }),
+    getPayments: builder.query({
+      query: () => ({ url: '/api/payments/' }),
+      providesTags: ['Payment'],
+    }),
+    createPayment: builder.mutation({
+      query: (body) => ({
+        url: '/api/payments/',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Payment', 'Invoice'],
+    }),
     getLogs: builder.query({
       query: (params) => ({ url: '/api/logs/', params }),
       providesTags: ['Log'],
@@ -477,5 +509,10 @@ export const {
   useCreateQuestionMutation,
   useUpdateQuestionMutation,
   useDeleteQuestionMutation,
+  useGetInvoicesQuery,
+  useCreateInvoiceMutation,
+  useGetInvoicePdfQuery,
+  useGetPaymentsQuery,
+  useCreatePaymentMutation,
   useGetLogsQuery,
 } = erpApi;
