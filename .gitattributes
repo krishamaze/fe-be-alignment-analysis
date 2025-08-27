@@ -11,3 +11,4 @@
 *.bmp filter=lfs diff=lfs merge=lfs -text
 *.mp4 filter=lfs diff=lfs merge=lfs -text
 *.mp3 filter=lfs diff=lfs merge=lfs -text
+finetune-ERP-backend-New/requirements.txt text diff
