@@ -23,6 +23,11 @@ export const erpApi = createApi({
     'Question',
     'Invoice',
     'Payment',
+    'StockLedger',
+    'StockEntry',
+    'Serial',
+    'PriceLog',
+    'InventoryConfig',
   ],
   endpoints: (builder) => ({
     getBrands: builder.query({
@@ -447,6 +452,47 @@ export const erpApi = createApi({
       query: (params) => ({ url: '/api/logs/', params }),
       providesTags: ['Log'],
     }),
+
+    getStockLedgers: builder.query({
+      query: (params) => ({ url: END_POINTS.GET_STOCK_LEDGERS, params }),
+      providesTags: ['StockLedger'],
+    }),
+    createStockEntry: builder.mutation({
+      query: (body) => ({
+        url: END_POINTS.MODIFY_STOCK_ENTRY,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['StockLedger', 'StockEntry'],
+    }),
+    getSerials: builder.query({
+      query: (params) => ({ url: END_POINTS.GET_SERIALS, params }),
+      providesTags: ['Serial'],
+    }),
+    updateSerial: builder.mutation({
+      query: ({ id, ...patch }) => ({
+        url: `${END_POINTS.MODIFY_SERIAL}/${id}`,
+        method: 'PUT',
+        body: patch,
+      }),
+      invalidatesTags: ['Serial'],
+    }),
+    getPriceLogs: builder.query({
+      query: (params) => ({ url: END_POINTS.GET_PRICE_LOGS, params }),
+      providesTags: ['PriceLog'],
+    }),
+    getInventoryConfig: builder.query({
+      query: () => ({ url: END_POINTS.GET_INVENTORY_CONFIG }),
+      providesTags: ['InventoryConfig'],
+    }),
+    updateInventoryConfig: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `${END_POINTS.MODIFY_INVENTORY_CONFIG}/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['InventoryConfig'],
+    }),
   }),
 });
 
@@ -515,4 +561,11 @@ export const {
   useGetPaymentsQuery,
   useCreatePaymentMutation,
   useGetLogsQuery,
+  useGetStockLedgersQuery,
+  useCreateStockEntryMutation,
+  useGetSerialsQuery,
+  useUpdateSerialMutation,
+  useGetPriceLogsQuery,
+  useGetInventoryConfigQuery,
+  useUpdateInventoryConfigMutation,
 } = erpApi;

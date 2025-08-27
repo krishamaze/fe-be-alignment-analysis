@@ -8,6 +8,7 @@ import InvoiceForm from '../components/InvoiceForm';
 import InvoiceTable from '../components/InvoiceTable';
 import PaymentsTable from '../components/PaymentsTable';
 import toast from 'react-hot-toast';
+import SaleEntryForm from '../components/inventory/SaleEntryForm';
 
 export default function BookingsDashboard() {
   const { data, isLoading, error } = useGetBookingsQuery();
@@ -170,6 +171,11 @@ export default function BookingsDashboard() {
           ))}
         </tbody>
       </table>
+
+      <div className="my-4">
+        <h2 className="text-lg font-semibold">Record Sale</h2>
+        <SaleEntryForm />
+      </div>
 
       {modal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50">

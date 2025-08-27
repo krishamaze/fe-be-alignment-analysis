@@ -121,6 +121,7 @@ INSTALLED_APPS = [
     "catalog",
     "invoicing",
     "activity",
+    "inventory",
     ##'django_extensions',
 ]
 
