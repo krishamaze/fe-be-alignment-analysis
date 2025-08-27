@@ -34,7 +34,8 @@ class Booking(models.Model):
     email = models.EmailField(blank=True)
     # Deprecated: use BookingDetails.issues instead
     issue = models.CharField(
-        max_length=100, blank=True, help_text="Deprecated. Use BookingDetails.issues"
+        max_length=100,
+        blank=True,
     )
     address = models.TextField(blank=True)
     remarks = models.TextField(blank=True)

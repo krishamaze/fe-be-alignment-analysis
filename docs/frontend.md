@@ -50,3 +50,9 @@ TODO: capture real screenshot of invoice/payment UI from the dashboards.
 - New components: `InvoiceForm`, `ReceiptForm`, `InvoiceTable`, `PaymentsTable`.
 - API layer exposes `/api/invoices`, `/api/payments`, and `/api/invoices/:id/pdf`.
 - PDF export renders a branded, GST-compliant invoice template.
+
+## Inventory
+
+- New `InventoryDashboard.jsx` displays store stock levels and serials.
+- Components: `StockEntryForm`, `SaleEntryForm`, `SerialManager`, `SerialTable`, `StockTable`, `PriceLogView`, `ConfigDashboard`.
+- RTK Query endpoints cover ledgers, stock entries, serials, price logs and config.

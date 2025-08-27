@@ -16,6 +16,7 @@ vi.mock('../../api/erpApi', () => ({
   }),
   useUpdateBookingStatusMutation: () => [updateMock],
   useGetInvoicesQuery: () => ({ data: [] }),
+  useCreateStockEntryMutation: () => [vi.fn()],
 }));
 
 test('reject requires reason', () => {
