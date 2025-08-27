@@ -1,15 +1,22 @@
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import {
   useGetBookingsQuery,
   useUpdateBookingStatusMutation,
+  useGetInvoicesQuery,
 } from '../api/erpApi';
+import InvoiceForm from '../components/InvoiceForm';
+import InvoiceTable from '../components/InvoiceTable';
+import PaymentsTable from '../components/PaymentsTable';
 import toast from 'react-hot-toast';
 
 export default function BookingsDashboard() {
   const { data, isLoading, error } = useGetBookingsQuery();
   const [updateBookingStatus] = useUpdateBookingStatusMutation();
   const [modal, setModal] = useState(null); // {id, status, reason}
+  const [invoiceModal, setInvoiceModal] = useState(null); // booking id
   const bookings = data?.content || [];
+  const { data: invoiceData } = useGetInvoicesQuery();
+  const allInvoices = invoiceData?.results || invoiceData || [];
 
   const changeStatus = async (id, status) => {
     try {
@@ -57,80 +64,109 @@ export default function BookingsDashboard() {
             <th className="p-2 border">Status</th>
             <th className="p-2 border">Reason</th>
             <th className="p-2 border">Actions</th>
+            <th className="p-2 border">Invoice</th>
           </tr>
         </thead>
         <tbody>
           {bookings.map((b) => (
-            <tr key={b.id} className="border-t">
-              <td className="p-2 border">{b.name}</td>
-              <td className="p-2 border">
-                {b.issues?.length
-                  ? b.issues.map((i) => (
-                      <span
-                        key={i.id || i}
-                        className="mr-1 inline-block rounded bg-gray-100 px-2 py-1"
-                      >
-                        {i.name || i}
-                      </span>
-                    ))
-                  : '-'}
-              </td>
-              <td className="p-2 border">
-                {b.other_issues?.length
-                  ? b.other_issues.map((o) => (
-                      <span
-                        key={o}
-                        className="mr-1 inline-block rounded bg-gray-100 px-2 py-1"
-                      >
-                        {o}
-                      </span>
-                    ))
-                  : '-'}
-              </td>
-              <td className="p-2 border">
-                {b.responses?.length
-                  ? b.responses.map((r) => (
-                      <div key={r.question} className="mb-1">
-                        <span className="font-medium">{r.question}</span>: {r.answer}
-                      </div>
-                    ))
-                  : '-'}
-              </td>
-              <td className="p-2 border">{b.status}</td>
-              <td className="p-2 border">{b.reason || '-'}</td>
-              <td className="p-2 border space-x-2">
-                <button
-                  onClick={() => changeStatus(b.id, 'approved')}
-                  className="text-blue-600"
-                >
-                  Approve
-                </button>
-                <button
-                  onClick={() => changeStatus(b.id, 'in_progress')}
-                  className="text-yellow-600"
-                >
-                  In Progress
-                </button>
-                <button
-                  onClick={() => changeStatus(b.id, 'completed')}
-                  className="text-green-600"
-                >
-                  Complete
-                </button>
-                <button
-                  onClick={() => openModal(b.id, 'cancelled')}
-                  className="text-red-600"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => openModal(b.id, 'rejected')}
-                  className="text-gray-600"
-                >
-                  Reject
-                </button>
-              </td>
-            </tr>
+            <Fragment key={b.id}>
+              <tr className="border-t">
+                <td className="p-2 border">{b.name}</td>
+                <td className="p-2 border">
+                  {b.issues?.length
+                    ? b.issues.map((i) => (
+                        <span
+                          key={i.id || i}
+                          className="mr-1 inline-block rounded bg-gray-100 px-2 py-1"
+                        >
+                          {i.name || i}
+                        </span>
+                      ))
+                    : '-'}
+                </td>
+                <td className="p-2 border">
+                  {b.other_issues?.length
+                    ? b.other_issues.map((o) => (
+                        <span
+                          key={o}
+                          className="mr-1 inline-block rounded bg-gray-100 px-2 py-1"
+                        >
+                          {o}
+                        </span>
+                      ))
+                    : '-'}
+                </td>
+                <td className="p-2 border">
+                  {b.responses?.length
+                    ? b.responses.map((r) => (
+                        <div key={r.question} className="mb-1">
+                          <span className="font-medium">{r.question}</span>:{' '}
+                          {r.answer}
+                        </div>
+                      ))
+                    : '-'}
+                </td>
+                <td className="p-2 border">{b.status}</td>
+                <td className="p-2 border">{b.reason || '-'}</td>
+                <td className="p-2 border space-x-2">
+                  <button
+                    onClick={() => changeStatus(b.id, 'approved')}
+                    className="text-blue-600"
+                  >
+                    Approve
+                  </button>
+                  <button
+                    onClick={() => changeStatus(b.id, 'in_progress')}
+                    className="text-yellow-600"
+                  >
+                    In Progress
+                  </button>
+                  <button
+                    onClick={() => changeStatus(b.id, 'completed')}
+                    className="text-green-600"
+                  >
+                    Complete
+                  </button>
+                  <button
+                    onClick={() => openModal(b.id, 'cancelled')}
+                    className="text-red-600"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => openModal(b.id, 'rejected')}
+                    className="text-gray-600"
+                  >
+                    Reject
+                  </button>
+                </td>
+                <td className="p-2 border">
+                  <button
+                    onClick={() => setInvoiceModal(b.id)}
+                    className="text-blue-600"
+                  >
+                    Create Invoice
+                  </button>
+                </td>
+              </tr>
+              {(() => {
+                const invs = allInvoices.filter((i) => i.booking === b.id);
+                if (!invs.length) return null;
+                return (
+                  <tr>
+                    <td colSpan={8} className="p-2 border">
+                      <InvoiceTable invoices={invs} />
+                      {invs.map((inv) => (
+                        <PaymentsTable
+                          key={inv.id}
+                          payments={inv.payments || []}
+                        />
+                      ))}
+                    </td>
+                  </tr>
+                );
+              })()}
+            </Fragment>
           ))}
         </tbody>
       </table>
@@ -158,6 +194,16 @@ export default function BookingsDashboard() {
                 Submit
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {invoiceModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+          <div className="bg-white p-4 rounded w-[500px]">
+            <InvoiceForm
+              bookingId={invoiceModal}
+              onSuccess={() => setInvoiceModal(null)}
+            />
           </div>
         </div>
       )}
