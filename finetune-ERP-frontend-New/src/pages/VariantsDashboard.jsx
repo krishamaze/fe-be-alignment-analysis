@@ -103,7 +103,10 @@ export default function VariantsDashboard() {
                 <td className="p-2 border">{v.stock}</td>
                 <td className="p-2 border">{v.availability ? 'Yes' : 'No'}</td>
                 <td className="p-2 border">
-                  <a href={`/product/${v.product}`} className="text-blue-600 underline">
+                  <a
+                    href={`/product/${v.product}`}
+                    className="text-blue-600 underline"
+                  >
                     {v.product}
                   </a>
                 </td>

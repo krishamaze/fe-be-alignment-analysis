@@ -9,10 +9,13 @@ const updateMock = vi
 
 vi.mock('../../api/erpApi', () => ({
   useGetBookingsQuery: () => ({
-    data: { content: [{ id: 1, name: 'A', status: 'pending', reason: 'delay' }] },
+    data: {
+      content: [{ id: 1, name: 'A', status: 'pending', reason: 'delay' }],
+    },
     isLoading: false,
   }),
   useUpdateBookingStatusMutation: () => [updateMock],
+  useGetInvoicesQuery: () => ({ data: [] }),
 }));
 
 test('reject requires reason', () => {

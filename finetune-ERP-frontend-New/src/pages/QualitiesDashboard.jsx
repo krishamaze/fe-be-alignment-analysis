@@ -14,13 +14,17 @@ export default function QualitiesDashboard() {
   const [deleteQuality] = useDeleteQualityMutation();
   const [form, setForm] = useState({ slug: null, name: '' });
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (form.slug) {
-        await updateQuality({ slug: form.slug, body: { name: form.name } }).unwrap();
+        await updateQuality({
+          slug: form.slug,
+          body: { name: form.name },
+        }).unwrap();
         toast.success('Quality updated');
       } else {
         await createQuality({ name: form.name }).unwrap();
@@ -67,7 +71,10 @@ export default function QualitiesDashboard() {
                 <td className="p-2">{q.name}</td>
                 <td className="p-2">{q.slug}</td>
                 <td className="p-2 space-x-2">
-                  <button className="text-blue-600" onClick={() => handleEdit(q)}>
+                  <button
+                    className="text-blue-600"
+                    onClick={() => handleEdit(q)}
+                  >
                     Edit
                   </button>
                   <button
@@ -92,10 +99,7 @@ export default function QualitiesDashboard() {
           className="w-full border p-2 rounded"
           required
         />
-        <button
-          type="submit"
-          className="px-4 py-2 bg-black text-white rounded"
-        >
+        <button type="submit" className="px-4 py-2 bg-black text-white rounded">
           {form.slug ? 'Update' : 'Create'}
         </button>
       </form>

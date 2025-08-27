@@ -1,43 +1,100 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8" />
-  <title>Invoice {{ invoice.invoice_no }}</title>
-  <style>
-    body { font-family: sans-serif; }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-    th, td { border: 1px solid #333; padding: 4px; text-align: left; }
-  </style>
-</head>
-<body>
-  <h1>Invoice {{ invoice.invoice_no }}</h1>
-  <p>Booking: {{ invoice.booking.id }}</p>
-  <table>
-    <thead>
-      <tr>
-        <th>Description</th>
-        <th>HSN</th>
-        <th>Qty</th>
-        <th>Unit Price</th>
-        <th>Amount</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for item in invoice.line_items.all %}
-      <tr>
-        <td>{{ item.description }}</td>
-        <td>{{ item.hsn_code }}</td>
-        <td>{{ item.quantity }}</td>
-        <td>{{ item.unit_price }}</td>
-        <td>{{ item.amount }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <p>Subtotal: {{ invoice.subtotal }}</p>
-  <p>CGST: {{ invoice.cgst }}</p>
-  <p>SGST: {{ invoice.sgst }}</p>
-  <p>IGST: {{ invoice.igst }}</p>
-  <h3>Total: {{ invoice.total }}</h3>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Invoice {{ invoice.invoice_no }}</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 20mm;
+      }
+      body {
+        font-family: sans-serif;
+        font-size: 12px;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 2px solid #333;
+        padding-bottom: 8px;
+        margin-bottom: 12px;
+      }
+      .logo {
+        height: 40px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+      }
+      th,
+      td {
+        border: 1px solid #333;
+        padding: 4px;
+        text-align: left;
+      }
+      .totals td {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <img
+        src="{% static 'invoicing/logo.svg' %}"
+        alt="Finetune Logo"
+        class="logo"
+      />
+      <h1>Invoice {{ invoice.invoice_no }}</h1>
+    </div>
+    <p>Booking: {{ invoice.booking.id }}</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>HSN Code</th>
+          <th>Qty</th>
+          <th>Unit Price</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in invoice.line_items.all %}
+        <tr>
+          <td>{{ item.description }}</td>
+          <td>{{ item.hsn_code }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.unit_price }}</td>
+          <td>{{ item.amount }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <table class="totals" style="margin-top: 1rem; width: 50%">
+      <tbody>
+        <tr>
+          <td>Subtotal</td>
+          <td>{{ invoice.subtotal }}</td>
+        </tr>
+        <tr>
+          <td>CGST</td>
+          <td>{{ invoice.cgst }}</td>
+        </tr>
+        <tr>
+          <td>SGST</td>
+          <td>{{ invoice.sgst }}</td>
+        </tr>
+        <tr>
+          <td>IGST</td>
+          <td>{{ invoice.igst }}</td>
+        </tr>
+        <tr>
+          <td>Total</td>
+          <td>{{ invoice.total }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
 </html>

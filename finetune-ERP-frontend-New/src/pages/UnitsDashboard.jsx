@@ -14,13 +14,17 @@ export default function UnitsDashboard() {
   const [deleteUnit] = useDeleteUnitMutation();
   const [form, setForm] = useState({ slug: null, name: '' });
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (form.slug) {
-        await updateUnit({ slug: form.slug, body: { name: form.name } }).unwrap();
+        await updateUnit({
+          slug: form.slug,
+          body: { name: form.name },
+        }).unwrap();
         toast.success('Unit updated');
       } else {
         await createUnit({ name: form.name }).unwrap();
@@ -95,10 +99,7 @@ export default function UnitsDashboard() {
           className="w-full border p-2 rounded"
           required
         />
-        <button
-          type="submit"
-          className="px-4 py-2 bg-black text-white rounded"
-        >
+        <button type="submit" className="px-4 py-2 bg-black text-white rounded">
           {form.slug ? 'Update' : 'Create'}
         </button>
       </form>
