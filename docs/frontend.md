@@ -37,11 +37,11 @@
 - Requires `VITE_RECAPTCHA_SITE_KEY` and backend `RECAPTCHA_SECRET_KEY` for captcha.
 - Backend exposes `/api/marketing/contact/`, `/api/marketing/schedule-call/`, and `/api/bookings` endpoints with throttling.
  
-### Bookings UX
+### Bookings & Invoices
 
-![Booking intake payload](assets/booking-intake.png)
+![Invoice and payment workflow](assets/invoice-payment.png)
 
-TODO: replace placeholder image with real booking intake payload screenshot.
+TODO: capture real screenshot of invoice/payment UI from the dashboards.
 
 ## Invoicing & Payments
 
@@ -49,7 +49,4 @@ TODO: replace placeholder image with real booking intake payload screenshot.
 - `BookingsDashboard.jsx` now links to invoice creation and displays related invoices and payments.
 - New components: `InvoiceForm`, `ReceiptForm`, `InvoiceTable`, `PaymentsTable`.
 - API layer exposes `/api/invoices`, `/api/payments`, and `/api/invoices/:id/pdf`.
-
-![Invoices screenshot](assets/invoices-dashboard.png)
-
-TODO: replace placeholder screenshot after deployment.
+- PDF export renders a branded, GST-compliant invoice template.

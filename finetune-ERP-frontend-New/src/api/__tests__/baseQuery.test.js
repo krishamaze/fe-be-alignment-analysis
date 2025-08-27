@@ -25,10 +25,13 @@ describe('baseQueryWithReauth', () => {
       .mockResolvedValueOnce({ error: { status: 401 } })
       .mockResolvedValueOnce({ error: { status: 401 } });
     const dispatch = vi.fn();
-    await baseQueryWithReauth({ url: '/x' }, {
-      dispatch,
-      getState: () => ({ auth: { refreshToken: 'r', user: null } }),
-    });
+    await baseQueryWithReauth(
+      { url: '/x' },
+      {
+        dispatch,
+        getState: () => ({ auth: { refreshToken: 'r', user: null } }),
+      }
+    );
     expect(dispatch).toHaveBeenCalledWith({ type: 'auth/logout' });
     expect(toast.error).toHaveBeenCalledWith(
       'Session expired. Please log in again.'
@@ -38,7 +41,10 @@ describe('baseQueryWithReauth', () => {
   it('shows throttle toast on 429', async () => {
     mockRaw.mockResolvedValueOnce({ error: { status: 429 } });
     const dispatch = vi.fn();
-    await baseQueryWithReauth({ url: '/x' }, { dispatch, getState: () => ({ auth: {} }) });
+    await baseQueryWithReauth(
+      { url: '/x' },
+      { dispatch, getState: () => ({ auth: {} }) }
+    );
     expect(toast.error).toHaveBeenCalledWith(
       'Too many requests. Please try again later.'
     );

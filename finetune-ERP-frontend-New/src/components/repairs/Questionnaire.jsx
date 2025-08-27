@@ -1,4 +1,8 @@
-export default function Questionnaire({ questions = [], responses = {}, onChange }) {
+export default function Questionnaire({
+  questions = [],
+  responses = {},
+  onChange,
+}) {
   const handle = (id, value) => onChange({ ...responses, [id]: value });
   return (
     <div className="space-y-4">

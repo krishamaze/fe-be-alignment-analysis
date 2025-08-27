@@ -6,15 +6,24 @@ import OtherIssuesDashboard from '../../src/pages/OtherIssuesDashboard';
 import QuestionsDashboard from '../../src/pages/QuestionsDashboard';
 
 vi.mock('../../src/api/erpApi', () => ({
-  useGetIssuesQuery: () => ({ data: [{ id: 1, name: 'Screen' }], isLoading: false }),
+  useGetIssuesQuery: () => ({
+    data: [{ id: 1, name: 'Screen' }],
+    isLoading: false,
+  }),
   useCreateIssueMutation: () => [vi.fn()],
   useUpdateIssueMutation: () => [vi.fn()],
   useDeleteIssueMutation: () => [vi.fn()],
-  useGetOtherIssuesQuery: () => ({ data: [{ id: 1, name: 'Battery' }], isLoading: false }),
+  useGetOtherIssuesQuery: () => ({
+    data: [{ id: 1, name: 'Battery' }],
+    isLoading: false,
+  }),
   useCreateOtherIssueMutation: () => [vi.fn()],
   useUpdateOtherIssueMutation: () => [vi.fn()],
   useDeleteOtherIssueMutation: () => [vi.fn()],
-  useGetQuestionsQuery: () => ({ data: [{ id: 1, text: 'Q1' }], isLoading: false }),
+  useGetQuestionsQuery: () => ({
+    data: [{ id: 1, text: 'Q1' }],
+    isLoading: false,
+  }),
   useCreateQuestionMutation: () => [vi.fn()],
   useUpdateQuestionMutation: () => [vi.fn()],
   useDeleteQuestionMutation: () => [vi.fn()],

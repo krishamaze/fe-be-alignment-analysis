@@ -51,9 +51,7 @@ export default function Locate() {
       <div className="p-4 pt-24 space-y-16">
         <section className="text-center max-w-3xl mx-auto">
           <h1 className="text-3xl font-bold">Locate us</h1>
-          <p className="text-gray-700 mt-4">
-            Find our head offices below.
-          </p>
+          <p className="text-gray-700 mt-4">Find our head offices below.</p>
         </section>
 
         {loading && (

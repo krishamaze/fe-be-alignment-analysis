@@ -3,7 +3,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, test, expect } from 'vitest';
 import ProductsDashboard from '../ProductsDashboard';
 
-const createMock = vi.fn().mockResolvedValue({ unwrap: () => Promise.resolve() });
+const createMock = vi
+  .fn()
+  .mockResolvedValue({ unwrap: () => Promise.resolve() });
 
 vi.mock('../../api/erpApi', () => ({
   useGetProductsQuery: () => ({ data: { content: [] }, isLoading: false }),
@@ -30,6 +32,8 @@ test('creates product via form', async () => {
     target: { value: '5', name: 'stock' },
   });
   fireEvent.click(screen.getByLabelText('Available'));
-  fireEvent.submit(screen.getByRole('button', { name: /create/i }).closest('form'));
+  fireEvent.submit(
+    screen.getByRole('button', { name: /create/i }).closest('form')
+  );
   expect(createMock).toHaveBeenCalled();
 });

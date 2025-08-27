@@ -62,7 +62,12 @@ export default function QuestionsDashboard() {
           onChange={onChange}
           placeholder="Question"
         />
-        <select name="type" className="input" value={form.type} onChange={onChange}>
+        <select
+          name="type"
+          className="input"
+          value={form.type}
+          onChange={onChange}
+        >
           <option value="text">Text</option>
           <option value="choice">Choice</option>
         </select>
