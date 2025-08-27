@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { useCreateStockEntryMutation } from '../../api/erpApi';
 
-export default function StockEntryForm({ defaultType = 'purchase' }) {
+export default function StockEntryForm({
+  defaultType = 'purchase',
+  bookingId,
+}) {
   const [form, setForm] = useState({
     entry_type: defaultType,
     store: '',
     product_variant: '',
     quantity: 0,
     unit_price: 0,
+    booking: bookingId || '',
   });
   const [createEntry] = useCreateStockEntryMutation();
 
@@ -50,6 +54,15 @@ export default function StockEntryForm({ defaultType = 'purchase' }) {
         onChange={handleChange}
         className="border p-1 w-full"
       />
+      {form.entry_type === 'sale' && !bookingId && (
+        <input
+          name="booking"
+          value={form.booking}
+          onChange={handleChange}
+          placeholder="Booking ID"
+          className="border p-1 w-full"
+        />
+      )}
       <button type="submit" className="px-2 py-1 bg-blue-500 text-white">
         Save
       </button>

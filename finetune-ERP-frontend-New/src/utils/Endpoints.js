@@ -43,6 +43,7 @@ const END_POINTS = {
 
   // INVENTORY
   GET_STOCK_LEDGERS: '/api/stock-ledgers',
+  GET_STOCK_ENTRIES: '/api/stock-entries',
   MODIFY_STOCK_ENTRY: '/api/stock-entries',
   GET_SERIALS: '/api/serials',
   MODIFY_SERIAL: '/api/serials',
