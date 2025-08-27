@@ -457,6 +457,10 @@ export const erpApi = createApi({
       query: (params) => ({ url: END_POINTS.GET_STOCK_LEDGERS, params }),
       providesTags: ['StockLedger'],
     }),
+    getStockEntries: builder.query({
+      query: (params) => ({ url: END_POINTS.GET_STOCK_ENTRIES, params }),
+      providesTags: ['StockEntry'],
+    }),
     createStockEntry: builder.mutation({
       query: (body) => ({
         url: END_POINTS.MODIFY_STOCK_ENTRY,
@@ -562,6 +566,7 @@ export const {
   useCreatePaymentMutation,
   useGetLogsQuery,
   useGetStockLedgersQuery,
+  useGetStockEntriesQuery,
   useCreateStockEntryMutation,
   useGetSerialsQuery,
   useUpdateSerialMutation,

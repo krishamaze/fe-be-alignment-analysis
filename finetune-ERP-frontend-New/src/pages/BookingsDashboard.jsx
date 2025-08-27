@@ -3,6 +3,7 @@ import {
   useGetBookingsQuery,
   useUpdateBookingStatusMutation,
   useGetInvoicesQuery,
+  useGetStockEntriesQuery,
 } from '../api/erpApi';
 import InvoiceForm from '../components/InvoiceForm';
 import InvoiceTable from '../components/InvoiceTable';
@@ -18,6 +19,8 @@ export default function BookingsDashboard() {
   const bookings = data?.content || [];
   const { data: invoiceData } = useGetInvoicesQuery();
   const allInvoices = invoiceData?.results || invoiceData || [];
+  const { data: stockEntryData } = useGetStockEntriesQuery();
+  const allEntries = stockEntryData?.results || stockEntryData || [];
 
   const changeStatus = async (id, status) => {
     try {
@@ -152,17 +155,41 @@ export default function BookingsDashboard() {
               </tr>
               {(() => {
                 const invs = allInvoices.filter((i) => i.booking === b.id);
-                if (!invs.length) return null;
+                const entries = allEntries.filter((e) => e.booking === b.id);
+                if (!invs.length && !entries.length)
+                  return (
+                    <tr>
+                      <td colSpan={8} className="p-2 border">
+                        <SaleEntryForm bookingId={b.id} />
+                      </td>
+                    </tr>
+                  );
                 return (
                   <tr>
-                    <td colSpan={8} className="p-2 border">
-                      <InvoiceTable invoices={invs} />
-                      {invs.map((inv) => (
-                        <PaymentsTable
-                          key={inv.id}
-                          payments={inv.payments || []}
-                        />
-                      ))}
+                    <td colSpan={8} className="p-2 border space-y-2">
+                      {invs.length && (
+                        <>
+                          <InvoiceTable invoices={invs} />
+                          {invs.map((inv) => (
+                            <PaymentsTable
+                              key={inv.id}
+                              payments={inv.payments || []}
+                            />
+                          ))}
+                        </>
+                      )}
+                      <div>
+                        <SaleEntryForm bookingId={b.id} />
+                        {entries.length > 0 && (
+                          <ul className="mt-2 list-disc list-inside">
+                            {entries.map((e) => (
+                              <li key={e.id}>
+                                {e.product_variant} x{e.quantity}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 );
@@ -171,11 +198,6 @@ export default function BookingsDashboard() {
           ))}
         </tbody>
       </table>
-
-      <div className="my-4">
-        <h2 className="text-lg font-semibold">Record Sale</h2>
-        <SaleEntryForm />
-      </div>
 
       {modal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50">

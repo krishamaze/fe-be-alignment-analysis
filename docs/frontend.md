@@ -56,3 +56,15 @@ TODO: capture real screenshot of invoice/payment UI from the dashboards.
 - New `InventoryDashboard.jsx` displays store stock levels and serials.
 - Components: `StockEntryForm`, `SaleEntryForm`, `SerialManager`, `SerialTable`, `StockTable`, `PriceLogView`, `ConfigDashboard`.
 - RTK Query endpoints cover ledgers, stock entries, serials, price logs and config.
+
+![Inventory dashboard screenshot](assets/inventory-dashboard.png)
+![Serial manager screenshot](assets/serial-manager.png)
+![Booking sale entry screenshot](assets/booking-sale-entry.png)
+
+### Usage
+
+- **Staff sale flow:** open a booking in BookingsDashboard and submit the embedded sale form; required serial numbers must be entered when the category enables tracking.
+- **BranchHead purchase/return:** use InventoryDashboard to post stock-in or return entries for a store.
+- **Global roll-up:** visit the ledger roll-up view to see total quantities across stores.
+
+> TODO: Replace screenshots after capturing from the deployed UI.
