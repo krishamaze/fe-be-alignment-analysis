@@ -3,7 +3,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, test, expect } from 'vitest';
 import VariantsDashboard from '../VariantsDashboard';
 
-const createMock = vi.fn().mockResolvedValue({ unwrap: () => Promise.resolve() });
+const createMock = vi
+  .fn()
+  .mockResolvedValue({ unwrap: () => Promise.resolve() });
 
 vi.mock('../../api/erpApi', () => ({
   useGetVariantsQuery: () => ({ data: { content: [] }, isLoading: false }),
@@ -27,6 +29,8 @@ test('creates variant via form', async () => {
     target: { value: '1', name: 'stock' },
   });
   fireEvent.click(screen.getByLabelText('Available'));
-  fireEvent.submit(screen.getByRole('button', { name: /create/i }).closest('form'));
+  fireEvent.submit(
+    screen.getByRole('button', { name: /create/i }).closest('form')
+  );
   expect(createMock).toHaveBeenCalled();
 });

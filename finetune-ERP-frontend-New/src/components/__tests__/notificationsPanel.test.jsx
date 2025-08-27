@@ -9,9 +9,16 @@ import { describe, it, expect } from 'vitest';
 
 describe('NotificationsPanel', () => {
   it('renders notifications from store', () => {
-    const store = configureStore({ reducer: { notifications: notificationsReducer } });
+    const store = configureStore({
+      reducer: { notifications: notificationsReducer },
+    });
     store.dispatch(
-      addNotification({ id: 1, message: 'hello', read: false, timestamp: 'now' })
+      addNotification({
+        id: 1,
+        message: 'hello',
+        read: false,
+        timestamp: 'now',
+      })
     );
     render(
       <Provider store={store}>

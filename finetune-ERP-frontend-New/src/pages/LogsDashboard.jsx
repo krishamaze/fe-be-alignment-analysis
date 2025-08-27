@@ -33,7 +33,8 @@ function LogsDashboard() {
       toast.error('Export failed');
       return;
     }
-    const content = format === 'csv' ? result.data : JSON.stringify(result.data);
+    const content =
+      format === 'csv' ? result.data : JSON.stringify(result.data);
     const blob = new Blob([content], {
       type: format === 'csv' ? 'text/csv' : 'application/json',
     });

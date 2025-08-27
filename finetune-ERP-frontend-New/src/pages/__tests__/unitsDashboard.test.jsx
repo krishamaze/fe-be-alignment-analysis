@@ -33,7 +33,9 @@ test('creates unit and refreshes table', async () => {
   fireEvent.change(screen.getByPlaceholderText('Name'), {
     target: { value: 'Piece', name: 'name' },
   });
-  fireEvent.submit(screen.getByRole('button', { name: /create/i }).closest('form'));
+  fireEvent.submit(
+    screen.getByRole('button', { name: /create/i }).closest('form')
+  );
   await waitFor(() => expect(createMock).toHaveBeenCalled());
   expect(getMock.mock.calls.length).toBeGreaterThan(initial);
   expect(toast.success).toHaveBeenCalled();
