@@ -5,6 +5,7 @@ from django.test.utils import override_settings
 from rest_framework.test import APIClient
 from accounts.models import CustomUser
 from bookings.models import Booking
+from bookings.notifications import NotificationService
 
 
 class DummyResponse:
@@ -204,16 +205,15 @@ def test_cancel_and_reject_require_reason(monkeypatch):
 def test_booking_notifications(monkeypatch):
     sent = {}
 
-    def _send_mail(subject, message, from_email, recipient_list, fail_silently):
-        sent["email"] = (subject, message, tuple(recipient_list))
+    def _send_email(to, subject, template, context):
+        sent["email"] = (to, subject, template, context)
 
-    def _sms(url, data=None, timeout=5):
-        sent.setdefault("sms", []).append((url, data))
-        return DummyResponse(True)
+    def _send_sms(to, template, context):
+        sent.setdefault("sms", []).append((to, template, context))
 
     monkeypatch.setattr(requests, "post", _captcha_ok)
-    monkeypatch.setattr("bookings.notifications.send_mail", _send_mail)
-    monkeypatch.setattr("bookings.notifications.requests.post", _sms)
+    monkeypatch.setattr(NotificationService, "send_email", staticmethod(_send_email))
+    monkeypatch.setattr(NotificationService, "send_sms", staticmethod(_send_sms))
     client = APIClient()
     user = CustomUser.objects.create_user(
         username="cust",
@@ -247,4 +247,4 @@ def test_booking_notifications(monkeypatch):
     )
     assert resp.status_code == 200
     assert "email" in sent and "sms" in sent
-    assert "changed plans" in sent["email"][1]
+    assert sent["email"][3]["booking"].reason == "changed plans"
