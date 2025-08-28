@@ -41,6 +41,16 @@ const END_POINTS = {
   MODIFY_QUESTION: '/api/questions',
   GET_QUESTIONS: '/api/questions',
 
+  // INVENTORY
+  GET_STOCK_LEDGERS: '/api/stock-ledgers',
+  GET_STOCK_ENTRIES: '/api/stock-entries',
+  MODIFY_STOCK_ENTRY: '/api/stock-entries',
+  GET_SERIALS: '/api/serials',
+  MODIFY_SERIAL: '/api/serials',
+  GET_PRICE_LOGS: '/api/price-logs',
+  GET_INVENTORY_CONFIG: '/api/inventory-config',
+  MODIFY_INVENTORY_CONFIG: '/api/inventory-config',
+
   // AUTHENTICATION
   LOGIN: '/api/auth/login',
   REFRESH_TOKEN: '/api/token/refresh',
