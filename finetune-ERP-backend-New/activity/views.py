@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.http import HttpResponse
@@ -12,7 +12,7 @@ from .serializers import EventLogSerializer
 class EventLogViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = EventLog.objects.all()
     serializer_class = EventLogSerializer
-    permission_classes = [IsSystemAdminUser]
+    permission_classes = [permissions.IsAuthenticated, IsSystemAdminUser]
 
     def get_queryset(self):
         qs = super().get_queryset()
