@@ -1,7 +1,6 @@
-from django.http import HttpResponse
-from django.template.loader import render_to_string
 from rest_framework import decorators, permissions, response, viewsets
-from weasyprint import HTML
+
+# from weasyprint import HTML  # TODO: Re-enable WeasyPrint when system libraries are installed on Railway
 
 from store.permissions import IsSystemAdminOrReadOnly
 from .models import Invoice, PaymentRecord
@@ -15,13 +14,13 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 
     @decorators.action(detail=True, methods=["get"], url_path="pdf")
     def pdf(self, request, pk=None):
-        invoice = self.get_object()
-        html = render_to_string("invoice.html", {"invoice": invoice})
-        try:
-            pdf_file = HTML(string=html).write_pdf()
-        except Exception:
-            pdf_file = b"%PDF-1.4\n%EOF"
-        return HttpResponse(pdf_file, content_type="application/pdf")
+        # TODO: Re-enable WeasyPrint when system libraries are installed on Railway
+        return response.Response(
+            {
+                "status": "coming_soon",
+                "message": "PDF generation temporarily disabled",
+            }
+        )
 
 
 class PaymentRecordViewSet(viewsets.ModelViewSet):
