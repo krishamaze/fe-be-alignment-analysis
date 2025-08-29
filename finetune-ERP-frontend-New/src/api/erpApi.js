@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from './baseQuery';
-import END_POINTS from '../utils/Endpoints';
+import END_POINTS from '@/utils/Endpoints';
 
 export const erpApi = createApi({
   reducerPath: 'erpApi',

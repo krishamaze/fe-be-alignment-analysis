@@ -21,7 +21,7 @@ vi.mock('../../api/erpApi', () => ({
   useDeleteSpareMutation: () => [vi.fn()],
 }));
 
-vi.mock('../../redux/hook', () => ({
+vi.mock('@/redux/hook', () => ({
   useAppSelector: () => 'system_admin',
 }));
 

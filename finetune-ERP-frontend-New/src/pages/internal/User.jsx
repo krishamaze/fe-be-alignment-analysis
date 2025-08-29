@@ -5,20 +5,20 @@ import {
   softDeleteUser,
   updateUser,
 } from '../../api/user';
-import NoDataFound from '../../assets/images/NoDataFound.png';
+import NoDataFound from '@/assets/images/NoDataFound.png';
 import toast from 'react-hot-toast';
-import { useAppDispatch, useAppSelector } from '../../redux/hook';
+import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { getStores } from '../../api/store';
 import { createUser } from '../../api/user';
-import { MESSAGE } from '../../utils/Constants';
-import Loader from '../../components/common/Loader';
+import { MESSAGE } from '@/utils/Constants';
+import Loader from '@/components/common/Loader';
 import { MdToggleOff, MdToggleOn } from 'react-icons/md';
-import ToggleStatusModal from '../../components/ToggleStatusModal';
-import DeleteConfirmationModal from '../../components/DeleteConfirmationModal';
-import ResponsivePaginationHandler from '../../components/ResponsivePaginationHandler';
+import ToggleStatusModal from '@/components/ToggleStatusModal';
+import DeleteConfirmationModal from '@/components/DeleteConfirmationModal';
+import ResponsivePaginationHandler from '@/components/ResponsivePaginationHandler';
 import { FaEdit, FaUserTie } from 'react-icons/fa';
 import { FaBuildingUser } from 'react-icons/fa6';
-import StoreAssignModal from '../../components/Store/StoreAssignModal';
+import StoreAssignModal from '@/components/Store/StoreAssignModal';
 
 const UserList = () => {
   const dispatch = useAppDispatch();

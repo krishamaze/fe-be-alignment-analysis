@@ -5,7 +5,7 @@ import {
   updateQuantity,
   clearCart,
   closeCart,
-} from '../../redux/slice/cartSlice';
+} from '@/redux/slice/cartSlice';
 import {
   HiOutlineX,
   HiOutlineTrash,

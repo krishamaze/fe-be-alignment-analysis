@@ -5,11 +5,11 @@ import {
   useGetInvoicesQuery,
   useGetStockEntriesQuery,
 } from '../../api/erpApi';
-import InvoiceForm from '../../components/InvoiceForm';
-import InvoiceTable from '../../components/InvoiceTable';
-import PaymentsTable from '../../components/PaymentsTable';
+import InvoiceForm from '@/components/InvoiceForm';
+import InvoiceTable from '@/components/InvoiceTable';
+import PaymentsTable from '@/components/PaymentsTable';
 import toast from 'react-hot-toast';
-import SaleEntryForm from '../../components/inventory/SaleEntryForm';
+import SaleEntryForm from '@/components/inventory/SaleEntryForm';
 
 export default function BookingsDashboard() {
   const { data, isLoading, error } = useGetBookingsQuery();
