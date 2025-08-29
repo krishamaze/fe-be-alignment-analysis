@@ -1,4 +1,4 @@
-import { useAppSelector } from '../../redux/hook';
+import { useAppSelector } from '@/redux/hook';
 
 function NotificationsPanel() {
   const items = useAppSelector((state) => state.notifications.items);

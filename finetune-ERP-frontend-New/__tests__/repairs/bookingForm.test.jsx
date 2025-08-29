@@ -2,7 +2,7 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { vi, test, expect } from 'vitest';
 import { useEffect } from 'react';
-import Bookings from '../../src/pages/Bookings';
+import Bookings from '../../src/pages/internal/Bookings';
 
 const submitMock = vi.fn().mockReturnValue({
   unwrap: () => Promise.resolve({ id: 1, status: 'pending' }),

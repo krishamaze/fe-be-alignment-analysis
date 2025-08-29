@@ -2,8 +2,11 @@ import Navbar from './components/common/Navbar';
 import EcommerceNavbar from './components/ecommerce/Navbar';
 import Footer from './components/common/Footer';
 import Hero from '../src/pages/Hero';
-import TeamLogin from './components/auth/TeamLogin';
-import Signup from './components/ecommerce/Signup';
+import TeamLogin from './pages/internal/TeamLogin';
+import Signup from './pages/customers/Signup';
+import Login from './pages/customers/Login';
+import Account from './pages/customers/Account';
+import Orders from './pages/customers/Orders';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './components/dashboard/layout/DashboardLayout';
 import { useAppSelector } from './redux/hook';
@@ -11,35 +14,37 @@ import { selectAuthToken, selectAuthRole } from './redux/slice/authSlice';
 import { useLocation } from 'react-router-dom';
 // import AddStore from './pages/AddStore';
 // import AddUser from './pages/AddUser';
-import User from './pages/User';
-import GiveawayRedemption from './pages/GiveawayRedemption';
+import User from './pages/internal/User';
+import GiveawayRedemption from './pages/internal/GiveawayRedemption';
 import { Toaster } from 'react-hot-toast';
-import Store from './pages/Store';
-import BrandDashboard from './pages/BrandDashboard';
-import BookingsDashboard from './pages/BookingsDashboard';
-import Settings from './pages/Settings';
-import ProductsDashboard from './pages/ProductsDashboard';
-import VariantsDashboard from './pages/VariantsDashboard';
-import TaxonomyDashboard from './pages/TaxonomyDashboard';
-import UnitsDashboard from './pages/UnitsDashboard';
-import QualitiesDashboard from './pages/QualitiesDashboard';
-import LogsDashboard from './pages/LogsDashboard';
+import Store from './pages/internal/Store';
+import BrandDashboard from './pages/internal/BrandDashboard';
+import BookingsDashboard from './pages/internal/BookingsDashboard';
+import Settings from './pages/internal/Settings';
+import ProductsDashboard from './pages/internal/ProductsDashboard';
+import VariantsDashboard from './pages/internal/VariantsDashboard';
+import TaxonomyDashboard from './pages/internal/TaxonomyDashboard';
+import UnitsDashboard from './pages/internal/UnitsDashboard';
+import QualitiesDashboard from './pages/internal/QualitiesDashboard';
+import LogsDashboard from './pages/internal/LogsDashboard';
 import FocusLayout from './components/layout/FocusLayout';
-import Workledger from './pages/Workledger';
-import WorkledgerDetails from './pages/WorkledgerDetails';
+import Workledger from './pages/internal/Workledger';
+import WorkledgerDetails from './pages/internal/WorkledgerDetails';
 import IndexPage from './pages/Index';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import Locate from './pages/Locate';
-import Terms from './pages/Terms';
-import ScheduleCall from './pages/ScheduleCall';
-import Stores from './pages/Stores';
-import StoreDetails from './pages/StoreDetails';
-import Spares from './pages/Spares';
-import Bookings from './pages/Bookings';
-import IssuesDashboard from './pages/IssuesDashboard';
-import OtherIssuesDashboard from './pages/OtherIssuesDashboard';
-import QuestionsDashboard from './pages/QuestionsDashboard';
+import About from './pages/public/About';
+import Contact from './pages/public/Contact';
+import Locate from './pages/public/Locate';
+import Legal from './pages/public/Legal';
+import Careers from './pages/public/Careers';
+import Offers from './pages/public/Offers';
+import ScheduleCall from './pages/internal/ScheduleCall';
+import Stores from './pages/internal/Stores';
+import StoreDetails from './pages/internal/StoreDetails';
+import Spares from './pages/internal/Spares';
+import Bookings from './pages/internal/Bookings';
+import IssuesDashboard from './pages/internal/IssuesDashboard';
+import OtherIssuesDashboard from './pages/internal/OtherIssuesDashboard';
+import QuestionsDashboard from './pages/internal/QuestionsDashboard';
 
 // E-commerce pages
 import Shop from './pages/ecommerce/Shop';
@@ -50,7 +55,6 @@ import ProductDetail from './pages/ecommerce/ProductDetail';
 import CartPage from './pages/ecommerce/CartPage';
 import Partners from './pages/ecommerce/Partners';
 import HelpCentre from './pages/ecommerce/HelpCentre';
-import Legal from './pages/ecommerce/Legal';
 
 function AppContent() {
   const token = useAppSelector(selectAuthToken);
@@ -62,12 +66,20 @@ function AppContent() {
     location.pathname === '/' ||
     location.pathname.startsWith('/shop') ||
     location.pathname.startsWith('/departments') ||
+    location.pathname.startsWith('/cart') ||
     location.pathname.startsWith('/partners') ||
     location.pathname.startsWith('/help') ||
     location.pathname.startsWith('/legal') ||
+    location.pathname.startsWith('/about') ||
+    location.pathname.startsWith('/contact') ||
+    location.pathname.startsWith('/locate') ||
+    location.pathname.startsWith('/offers') ||
+    location.pathname.startsWith('/careers') ||
     location.pathname.startsWith('/signup') ||
-    location.pathname.startsWith('/teamlogin') ||
-    location.pathname.startsWith('/login');
+    location.pathname.startsWith('/login') ||
+    location.pathname.startsWith('/account') ||
+    location.pathname.startsWith('/orders') ||
+    location.pathname.startsWith('/teamlogin');
 
   return (
     <>
@@ -80,6 +92,15 @@ function AppContent() {
           element={token ? <Navigate to="/dashboard" /> : <TeamLogin />}
         />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/account"
+          element={token ? <Account /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/orders"
+          element={token ? <Orders /> : <Navigate to="/login" replace />}
+        />
 
         {/* E-commerce routes */}
         <Route path="/shop" element={<Shop />} />
@@ -98,14 +119,19 @@ function AppContent() {
         <Route path="/help" element={<HelpCentre />} />
         <Route path="/legal" element={<Legal />} />
         <Route path="/marketing" element={<IndexPage />} />
-        <Route path="/about/" element={<About />} />
-        <Route path="/contact/" element={<Contact />} />
-        <Route path="/locate/" element={<Locate />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/locate" element={<Locate />} />
+        <Route path="/offers" element={<Offers />} />
+        <Route path="/careers" element={<Careers />} />
         <Route path="/stores" element={<Stores />} />
         <Route path="/stores/:id" element={<StoreDetails />} />
         <Route path="/spares" element={<Spares />} />
         <Route path="/bookings" element={<Bookings />} />
-        <Route path="/terms-and-conditions/" element={<Terms />} />
+        <Route
+          path="/terms-and-conditions"
+          element={<Navigate to="/legal" replace />}
+        />
         <Route path="/schedule-call" element={<ScheduleCall />} />
 
         <Route
