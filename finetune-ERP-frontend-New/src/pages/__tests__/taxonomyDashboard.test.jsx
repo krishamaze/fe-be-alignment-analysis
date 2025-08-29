@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, test, expect } from 'vitest';
-import TaxonomyDashboard from '../TaxonomyDashboard';
+import TaxonomyDashboard from '../internal/TaxonomyDashboard';
 
 const departments = vi.hoisted(() => []);
 

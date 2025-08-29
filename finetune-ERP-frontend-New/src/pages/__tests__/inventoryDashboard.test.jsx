@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, vi, expect } from 'vitest';
-import InventoryDashboard from '../InventoryDashboard.jsx';
+import InventoryDashboard from '../internal/InventoryDashboard.jsx';
 
 vi.mock('../../api/erpApi', () => ({
   useGetStockLedgersQuery: () => ({ data: [] }),

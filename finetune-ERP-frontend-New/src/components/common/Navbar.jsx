@@ -1,24 +1,16 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
-import { useAppSelector } from '../../redux/hook';
-import { selectAuthToken } from '../../redux/slice/authSlice';
 import Logo from './Logo';
 
 function Navbar() {
-  const token = useAppSelector(selectAuthToken);
-  const loginTarget = token ? '/dashboard' : '/teamlogin';
-  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
-  const isLoginPage = location.pathname === '/teamlogin';
   // Navigation links
   const navLinks = [
     { name: 'About', href: '/about/' },
     { name: 'Locate', href: '/locate/' },
     { name: 'Contact', href: '/contact/' },
-    ...(isLoginPage ? [] : [{ name: 'Login', href: loginTarget }]),
   ];
 
   // Close on outside click
@@ -61,15 +53,7 @@ function Navbar() {
         <ul className="hidden md:flex items-center gap-8 text-gray-700 font-medium">
           {navLinks.map((link) => (
             <li className="hover:text-keyline" key={link.name}>
-              {link.name === 'Login' ? (
-                <Link to={loginTarget}>
-                  <button className="bg-black text-white px-4 py-1 rounded hover:bg-gray-800">
-                    {token ? 'Dashboard' : 'Login'}
-                  </button>
-                </Link>
-              ) : (
-                <Link to={link.href}>{link.name}</Link>
-              )}
+              <Link to={link.href}>{link.name}</Link>
             </li>
           ))}
         </ul>
@@ -92,23 +76,16 @@ function Navbar() {
           ref={menuRef}
           className="md:hidden bg-white px-6 py-4 space-y-3 shadow-md"
         >
-          {navLinks.map((link) =>
-            link.name === 'Login' ? (
-              <Link key={link.name} to={loginTarget}>
-                <button className="w-full bg-black text-white px-4 py-2 rounded hover:bg-gray-800">
-                  {token ? 'Dashboard' : 'Login'}
-                </button>
-              </Link>
-            ) : (
-              <Link
-                key={link.name}
-                to={link.href}
-                className="block text-gray-700 hover:text-keyline"
-              >
-                {link.name}
-              </Link>
-            )
-          )}
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.href}
+              className="block text-gray-700 hover:text-keyline"
+              onClick={() => setIsOpen(false)}
+            >
+              {link.name}
+            </Link>
+          ))}
         </div>
       )}
     </header>

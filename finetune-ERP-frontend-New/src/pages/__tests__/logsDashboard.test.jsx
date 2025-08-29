@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import LogsDashboard from '../LogsDashboard';
+import LogsDashboard from '../internal/LogsDashboard';
 import { vi, describe, it, expect } from 'vitest';
 
 vi.mock('../../api/erpApi', () => ({
