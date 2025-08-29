@@ -3,15 +3,15 @@ import { describe, it, expect, afterEach, vi } from 'vitest';
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import About from '../About';
-import Contact from '../Contact';
-import Locate from '../Locate';
-import Terms from '../Terms';
+import About from '../public/About';
+import Contact from '../public/Contact';
+import Locate from '../public/Locate';
+import Legal from '../public/Legal';
 import Index from '../Index';
-import StoreDetails from '../StoreDetails';
-import Stores from '../Stores';
-import Spares from '../Spares';
-import Bookings from '../Bookings';
+import StoreDetails from '../internal/StoreDetails';
+import Stores from '../internal/Stores';
+import Spares from '../internal/Spares';
+import Bookings from '../internal/Bookings';
 import axios from 'axios';
 import.meta.env.VITE_RECAPTCHA_SITE_KEY = 'test-site-key';
 vi.mock('axios');
@@ -73,16 +73,16 @@ describe('SEO meta tags', () => {
     expect(desc.getAttribute('content')).toContain('service branches');
   });
 
-  it('sets title and description for Terms page', async () => {
+  it('sets title and description for Legal page', async () => {
     const container = document.createElement('div');
     const root = createRoot(container);
     await act(async () => {
-      root.render(<Terms />);
+      root.render(<Legal />);
     });
     await act(async () => {});
-    expect(document.title).toBe('Terms & Conditions – Finetune');
+    expect(document.title).toBe('Legal Information – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
-    expect(desc.getAttribute('content')).toContain('Agreement for repair');
+    expect(desc.getAttribute('content')).toContain('Important legal information');
     await act(async () => {
       root.unmount();
     });

@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
 import { render, screen } from '@testing-library/react';
 import { vi, test, expect } from 'vitest';
-import IssuesDashboard from '../../src/pages/IssuesDashboard';
-import OtherIssuesDashboard from '../../src/pages/OtherIssuesDashboard';
-import QuestionsDashboard from '../../src/pages/QuestionsDashboard';
+import IssuesDashboard from '../../src/pages/internal/IssuesDashboard';
+import OtherIssuesDashboard from '../../src/pages/internal/OtherIssuesDashboard';
+import QuestionsDashboard from '../../src/pages/internal/QuestionsDashboard';
 
 vi.mock('../../src/api/erpApi', () => ({
   useGetIssuesQuery: () => ({
