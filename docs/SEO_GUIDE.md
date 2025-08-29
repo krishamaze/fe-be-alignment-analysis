@@ -3,7 +3,6 @@
 ## Slug Strategy
 - Products and variants include unique `slug` fields generated from their names and are immutable after the first save.
 - `get_absolute_url()` exposes canonical paths like `/product/{slug}`.
-- Legacy `/productdetail/<model>/<brand>/` routes redirect to the canonical slug URL with `301`.
 - Departments, categories, and subcategories also expose immutable slugs for SEO-friendly taxonomy URLs.
 
 ## Metadata Injection

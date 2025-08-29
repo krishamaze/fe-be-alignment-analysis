@@ -1,16 +1,21 @@
-from rest_framework import viewsets, status
+from rest_framework import permissions, status, viewsets
 from rest_framework.response import Response
 from django.db.models import Q
+
+from accounts.permissions import IsSystemAdminUser
 from .models import Store
 from .serializers import StoreSerializer
-from .permissions import IsSystemAdminOrReadOnly
 
 
 class StoreViewSet(viewsets.ModelViewSet):
     # Hide soft-deleted by default
     queryset = Store.objects.filter(deleted=False)
     serializer_class = StoreSerializer
-    permission_classes = [IsSystemAdminOrReadOnly]
+
+    def get_permissions(self):
+        if self.request.method in permissions.SAFE_METHODS:
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated(), IsSystemAdminUser()]
 
     # Soft delete: mark deleted + deactivate, return 204 with no body
     def destroy(self, request, *args, **kwargs):

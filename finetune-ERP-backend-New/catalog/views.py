@@ -1,6 +1,6 @@
-from django.shortcuts import get_object_or_404, redirect
-from rest_framework import viewsets
+from rest_framework import permissions, viewsets
 from store.permissions import IsSystemAdminOrReadOnly
+
 from .models import Department, Category, SubCategory, Product, Variant, Unit, Quality
 from .serializers import (
     DepartmentSerializer,
@@ -17,14 +17,14 @@ class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all().order_by("name")
     serializer_class = DepartmentSerializer
     lookup_field = "slug"
-    permission_classes = [IsSystemAdminOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all().order_by("name")
     serializer_class = CategorySerializer
     lookup_field = "slug"
-    permission_classes = [IsSystemAdminOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -38,7 +38,7 @@ class SubCategoryViewSet(viewsets.ModelViewSet):
     queryset = SubCategory.objects.all().order_by("name")
     serializer_class = SubCategorySerializer
     lookup_field = "slug"
-    permission_classes = [IsSystemAdminOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -53,7 +53,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all().order_by("name")
     serializer_class = ProductSerializer
     lookup_field = "slug"
-    permission_classes = [IsSystemAdminOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -97,7 +97,7 @@ class VariantViewSet(viewsets.ModelViewSet):
     queryset = Variant.objects.all().order_by("variant_name")
     serializer_class = VariantSerializer
     lookup_field = "slug"
-    permission_classes = [IsSystemAdminOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -111,16 +111,13 @@ class UnitViewSet(viewsets.ModelViewSet):
     queryset = Unit.objects.all().order_by("name")
     serializer_class = UnitSerializer
     lookup_field = "slug"
-    permission_classes = [IsSystemAdminOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
 
 
 class QualityViewSet(viewsets.ModelViewSet):
     queryset = Quality.objects.all().order_by("name")
     serializer_class = QualitySerializer
     lookup_field = "slug"
-    permission_classes = [IsSystemAdminOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
 
 
-def legacy_product_redirect(request, model, brand):
-    product = get_object_or_404(Product, slug=model, brand__name__iexact=brand)
-    return redirect(product.get_absolute_url(), permanent=True)

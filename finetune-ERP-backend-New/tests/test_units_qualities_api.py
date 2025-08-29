@@ -15,18 +15,20 @@ from spares.models import Spare
 
 
 @pytest.mark.django_db
-def test_list_units():
+def test_list_units(admin_user):
     Unit.objects.create(name="Piece")
     client = APIClient()
+    client.force_authenticate(user=admin_user)
     resp = client.get("/api/units")
     assert resp.status_code == 200
     assert resp.json()["content"][0]["slug"] == "piece"
 
 
 @pytest.mark.django_db
-def test_list_qualities():
+def test_list_qualities(admin_user):
     Quality.objects.create(name="Premium")
     client = APIClient()
+    client.force_authenticate(user=admin_user)
     resp = client.get("/api/qualities")
     assert resp.status_code == 200
     assert resp.json()["content"][0]["slug"] == "premium"
@@ -44,7 +46,7 @@ def test_spare_includes_quality():
 
 
 @pytest.mark.django_db
-def test_product_and_variant_include_unit():
+def test_product_and_variant_include_unit(admin_user):
     unit = Unit.objects.create(name="Piece")
     brand = Brand.objects.create(name="B1")
     dept = Department.objects.create(name="Electronics")
@@ -55,6 +57,7 @@ def test_product_and_variant_include_unit():
     )
     Variant.objects.create(product=product, variant_name="V1", price=5, stock=1)
     client = APIClient()
+    client.force_authenticate(user=admin_user)
     resp = client.get("/api/products")
     pdata = resp.json()["content"][0]
     assert pdata["unit_slug"] == "piece"

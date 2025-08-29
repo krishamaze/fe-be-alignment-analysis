@@ -1,5 +1,5 @@
-from django.urls import path
 from rest_framework.routers import DefaultRouter
+
 from .views import (
     DepartmentViewSet,
     CategoryViewSet,
@@ -8,7 +8,6 @@ from .views import (
     VariantViewSet,
     UnitViewSet,
     QualityViewSet,
-    legacy_product_redirect,
 )
 
 router = DefaultRouter(trailing_slash=False)
@@ -20,6 +19,4 @@ router.register(r"variants", VariantViewSet, basename="variant")
 router.register(r"units", UnitViewSet, basename="unit")
 router.register(r"qualities", QualityViewSet, basename="quality")
 
-urlpatterns = router.urls + [
-    path("productdetail/<str:model>/<str:brand>/", legacy_product_redirect),
-]
+urlpatterns = router.urls
