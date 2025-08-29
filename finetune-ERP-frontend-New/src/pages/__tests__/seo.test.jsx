@@ -19,7 +19,7 @@ vi.mock('react-google-recaptcha', () => ({
   __esModule: true,
   default: () => <div data-testid="recaptcha" />,
 }));
-vi.mock('../../redux/hook', () => ({
+vi.mock('@/redux/hook', () => ({
   useAppSelector: () => 'system_admin',
 }));
 vi.mock('../../api/erpApi', () => ({
@@ -82,7 +82,9 @@ describe('SEO meta tags', () => {
     await act(async () => {});
     expect(document.title).toBe('Legal Information – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
-    expect(desc.getAttribute('content')).toContain('Important legal information');
+    expect(desc.getAttribute('content')).toContain(
+      'Important legal information'
+    );
     await act(async () => {
       root.unmount();
     });

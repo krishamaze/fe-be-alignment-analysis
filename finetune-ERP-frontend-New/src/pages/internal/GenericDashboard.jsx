@@ -1,5 +1,5 @@
 import React from 'react';
-import CardItem from '../../components/dashboard/components/CardItem';
+import CardItem from '@/components/dashboard/components/CardItem';
 
 function Section({ label, items, disabled = false }) {
   if (!items.length) return null;

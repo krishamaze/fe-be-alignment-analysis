@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../redux/hook';
-import { loginUser, selectAuthStatus } from '../../redux/slice/authSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/hook';
+import { loginUser, selectAuthStatus } from '@/redux/slice/authSlice';
 
 function TeamLogin() {
   const [username, setUsername] = useState('');

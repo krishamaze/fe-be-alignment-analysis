@@ -14,8 +14,8 @@ import {
   HiOutlineXMark,
   HiOutlineEllipsisHorizontal,
 } from 'react-icons/hi2';
-import { useAppDispatch } from '../../../redux/hook';
-import { logoutUser } from '../../../redux/slice/authSlice';
+import { useAppDispatch } from '@/redux/hook';
+import { logoutUser } from '@/redux/slice/authSlice';
 
 export default function DashboardBottomNav({ role, navOpen, setNavOpen }) {
   const { pathname } = useLocation();

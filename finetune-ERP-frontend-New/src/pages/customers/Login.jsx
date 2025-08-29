@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../redux/hook';
-import { loginUser, selectAuthStatus } from '../../redux/slice/authSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/hook';
+import { loginUser, selectAuthStatus } from '@/redux/slice/authSlice';
 
 export default function Login() {
   const [email, setEmail] = useState('');

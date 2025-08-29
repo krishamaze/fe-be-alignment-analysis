@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import NotificationsPanel from '../common/NotificationsPanel';
 import notificationsReducer, {
   addNotification,
-} from '../../redux/slice/notificationsSlice';
+} from '@/redux/slice/notificationsSlice';
 import { describe, it, expect } from 'vitest';
 
 describe('NotificationsPanel', () => {

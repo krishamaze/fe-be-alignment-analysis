@@ -1,6 +1,6 @@
-import { useAppSelector } from '../../redux/hook';
-import { selectAuthRole } from '../../redux/slice/authSlice';
-import CardItem from '../../components/dashboard/components/CardItem';
+import { useAppSelector } from '@/redux/hook';
+import { selectAuthRole } from '@/redux/slice/authSlice';
+import CardItem from '@/components/dashboard/components/CardItem';
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
 
 const tiles = {

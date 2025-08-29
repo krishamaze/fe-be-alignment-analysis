@@ -59,6 +59,15 @@ Backend service lives in a separate repository (TODO: link) and expects requests
 └── docs/                 project documentation
 ```
 
+### Import aliases
+
+The `@` prefix resolves to the `src` directory. For example:
+
+```js
+import Loader from '@/components/common/Loader';
+import END_POINTS from '@/utils/Endpoints';
+```
+
 ## Troubleshooting
 
 1. **Port 5173 already in use** → stop the conflicting process or change the `server.port` in `vite.config.js`.

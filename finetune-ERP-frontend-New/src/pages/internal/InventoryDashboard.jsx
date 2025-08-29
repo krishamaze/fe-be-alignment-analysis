@@ -1,10 +1,10 @@
 import React from 'react';
 import { useGetStockLedgersQuery } from '../../api/erpApi';
-import StockTable from '../../components/inventory/StockTable';
-import StockEntryForm from '../../components/inventory/StockEntryForm';
-import SerialManager from '../../components/inventory/SerialManager';
-import PriceLogView from '../../components/inventory/PriceLogView';
-import ConfigDashboard from '../../components/inventory/ConfigDashboard';
+import StockTable from '@/components/inventory/StockTable';
+import StockEntryForm from '@/components/inventory/StockEntryForm';
+import SerialManager from '@/components/inventory/SerialManager';
+import PriceLogView from '@/components/inventory/PriceLogView';
+import ConfigDashboard from '@/components/inventory/ConfigDashboard';
 
 export default function InventoryDashboard() {
   const { data } = useGetStockLedgersQuery();

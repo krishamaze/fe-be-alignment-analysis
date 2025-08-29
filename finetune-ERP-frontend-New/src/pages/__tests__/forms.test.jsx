@@ -5,7 +5,7 @@ import { createRoot } from 'react-dom/client';
 import Contact from '../public/Contact';
 import ScheduleCall from '../internal/ScheduleCall';
 import Bookings from '../internal/Bookings';
-import END_POINTS from '../../utils/Endpoints';
+import END_POINTS from '@/utils/Endpoints';
 import axios from 'axios';
 
 import.meta.env.VITE_RECAPTCHA_SITE_KEY = 'test-site-key';

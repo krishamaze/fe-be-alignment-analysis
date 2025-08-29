@@ -5,12 +5,12 @@ import {
   HiOutlineArrowRightOnRectangle,
   HiOutlineBell,
 } from 'react-icons/hi2';
-import { useAppDispatch, useAppSelector } from '../../../redux/hook';
+import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import {
   selectAuthUser,
   selectAuthRole,
   logoutUser,
-} from '../../../redux/slice/authSlice';
+} from '@/redux/slice/authSlice';
 import Logo from '../../common/Logo';
 import NotificationsPanel from '../../common/NotificationsPanel';
 
