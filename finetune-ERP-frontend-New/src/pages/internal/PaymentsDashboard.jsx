@@ -1,5 +1,5 @@
 import { useGetPaymentsQuery } from '../../api/erpApi';
-import PaymentsTable from '../../components/PaymentsTable';
+import PaymentsTable from '@/components/PaymentsTable';
 
 export default function PaymentsDashboard() {
   const { data, isLoading, error } = useGetPaymentsQuery();

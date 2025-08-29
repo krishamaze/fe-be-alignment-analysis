@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import END_POINTS from '../../utils/Endpoints';
-import Loader from '../../components/common/Loader';
-import ReCaptchaWrapper from '../../components/common/ReCaptchaWrapper';
+import END_POINTS from '@/utils/Endpoints';
+import Loader from '@/components/common/Loader';
+import ReCaptchaWrapper from '@/components/common/ReCaptchaWrapper';
 
 export default function ScheduleCall() {
   const [form, setForm] = useState({

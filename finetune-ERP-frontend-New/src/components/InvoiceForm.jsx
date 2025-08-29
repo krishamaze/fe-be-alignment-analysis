@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useCreateInvoiceMutation } from '../api/erpApi';
-import { computeGST } from '../utils/gst';
+import { computeGST } from '@/utils/gst';
 
 export default function InvoiceForm({ bookingId, onSuccess }) {
   const [items, setItems] = useState([

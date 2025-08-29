@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../redux/hook';
-import { selectAuthToken } from '../../redux/slice/authSlice';
-import { toggleCart } from '../../redux/slice/cartSlice';
+import { useAppSelector } from '@/redux/hook';
+import { selectAuthToken } from '@/redux/slice/authSlice';
+import { toggleCart } from '@/redux/slice/cartSlice';
 import Logo from '../common/Logo';
 import {
   HiOutlineShoppingCart,

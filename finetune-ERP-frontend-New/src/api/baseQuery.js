@@ -1,8 +1,8 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
-import END_POINTS from '../utils/Endpoints';
-import { logout, setCredentials } from '../redux/slice/authSlice';
+import END_POINTS from '@/utils/Endpoints';
+import { logout, setCredentials } from '@/redux/slice/authSlice';
 
 const getCookieJSON = (key) => {
   try {

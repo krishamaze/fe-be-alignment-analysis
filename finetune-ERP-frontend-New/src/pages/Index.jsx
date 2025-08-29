@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import END_POINTS from '../utils/Endpoints';
+import END_POINTS from '@/utils/Endpoints';
 import Loader from '../components/common/Loader';
 
 export default function Index() {

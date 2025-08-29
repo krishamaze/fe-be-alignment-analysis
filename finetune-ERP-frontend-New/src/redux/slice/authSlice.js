@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
 import { baseQueryWithReauth } from '../../api/baseQuery';
-import END_POINTS from '../../utils/Endpoints';
+import END_POINTS from '@/utils/Endpoints';
 
 export const registerUser = createAsyncThunk(
   'auth/registerUser',

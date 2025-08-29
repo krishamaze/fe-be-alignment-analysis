@@ -2,7 +2,7 @@ import {
   useLazyGetInvoicePdfQuery,
   useGetInvoicesQuery,
 } from '../../api/erpApi';
-import InvoiceTable from '../../components/InvoiceTable';
+import InvoiceTable from '@/components/InvoiceTable';
 
 export default function InvoicesDashboard() {
   const { data, isLoading, error } = useGetInvoicesQuery();

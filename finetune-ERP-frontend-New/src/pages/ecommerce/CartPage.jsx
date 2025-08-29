@@ -4,14 +4,14 @@ import {
   removeFromCart,
   updateQuantity,
   clearCart,
-} from '../../redux/slice/cartSlice';
+} from '@/redux/slice/cartSlice';
 import {
   HiOutlineTrash,
   HiOutlineShoppingBag,
   HiOutlineArrowRight,
   HiOutlineArrowLeft,
 } from 'react-icons/hi';
-import Payment from '../../components/ecommerce/Payment';
+import Payment from '@/components/ecommerce/Payment';
 import { useState } from 'react';
 
 function CartPage() {

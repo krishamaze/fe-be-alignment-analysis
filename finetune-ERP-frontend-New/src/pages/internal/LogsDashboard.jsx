@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useGetLogsQuery } from '../../api/erpApi';
 import { baseQueryWithReauth } from '../../api/baseQuery';
-import store from '../../redux/store';
+import store from '@/redux/store';
 import toast from 'react-hot-toast';
 
 function LogsDashboard() {
