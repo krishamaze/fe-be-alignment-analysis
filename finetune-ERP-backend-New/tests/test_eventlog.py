@@ -6,6 +6,13 @@ from rest_framework.test import APIClient
 
 
 @pytest.mark.django_db
+def test_logs_require_auth():
+    client = APIClient()
+    resp = client.get("/api/logs/")
+    assert resp.status_code in (401, 403)
+
+
+@pytest.mark.django_db
 def test_eventlog_booking_crud(admin_user):
     booking = Booking.objects.create(
         name="Test", email="a@example.com", date=date.today(), time=dtime(9, 0)

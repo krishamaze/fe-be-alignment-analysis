@@ -1,4 +1,4 @@
-from rest_framework import viewsets, mixins
+from rest_framework import mixins, permissions, viewsets
 from .models import Booking, Issue, OtherIssue, Question, CustomerResponse
 from .serializers import (
     BookingSerializer,
@@ -36,19 +36,19 @@ class BookingViewSet(viewsets.ModelViewSet):
 class IssueViewSet(viewsets.ModelViewSet):
     queryset = Issue.objects.all().order_by("-date_created")
     serializer_class = IssueSerializer
-    permission_classes = [IsSystemAdminOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
 
 
 class OtherIssueViewSet(viewsets.ModelViewSet):
     queryset = OtherIssue.objects.all().order_by("-id")
     serializer_class = OtherIssueSerializer
-    permission_classes = [IsSystemAdminOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all().order_by("-id")
     serializer_class = QuestionSerializer
-    permission_classes = [IsSystemAdminOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
 
 
 class CustomerResponseViewSet(

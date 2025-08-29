@@ -35,3 +35,10 @@ def test_admin_sees_authority_fields():
     assert data["authority"] == bh.id
     assert data["authority_name"]
     assert data["authority_email"] == bh.email
+
+
+@pytest.mark.django_db
+def test_anonymous_cannot_create_store():
+    client = APIClient()
+    resp = client.post("/api/stores", {"store_name": "S1", "code": "S1"})
+    assert resp.status_code in (401, 403)
