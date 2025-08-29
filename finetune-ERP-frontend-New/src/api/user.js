@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { baseQueryWithReauth } from './baseQuery';
-import END_POINTS from '../utils/Endpoints';
+import END_POINTS from '@/utils/Endpoints';
 
 export const getUsers = createAsyncThunk(
   'user/getUsers',

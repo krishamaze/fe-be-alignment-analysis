@@ -20,11 +20,12 @@ React + Vite application providing ERP and e‑commerce interfaces for finetune.
 | Route                    | Component          |
 | ------------------------ | ------------------ |
 | `/marketing`             | `Index.jsx`        |
-| `/about/`                | `About.jsx`        |
-| `/contact/`              | `Contact.jsx`      |
-| `/locate/`               | `Locate.jsx`       |
-| `/terms-and-conditions/` | `Terms.jsx`        |
-| `/schedule-call`         | `ScheduleCall.jsx` |
+| `/about`                 | `public/About.jsx` |
+| `/contact`               | `public/Contact.jsx` |
+| `/locate`                | `public/Locate.jsx` |
+| `/legal`                 | `public/Legal.jsx` |
+| `/offers`                | `public/Offers.jsx` |
+| `/careers`               | `public/Careers.jsx` |
 
 ## Environment
 
@@ -56,6 +57,15 @@ Backend service lives in a separate repository (TODO: link) and expects requests
 │   ├── redux/            slices and store
 │   └── utils/            constants and helpers
 └── docs/                 project documentation
+```
+
+### Import aliases
+
+The `@` prefix resolves to the `src` directory. For example:
+
+```js
+import Loader from '@/components/common/Loader';
+import END_POINTS from '@/utils/Endpoints';
 ```
 
 ## Troubleshooting

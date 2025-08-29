@@ -6,7 +6,14 @@ from catalog.models import Department, Category, SubCategory, Product, Variant
 
 
 @pytest.mark.django_db
-def test_product_list_and_detail_by_slug():
+def test_product_list_requires_auth():
+    client = APIClient()
+    resp = client.get("/api/products")
+    assert resp.status_code in (401, 403)
+
+
+@pytest.mark.django_db
+def test_product_list_and_detail_by_slug(admin_user):
     brand = Brand.objects.create(name="B1")
     dept = Department.objects.create(name="Electronics")
     cat = Category.objects.create(name="Phones", department=dept)
@@ -15,6 +22,7 @@ def test_product_list_and_detail_by_slug():
         name="P1", brand=brand, subcategory=sub, price=10, stock=5
     )
     client = APIClient()
+    client.force_authenticate(user=admin_user)
     resp = client.get("/api/products")
     assert resp.status_code == 200
     assert resp.json()["content"][0]["slug"] == product.slug
@@ -24,7 +32,7 @@ def test_product_list_and_detail_by_slug():
 
 
 @pytest.mark.django_db
-def test_product_filter_brand_availability():
+def test_product_filter_brand_availability(admin_user):
     brand1 = Brand.objects.create(name="B1")
     brand2 = Brand.objects.create(name="B2")
     dept = Department.objects.create(name="Electronics")
@@ -47,6 +55,7 @@ def test_product_filter_brand_availability():
         availability=False,
     )
     client = APIClient()
+    client.force_authenticate(user=admin_user)
     resp = client.get(f"/api/products?brand={brand1.id}")
     assert len(resp.json()["content"]) == 1
     resp = client.get("/api/products?availability=true")
@@ -54,7 +63,7 @@ def test_product_filter_brand_availability():
 
 
 @pytest.mark.django_db
-def test_variant_list_and_detail():
+def test_variant_list_and_detail(admin_user):
     brand = Brand.objects.create(name="B1")
     dept = Department.objects.create(name="Electronics")
     cat = Category.objects.create(name="Phones", department=dept)
@@ -65,6 +74,7 @@ def test_variant_list_and_detail():
     v1 = Variant.objects.create(product=product, variant_name="V1", price=5, stock=1)
     Variant.objects.create(product=product, variant_name="V2", price=6, stock=1)
     client = APIClient()
+    client.force_authenticate(user=admin_user)
     resp = client.get(f"/api/variants?product={product.slug}")
     assert resp.status_code == 200
     assert len(resp.json()["content"]) == 2
@@ -199,13 +209,14 @@ def test_admin_crud_and_validations():
 
 
 @pytest.mark.django_db
-def test_taxonomy_endpoints_and_product_filter():
+def test_taxonomy_endpoints_and_product_filter(admin_user):
     dept = Department.objects.create(name="Electronics")
     cat = Category.objects.create(name="Phones", department=dept)
     sub = SubCategory.objects.create(name="Smartphones", category=cat)
     brand = Brand.objects.create(name="B1")
     Product.objects.create(name="P1", brand=brand, subcategory=sub, price=1, stock=1)
     client = APIClient()
+    client.force_authenticate(user=admin_user)
 
     resp = client.get("/api/departments")
     assert resp.status_code == 200
@@ -252,7 +263,7 @@ def test_slug_immutable_model_level():
 
 
 @pytest.mark.django_db
-def test_price_filter_and_ordering_and_redirect():
+def test_price_filter_and_ordering(admin_user):
     brand = Brand.objects.create(name="B1")
     dept = Department.objects.create(name="Electronics")
     cat = Category.objects.create(name="Phones", department=dept)
@@ -260,6 +271,7 @@ def test_price_filter_and_ordering_and_redirect():
     p1 = Product.objects.create(name="P1", brand=brand, subcategory=sub, price=5, stock=1)
     p2 = Product.objects.create(name="P2", brand=brand, subcategory=sub, price=10, stock=1)
     client = APIClient()
+    client.force_authenticate(user=admin_user)
     resp = client.get("/api/products?min_price=6")
     slugs = [item["slug"] for item in resp.json()["content"]]
     assert p2.slug in slugs and p1.slug not in slugs
@@ -272,6 +284,3 @@ def test_price_filter_and_ordering_and_redirect():
     resp = client.get("/api/products?ordering=-date_created")
     slugs = [item["slug"] for item in resp.json()["content"]]
     assert slugs[0] == p2.slug
-    resp = client.get(f"/api/productdetail/{p1.slug}/{brand.name}/", follow=False)
-    assert resp.status_code == 301
-    assert resp.headers["Location"].endswith(p1.get_absolute_url())

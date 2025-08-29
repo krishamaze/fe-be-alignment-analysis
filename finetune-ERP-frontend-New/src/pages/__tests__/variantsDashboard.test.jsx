@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, test, expect } from 'vitest';
-import VariantsDashboard from '../VariantsDashboard';
+import VariantsDashboard from '../internal/VariantsDashboard';
 
 const createMock = vi
   .fn()

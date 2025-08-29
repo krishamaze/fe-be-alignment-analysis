@@ -12,7 +12,7 @@ vi.mock('react-hot-toast', () => ({
 }));
 import toast from 'react-hot-toast';
 
-vi.mock('../../redux/slice/authSlice', () => ({
+vi.mock('@/redux/slice/authSlice', () => ({
   logout: () => ({ type: 'auth/logout' }),
   setCredentials: (payload) => ({ type: 'auth/setCredentials', payload }),
 }));

@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, test, expect } from 'vitest';
-import Spares from '../Spares';
+import Spares from '../internal/Spares';
 
 const createMock = vi
   .fn()
@@ -21,7 +21,7 @@ vi.mock('../../api/erpApi', () => ({
   useDeleteSpareMutation: () => [vi.fn()],
 }));
 
-vi.mock('../../redux/hook', () => ({
+vi.mock('@/redux/hook', () => ({
   useAppSelector: () => 'system_admin',
 }));
 

@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../redux/hook';
-import { selectAuthToken } from '../../redux/slice/authSlice';
-import { toggleCart } from '../../redux/slice/cartSlice';
+import { useAppSelector } from '@/redux/hook';
+import { selectAuthToken } from '@/redux/slice/authSlice';
+import { toggleCart } from '@/redux/slice/cartSlice';
 import Logo from '../common/Logo';
 import {
   HiOutlineShoppingCart,
@@ -26,13 +26,18 @@ function EcommerceNavbar() {
 
   // Navigation links
   const navLinks = [
-    { name: 'Shop Now', href: '/shop' },
+    { name: 'Home', href: '/' },
+    { name: 'Shop', href: '/shop' },
     { name: 'Departments', href: '/departments' },
+    { name: 'Cart', href: '/cart' },
+    { name: 'About', href: '/about' },
+    { name: 'Contact', href: '/contact' },
+    { name: 'Help', href: '/help' },
     { name: 'Partners', href: '/partners' },
-    { name: 'Help Centre', href: '/help' },
     { name: 'Legal', href: '/legal' },
+    { name: 'Offers', href: '/offers' },
+    { name: 'Careers', href: '/careers' },
   ];
-
   const categories = [
     {
       name: 'Mobiles',
