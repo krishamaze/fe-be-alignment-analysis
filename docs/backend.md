@@ -8,7 +8,7 @@
 ## API Endpoints
 - `POST /api/invoices/` create invoice with nested `line_items`.
 - `GET /api/invoices/` list invoices.
-- `GET /api/invoices/:id/pdf/` render invoice PDF.
+- `GET /api/invoices/:id/pdf/` returns placeholder JSON until PDF generation is restored.
 - `POST /api/payments/` record a payment for an invoice.
 
 Invoice numbers use a global sequence `FT-INV-0001` stored in the database and only reset if the `InvoiceSequence` record is cleared.
