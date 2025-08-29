@@ -5,7 +5,7 @@ import {
   softDeleteUser,
   updateUser,
 } from '../../api/user';
-import NoDataFound from '../assets/images/NoDataFound.png';
+import NoDataFound from '../../assets/images/NoDataFound.png';
 import toast from 'react-hot-toast';
 import { useAppDispatch, useAppSelector } from '../../redux/hook';
 import { getStores } from '../../api/store';
