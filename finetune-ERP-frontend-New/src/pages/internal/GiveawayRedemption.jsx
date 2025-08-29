@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import QRScanSection from '../../components/qr/QRScanSection';
+import QRScanSection from '@/components/qr/QRScanSection';
 
 const BACKEND_URL =
   'https://script.google.com/macros/s/AKfycbxcANXk6gBddr0yIV_owEaxueJvxtvJX_Jkq8flGGVOL9hNCljPNyI-GdJ2A-jSZtcA/exec';

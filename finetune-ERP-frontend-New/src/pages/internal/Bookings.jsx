@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import Loader from '../../components/common/Loader';
-import ReCaptchaWrapper from '../../components/common/ReCaptchaWrapper';
-import MyBookings from '../../components/MyBookings';
-import MultiSelectIssues from '../../components/repairs/MultiSelectIssues';
-import Questionnaire from '../../components/repairs/Questionnaire';
+import Loader from '@/components/common/Loader';
+import ReCaptchaWrapper from '@/components/common/ReCaptchaWrapper';
+import MyBookings from '@/components/MyBookings';
+import MultiSelectIssues from '@/components/repairs/MultiSelectIssues';
+import Questionnaire from '@/components/repairs/Questionnaire';
 import {
   useCreateBookingMutation,
   useGetBookingsQuery,

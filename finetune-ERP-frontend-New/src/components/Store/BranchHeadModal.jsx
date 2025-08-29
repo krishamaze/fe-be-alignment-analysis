@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../redux/hook';
+import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { getUsers } from '../../api/user';
 import {
   assignBranchHeadToStore,

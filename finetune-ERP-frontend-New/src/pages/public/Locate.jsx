@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Loader from '../../components/common/Loader';
-import END_POINTS from '../../utils/Endpoints';
+import Loader from '@/components/common/Loader';
+import END_POINTS from '@/utils/Endpoints';
 
 export default function Locate() {
   const [hqs, setHqs] = useState([]);

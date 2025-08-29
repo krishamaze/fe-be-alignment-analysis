@@ -5,8 +5,8 @@ import {
   useUpdateSpareMutation,
   useDeleteSpareMutation,
 } from '../../api/erpApi';
-import { useAppSelector } from '../../redux/hook';
-import { selectAuthRole } from '../../redux/slice/authSlice';
+import { useAppSelector } from '@/redux/hook';
+import { selectAuthRole } from '@/redux/slice/authSlice';
 import toast from 'react-hot-toast';
 
 export default function Spares() {

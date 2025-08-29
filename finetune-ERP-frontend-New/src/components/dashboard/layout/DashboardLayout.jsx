@@ -5,11 +5,8 @@ import AdminDashboard from '../../../pages/internal/AdminDashboard';
 import BranchHeadDashboard from '../../../pages/internal/BranchHeadDashboard';
 import AdvisorDashboard from '../../../pages/internal/AdvisorDashboard';
 import DashboardNavbar from './DashboardNavbar';
-import { useAppSelector } from '../../../redux/hook';
-import {
-  selectAuthRole,
-  selectAuthStatus,
-} from '../../../redux/slice/authSlice';
+import { useAppSelector } from '@/redux/hook';
+import { selectAuthRole, selectAuthStatus } from '@/redux/slice/authSlice';
 
 function Dashboard() {
   const role = useAppSelector(selectAuthRole);
