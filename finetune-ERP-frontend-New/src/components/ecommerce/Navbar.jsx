@@ -26,13 +26,18 @@ function EcommerceNavbar() {
 
   // Navigation links
   const navLinks = [
-    { name: 'Shop Now', href: '/shop' },
+    { name: 'Home', href: '/' },
+    { name: 'Shop', href: '/shop' },
     { name: 'Departments', href: '/departments' },
+    { name: 'Cart', href: '/cart' },
+    { name: 'About', href: '/about' },
+    { name: 'Contact', href: '/contact' },
+    { name: 'Help', href: '/help' },
     { name: 'Partners', href: '/partners' },
-    { name: 'Help Centre', href: '/help' },
     { name: 'Legal', href: '/legal' },
+    { name: 'Offers', href: '/offers' },
+    { name: 'Careers', href: '/careers' },
   ];
-
   const categories = [
     {
       name: 'Mobiles',

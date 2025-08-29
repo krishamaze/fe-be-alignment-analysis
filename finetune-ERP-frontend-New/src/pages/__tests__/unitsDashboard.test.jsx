@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi, test, expect, beforeEach } from 'vitest';
-import UnitsDashboard from '../UnitsDashboard';
+import UnitsDashboard from '../internal/UnitsDashboard';
 import toast from 'react-hot-toast';
 
 vi.mock('react-hot-toast', () => {

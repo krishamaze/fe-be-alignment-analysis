@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, test, expect } from 'vitest';
-import Spares from '../Spares';
+import Spares from '../internal/Spares';
 
 const createMock = vi
   .fn()
