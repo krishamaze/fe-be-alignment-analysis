@@ -48,8 +48,8 @@ TODO: capture real screenshot of invoice/payment UI from the dashboards.
 - Added `InvoicesDashboard.jsx` and `PaymentsDashboard.jsx` for system admins.
 - `BookingsDashboard.jsx` now links to invoice creation and displays related invoices and payments.
 - New components: `InvoiceForm`, `ReceiptForm`, `InvoiceTable`, `PaymentsTable`.
-- API layer exposes `/api/invoices`, `/api/payments`, and `/api/invoices/:id/pdf`.
-- PDF export renders a branded, GST-compliant invoice template.
+- API layer exposes `/api/invoices`, `/api/payments`, and `/api/invoices/:id/pdf` (currently returns placeholder JSON).
+- PDF export is temporarily disabled until system libraries are installed on Railway.
 
 ## Inventory
 
