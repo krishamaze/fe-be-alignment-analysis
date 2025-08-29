@@ -1,14 +1,19 @@
 from django.db.models import Q
-from rest_framework import viewsets
+from rest_framework import permissions, viewsets
+
+from accounts.permissions import IsSystemAdminUser
 from .models import Spare
 from .serializers import SpareSerializer
-from store.permissions import IsSystemAdminOrReadOnly
 
 
 class SpareViewSet(viewsets.ModelViewSet):
     queryset = Spare.objects.all()
     serializer_class = SpareSerializer
-    permission_classes = [IsSystemAdminOrReadOnly]
+
+    def get_permissions(self):
+        if self.request.method in permissions.SAFE_METHODS:
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated(), IsSystemAdminUser()]
 
     # TODO: restrict nested relations (SpareVariety, Quality) when models exist
 

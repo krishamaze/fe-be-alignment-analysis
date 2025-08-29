@@ -16,6 +16,13 @@ from django.utils import timezone
 
 
 @pytest.mark.django_db
+def test_stock_ledgers_require_auth():
+    client = APIClient()
+    resp = client.get("/api/stock-ledgers/")
+    assert resp.status_code in (401, 403)
+
+
+@pytest.mark.django_db
 def test_stock_entry_updates_ledger(store_s1):
     user = CustomUser.objects.create_user(
         username="u", email="u@example.com", password="x", role="system_admin"

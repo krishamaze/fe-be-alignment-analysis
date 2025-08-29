@@ -1,5 +1,6 @@
-from rest_framework import generics, viewsets
+from rest_framework import generics, permissions, viewsets
 from rest_framework.throttling import ScopedRateThrottle
+
 from .models import Brand, Contact, ScheduleCall
 from .serializers import BrandSerializer, ContactSerializer, ScheduleCallSerializer
 from store.permissions import IsSystemAdminOrReadOnly
@@ -14,7 +15,7 @@ class BrandViewSet(viewsets.ModelViewSet):
 
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
-    permission_classes = [IsSystemAdminOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
 
     def create(self, request, *args, **kwargs):  # pragma: no cover - simple proxy
         return super().create(request, *args, **kwargs)
@@ -31,6 +32,7 @@ class ContactCreateView(generics.CreateAPIView):
     serializer_class = ContactSerializer
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = "contact"
+    permission_classes = [permissions.AllowAny]
 
 
 class ScheduleCallCreateView(generics.CreateAPIView):
@@ -38,3 +40,4 @@ class ScheduleCallCreateView(generics.CreateAPIView):
     serializer_class = ScheduleCallSerializer
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = "schedule_call"
+    permission_classes = [permissions.AllowAny]

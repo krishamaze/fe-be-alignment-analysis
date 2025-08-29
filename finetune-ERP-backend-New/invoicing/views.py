@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from rest_framework import viewsets, decorators, response
+from rest_framework import decorators, permissions, response, viewsets
 from weasyprint import HTML
 
+from store.permissions import IsSystemAdminOrReadOnly
 from .models import Invoice, PaymentRecord
 from .serializers import InvoiceSerializer, PaymentRecordSerializer
 
@@ -10,6 +11,7 @@ from .serializers import InvoiceSerializer, PaymentRecordSerializer
 class InvoiceViewSet(viewsets.ModelViewSet):
     queryset = Invoice.objects.all().order_by("-created_at")
     serializer_class = InvoiceSerializer
+    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
 
     @decorators.action(detail=True, methods=["get"], url_path="pdf")
     def pdf(self, request, pk=None):
@@ -25,3 +27,4 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 class PaymentRecordViewSet(viewsets.ModelViewSet):
     queryset = PaymentRecord.objects.all().order_by("-date")
     serializer_class = PaymentRecordSerializer
+    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]

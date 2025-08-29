@@ -1,9 +1,9 @@
 # API Guide
 
 ## Brands
-- `GET /api/brands/` – public list
+- `GET /api/brands/` – auth required
 - `POST /api/brands/` – system_admin only
-- `GET /api/brands/{id}/` – public detail
+- `GET /api/brands/{id}/` – auth required
 - `PUT /api/brands/{id}/` – system_admin only
 - `DELETE /api/brands/{id}/` – system_admin only
 
@@ -22,47 +22,47 @@
 - `DELETE /api/spares/{id}` – system_admin only
 
 ## Units
-- `GET /api/units` – public list
-- `GET /api/units/{slug}` – public detail
+- `GET /api/units` – auth required
+- `GET /api/units/{slug}` – auth required
 - `POST /api/units` – system_admin only
 - `PUT /api/units/{slug}` – system_admin only (slug immutable)
 - `DELETE /api/units/{slug}` – system_admin only
 
 ## Qualities
-- `GET /api/qualities` – public list
-- `GET /api/qualities/{slug}` – public detail
+- `GET /api/qualities` – auth required
+- `GET /api/qualities/{slug}` – auth required
 - `POST /api/qualities` – system_admin only
 - `PUT /api/qualities/{slug}` – system_admin only (slug immutable)
 - `DELETE /api/qualities/{slug}` – system_admin only
 
 ## Taxonomy
-- `GET /api/departments` – public list
+- `GET /api/departments` – auth required
 - `POST /api/departments` – system_admin only
-- `GET /api/departments/{slug}` – public detail
+- `GET /api/departments/{slug}` – auth required
 - `PUT /api/departments/{slug}` – system_admin only (slug immutable)
 - `DELETE /api/departments/{slug}` – system_admin only
-- `GET /api/categories?department=slug` – public list filtered by department
+- `GET /api/categories?department=slug` – auth required
 - `POST /api/categories` – system_admin only
-- `GET /api/categories/{slug}` – public detail
+- `GET /api/categories/{slug}` – auth required
 - `PUT /api/categories/{slug}` – system_admin only (slug immutable)
 - `DELETE /api/categories/{slug}` – system_admin only
-- `GET /api/subcategories?category=slug` – public list filtered by category
+- `GET /api/subcategories?category=slug` – auth required
 - `POST /api/subcategories` – system_admin only
-- `GET /api/subcategories/{slug}` – public detail
+- `GET /api/subcategories/{slug}` – auth required
 - `PUT /api/subcategories/{slug}` – system_admin only (slug immutable)
 - `DELETE /api/subcategories/{slug}` – system_admin only
 
 ## Products
-- `GET /api/products` – public list (filter by `brand`, `availability`, `department`, `category`, `subcategory`, `min_price`, `max_price`; order with `ordering=price| -price | -date_created`)
+- `GET /api/products` – auth required (filter by `brand`, `availability`, `department`, `category`, `subcategory`, `min_price`, `max_price`; order with `ordering=price| -price | -date_created`)
 - `POST /api/products` – system_admin only
-- `GET /api/products/{slug}` – public detail
+- `GET /api/products/{slug}` – auth required
 - `PUT /api/products/{slug}` – system_admin only (slug immutable)
 - `DELETE /api/products/{slug}` – system_admin only
 
 ## Variants
-- `GET /api/variants` – public list (filter by `product` slug)
+- `GET /api/variants` – auth required (filter by `product` slug)
 - `POST /api/variants` – system_admin only
-- `GET /api/variants/{slug}` – public detail
+- `GET /api/variants/{slug}` – auth required
 - `PUT /api/variants/{slug}` – system_admin only (slug immutable)
 - `DELETE /api/variants/{slug}` – system_admin only
 
@@ -86,7 +86,7 @@
   - Transitions: pending→approved/rejected/cancelled, approved→in_progress/cancelled, in_progress→completed/cancelled
 
 ## Issues & Questions
-- `GET /api/issues/`, `POST /api/issues/` – list public, create/update/delete system_admin only
+- `GET /api/issues/`, `POST /api/issues/` – auth required; writes system_admin only
 - `GET /api/otherissues/`, `POST /api/otherissues/` – same rules
 - `GET /api/questions/`, `POST /api/questions/` – same rules
 
