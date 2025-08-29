@@ -2,9 +2,9 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
-import Contact from '../Contact';
-import ScheduleCall from '../ScheduleCall';
-import Bookings from '../Bookings';
+import Contact from '../public/Contact';
+import ScheduleCall from '../internal/ScheduleCall';
+import Bookings from '../internal/Bookings';
 import END_POINTS from '../../utils/Endpoints';
 import axios from 'axios';
 
