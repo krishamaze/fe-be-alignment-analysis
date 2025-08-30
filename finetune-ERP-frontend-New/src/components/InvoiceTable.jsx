@@ -1,4 +1,4 @@
-export default function InvoiceTable({ invoices = [], onDownload }) {
+export default function InvoiceTable({ invoices = [] }) {
   return (
     <table className="w-full text-left border mt-4">
       <thead>
@@ -16,12 +16,7 @@ export default function InvoiceTable({ invoices = [], onDownload }) {
             <td className="p-2 border">{inv.total}</td>
             <td className="p-2 border">{inv.status}</td>
             <td className="p-2 border">
-              <button
-                onClick={() => onDownload?.(inv.id)}
-                className="text-blue-600"
-              >
-                PDF
-              </button>
+              {/* TODO(v1.1): Enable invoice PDF once Railway system libraries available */}
             </td>
           </tr>
         ))}

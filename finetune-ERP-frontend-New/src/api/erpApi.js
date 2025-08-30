@@ -430,12 +430,13 @@ export const erpApi = createApi({
       }),
       invalidatesTags: ['Invoice'],
     }),
-    getInvoicePdf: builder.query({
-      query: (id) => ({
-        url: `/api/invoices/${id}/pdf/`,
-        responseHandler: (response) => response.blob(),
-      }),
-    }),
+    // TODO(v1.1): Enable invoice PDF once Railway system libraries available
+    // getInvoicePdf: builder.query({
+    //   query: (id) => ({
+    //     url: `/api/invoices/${id}/pdf/`,
+    //     responseHandler: (response) => response.blob(),
+    //   }),
+    // }),
     getPayments: builder.query({
       query: () => ({ url: '/api/payments/' }),
       providesTags: ['Payment'],

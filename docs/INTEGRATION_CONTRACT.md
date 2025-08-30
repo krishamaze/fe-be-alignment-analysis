@@ -377,7 +377,7 @@ Status advances automatically when the booking time passes; admins may override 
 
 ## Notes
 - Write operations (`POST`, `PUT`, `PATCH`, `DELETE`) are restricted to users with the `system_admin` role per `IsSystemAdminOrReadOnly`.
-- TODO: document pagination query parameters when backend stabilizes.
+- Pagination query parameters will be documented once the backend stabilizes.
 - Contact, schedule-call, and booking forms require a valid reCAPTCHA token. Bookings are throttled at 5 submissions/hour per user; advisors, branch heads, and system admins are exempt.
 
 ### Event Logs
