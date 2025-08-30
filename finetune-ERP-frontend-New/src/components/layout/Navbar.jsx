@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import Logo from '../common/Logo';
 import {
@@ -8,7 +8,10 @@ import {
   ShoppingCart,
   User,
   Search,
+  X,
 } from 'lucide-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutUser } from '@/redux/slice/authSlice';
 
 const promoMessages = [
   '🔥 Free Shipping',
@@ -19,6 +22,11 @@ const promoMessages = [
 export default function Navbar() {
   const [promoIndex, setPromoIndex] = useState(0);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const inputRef = useRef(null);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
   const location = useLocation();
 
   // Rotate promo messages every 4 seconds
@@ -57,9 +65,9 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50">
+    <header className="sticky top-0 left-0 w-full z-50 pt-[env(safe-area-inset-top)]">
       {/* Promo Bar */}
-      <div className="h-8 bg-secondary text-white flex items-center justify-between px-4 text-xs md:text-sm">
+      <div className="h-7 bg-secondary text-white flex items-center justify-between px-4 text-xs md:text-sm">
         <span className="transition-opacity duration-500" key={promoIndex}>
           {promoMessages[promoIndex]}
         </span>
@@ -94,12 +102,23 @@ export default function Navbar() {
             </li>
           </ul>
           <div className="hidden md:flex items-center gap-4">
-            <NavLink to="/account" className="flex" aria-label="Account">
+            <button
+              onClick={() => setProfileOpen(true)}
+              className="flex"
+              aria-label="Profile"
+            >
               <User className={iconClasses} />
-            </NavLink>
-            <NavLink to="/search" className="flex" aria-label="Search">
+            </button>
+            <button
+              onClick={() => {
+                setSearchOpen(true);
+                setTimeout(() => inputRef.current?.focus(), 0);
+              }}
+              className="flex"
+              aria-label="Search"
+            >
               <Search className={iconClasses} />
-            </NavLink>
+            </button>
             <NavLink to="/cart" className="flex" aria-label="Cart">
               <ShoppingCart className={iconClasses} />
             </NavLink>
@@ -115,14 +134,21 @@ export default function Navbar() {
         {/* Mobile: Logo + Search */}
         <div className="flex items-center justify-between w-full md:hidden">
           <Logo />
-          <NavLink to="/search" className="flex" aria-label="Search">
+          <button
+            onClick={() => {
+              setSearchOpen(true);
+              setTimeout(() => inputRef.current?.focus(), 0);
+            }}
+            className="flex"
+            aria-label="Search"
+          >
             <Search className="w-5 h-5" />
-          </NavLink>
+          </button>
         </div>
       </nav>
 
       {/* Mobile Bottom Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-full border-t border-gray-200 bg-white flex justify-around py-1 z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 w-full border-t border-gray-200 bg-white flex justify-around pt-1 pb-[env(safe-area-inset-bottom)] z-50">
         {/* eslint-disable-next-line no-unused-vars */}
         {bottomTabs.map(({ to, label, icon: Icon, onClick }) => (
           <NavLink
@@ -218,6 +244,90 @@ export default function Navbar() {
               </NavLink>
             </li>
           </ul>
+        </div>
+      )}
+      {/* Search Overlay */}
+      {searchOpen && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+          <button
+            onClick={() => setSearchOpen(false)}
+            className="absolute top-4 right-4 hidden md:block text-white"
+            aria-label="Close search"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          <button
+            onClick={() => setSearchOpen(false)}
+            className="absolute top-4 right-4 md:hidden text-white text-sm"
+          >
+            Cancel
+          </button>
+          <div className="w-full max-w-md px-4">
+            <input
+              ref={inputRef}
+              type="search"
+              placeholder="Search..."
+              className="w-full p-2 rounded border border-gray-300 focus:outline-none"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Profile Modal */}
+      {profileOpen && (
+        <div className="fixed inset-0 z-50 bg-black/50 hidden md:flex items-center justify-center">
+          <div className="bg-white rounded-md p-6 w-80 relative">
+            <button
+              onClick={() => setProfileOpen(false)}
+              className="absolute top-2 right-2"
+              aria-label="Close profile"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <div className="mb-4">
+              {user && (
+                <>
+                  <p className="font-medium">{user.username}</p>
+                  {user.email && (
+                    <p className="text-sm text-gray-600">{user.email}</p>
+                  )}
+                </>
+              )}
+            </div>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <NavLink to="/orders" onClick={() => setProfileOpen(false)}>
+                  Orders
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/wishlist" onClick={() => setProfileOpen(false)}>
+                  Wishlist
+                </NavLink>
+              </li>
+              <li>
+                <button
+                  onClick={() => {
+                    dispatch(logoutUser());
+                    setProfileOpen(false);
+                  }}
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+            <div className="mt-4 border-t pt-4 text-xs space-y-1">
+              <NavLink to="/partners" onClick={() => setProfileOpen(false)}>
+                Partners
+              </NavLink>
+              <NavLink to="/careers" onClick={() => setProfileOpen(false)}>
+                Careers
+              </NavLink>
+              <NavLink to="/policies" onClick={() => setProfileOpen(false)}>
+                Policies
+              </NavLink>
+            </div>
+          </div>
         </div>
       )}
     </header>
