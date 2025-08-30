@@ -16,7 +16,6 @@
 }
 ```
 
-![Booking intake payload](TODO: add screenshot)
 
 ## Dashboard Routes
 

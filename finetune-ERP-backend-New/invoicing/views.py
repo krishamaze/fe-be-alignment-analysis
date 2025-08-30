@@ -12,15 +12,15 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     serializer_class = InvoiceSerializer
     permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
 
-    @decorators.action(detail=True, methods=["get"], url_path="pdf")
-    def pdf(self, request, pk=None):
-        # TODO: Re-enable WeasyPrint when system libraries are installed on Railway
-        return response.Response(
-            {
-                "status": "coming_soon",
-                "message": "PDF generation temporarily disabled",
-            }
-        )
+    # TODO(v1.1): Enable invoice PDF once Railway system libraries available
+    # @decorators.action(detail=True, methods=["get"], url_path="pdf")
+    # def pdf(self, request, pk=None):
+    #     return response.Response(
+    #         {
+    #             "status": "coming_soon",
+    #             "message": "PDF generation temporarily disabled",
+    #         }
+    #     )
 
 
 class PaymentRecordViewSet(viewsets.ModelViewSet):

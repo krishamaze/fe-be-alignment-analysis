@@ -1,7 +1,7 @@
 from rest_framework.routers import DefaultRouter
 from .views import InvoiceViewSet, PaymentRecordViewSet
 
-# TODO: Re-enable WeasyPrint when system libraries are installed on Railway
+# TODO(v1.1): Enable invoice PDF once Railway system libraries available
 
 router = DefaultRouter()
 router.register(r"invoices", InvoiceViewSet, basename="invoice")
