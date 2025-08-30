@@ -24,7 +24,7 @@
 
 ## Deprecation policy
 
-_TODO: document how deprecated endpoints will be communicated and sunset._
+Deprecated endpoints will be communicated before removal.
 
 ## Business details source
 

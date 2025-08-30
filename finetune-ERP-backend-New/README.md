@@ -18,6 +18,8 @@ python manage.py createsuperuser  # set admin credentials
 python manage.py runserver
 ```
 
+Production instance is hosted on Railway at `https://api.finetune.store`.
+
 ### Common tasks
 - `python manage.py test` or `pytest` – run tests
 - `python manage.py attendance_autoclose` – finalize previous day
@@ -49,3 +51,12 @@ Public booking submissions require `RECAPTCHA_SECRET_KEY` and are throttled to 5
 | Cannot login | `SECRET_KEY` mismatch or tokens expired; refresh via `/api/token/refresh` |
 
 See [docs/](docs) for architecture, API and deployment notes.
+
+## Roadmap
+
+Planned for v1.1:
+
+- Invoice PDF generation
+- Lighthouse performance checks
+- Updated UI screenshots
+- Expanded deployment matrix

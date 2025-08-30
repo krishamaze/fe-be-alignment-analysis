@@ -8,10 +8,11 @@
 ## API Endpoints
 - `POST /api/invoices/` create invoice with nested `line_items`.
 - `GET /api/invoices/` list invoices.
-- `GET /api/invoices/:id/pdf/` returns placeholder JSON until PDF generation is restored.
 - `POST /api/payments/` record a payment for an invoice.
 
 Invoice numbers use a global sequence `FT-INV-0001` stored in the database and only reset if the `InvoiceSequence` record is cleared.
+
+Invoice PDF generation is currently disabled pending system libraries on Railway.
 
 ## Inventory
 
@@ -34,3 +35,16 @@ API:
 - `GET /api/serials/` list tracked serial numbers.
 - `GET /api/price-logs/` view price change history.
 - `GET /api/inventory-config/` configure tracking flags.
+
+## Deployment
+
+Backend runs on Railway at `https://api.finetune.store`.
+
+## Roadmap
+
+Planned for v1.1:
+
+- Invoice PDF generation
+- Lighthouse performance checks
+- Updated UI screenshots
+- Expanded deployment matrix

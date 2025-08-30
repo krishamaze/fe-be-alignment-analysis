@@ -32,10 +32,10 @@ React + Vite application providing ERP and e‑commerce interfaces for finetune.
 
 | Variable                  | Description                                                                      | Example                                           |
 | ------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------- |
-| _none_                    | API base URL is hard coded in [`src/utils/Endpoints.js`](src/utils/Endpoints.js) | `https://finetunetechcrafterp-dev.up.railway.app` |
-| `VITE_RECAPTCHA_SITE_KEY` | Google reCAPTCHA site key used by `ReCaptchaWrapper` in public forms             | `test-site-key`                                   |
+| _none_                    | API base URL is hard coded in [`src/utils/Endpoints.js`](src/utils/Endpoints.js) | `https://api.finetune.store` |
+| `VITE_RECAPTCHA_SITE_KEY` | Google reCAPTCHA site key used by `ReCaptchaWrapper` in public forms             | `test-site-key`             |
 
-Backend service lives in a separate repository (TODO: link) and expects requests against the base URL above.
+Backend API runs on Railway at `https://api.finetune.store`.
 
 ## Scripts
 
@@ -73,6 +73,15 @@ import END_POINTS from '@/utils/Endpoints';
 
 1. **Port 5173 already in use** → stop the conflicting process or change the `server.port` in `vite.config.js`.
 2. **`npm install` fails** → ensure Node.js ≥ 18.
-3. **API requests fail** → confirm the backend at `https://finetunetechcrafterp-dev.up.railway.app` is reachable.
+3. **API requests fail** → confirm the backend at `https://api.finetune.store` is reachable.
 4. **Immediate redirect to login** → clear invalid tokens from cookies.
 5. **Missing styles** → ensure `src/index.css` imports Tailwind directives and that Vite restarted after editing config.
+
+## Roadmap
+
+Planned for v1.1:
+
+- Invoice PDF generation
+- Lighthouse performance checks
+- Updated UI screenshots
+- Expanded deployment matrix
