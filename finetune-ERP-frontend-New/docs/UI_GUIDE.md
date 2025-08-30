@@ -57,9 +57,9 @@ The mobile dashboard uses a fixed bottom navigation bar that displays navigation
 
 ## Dashboard tiles
 
-Dashboard pages group features into **Live** and **Upcoming** sections. Section headers show counts in 14px medium text. Upcoming tiles render at ~70% opacity and trigger a "Coming soon" toast when activated. Tiles can optionally supply a `to` route to enable navigation (TODO: clarify deep linking patterns).
+Dashboard pages group features into **Live** and **Upcoming** sections. Section headers show counts in 14px medium text. Upcoming tiles render at ~70% opacity and trigger a "Coming soon" toast when activated. Tiles can optionally supply a `to` route to enable navigation.
 
-Giveaway Redemption and Workledger tiles navigate to `/giveaway-redemption` and `/workledger`, rendering inside `FocusLayout` (TODO: confirm additional FocusLayout flows).
+Giveaway Redemption and Workledger tiles navigate to `/giveaway-redemption` and `/workledger`, rendering inside `FocusLayout`.
 
 ## Brand keyline system
 

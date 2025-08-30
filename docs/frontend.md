@@ -30,7 +30,7 @@
 
 - SEO tags verified via page source inspection.
 - SEO tests cover About, Brands, Stores, Store details, Spares, and Bookings pages.
-- TODO: run Lighthouse to confirm performance within ±10% of legacy baseline.
+- Lighthouse audits planned post-launch.
 
 ## Dependencies & Blockers
 
@@ -41,15 +41,13 @@
 
 ![Invoice and payment workflow](assets/invoice-payment.png)
 
-TODO: capture real screenshot of invoice/payment UI from the dashboards.
-
 ## Invoicing & Payments
 
 - Added `InvoicesDashboard.jsx` and `PaymentsDashboard.jsx` for system admins.
 - `BookingsDashboard.jsx` now links to invoice creation and displays related invoices and payments.
 - New components: `InvoiceForm`, `ReceiptForm`, `InvoiceTable`, `PaymentsTable`.
-- API layer exposes `/api/invoices`, `/api/payments`, and `/api/invoices/:id/pdf` (currently returns placeholder JSON).
-- PDF export is temporarily disabled until system libraries are installed on Railway.
+- API layer exposes `/api/invoices` and `/api/payments`.
+- PDF export is disabled until system libraries are installed on Railway.
 
 ## Inventory
 
@@ -67,4 +65,16 @@ TODO: capture real screenshot of invoice/payment UI from the dashboards.
 - **BranchHead purchase/return:** use InventoryDashboard to post stock-in or return entries for a store.
 - **Global roll-up:** visit the ledger roll-up view to see total quantities across stores.
 
-> TODO: Replace screenshots after capturing from the deployed UI.
+
+## Deployment
+
+Frontend is deployed on Vercel and uses the backend API at `https://api.finetune.store` hosted on Railway.
+
+## Roadmap
+
+Planned for v1.1:
+
+- Invoice PDF generation
+- Lighthouse performance checks
+- Updated UI screenshots
+- Expanded deployment matrix
