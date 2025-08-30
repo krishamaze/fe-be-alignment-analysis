@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../common/Logo';
 import {
   Home,
@@ -8,7 +8,10 @@ import {
   ShoppingCart,
   User,
   Search,
+  X,
 } from 'lucide-react';
+import { useAppSelector, useAppDispatch } from '../../redux/hook';
+import { logout } from '../../redux/slice/authSlice';
 
 const promoMessages = [
   '🔥 Free Shipping',
@@ -18,8 +21,14 @@ const promoMessages = [
 
 export default function Navbar() {
   const [promoIndex, setPromoIndex] = useState(0);
-  const [accountOpen, setAccountOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const searchRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.auth.user);
 
   // Rotate promo messages every 4 seconds
   useEffect(() => {
@@ -29,13 +38,19 @@ export default function Navbar() {
     return () => clearInterval(interval);
   }, []);
 
-  // Close account menu on route change
+  // Close overlays on route change
   useEffect(() => {
-    setAccountOpen(false);
+    setProfileOpen(false);
+    setSearchOpen(false);
   }, [location.pathname]);
 
+  // Focus search input when opened
+  useEffect(() => {
+    if (searchOpen) searchRef.current?.focus();
+  }, [searchOpen]);
+
   const navLinkClasses =
-    'relative px-3 py-2 text-sm text-primary after:absolute after:left-0 after:-bottom-0.5 after:h-0.5 after:bg-secondary after:w-0 after:transition-all hover:after:w-full';
+    'relative px-3 py-2 text-sm text-primary after:absolute after:left-0 after:-bottom-0.5 after:h-0.5 after:bg-secondary after:w-0 after:transition-all after:duration-200 after:ease-out hover:after:w-full';
 
   const iconClasses =
     'w-5 h-5 transition transform hover:opacity-80 hover:scale-110';
@@ -45,21 +60,27 @@ export default function Navbar() {
     { to: '/repair', label: 'Repair', icon: Wrench },
     { to: '/shop', label: 'Shop', icon: ShoppingBag },
     { to: '/cart', label: 'Cart', icon: ShoppingCart },
-    {
-      to: '/account',
-      label: 'Account',
-      icon: User,
-      onClick: (e) => {
-        e.preventDefault();
-        setAccountOpen((o) => !o);
-      },
-    },
+    { to: '/account', label: 'Account', icon: User },
   ];
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (query.trim()) {
+      navigate(`/search?q=${encodeURIComponent(query)}`);
+    }
+    setSearchOpen(false);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    setProfileOpen(false);
+    navigate('/');
+  };
 
   return (
     <header className="fixed top-0 left-0 w-full z-50">
       {/* Promo Bar */}
-      <div className="h-8 bg-secondary text-white flex items-center justify-between px-4 text-xs md:text-sm">
+      <div className="h-7 bg-secondary text-white flex items-center justify-between px-4 text-xs md:text-sm">
         <span className="transition-opacity duration-500" key={promoIndex}>
           {promoMessages[promoIndex]}
         </span>
@@ -94,12 +115,22 @@ export default function Navbar() {
             </li>
           </ul>
           <div className="hidden md:flex items-center gap-4">
-            <NavLink to="/account" className="flex" aria-label="Account">
+            <button
+              type="button"
+              onClick={() => setProfileOpen(true)}
+              className="flex"
+              aria-label="Account"
+            >
               <User className={iconClasses} />
-            </NavLink>
-            <NavLink to="/search" className="flex" aria-label="Search">
+            </button>
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className="flex"
+              aria-label="Search"
+            >
               <Search className={iconClasses} />
-            </NavLink>
+            </button>
             <NavLink to="/cart" className="flex" aria-label="Cart">
               <ShoppingCart className={iconClasses} />
             </NavLink>
@@ -115,20 +146,24 @@ export default function Navbar() {
         {/* Mobile: Logo + Search */}
         <div className="flex items-center justify-between w-full md:hidden">
           <Logo />
-          <NavLink to="/search" className="flex" aria-label="Search">
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            className="flex"
+            aria-label="Search"
+          >
             <Search className="w-5 h-5" />
-          </NavLink>
+          </button>
         </div>
       </nav>
 
       {/* Mobile Bottom Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-full border-t border-gray-200 bg-white flex justify-around py-1 z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 w-full border-t border-gray-200 bg-white flex justify-around py-1 pb-[env(safe-area-inset-bottom)] z-50">
         {/* eslint-disable-next-line no-unused-vars */}
-        {bottomTabs.map(({ to, label, icon: Icon, onClick }) => (
+        {bottomTabs.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={label}
             to={to}
-            onClick={onClick}
             className={({ isActive }) =>
               `flex flex-col items-center gap-0.5 text-xs pt-1 pb-0.5 ${
                 isActive ? 'text-secondary' : 'text-gray-600'
@@ -141,83 +176,74 @@ export default function Navbar() {
         ))}
       </nav>
 
-      {/* Account submenu */}
-      {accountOpen && (
-        <div className="md:hidden fixed bottom-16 left-0 right-0 mx-4 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-          <ul className="p-4 text-sm space-y-2">
-            <li>
-              <NavLink
-                to="/account"
-                className="block"
-                onClick={() => setAccountOpen(false)}
-              >
-                Profile
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/orders"
-                className="block"
-                onClick={() => setAccountOpen(false)}
-              >
-                Orders
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/wishlist"
-                className="block"
-                onClick={() => setAccountOpen(false)}
-              >
-                Wishlist
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/partners"
-                className="block"
-                onClick={() => setAccountOpen(false)}
-              >
-                Partners
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/careers"
-                className="block"
-                onClick={() => setAccountOpen(false)}
-              >
-                Careers
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/privacy"
-                className="block"
-                onClick={() => setAccountOpen(false)}
-              >
-                Privacy
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/terms"
-                className="block"
-                onClick={() => setAccountOpen(false)}
-              >
-                Terms
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/legal"
-                className="block"
-                onClick={() => setAccountOpen(false)}
-              >
-                Legal
-              </NavLink>
-            </li>
-          </ul>
+      {/* Search overlay */}
+      {searchOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-start justify-center p-4 z-50">
+          <div className="bg-white w-full max-w-md mt-20 p-4 rounded relative">
+            <button
+              type="button"
+              onClick={() => setSearchOpen(false)}
+              className="absolute top-3 right-3 text-gray-500"
+              aria-label="Close search"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <form onSubmit={handleSearch}>
+              <input
+                ref={searchRef}
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search"
+                className="w-full border-b border-gray-300 focus:border-secondary focus:outline-none p-2"
+              />
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Profile modal */}
+      {profileOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-start justify-end z-50">
+          <div className="bg-white w-64 mt-16 mr-4 rounded shadow-lg p-4 relative">
+            <button
+              type="button"
+              onClick={() => setProfileOpen(false)}
+              className="absolute top-2 right-2 text-gray-500"
+              aria-label="Close profile"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <p className="mb-4 text-sm font-semibold">
+              Hi, {user?.username || 'Guest'}
+            </p>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <NavLink to="/account" onClick={() => setProfileOpen(false)}>
+                  Profile
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/orders" onClick={() => setProfileOpen(false)}>
+                  Orders
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/wishlist" onClick={() => setProfileOpen(false)}>
+                  Wishlist
+                </NavLink>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="text-left w-full"
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
       )}
     </header>
