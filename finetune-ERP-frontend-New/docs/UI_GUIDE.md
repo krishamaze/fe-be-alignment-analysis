@@ -41,15 +41,15 @@ Dark mode is enabled via `class` strategy. Toggle a `dark` class on the root ele
 
 ## Reusable components
 
-| Component                                       | Location                          | Notes                                                        |
-| ----------------------------------------------- | --------------------------------- | ------------------------------------------------------------ |
-| `Navbar`                                        | `src/components/common`           | top navigation bar (ecommerce variant pending consolidation) |
-| `DashboardNavbar` / `DashboardBottomNav`        | `src/components/dashboard/layout` | responsive dashboard navigation with fixed bottom grid       |
-| `Navbar`                                        | `src/components/common`           | top navigation bar (ecommerce variant pending consolidation) |
-| `Pagination` / `ResponsivePaginationHandler`    | `src/components`                  | reusable pagination controls                                 |
-| `ToggleStatusModal` & `DeleteConfirmationModal` | `src/components`                  | confirmation dialogs                                         |
-| `StoreAssignModal` & `BranchHeadModal`          | `src/components/Store`            | assign stores or branch heads                                |
-| `Loader`                                        | `src/components/common`           | full-screen loading spinner                                  |
+| Component                                       | Location                          | Notes                                                           |
+| ----------------------------------------------- | --------------------------------- | --------------------------------------------------------------- |
+| `Navbar`                                        | `src/components/layout`           | unified public navigation with promo bar and mobile bottom tabs |
+| `Footer`                                        | `src/components/layout`           | slim desktop footer                                             |
+| `DashboardNavbar` / `DashboardBottomNav`        | `src/components/dashboard/layout` | responsive dashboard navigation with fixed bottom grid          |
+| `Pagination` / `ResponsivePaginationHandler`    | `src/components`                  | reusable pagination controls                                    |
+| `ToggleStatusModal` & `DeleteConfirmationModal` | `src/components`                  | confirmation dialogs                                            |
+| `StoreAssignModal` & `BranchHeadModal`          | `src/components/Store`            | assign stores or branch heads                                   |
+| `Loader`                                        | `src/components/common`           | full-screen loading spinner                                     |
 
 Follow these patterns when adding new components to keep styling and accessibility consistent.
 
