@@ -1,6 +1,5 @@
-import Navbar from './components/common/Navbar';
-import EcommerceNavbar from './components/ecommerce/Navbar';
-import Footer from './components/common/Footer';
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
 import Hero from '../src/pages/Hero';
 import TeamLogin from './pages/internal/TeamLogin';
 import Signup from './pages/customers/Signup';
@@ -37,6 +36,9 @@ import Locate from './pages/public/Locate';
 import Legal from './pages/public/Legal';
 import Careers from './pages/public/Careers';
 import Offers from './pages/public/Offers';
+import Repair from './pages/public/Repair';
+import Support from './pages/public/Support';
+import SearchPage from './pages/public/Search';
 import ScheduleCall from './pages/internal/ScheduleCall';
 import Stores from './pages/internal/Stores';
 import StoreDetails from './pages/internal/StoreDetails';
@@ -61,30 +63,9 @@ function AppContent() {
   const role = useAppSelector(selectAuthRole);
   const location = useLocation();
 
-  // Check if current route is e-commerce related
-  const isEcommerceRoute =
-    location.pathname === '/' ||
-    location.pathname.startsWith('/shop') ||
-    location.pathname.startsWith('/departments') ||
-    location.pathname.startsWith('/cart') ||
-    location.pathname.startsWith('/partners') ||
-    location.pathname.startsWith('/help') ||
-    location.pathname.startsWith('/legal') ||
-    location.pathname.startsWith('/about') ||
-    location.pathname.startsWith('/contact') ||
-    location.pathname.startsWith('/locate') ||
-    location.pathname.startsWith('/offers') ||
-    location.pathname.startsWith('/careers') ||
-    location.pathname.startsWith('/signup') ||
-    location.pathname.startsWith('/login') ||
-    location.pathname.startsWith('/account') ||
-    location.pathname.startsWith('/orders') ||
-    location.pathname.startsWith('/teamlogin');
-
   return (
     <>
-      {!location.pathname.startsWith('/dashboard') &&
-        (isEcommerceRoute ? <EcommerceNavbar /> : <Navbar />)}
+      {!location.pathname.startsWith('/dashboard') && <Navbar />}
       <Routes>
         <Route path="/" element={<Hero />} />
         <Route
@@ -104,6 +85,9 @@ function AppContent() {
 
         {/* E-commerce routes */}
         <Route path="/shop" element={<Shop />} />
+        <Route path="/repair" element={<Repair />} />
+        <Route path="/support" element={<Support />} />
+        <Route path="/search" element={<SearchPage />} />
         <Route path="/product/:slug" element={<ProductDetail />} />
         <Route path="/departments" element={<DepartmentsPage />} />
         <Route
