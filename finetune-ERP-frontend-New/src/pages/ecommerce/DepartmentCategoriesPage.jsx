@@ -1,10 +1,14 @@
 import { Link, useParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
 import {
   useGetDepartmentsQuery,
   useGetCategoriesQuery,
   useGetSubCategoriesQuery,
 } from '../../api/erpApi';
+
+export const metadata = {
+  title: 'Categories',
+  description: 'Browse categories',
+};
 
 function DepartmentCategoriesPage() {
   const { deptSlug } = useParams();
@@ -17,15 +21,6 @@ function DepartmentCategoriesPage() {
 
   return (
     <div className="pt-20 max-w-7xl mx-auto px-4">
-      <Helmet>
-        <title>{department ? department.name : 'Categories'}</title>
-        <meta
-          name="description"
-          content={
-            department ? `Categories in ${department.name}` : 'Categories'
-          }
-        />
-      </Helmet>
       <h1 className="text-2xl font-bold mb-4">
         {department ? department.name : ''}
       </h1>

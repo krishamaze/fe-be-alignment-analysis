@@ -2,7 +2,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { vi, test, expect } from 'vitest';
-import ProductDetail from '../ecommerce/ProductDetail';
+import ProductDetail, { metadata } from '../ecommerce/ProductDetail';
 
 vi.mock('../../api/erpApi', () => ({
   useGetProductBySlugQuery: () => ({
@@ -47,9 +47,8 @@ test('renders product detail and SEO metadata', async () => {
   );
   expect(screen.getByText('P1')).toBeDefined();
   await waitFor(() => {
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    expect(ogTitle.getAttribute('content')).toBe('P1 - B');
+    expect(metadata.title).toBe('P1 - B');
+    expect(metadata.openGraph.title).toBe('P1 - B');
   });
-  const script = document.querySelector('script[type="application/ld+json"]');
-  expect(script.textContent).toContain('"@type":"Product"');
+  expect(metadata.jsonLd['@type']).toBe('Product');
 });
