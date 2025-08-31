@@ -113,7 +113,7 @@ export default function DashboardBottomNav({ role, navOpen, setNavOpen }) {
     <>
       <nav
         aria-label="Dashboard navigation"
-        className={`fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-keyline transition-transform duration-300 ${
+        className={`fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-keyline transition-transform duration-300 pb-[env(safe-area-inset-bottom)] ${
           navOpen ? 'translate-y-0' : 'translate-y-full'
         }`}
       >

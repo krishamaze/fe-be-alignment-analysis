@@ -53,6 +53,8 @@ Dark mode is enabled via `class` strategy. Toggle a `dark` class on the root ele
 
 Follow these patterns when adding new components to keep styling and accessibility consistent.
 
+Layout containers use `min-h-[100dvh]` for full viewport height, and fixed navigation bars apply safe-area padding with `env(safe-area-inset-top)` and `env(safe-area-inset-bottom)`.
+
 The mobile dashboard uses a fixed bottom navigation bar that displays navigation tiles in a three-column grid (six columns on wider breakpoints) and can be shown or hidden via the floating toggle button.
 
 ## Dashboard tiles

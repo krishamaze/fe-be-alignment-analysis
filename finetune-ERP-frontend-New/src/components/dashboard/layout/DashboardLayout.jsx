@@ -38,7 +38,7 @@ function Dashboard() {
   return (
     <>
       <DashboardNavbar />
-      <main className="min-h-screen p-6 bg-gray-50 mt-16 pb-[92px]">
+      <main className="min-h-[100dvh] p-6 bg-gray-50 mt-16 pb-[92px]">
         {isLoading ? (
           <div className="flex justify-center items-center h-full">
             <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-gray-500"></div>
