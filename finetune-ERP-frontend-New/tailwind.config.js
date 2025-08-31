@@ -27,6 +27,12 @@ export default {
         'body-sm': ['0.875rem', { lineHeight: '1.25rem' }],
         caption: ['0.75rem', { lineHeight: '1rem' }],
       },
+      minHeight: {
+        app: '100dvh',
+      },
+      padding: {
+        'safe-header': 'calc(5rem + env(safe-area-inset-top))',
+      },
     },
   },
   plugins: [],

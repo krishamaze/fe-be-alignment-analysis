@@ -20,7 +20,7 @@ function DepartmentCategoriesPage() {
   const subs = subData?.content ?? [];
 
   return (
-    <div className="pt-20 max-w-7xl mx-auto px-4">
+    <div className="pt-safe-header max-w-7xl mx-auto px-4">
       <h1 className="text-2xl font-bold mb-4">
         {department ? department.name : ''}
       </h1>

@@ -23,7 +23,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4 py-6">
+    <div className="min-h-app flex items-center justify-center bg-white px-4 py-6">
       <div className="w-full max-w-sm space-y-4">
         <div className="text-center">
           <h2

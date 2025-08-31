@@ -10,7 +10,7 @@ function DepartmentsPage() {
   const { data } = useGetDepartmentsQuery();
   const departments = data?.content ?? [];
   return (
-    <div className="pt-20 max-w-7xl mx-auto px-4">
+    <div className="pt-safe-header max-w-7xl mx-auto px-4">
       <h1 className="text-2xl font-bold mb-4">Departments</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {departments.map((d) => (
