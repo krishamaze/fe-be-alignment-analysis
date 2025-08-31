@@ -90,20 +90,19 @@ describe('SEO meta tags', () => {
     });
   });
 
-  it('sets title and description for Brands page', async () => {
+  it('sets title and description for Home page', async () => {
     document.title = '';
     const container = document.createElement('div');
-    const root = createRoot(container);
     await act(async () => {
-      root.render(<Index />);
+      createRoot(container).render(
+        <MemoryRouter>
+          <Index />
+        </MemoryRouter>
+      );
     });
-    await act(async () => {});
-    expect(document.title).toBe('Brands – Finetune');
+    expect(document.title).toBe('Home – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
-    expect(desc.getAttribute('content')).toContain('Brands we service');
-    await act(async () => {
-      root.unmount();
-    });
+    expect(desc.getAttribute('content')).toContain('We finetune your device.');
   });
 
   it('sets title and description for Stores page', async () => {
