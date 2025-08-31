@@ -6,5 +6,5 @@
 - Departments, categories, and subcategories also expose immutable slugs for SEO-friendly taxonomy URLs.
 
 ## Metadata Injection
-- Frontend uses `react-helmet` to set `<title>`, `<meta name="description">`, Open Graph tags, and `<link rel="canonical">` on product detail and taxonomy pages.
+- Frontend uses React 19's metadata API to set `<title>`, `<meta name="description">`, Open Graph tags, and `<link rel="canonical">` on product detail and taxonomy pages.
 - Product detail pages render JSON-LD `Product` schema including name, brand, price, and availability.
