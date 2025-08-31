@@ -43,7 +43,8 @@ Dark mode is enabled via `class` strategy. Toggle a `dark` class on the root ele
 
 | Component                                       | Location                          | Notes                                                           |
 | ----------------------------------------------- | --------------------------------- | --------------------------------------------------------------- |
-| `Navbar`                                        | `src/components/layout`           | unified public navigation with promo bar and mobile bottom tabs |
+| `Navbar`                                        | `src/components/layout`           | wrapper combining `TopBar`, `MainNav`, and `BottomNav` |
+| `TopBar` / `MainNav` / `BottomNav`              | `src/components/layout`           | modular public navigation pieces |
 | `Footer`                                        | `src/components/layout`           | slim desktop footer                                             |
 | `DashboardNavbar` / `DashboardBottomNav`        | `src/components/dashboard/layout` | responsive dashboard navigation with fixed bottom grid          |
 | `Pagination` / `ResponsivePaginationHandler`    | `src/components`                  | reusable pagination controls                                    |
