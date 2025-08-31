@@ -1,9 +1,10 @@
 import { useParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
 import {
   useGetProductBySlugQuery,
   useGetVariantsQuery,
 } from '../../api/erpApi';
+
+export let metadata = {};
 
 function ProductDetail() {
   const { slug } = useParams();
@@ -32,18 +33,21 @@ function ProductDetail() {
     url: product.url,
   };
 
+  metadata = {
+    title: metaTitle,
+    description: metaDesc,
+    alternates: { canonical: product.url },
+    openGraph: {
+      title: metaTitle,
+      description: metaDesc,
+      url: product.url,
+      images: [product.image || ''],
+    },
+    jsonLd,
+  };
+
   return (
     <div className="p-4 space-y-4">
-      <Helmet>
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDesc} />
-        <link rel="canonical" href={product.url} />
-        <meta property="og:title" content={metaTitle} />
-        <meta property="og:description" content={metaDesc} />
-        <meta property="og:image" content={product.image || ''} />
-        <meta property="og:url" content={product.url} />
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-      </Helmet>
       <h1 className="text-2xl font-bold">{product.name}</h1>
       <p className="text-gray-600">{product.brand_name || product.brand}</p>
       <p className="text-xl">
