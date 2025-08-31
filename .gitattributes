@@ -1,16 +1,28 @@
-*.psd filter=lfs diff=lfs merge=lfs -text
-*.pdf filter=lfs diff=lfs merge=lfs -text
-*.zip filter=lfs diff=lfs merge=lfs -text
-*.xlsx filter=lfs diff=lfs merge=lfs -text
-*.docx filter=lfs diff=lfs merge=lfs -text
-*.png filter=lfs diff=lfs merge=lfs -text
-*.jpg filter=lfs diff=lfs merge=lfs -text
-*.jpeg filter=lfs diff=lfs merge=lfs -text
-*.gif filter=lfs diff=lfs merge=lfs -text
-*.tiff filter=lfs diff=lfs merge=lfs -text
-*.bmp filter=lfs diff=lfs merge=lfs -text
-*.mp4 filter=lfs diff=lfs merge=lfs -text
-*.mp3 filter=lfs diff=lfs merge=lfs -text
+# ========================================
+# 🔹 Global LFS Rules (big/heavy binaries)
+*.psd   filter=lfs diff=lfs merge=lfs -text
+*.pdf   filter=lfs diff=lfs merge=lfs -text
+*.zip   filter=lfs diff=lfs merge=lfs -text
+*.xlsx  filter=lfs diff=lfs merge=lfs -text
+*.docx  filter=lfs diff=lfs merge=lfs -text
+*.mp4   filter=lfs diff=lfs merge=lfs -text
+*.mp3   filter=lfs diff=lfs merge=lfs -text
+*.tiff  filter=lfs diff=lfs merge=lfs -text
+*.bmp   filter=lfs diff=lfs merge=lfs -text
+
+# Global image rule (default: LFS)
+*.png   filter=lfs diff=lfs merge=lfs -text
+*.jpg   filter=lfs diff=lfs merge=lfs -text
+*.jpeg  filter=lfs diff=lfs merge=lfs -text
+*.gif   filter=lfs diff=lfs merge=lfs -text
+# 🔹 Overrides: keep frontend build assets in plain Git
+# (Important for Vercel deploys)
+finetune-ERP-frontend-New/src/assets/*.png   -filter -diff -merge text
+finetune-ERP-frontend-New/src/assets/*.jpg   -filter -diff -merge text
+finetune-ERP-frontend-New/src/assets/*.jpeg  -filter -diff -merge text
+finetune-ERP-frontend-New/src/assets/*.gif   -filter -diff -merge text
+finetune-ERP-frontend-New/src/assets/*.svg   -filter -diff -merge text
+# 🔹 Special Cases
 finetune-ERP-backend-New/requirements.txt text diff
 finetune-ERP-frontend-New/src/assets/* !text !filter !merge !diff
 finetune-ERP-frontend-New/src/assets/images/NoDataFound.png !text !filter !merge !diff
