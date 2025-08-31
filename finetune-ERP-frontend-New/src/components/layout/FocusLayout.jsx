@@ -6,7 +6,7 @@ function FocusLayout({ title = '' }) {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-surface min-h-screen">
+    <div className="bg-surface min-h-[100dvh]">
       <DashboardNavbar />
       <div className="mt-16">
         <header className="flex items-center gap-2 p-4 border-b border-keyline bg-white">

@@ -57,7 +57,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50">
+    <header className="fixed top-0 left-0 w-full z-50 pt-[env(safe-area-inset-top)]">
       {/* Promo Bar */}
       <div className="h-8 bg-secondary text-white flex items-center justify-between px-4 text-xs md:text-sm">
         <span className="transition-opacity duration-500" key={promoIndex}>
@@ -122,7 +122,7 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile Bottom Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-full border-t border-gray-200 bg-white flex justify-around py-1 z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 w-full border-t border-gray-200 bg-white flex justify-around py-1 z-50 pb-[env(safe-area-inset-bottom)]">
         {/* eslint-disable-next-line no-unused-vars */}
         {bottomTabs.map(({ to, label, icon: Icon, onClick }) => (
           <NavLink

@@ -13,3 +13,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix dashboard icon imports to ensure valid heroicon modules.
 - Forward tile routes into `CardItem` so dashboard tiles navigate correctly.
 - Route Giveaway Redemption through `FocusLayout` at `/giveaway-redemption` and make the layout title configurable.
+- Replace `min-h-screen` with `min-h-[100dvh]` in layout containers for mobile-friendly viewport sizing.
+- Add safe-area inset padding to fixed navigation bars for better display on notch devices.

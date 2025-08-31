@@ -32,7 +32,7 @@ function DashboardNavbar() {
   return (
     <nav
       id="dashboard-navbar"
-      className="bg-white shadow-md fixed top-0 w-full z-20"
+      className="bg-white shadow-md fixed top-0 w-full z-20 pt-[env(safe-area-inset-top)]"
     >
       <div className="max-w-[1200px] mx-auto px-6 flex justify-between items-center h-16">
         {/* Left: Logo */}

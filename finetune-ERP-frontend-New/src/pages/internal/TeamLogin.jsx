@@ -51,7 +51,7 @@ function TeamLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 pt-20">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-gray-100 px-4 pt-20">
       <div className="w-full max-w-md bg-white border border-gray-200 shadow-lg rounded-lg p-8">
         <h2 className="text-2xl font-bold mb-2 text-center">Team Login</h2>
         <p className="text-center text-gray-500 mb-6 text-sm">
