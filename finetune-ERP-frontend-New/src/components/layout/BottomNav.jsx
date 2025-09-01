@@ -30,7 +30,7 @@ export default function BottomNav({
   return (
     <nav
       className={`md:hidden fixed bottom-0 left-0 w-full border-t border-gray-200 bg-white flex justify-around py-1 z-50 ${
-        visible ? 'translate-y-0' : 'translate-y-full'
+        keyboardDocked || visible ? 'translate-y-0' : 'translate-y-full'
       } ${keyboardDocked ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       style={{
         height: 'var(--bottombar-h)',
