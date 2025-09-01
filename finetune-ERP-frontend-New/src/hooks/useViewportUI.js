@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 
-export default function useViewportUI(mode = 'scroll') {
+export default function useViewportUI(
+  mode = 'scroll',
+  keyboardThreshold = 100
+) {
   const [bottomVisible, setBottomVisible] = useState(true);
   const [keyboardDocked, setKeyboardDocked] = useState(false);
 
@@ -12,7 +15,7 @@ export default function useViewportUI(mode = 'scroll') {
     const updateVh = () => {
       const vh = viewport.height;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
-      setKeyboardDocked(window.innerHeight - vh > 100);
+      setKeyboardDocked(window.innerHeight - vh > keyboardThreshold);
     };
 
     updateVh();
@@ -22,35 +25,34 @@ export default function useViewportUI(mode = 'scroll') {
       viewport.removeEventListener('resize', updateVh);
       window.removeEventListener('orientationchange', updateVh);
     };
-  }, []);
+  }, [keyboardThreshold]);
 
   // scroll direction detection for bottom nav
   useEffect(() => {
     if (mode !== 'scroll') return;
     let lastY = window.scrollY;
-    let timer;
+    let ticking = false;
 
     const onScroll = () => {
       const currentY = window.scrollY;
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        setBottomVisible(currentY < lastY);
-        lastY = currentY;
-      }, 100);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setBottomVisible(currentY < lastY);
+          lastY = currentY;
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
+    // TODO: explore IntersectionObserver for scroll intent if rAF proves insufficient
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', onScroll);
-      clearTimeout(timer);
     };
   }, [mode]);
 
-  const bottomNavVisible = (() => {
-    if (keyboardDocked) return false; // keyboard has highest priority
-    if (mode === 'scroll') return bottomVisible; // scroll overrides mode
-    return true; // paged mode defaults to visible
-  })();
+  const bottomNavVisible = mode === 'scroll' ? bottomVisible : true;
 
   return { bottomNavVisible, keyboardDocked };
 }
