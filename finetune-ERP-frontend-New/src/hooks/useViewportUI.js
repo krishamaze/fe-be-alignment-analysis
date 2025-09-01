@@ -45,14 +45,18 @@ export default function useViewportUI(
       }
     };
 
-    // TODO: explore IntersectionObserver for scroll intent if rAF proves insufficient
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', onScroll);
     };
   }, [mode]);
 
-  const bottomNavVisible = mode === 'scroll' ? bottomVisible : true;
+  // ✅ Priority rule: keyboard > scroll > mode
+  const bottomNavVisible = (() => {
+    if (keyboardDocked) return false;        // hide if keyboard
+    if (mode === 'scroll') return bottomVisible; // scroll up/down intent
+    return true;                             // paged mode always visible
+  })();
 
-  return { bottomNavVisible, keyboardDocked };
+  return { bottomNavVisible };
 }

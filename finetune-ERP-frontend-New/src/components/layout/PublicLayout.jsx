@@ -3,9 +3,10 @@ import MainNav from './MainNav';
 import BottomNav from './BottomNav';
 import Footer from './Footer';
 import useViewportUI from '@/hooks/useViewportUI';
+import PageSection from '@/components/common/PageSection';
 
 export default function PublicLayout({ children, mode = 'scroll' }) {
-  const { bottomNavVisible, keyboardDocked } = useViewportUI(mode);
+  const { bottomNavVisible } = useViewportUI(mode);
 
   return (
     <div className="flex flex-col min-h-[var(--vh)]">
@@ -15,16 +16,13 @@ export default function PublicLayout({ children, mode = 'scroll' }) {
       </header>
 
       {/* Page content */}
-      <main
-        className={`flex-1 pt-[calc(var(--topbar-h)+var(--mainnav-h))] ${
-          mode === 'paged' ? 'pb-[var(--bottombar-h)]' : ''
-        }`}
-        style={{
-          minHeight: 'calc(var(--vh) - var(--topbar-h) - var(--mainnav-h))',
-        }}
+      <PageSection
+        withBottom={mode === 'paged'}
+        className="flex-1"
+        style={{ marginTop: 'calc(var(--topbar-h) + var(--mainnav-h))' }}
       >
         {children}
-      </main>
+      </PageSection>
 
       {/* Desktop footer */}
       <div className="hidden md:block mt-auto">
@@ -32,7 +30,7 @@ export default function PublicLayout({ children, mode = 'scroll' }) {
       </div>
 
       {/* Mobile bottom nav */}
-      <BottomNav visible={bottomNavVisible} keyboardDocked={keyboardDocked} />
+      <BottomNav visible={bottomNavVisible} />
     </div>
   );
 }
