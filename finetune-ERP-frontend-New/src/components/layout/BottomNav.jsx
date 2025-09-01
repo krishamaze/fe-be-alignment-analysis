@@ -29,10 +29,13 @@ export default function BottomNav({
 
   return (
     <nav
-      className={`md:hidden fixed bottom-0 left-0 w-full border-t border-gray-200 bg-white flex justify-around py-1 z-50 transition-transform duration-300 ${
+      className={`md:hidden fixed bottom-0 left-0 w-full border-t border-gray-200 bg-white flex justify-around py-1 z-50 ${
         visible ? 'translate-y-0' : 'translate-y-full'
       } ${keyboardDocked ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-      style={{ height: 'var(--bottombar-h)' }}
+      style={{
+        height: 'var(--bottombar-h)',
+        transition: 'transform 0.2s ease, opacity 0.2s ease',
+      }}
     >
       {/* eslint-disable-next-line no-unused-vars */}
       {bottomTabs.map(({ to, label, icon: Icon, onClick }) => (
