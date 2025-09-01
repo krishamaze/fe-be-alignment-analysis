@@ -9,7 +9,7 @@ import {
 
 export default function HeroSection() {
   return (
-    <section className="relative mt-[var(--navbar-height)] flex flex-col md:flex-row items-center justify-center min-h-[calc(100vh-var(--navbar-height))] bg-gradient-to-r from-primary via-secondary to-surface text-surface px-6 py-12">
+    <section className="relative flex flex-col md:flex-row items-center justify-center min-h-[calc(var(--vh)-var(--topbar-h)-var(--mainnav-h)-var(--bottombar-h))] bg-gradient-to-r from-primary via-secondary to-surface text-surface px-6 py-12">
       {/* Left: Text and CTAs */}
       <div className="md:w-1/2 text-center md:text-left flex flex-col justify-center gap-6">
         <div>

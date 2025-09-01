@@ -56,6 +56,20 @@ Follow these patterns when adding new components to keep styling and accessibili
 
 The mobile dashboard uses a fixed bottom navigation bar that displays navigation tiles in a three-column grid (six columns on wider breakpoints) and can be shown or hidden via the floating toggle button.
 
+## Layout Modes
+
+`PublicLayout` accepts a `mode` prop to control mobile navigation:
+
+- `scroll` (default) – page content scrolls underneath the bottom nav. The nav hides on downward scroll and reappears when scrolling up.
+- `paged` – page content is padded by `var(--bottombar-h)` and the bottom nav stays visible.
+
+Viewport changes are handled by `useViewportUI`, which updates the CSS vars:
+
+- `--vh` – current visual viewport height
+- `--topbar-h`, `--mainnav-h`, `--bottombar-h` – heights used to size the page content
+
+When the virtual keyboard is docked, the hook fades the bottom nav out while preserving its reserved space. Floating keyboards leave the nav visible.
+
 ## Dashboard tiles
 
 Dashboard pages group features into **Live** and **Upcoming** sections. Section headers show counts in 14px medium text. Upcoming tiles render at ~70% opacity and trigger a "Coming soon" toast when activated. Tiles can optionally supply a `to` route to enable navigation.
