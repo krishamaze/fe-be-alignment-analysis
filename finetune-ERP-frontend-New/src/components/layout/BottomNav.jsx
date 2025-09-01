@@ -3,11 +3,7 @@ import { Home, Wrench, ShoppingBag, ShoppingCart, User } from 'lucide-react';
 
 const allowedPaths = ['/', '/shop', '/repair', '/cart', '/account'];
 
-export default function BottomNav({
-  onAccountToggle,
-  visible = true,
-  keyboardDocked = false,
-}) {
+export default function BottomNav({ onAccountToggle, visible = true }) {
   const location = useLocation();
   if (!allowedPaths.includes(location.pathname)) return null;
 
@@ -30,14 +26,13 @@ export default function BottomNav({
   return (
     <nav
       className={`md:hidden fixed bottom-0 left-0 w-full border-t border-gray-200 bg-white flex justify-around py-1 z-50 ${
-        keyboardDocked || visible ? 'translate-y-0' : 'translate-y-full'
-      } ${keyboardDocked ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        visible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
+      }`}
       style={{
         height: 'var(--bottombar-h)',
         transition: 'transform 0.2s ease, opacity 0.2s ease',
       }}
     >
-      {/* eslint-disable-next-line no-unused-vars */}
       {bottomTabs.map(({ to, label, icon: Icon, onClick }) => (
         <NavLink
           key={label}
