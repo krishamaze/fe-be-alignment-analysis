@@ -3,7 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --navbar-height: 4rem; /* 64px */
+  --topbar-h: 2rem;
+  --mainnav-h: 70px;
+  --bottombar-h: 4rem;
+  --vh: 100vh;
 }
 
 html,
