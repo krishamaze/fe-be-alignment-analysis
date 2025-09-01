@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const promoMessages = [
@@ -9,6 +9,21 @@ const promoMessages = [
 
 export default function TopBar({ mode = 'offers' }) {
   const [promoIndex, setPromoIndex] = useState(0);
+  const barRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const updateHeight = () => {
+      if (barRef.current) {
+        document.documentElement.style.setProperty(
+          '--topbar-h',
+          `${barRef.current.offsetHeight}px`
+        );
+      }
+    };
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
+  }, []);
 
   useEffect(() => {
     if (mode !== 'offers') return;
@@ -27,6 +42,7 @@ export default function TopBar({ mode = 'offers' }) {
       <div
         className={baseClasses}
         style={{ paddingTop: 'env(safe-area-inset-top,0)' }}
+        ref={barRef}
       />
     );
   }
@@ -36,6 +52,7 @@ export default function TopBar({ mode = 'offers' }) {
       <div
         className={`${baseClasses} h-8`}
         style={{ paddingTop: 'env(safe-area-inset-top,0)' }}
+        ref={barRef}
       >
         Notifications
       </div>
@@ -47,6 +64,7 @@ export default function TopBar({ mode = 'offers' }) {
     <div
       className={`h-8 px-4 relative ${baseClasses}`}
       style={{ paddingTop: 'env(safe-area-inset-top,0)' }}
+      ref={barRef}
     >
       <span className="transition-opacity duration-500" key={promoIndex}>
         {promoMessages[promoIndex]}

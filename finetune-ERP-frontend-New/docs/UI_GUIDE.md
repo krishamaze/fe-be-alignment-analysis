@@ -71,6 +71,18 @@ Viewport changes are handled by `useViewportUI`, which updates the CSS vars:
 
 When the virtual keyboard is docked, the hook fades the bottom nav out while preserving its reserved space. Floating keyboards leave the nav visible.
 
+## Layout Verification Checklist
+
+✅ Orientation change → no content jump
+
+✅ Keyboard docked → BottomNav fades out, Hero stable
+
+✅ Keyboard floating → BottomNav stays visible
+
+✅ Paged mode → BottomNav reserved space works
+
+✅ Scroll mode → BottomNav hides/shows smoothly
+
 ## Dashboard tiles
 
 Dashboard pages group features into **Live** and **Upcoming** sections. Section headers show counts in 14px medium text. Upcoming tiles render at ~70% opacity and trigger a "Coming soon" toast when activated. Tiles can optionally supply a `to` route to enable navigation.

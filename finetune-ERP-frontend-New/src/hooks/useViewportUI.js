@@ -46,7 +46,11 @@ export default function useViewportUI(mode = 'scroll') {
     };
   }, [mode]);
 
-  const bottomNavVisible =
-    !keyboardDocked && (mode === 'paged' || bottomVisible);
+  const bottomNavVisible = (() => {
+    if (keyboardDocked) return false; // keyboard has highest priority
+    if (mode === 'scroll') return bottomVisible; // scroll overrides mode
+    return true; // paged mode defaults to visible
+  })();
+
   return { bottomNavVisible, keyboardDocked };
 }
