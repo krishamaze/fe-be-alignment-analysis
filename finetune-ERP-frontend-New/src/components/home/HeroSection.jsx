@@ -6,10 +6,11 @@ import {
   HiOutlinePhone,
   HiOutlineChevronDown,
 } from 'react-icons/hi2';
+import PageSection from '@/components/common/PageSection';
 
 export default function HeroSection() {
   return (
-    <section className="relative flex flex-col md:flex-row items-center justify-center min-h-[calc(var(--vh)-var(--topbar-h)-var(--mainnav-h)-var(--bottombar-h))] bg-gradient-to-r from-primary via-secondary to-surface text-surface px-6 py-12">
+    <PageSection className="relative flex flex-col md:flex-row items-center justify-center min-h-[calc(var(--vh)-var(--topbar-h)-var(--mainnav-h)-var(--bottombar-h))] bg-gradient-to-r from-primary via-secondary to-surface text-surface px-6 py-12">
       {/* Left: Text and CTAs */}
       <div className="md:w-1/2 text-center md:text-left flex flex-col justify-center gap-6">
         <div>
@@ -56,6 +57,6 @@ export default function HeroSection() {
 
       {/* Scroll hint */}
       <HiOutlineChevronDown className="absolute bottom-4 left-1/2 -translate-x-1/2 text-surface animate-bounce" />
-    </section>
+    </PageSection>
   );
 }

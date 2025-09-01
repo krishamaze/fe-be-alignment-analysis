@@ -41,16 +41,17 @@ Dark mode is enabled via `class` strategy. Toggle a `dark` class on the root ele
 
 ## Reusable components
 
-| Component                                       | Location                          | Notes                                                           |
-| ----------------------------------------------- | --------------------------------- | --------------------------------------------------------------- |
+| Component                                       | Location                          | Notes                                                                 |
+| ----------------------------------------------- | --------------------------------- | --------------------------------------------------------------------- |
 | `PublicLayout`                                  | `src/components/layout`           | wraps `TopBar`, `MainNav`, `BottomNav`, and `Footer` for public pages |
-| `TopBar` / `MainNav` / `BottomNav`              | `src/components/layout`           | modular public navigation pieces; `TopBar` respects safe-area insets |
-| `Footer`                                        | `src/components/layout`           | slim desktop footer                                             |
-| `DashboardNavbar` / `DashboardBottomNav`        | `src/components/dashboard/layout` | responsive dashboard navigation with fixed bottom grid          |
-| `Pagination` / `ResponsivePaginationHandler`    | `src/components`                  | reusable pagination controls                                    |
-| `ToggleStatusModal` & `DeleteConfirmationModal` | `src/components`                  | confirmation dialogs                                            |
-| `StoreAssignModal` & `BranchHeadModal`          | `src/components/Store`            | assign stores or branch heads                                   |
-| `Loader`                                        | `src/components/common`           | full-screen loading spinner                                     |
+| `TopBar` / `MainNav` / `BottomNav`              | `src/components/layout`           | modular public navigation pieces; `TopBar` respects safe-area insets  |
+| `Footer`                                        | `src/components/layout`           | slim desktop footer                                                   |
+| `DashboardNavbar` / `DashboardBottomNav`        | `src/components/dashboard/layout` | responsive dashboard navigation with fixed bottom grid                |
+| `Pagination` / `ResponsivePaginationHandler`    | `src/components`                  | reusable pagination controls                                          |
+| `ToggleStatusModal` & `DeleteConfirmationModal` | `src/components`                  | confirmation dialogs                                                  |
+| `StoreAssignModal` & `BranchHeadModal`          | `src/components/Store`            | assign stores or branch heads                                         |
+| `Loader`                                        | `src/components/common`           | full-screen loading spinner                                           |
+| `PageSection`                                   | `src/components/common`           | semantic wrapper for page sections                                    |
 
 Follow these patterns when adding new components to keep styling and accessibility consistent.
 
