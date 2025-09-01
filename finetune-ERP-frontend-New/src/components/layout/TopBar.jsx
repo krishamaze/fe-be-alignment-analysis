@@ -35,14 +35,14 @@ export default function TopBar({ mode = 'offers' }) {
   }, [mode]);
 
   const baseClasses =
-    'bg-secondary text-white flex items-center justify-center text-xs md:text-sm min-h-[env(safe-area-inset-top,0)]';
+    'bg-secondary text-white flex items-center justify-center text-xs md:text-sm min-h-[2rem]';
 
   if (mode === 'empty') {
     return (
       <div
+        ref={barRef}
         className={baseClasses}
         style={{ paddingTop: 'env(safe-area-inset-top,0)' }}
-        ref={barRef}
       />
     );
   }
@@ -50,9 +50,9 @@ export default function TopBar({ mode = 'offers' }) {
   if (mode === 'notifications') {
     return (
       <div
-        className={`${baseClasses} h-8`}
-        style={{ paddingTop: 'env(safe-area-inset-top,0)' }}
         ref={barRef}
+        className={baseClasses}
+        style={{ paddingTop: 'env(safe-area-inset-top,0)' }}
       >
         Notifications
       </div>
@@ -62,9 +62,9 @@ export default function TopBar({ mode = 'offers' }) {
   // default offers
   return (
     <div
-      className={`h-8 px-4 relative ${baseClasses}`}
-      style={{ paddingTop: 'env(safe-area-inset-top,0)' }}
       ref={barRef}
+      className={`px-4 relative ${baseClasses}`}
+      style={{ paddingTop: 'env(safe-area-inset-top,0)' }}
     >
       <span className="transition-opacity duration-500" key={promoIndex}>
         {promoMessages[promoIndex]}
