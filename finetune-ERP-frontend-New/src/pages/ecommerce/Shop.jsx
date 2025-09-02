@@ -20,19 +20,22 @@ function Shop() {
 
   const { data: brandData } = useGetBrandsQuery();
   const brandOptions = brandData?.content ?? brandData ?? [];
+
   const { data: deptData } = useGetDepartmentsQuery();
   const deptOptions = deptData?.content ?? [];
+
   const { data: catData } = useGetCategoriesQuery(
     department ? { department } : undefined
   );
   const catOptions = catData?.content ?? [];
+
   const { data: subData } = useGetSubCategoriesQuery(
     category ? { category } : undefined
   );
   const subOptions = subData?.content ?? [];
 
   const params = {
-    ...(selectedBrands[0] && { brand: selectedBrands[0] }),
+    ...(selectedBrands.length && { brand: selectedBrands.join(',') }),
     ...(onlyAvailable && { availability: true }),
     ...(department && { department }),
     ...(category && { category }),
@@ -41,6 +44,7 @@ function Shop() {
     ...(maxPrice > 0 && { max_price: maxPrice }),
     ...(ordering && { ordering }),
   };
+
   const { data, isLoading } = useGetProductsQuery(params);
   const products = data?.content ?? [];
 
@@ -50,13 +54,21 @@ function Shop() {
     );
   };
 
+  // clamp price sliders
+  const handleMinPrice = (val) => {
+    setMinPrice(Math.min(val, maxPrice));
+  };
+  const handleMaxPrice = (val) => {
+    setMaxPrice(Math.max(val, minPrice));
+  };
+
   if (isLoading) return <div className="p-4">Loading...</div>;
 
   return (
-    <div className="space-y-6">
-      {/* Filters organized in sections */}
+    <div className="space-y-6 pb-[var(--bottombar-h)]">
+      {/* Filters */}
       <div className="p-4 space-y-6">
-        {/* Search & Sort */}
+        {/* Sort */}
         <section className="space-y-3">
           <h3 className="font-medium text-sm">Sort</h3>
           <select
@@ -147,14 +159,14 @@ function Shop() {
                 min="0"
                 max="100000"
                 value={minPrice}
-                onChange={(e) => setMinPrice(Number(e.target.value))}
+                onChange={(e) => handleMinPrice(Number(e.target.value))}
               />
               <input
                 type="range"
                 min="0"
                 max="100000"
                 value={maxPrice}
-                onChange={(e) => setMaxPrice(Number(e.target.value))}
+                onChange={(e) => handleMaxPrice(Number(e.target.value))}
               />
             </div>
             <label className="flex items-center gap-2">
@@ -169,7 +181,7 @@ function Shop() {
         </section>
       </div>
 
-      {/* Products Grid */}
+      {/* Products */}
       <div className="p-4">
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((p) => (
