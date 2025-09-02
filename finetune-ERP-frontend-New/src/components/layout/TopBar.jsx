@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 const promoMessages = [
@@ -11,20 +11,6 @@ export default function TopBar({ mode = 'offers' }) {
   const [promoIndex, setPromoIndex] = useState(0);
   const barRef = useRef(null);
 
-  useLayoutEffect(() => {
-    const updateHeight = () => {
-      if (barRef.current) {
-        document.documentElement.style.setProperty(
-          '--topbar-h',
-          `${barRef.current.offsetHeight}px`
-        );
-      }
-    };
-    updateHeight();
-    window.addEventListener('resize', updateHeight);
-    return () => window.removeEventListener('resize', updateHeight);
-  }, []);
-
   useEffect(() => {
     if (mode !== 'offers') return;
     const interval = setInterval(
@@ -35,14 +21,17 @@ export default function TopBar({ mode = 'offers' }) {
   }, [mode]);
 
   const baseClasses =
-    'bg-secondary text-white flex items-center justify-center text-xs md:text-sm min-h-[2rem]';
+    'bg-secondary text-white flex items-center justify-center text-xs md:text-sm';
 
   if (mode === 'empty') {
     return (
       <div
         ref={barRef}
         className={baseClasses}
-        style={{ paddingTop: 'env(safe-area-inset-top,0)' }}
+        style={{
+          paddingTop: 'env(safe-area-inset-top,0)',
+          minHeight: 'var(--topbar-h)',
+        }}
       />
     );
   }
@@ -52,7 +41,10 @@ export default function TopBar({ mode = 'offers' }) {
       <div
         ref={barRef}
         className={baseClasses}
-        style={{ paddingTop: 'env(safe-area-inset-top,0)' }}
+        style={{
+          paddingTop: 'env(safe-area-inset-top,0)',
+          minHeight: 'var(--topbar-h)',
+        }}
       >
         Notifications
       </div>
@@ -64,7 +56,10 @@ export default function TopBar({ mode = 'offers' }) {
     <div
       ref={barRef}
       className={`px-4 relative ${baseClasses}`}
-      style={{ paddingTop: 'env(safe-area-inset-top,0)' }}
+      style={{
+        paddingTop: 'env(safe-area-inset-top,0)',
+        minHeight: 'var(--topbar-h)',
+      }}
     >
       <span className="transition-opacity duration-500" key={promoIndex}>
         {promoMessages[promoIndex]}

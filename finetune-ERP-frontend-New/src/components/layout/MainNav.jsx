@@ -1,26 +1,8 @@
-import { useRef, useLayoutEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import Logo from '../common/Logo';
 import { User, Search, ShoppingCart } from 'lucide-react';
 
 export default function MainNav() {
-  const navRef = useRef(null);
-
-  // Dynamically update --mainnav-h
-  useLayoutEffect(() => {
-    const updateHeight = () => {
-      if (navRef.current) {
-        document.documentElement.style.setProperty(
-          '--mainnav-h',
-          `${navRef.current.offsetHeight}px`
-        );
-      }
-    };
-    updateHeight();
-    window.addEventListener('resize', updateHeight);
-    return () => window.removeEventListener('resize', updateHeight);
-  }, []);
-
   const navLinkClasses =
     'relative px-3 py-2 text-sm text-primary after:absolute after:left-0 after:-bottom-0.5 after:h-0.5 after:bg-secondary after:w-0 after:transition-all hover:after:w-full';
 
@@ -29,8 +11,11 @@ export default function MainNav() {
 
   return (
     <nav
-      ref={navRef}
-      className="bg-white shadow-sm min-h-[70px] flex items-center justify-between px-4 md:px-8"
+      className="fixed left-0 right-0 bg-white shadow-sm flex items-center justify-between px-4 md:px-8 z-50"
+      style={{
+        top: 'var(--topbar-h)',
+        minHeight: 'var(--mainnav-h)',
+      }}
     >
       {/* Desktop: Logo + Links + Icons */}
       <div className="flex items-center gap-8 w-full">
