@@ -39,7 +39,7 @@ export default function TopBar({ mode = 'offers' }) {
   // default offers
   return (
     <div
-      className={`px-4 relative ${baseClasses}`}
+      className={`px-2 relative ${baseClasses}`}
       style={{
         height: 'var(--topbar-h)', // 👈 always controlled by hook
         paddingTop: 'env(safe-area-inset-top,0)',
