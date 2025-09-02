@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function useViewportUI(
   mode = 'scroll',
@@ -7,18 +7,42 @@ export default function useViewportUI(
   const [bottomVisible, setBottomVisible] = useState(true);
   const [keyboardDocked, setKeyboardDocked] = useState(false);
 
-  // update --vh and detect keyboard
+  // keep baseline heights in a ref (no rerenders needed)
+  const baselineRef = useRef(null);
+
   useEffect(() => {
     const viewport = window.visualViewport;
     if (!viewport) return;
 
+    const mainNav = document.querySelector('nav'); // MainNav element
+    const pageSection = document.querySelector('[data-pagesection]'); // PageSection
+
+    if (mainNav && pageSection && !baselineRef.current) {
+      baselineRef.current = {
+        mainNav: mainNav.offsetHeight,
+        pageSection: pageSection.offsetHeight,
+      };
+    }
+
     const updateVh = () => {
       const vh = viewport.height;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+      if (baselineRef.current) {
+        const { mainNav, pageSection } = baselineRef.current;
+        let topbarH = vh - (mainNav + pageSection);
+
+        // clamp to avoid collapsing too small or negative
+        topbarH = Math.max(50, topbarH);
+        document.documentElement.style.setProperty('--topbar-h', `${topbarH}px`);
+      }
+
+      // keyboard detection
       setKeyboardDocked(window.innerHeight - vh > keyboardThreshold);
     };
 
     updateVh();
+
     viewport.addEventListener('resize', updateVh);
     window.addEventListener('orientationchange', updateVh);
     return () => {
@@ -27,7 +51,7 @@ export default function useViewportUI(
     };
   }, [keyboardThreshold]);
 
-  // scroll direction detection for bottom nav
+  // scroll detection (unchanged)
   useEffect(() => {
     if (mode !== 'scroll') return;
     let lastY = window.scrollY;
@@ -51,11 +75,10 @@ export default function useViewportUI(
     };
   }, [mode]);
 
-  // ✅ Priority rule: keyboard > scroll > mode
   const bottomNavVisible = (() => {
-    if (keyboardDocked) return false; // hide if keyboard
-    if (mode === 'scroll') return bottomVisible; // scroll up/down intent
-    return true; // paged mode always visible
+    if (keyboardDocked) return false;
+    if (mode === 'scroll') return bottomVisible;
+    return true;
   })();
 
   return { bottomNavVisible };

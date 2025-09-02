@@ -5,12 +5,19 @@ export default function PageSection({
   style = {},
   ...props
 }) {
-  const minHeight = `calc(var(--vh) - var(--topbar-h) - var(--mainnav-h)${
-    withBottom ? ' - var(--bottombar-h)' : ''
-  })`;
+  // Full height under topbar + mainnav
+  const minHeight = `calc(var(--vh) - var(--topbar-h) - var(--mainnav-h))`;
+
   return (
-    <section className={className} style={{ minHeight, ...style }} {...props}>
-      {children}
+    <section
+      data-pagesection
+      className={`relative ${className}`}
+      style={{ minHeight, ...style }}
+      {...props}
+    >
+      <div className={withBottom ? 'pb-[var(--bottombar-h)]' : ''}>
+        {children}
+      </div>
     </section>
   );
 }

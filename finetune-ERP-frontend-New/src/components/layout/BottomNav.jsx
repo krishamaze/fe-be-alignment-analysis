@@ -2,17 +2,21 @@ import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Home, Wrench, ShoppingBag, ShoppingCart, User } from 'lucide-react';
 
-const allowedPaths = ['/', '/shop', '/repair', '/cart', '/account'];
+const rootPaths = ['/', '/shop', '/repair', '/cart', '/account'];
 
 export default function BottomNav({ visible = true }) {
   const location = useLocation();
   const [accountOpen, setAccountOpen] = useState(false);
 
+  // close account dropdown on route change
   useEffect(() => {
     setAccountOpen(false);
   }, [location.pathname]);
 
-  if (!allowedPaths.includes(location.pathname)) return null;
+  // Only show nav on allowed root paths
+  if (!rootPaths.some((path) => location.pathname.startsWith(path))) {
+    return null;
+  }
 
   const bottomTabs = [
     { to: '/', label: 'Home', icon: Home },
@@ -23,33 +27,41 @@ export default function BottomNav({ visible = true }) {
       to: '/account',
       label: 'Account',
       icon: User,
-      onClick: (e) => {
-        e.preventDefault();
-        setAccountOpen((o) => !o);
-      },
+      custom: true, // mark as custom toggle
     },
   ];
 
   return (
     <>
       <nav
-        className={`md:hidden fixed bottom-0 left-0 w-full border-t border-gray-200 bg-white flex justify-around py-1 z-50 ${
+        className={`md:hidden fixed bottom-0 left-0 w-full border-t border-gray-200 bg-white flex justify-around py-1 z-50 transform transition-all duration-200 ${
           visible
             ? 'translate-y-0 opacity-100'
             : 'translate-y-full opacity-0 pointer-events-none'
         }`}
-        style={{
-          height: 'var(--bottombar-h)',
-          transition: 'transform 0.2s ease, opacity 0.2s ease',
-        }}
+        style={{ height: 'var(--bottombar-h)' }}
       >
-        {bottomTabs.map(({ to, label, icon, onClick }) => {
+        {bottomTabs.map(({ to, label, icon, custom }) => {
           const Icon = icon;
+
+          if (custom) {
+            return (
+              <button
+                key={label}
+                type="button"
+                onClick={() => setAccountOpen((o) => !o)}
+                className="flex flex-col items-center gap-0.5 text-xs pt-1 pb-0.5 text-gray-600 focus:outline-none"
+              >
+                <Icon className="w-5 h-5" />
+                <span>{label}</span>
+              </button>
+            );
+          }
+
           return (
             <NavLink
               key={label}
               to={to}
-              onClick={onClick}
               className={({ isActive }) =>
                 `flex flex-col items-center gap-0.5 text-xs pt-1 pb-0.5 ${
                   isActive ? 'text-secondary' : 'text-gray-600'
@@ -64,7 +76,10 @@ export default function BottomNav({ visible = true }) {
       </nav>
 
       {accountOpen && (
-        <div className="md:hidden fixed bottom-16 left-0 right-0 mx-4 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+        <div
+          className="md:hidden fixed left-0 right-0 mx-4 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+          style={{ bottom: 'calc(var(--bottombar-h) + 0.5rem)' }} // dynamic
+        >
           <ul className="p-4 text-sm space-y-2">
             {[
               { to: '/account', label: 'Profile' },
@@ -79,7 +94,7 @@ export default function BottomNav({ visible = true }) {
               <li key={to}>
                 <NavLink
                   to={to}
-                  className="block"
+                  className="block hover:text-secondary"
                   onClick={() => setAccountOpen(false)}
                 >
                   {label}
