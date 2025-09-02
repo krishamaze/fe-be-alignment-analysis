@@ -44,7 +44,7 @@ Dark mode is enabled via `class` strategy. Toggle a `dark` class on the root ele
 | Component                                       | Location                          | Notes                                                                                                                        |
 | ----------------------------------------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | `PublicLayout`                                  | `src/components/layout`           | wraps `TopBar`, `MainNav`, `BottomNav`, and `Footer` for public pages; offsets header so child pages only need `p-4` padding |
-| `TopBar` / `MainNav` / `BottomNav`              | `src/components/layout`           | modular public navigation pieces; `TopBar` respects safe-area insets and `BottomNav` manages its own account menu            |
+| `TopBar` / `MainNav` / `BottomNav`              | `src/components/layout`           | modular public navigation pieces; `TopBar` text expands when the address bar hides and `BottomNav` manages its own account menu |
 | `Footer`                                        | `src/components/layout`           | slim desktop footer                                                                                                          |
 | `DashboardNavbar` / `DashboardBottomNav`        | `src/components/dashboard/layout` | responsive dashboard navigation with fixed bottom grid                                                                       |
 | `Pagination` / `ResponsivePaginationHandler`    | `src/components`                  | reusable pagination controls                                                                                                 |
@@ -57,31 +57,15 @@ Follow these patterns when adding new components to keep styling and accessibili
 
 The mobile dashboard uses a fixed bottom navigation bar that displays navigation tiles in a three-column grid (six columns on wider breakpoints) and can be shown or hidden via the floating toggle button.
 
-## Layout Modes
+## Layout
 
-`PublicLayout` accepts a `mode` prop to control mobile navigation:
+Global CSS variables define navigation heights:
 
-- `scroll` (default) – page content scrolls underneath the bottom nav. The nav hides on downward scroll and reappears when scrolling up.
-- `paged` – page content is padded by `var(--bottombar-h)` and the bottom nav stays visible.
+- `--topbar-h` – top promo bar (40px)
+- `--mainnav-h` – main navigation (70px)
+- `--bottombar-h` – mobile bottom navigation (4rem)
 
-Viewport changes are handled by `useViewportUI(mode, keyboardThreshold?)`, which updates the CSS vars:
-
-- `--vh` – current visual viewport height
-- `--topbar-h`, `--mainnav-h`, `--bottombar-h` – heights used to size the page content
-
-When the virtual keyboard is docked, the hook fades the bottom nav out while preserving its reserved space. `keyboardThreshold` (default `100`) controls dock detection; adjust per device—Android floating keyboards may vary.
-
-## Layout Verification Checklist
-
-✅ Orientation change → no content jump
-
-✅ Keyboard docked → BottomNav fades out, Hero stable
-
-✅ Keyboard floating → BottomNav stays visible
-
-✅ Paged mode → BottomNav reserved space works
-
-✅ Scroll mode → BottomNav hides/shows smoothly
+`PageSection` applies `min-height: calc(100vh - var(--topbar-h) - var(--mainnav-h))` and subtracts `--bottombar-h` when `withBottom` is set. `TopBar` text enlarges when the browser address bar hides, and `BottomNav` includes safe-area padding.
 
 ## Dashboard tiles
 

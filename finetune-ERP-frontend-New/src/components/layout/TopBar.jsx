@@ -1,57 +1,37 @@
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
-const promoMessages = [
-  '🔥 Free Shipping',
-  '100% Secure Payments',
-  'Special Offers',
-];
+export default function TopBar() {
+  const [expanded, setExpanded] = useState(false);
 
-export default function TopBar({ mode = 'offers' }) {
-  const baseClasses =
-    'bg-secondary text-white flex items-center justify-center text-xs md:text-sm';
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!viewport) return;
+    const EPSILON = 5;
+    const svh = window.innerHeight; // baseline (bar visible)
+    const lvh = screen.height; // max (bar hidden)
 
-  if (mode === 'empty') {
-    return (
-      <div
-        className={baseClasses}
-        style={{
-          height: 'var(--topbar-h)', // 👈 dynamic spacer height
-          paddingTop: 'env(safe-area-inset-top,0)',
-        }}
-      />
-    );
-  }
+    const update = () => {
+      const dvh = viewport.height;
+      if (Math.abs(dvh - lvh) < EPSILON) setExpanded(true);
+      else if (Math.abs(dvh - svh) < EPSILON) setExpanded(false);
+    };
 
-  if (mode === 'notifications') {
-    return (
-      <div
-        className={baseClasses}
-        style={{
-          height: 'var(--topbar-h)',
-          paddingTop: 'env(safe-area-inset-top,0)',
-        }}
-      >
-        Notifications
-      </div>
-    );
-  }
+    update();
+    viewport.addEventListener('resize', update);
+    return () => viewport.removeEventListener('resize', update);
+  }, []);
 
-  // default offers
   return (
     <div
-      className={`px-2 relative ${baseClasses}`}
+      className="bg-secondary text-white flex items-end justify-center"
       style={{
-        height: 'var(--topbar-h)', // 👈 always controlled by hook
-        paddingTop: 'env(safe-area-inset-top,0)',
+        height: 'var(--topbar-h)',
+        paddingBottom: '2px',
       }}
     >
-      <span>🔥 Free Shipping</span>
-      <Link
-        to="/offers"
-        className="absolute right-4 underline hover:opacity-80 transition-opacity"
-      >
-        Offers
-      </Link>
+      <span className={`topbar-text ${expanded ? 'large' : ''}`}>
+        🔥 Free Shipping
+      </span>
     </div>
   );
 }

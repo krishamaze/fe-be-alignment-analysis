@@ -3,10 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --topbar-h: 70px;
+  --topbar-h: 40px;
   --mainnav-h: 70px;
   --bottombar-h: 4rem;
-  --vh: 100vh; /* default fallback, will be updated by JS */
 }
 
 html,
@@ -30,4 +29,12 @@ body {
 #root {
   display: flex;
   flex-direction: column;
+}
+
+.topbar-text {
+  font-size: 10px;
+  transition: font-size 0.3s ease;
+}
+.topbar-text.large {
+  font-size: 14px;
 }

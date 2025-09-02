@@ -2,23 +2,20 @@ import TopBar from './TopBar';
 import MainNav from './MainNav';
 import BottomNav from './BottomNav';
 import Footer from './Footer';
-import useViewportUI from '@/hooks/useViewportUI';
 import PageSection from '@/components/common/PageSection';
 
-export default function PublicLayout({ children, mode = 'scroll' }) {
-  const { bottomNavVisible } = useViewportUI(mode);
-
+export default function PublicLayout({ children }) {
   return (
-    <div className="flex flex-col" style={{ minHeight: 'var(--vh)' }}>
+    <div className="flex flex-col min-h-screen">
       {/* Fixed header (TopBar + MainNav) */}
       <header className="fixed top-0 left-0 w-full z-50">
-        <TopBar mode="offers" />
+        <TopBar />
         <MainNav />
       </header>
 
       {/* Page content */}
       <PageSection
-        withBottom={mode === 'paged'}
+        withBottom
         className="flex-1"
         style={{ marginTop: 'calc(var(--topbar-h) + var(--mainnav-h))' }}
       >
@@ -31,7 +28,7 @@ export default function PublicLayout({ children, mode = 'scroll' }) {
       </div>
 
       {/* Mobile bottom nav */}
-      <BottomNav visible={bottomNavVisible} />
+      <BottomNav />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { Home, Wrench, ShoppingBag, ShoppingCart, User } from 'lucide-react';
 
 const rootPaths = ['/', '/shop', '/repair', '/cart', '/account'];
 
-export default function BottomNav({ visible = true }) {
+export default function BottomNav() {
   const location = useLocation();
   const [accountOpen, setAccountOpen] = useState(false);
 
@@ -34,12 +34,11 @@ export default function BottomNav({ visible = true }) {
   return (
     <>
       <nav
-        className={`md:hidden fixed bottom-0 left-0 w-full border-t border-gray-200 bg-white flex justify-around py-1 z-50 transform transition-all duration-200 ${
-          visible
-            ? 'translate-y-0 opacity-100'
-            : 'translate-y-full opacity-0 pointer-events-none'
-        }`}
-        style={{ height: 'var(--bottombar-h)' }}
+        className="md:hidden fixed bottom-0 left-0 w-full border-t border-gray-200 bg-white flex justify-around py-1 z-50"
+        style={{
+          height: 'var(--bottombar-h)',
+          paddingBottom: 'env(safe-area-inset-bottom)',
+        }}
       >
         {bottomTabs.map(({ to, label, icon, custom }) => {
           const Icon = icon;
@@ -78,7 +77,10 @@ export default function BottomNav({ visible = true }) {
       {accountOpen && (
         <div
           className="md:hidden fixed left-0 right-0 mx-4 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
-          style={{ bottom: 'calc(var(--bottombar-h) + 0.5rem)' }} // dynamic
+          style={{
+            bottom:
+              'calc(var(--bottombar-h) + env(safe-area-inset-bottom) + 0.5rem)',
+          }}
         >
           <ul className="p-4 text-sm space-y-2">
             {[
