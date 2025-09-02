@@ -18,10 +18,10 @@
 *.gif   filter=lfs diff=lfs merge=lfs -text
 
 # ========================================
-# 🔹 Overrides: keep frontend build assets in plain Git
-# (Important for Vercel deploys)
+# 🔹 Overrides: keep ALL frontend assets in plain Git
+# (Important for Vercel deploys — covers nested folders too)
 # ========================================
-finetune-ERP-frontend-New/src/assets/* -filter -diff -merge text
+finetune-ERP-frontend-New/src/assets/** -filter -diff -merge text
 
 # ========================================
 # 🔹 Special Cases
