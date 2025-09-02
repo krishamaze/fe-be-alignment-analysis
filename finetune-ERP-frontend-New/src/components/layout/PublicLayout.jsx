@@ -6,8 +6,8 @@ import PageSection from '@/components/common/PageSection';
 
 export default function PublicLayout({ children }) {
   return (
-    // Use h-screen instead of min-h-screen so header can overlap address bar
-    <div className="flex flex-col h-screen">
+    // Use min-h-full so the root expands to the initial containing block for proper header behavior
+    <div className="flex flex-col min-h-full">
       {/* Fixed header (TopBar + MainNav) */}
       <header className="fixed top-0 left-0 w-full z-50">
         <TopBar />
