@@ -5,7 +5,7 @@ export default function PageSection({
   style = {},
   ...props
 }) {
-  const minHeight = `calc(100vh - var(--topbar-h) - var(--mainnav-h)${
+  const minHeight = `calc(100% - var(--topbar-h) - var(--mainnav-h)${
     withBottom ? ' - var(--bottombar-h)' : ''
   })`;
 
