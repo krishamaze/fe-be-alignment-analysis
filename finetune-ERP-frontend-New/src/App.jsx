@@ -65,122 +65,120 @@ function AppContent() {
 
   const routes = (
     <Routes>
-        <Route path="/" element={<Hero />} />
-        <Route
-          path="/teamlogin"
-          element={token ? <Navigate to="/dashboard" /> : <TeamLogin />}
-        />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/account"
-          element={token ? <Account /> : <Navigate to="/login" replace />}
-        />
-        <Route
-          path="/orders"
-          element={token ? <Orders /> : <Navigate to="/login" replace />}
-        />
+      <Route path="/" element={<Hero />} />
+      <Route
+        path="/teamlogin"
+        element={token ? <Navigate to="/dashboard" /> : <TeamLogin />}
+      />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+      <Route
+        path="/account"
+        element={token ? <Account /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/orders"
+        element={token ? <Orders /> : <Navigate to="/login" replace />}
+      />
 
-        {/* E-commerce routes */}
-        <Route
-          path="/shop"
-          element={
-            <PublicLayout mode="scroll">
-              <Shop />
-            </PublicLayout>
-          }
-        />
-        <Route path="/repair" element={<Repair />} />
-        <Route path="/support" element={<Support />} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/product/:slug" element={<ProductDetail />} />
-        <Route path="/departments" element={<DepartmentsPage />} />
-        <Route
-          path="/departments/:deptSlug/categories"
-          element={<DepartmentCategoriesPage />}
-        />
-        <Route
-          path="/departments/:deptSlug/:catSlug/:subcatSlug/products"
-          element={<CategoryPage />}
-        />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/partners" element={<Partners />} />
-        <Route path="/help" element={<HelpCentre />} />
-        <Route path="/legal" element={<Legal />} />
-        <Route path="/marketing" element={<IndexPage />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/locate" element={<Locate />} />
-        <Route path="/offers" element={<Offers />} />
-        <Route path="/careers" element={<Careers />} />
-        <Route path="/stores" element={<Stores />} />
-        <Route path="/stores/:id" element={<StoreDetails />} />
-        <Route path="/spares" element={<Spares />} />
-        <Route path="/bookings" element={<Bookings />} />
-        <Route
-          path="/terms-and-conditions"
-          element={<Navigate to="/legal" replace />}
-        />
-        <Route path="/schedule-call" element={<ScheduleCall />} />
+      {/* E-commerce routes */}
+      <Route
+        path="/shop"
+        element={
+          <PublicLayout mode="scroll">
+            <Shop />
+          </PublicLayout>
+        }
+      />
+      <Route path="/repair" element={<Repair />} />
+      <Route path="/support" element={<Support />} />
+      <Route path="/search" element={<SearchPage />} />
+      <Route path="/product/:slug" element={<ProductDetail />} />
+      <Route path="/departments" element={<DepartmentsPage />} />
+      <Route
+        path="/departments/:deptSlug/categories"
+        element={<DepartmentCategoriesPage />}
+      />
+      <Route
+        path="/departments/:deptSlug/:catSlug/:subcatSlug/products"
+        element={<CategoryPage />}
+      />
+      <Route path="/cart" element={<CartPage />} />
+      <Route path="/partners" element={<Partners />} />
+      <Route path="/help" element={<HelpCentre />} />
+      <Route path="/legal" element={<Legal />} />
+      <Route path="/marketing" element={<IndexPage />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/locate" element={<Locate />} />
+      <Route path="/offers" element={<Offers />} />
+      <Route path="/careers" element={<Careers />} />
+      <Route path="/stores" element={<Stores />} />
+      <Route path="/stores/:id" element={<StoreDetails />} />
+      <Route path="/spares" element={<Spares />} />
+      <Route path="/bookings" element={<Bookings />} />
+      <Route
+        path="/terms-and-conditions"
+        element={<Navigate to="/legal" replace />}
+      />
+      <Route path="/schedule-call" element={<ScheduleCall />} />
 
-        <Route
-          path="/workledger/*"
-          element={
-            token &&
-            ['system_admin', 'branch_head', 'advisor'].includes(role) ? (
-              <FocusLayout title="Workledger" />
-            ) : (
-              <Navigate to="/teamlogin" />
-            )
-          }
-        >
-          <Route index element={<Workledger />} />
-          <Route path="details/:id" element={<WorkledgerDetails />} />
-        </Route>
+      <Route
+        path="/workledger/*"
+        element={
+          token && ['system_admin', 'branch_head', 'advisor'].includes(role) ? (
+            <FocusLayout title="Workledger" />
+          ) : (
+            <Navigate to="/teamlogin" />
+          )
+        }
+      >
+        <Route index element={<Workledger />} />
+        <Route path="details/:id" element={<WorkledgerDetails />} />
+      </Route>
 
-        <Route
-          path="/giveaway-redemption"
-          element={
-            token &&
-            ['system_admin', 'branch_head', 'advisor'].includes(role) ? (
-              <FocusLayout title="Giveaway Redemption" />
-            ) : (
-              <Navigate to="/teamlogin" />
-            )
-          }
-        >
-          <Route index element={<GiveawayRedemption />} />
-        </Route>
+      <Route
+        path="/giveaway-redemption"
+        element={
+          token && ['system_admin', 'branch_head', 'advisor'].includes(role) ? (
+            <FocusLayout title="Giveaway Redemption" />
+          ) : (
+            <Navigate to="/teamlogin" />
+          )
+        }
+      >
+        <Route index element={<GiveawayRedemption />} />
+      </Route>
 
-        <Route
-          path="/dashboard"
-          element={token ? <Dashboard /> : <Navigate to="/teamlogin" />}
-        >
-          {['system_admin'].includes(role) && (
-            <>
-              {/* <Route path="stores/add" element={<AddStore />} /> */}
-              <Route path="users" element={<User />} />
-              {/* <Route path="users/add" element={<AddUser />} /> */}
-              <Route path="stores" element={<Store />} />
-              <Route path="brands" element={<BrandDashboard />} />
-              <Route path="products" element={<ProductsDashboard />} />
-              <Route path="variants" element={<VariantsDashboard />} />
-              <Route path="taxonomy" element={<TaxonomyDashboard />} />
-              <Route path="units" element={<UnitsDashboard />} />
-              <Route path="qualities" element={<QualitiesDashboard />} />
-              <Route path="bookings" element={<BookingsDashboard />} />
-              <Route path="repairs">
-                <Route path="issues" element={<IssuesDashboard />} />
-                <Route path="other-issues" element={<OtherIssuesDashboard />} />
-                <Route path="questions" element={<QuestionsDashboard />} />
-              </Route>
-              <Route path="settings" element={<Settings />} />
-              <Route path="logs" element={<LogsDashboard />} />
-            </>
-          )}
-        </Route>
-        {/* <Route path="*" element={<Navigate to="/" />} /> */}
-      </Routes>
+      <Route
+        path="/dashboard"
+        element={token ? <Dashboard /> : <Navigate to="/teamlogin" />}
+      >
+        {['system_admin'].includes(role) && (
+          <>
+            {/* <Route path="stores/add" element={<AddStore />} /> */}
+            <Route path="users" element={<User />} />
+            {/* <Route path="users/add" element={<AddUser />} /> */}
+            <Route path="stores" element={<Store />} />
+            <Route path="brands" element={<BrandDashboard />} />
+            <Route path="products" element={<ProductsDashboard />} />
+            <Route path="variants" element={<VariantsDashboard />} />
+            <Route path="taxonomy" element={<TaxonomyDashboard />} />
+            <Route path="units" element={<UnitsDashboard />} />
+            <Route path="qualities" element={<QualitiesDashboard />} />
+            <Route path="bookings" element={<BookingsDashboard />} />
+            <Route path="repairs">
+              <Route path="issues" element={<IssuesDashboard />} />
+              <Route path="other-issues" element={<OtherIssuesDashboard />} />
+              <Route path="questions" element={<QuestionsDashboard />} />
+            </Route>
+            <Route path="settings" element={<Settings />} />
+            <Route path="logs" element={<LogsDashboard />} />
+          </>
+        )}
+      </Route>
+      {/* <Route path="*" element={<Navigate to="/" />} /> */}
+    </Routes>
   );
 
   return isDashboard ? routes : <PublicLayout>{routes}</PublicLayout>;

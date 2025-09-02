@@ -34,7 +34,9 @@ export default function BottomNav({ visible = true }) {
     <>
       <nav
         className={`md:hidden fixed bottom-0 left-0 w-full border-t border-gray-200 bg-white flex justify-around py-1 z-50 ${
-          visible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
+          visible
+            ? 'translate-y-0 opacity-100'
+            : 'translate-y-full opacity-0 pointer-events-none'
         }`}
         style={{
           height: 'var(--bottombar-h)',
@@ -61,50 +63,25 @@ export default function BottomNav({ visible = true }) {
       {accountOpen && (
         <div className="md:hidden fixed bottom-16 left-0 right-0 mx-4 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
           <ul className="p-4 text-sm space-y-2">
-            <li>
-              <NavLink to="/account" className="block" onClick={() => setAccountOpen(false)}>
-                Profile
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/orders" className="block" onClick={() => setAccountOpen(false)}>
-                Orders
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/wishlist" className="block" onClick={() => setAccountOpen(false)}>
-                Wishlist
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/partners" className="block" onClick={() => setAccountOpen(false)}>
-                Partners
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/careers" className="block" onClick={() => setAccountOpen(false)}>
-                Careers
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/privacy" className="block" onClick={() => setAccountOpen(false)}>
-                Privacy
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/terms" className="block" onClick={() => setAccountOpen(false)}>
-                Terms
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/legal" className="block" onClick={() => setAccountOpen(false)}>
-                Legal
-              </NavLink>
-            </li>
+            {[
+              { to: '/account', label: 'Profile' },
+              { to: '/orders', label: 'Orders' },
+              { to: '/wishlist', label: 'Wishlist' },
+              { to: '/partners', label: 'Partners' },
+              { to: '/careers', label: 'Careers' },
+              { to: '/privacy', label: 'Privacy' },
+              { to: '/terms', label: 'Terms' },
+              { to: '/legal', label: 'Legal' },
+            ].map(({ to, label }) => (
+              <li key={to}>
+                <NavLink to={to} className="block" onClick={() => setAccountOpen(false)}>
+                  {label}
+                </NavLink>
+              </li>
+            ))}
           </ul>
         </div>
       )}
     </>
   );
 }
-

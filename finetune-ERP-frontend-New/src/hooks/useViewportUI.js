@@ -53,9 +53,9 @@ export default function useViewportUI(
 
   // ✅ Priority rule: keyboard > scroll > mode
   const bottomNavVisible = (() => {
-    if (keyboardDocked) return false;        // hide if keyboard
+    if (keyboardDocked) return false; // hide if keyboard
     if (mode === 'scroll') return bottomVisible; // scroll up/down intent
-    return true;                             // paged mode always visible
+    return true; // paged mode always visible
   })();
 
   return { bottomNavVisible };
