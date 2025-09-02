@@ -82,7 +82,14 @@ function AppContent() {
         />
 
         {/* E-commerce routes */}
-        <Route path="/shop" element={<Shop />} />
+        <Route
+          path="/shop"
+          element={
+            <PublicLayout mode="scroll">
+              <Shop />
+            </PublicLayout>
+          }
+        />
         <Route path="/repair" element={<Repair />} />
         <Route path="/support" element={<Support />} />
         <Route path="/search" element={<SearchPage />} />
