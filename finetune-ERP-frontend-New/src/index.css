@@ -6,6 +6,10 @@
   --topbar-h: 40px;
   --mainnav-h: 70px;
   --bottombar-h: 4rem;
+  
+  /* Dynamic address bar measurements - updated by useViewport hook */
+  --address-bar-height: 0px;
+  --viewport-expanded: 0;
 }
 
 html,
@@ -35,6 +39,23 @@ body {
   font-size: 10px;
   transition: font-size 0.3s ease;
 }
+
 .topbar-text.large {
   font-size: 14px;
+}
+
+/* Optional: Smooth TopBar reveal animation */
+@media (max-width: 768px) {
+  header {
+    /* TopBar slides smoothly as address bar shows/hides */
+    transition: top 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  /* Alternative approach: Only show when expanded */
+  /*
+  header {
+    transform: translateY(calc(-100% + var(--viewport-expanded) * 100%));
+    transition: transform 0.3s ease;
+  }
+  */
 }

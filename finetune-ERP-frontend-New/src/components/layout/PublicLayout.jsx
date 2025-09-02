@@ -6,10 +6,16 @@ import PageSection from '@/components/common/PageSection';
 
 export default function PublicLayout({ children }) {
   return (
-    // Use min-h-full so the root expands to the initial containing block for proper header behavior
+    // Use min-h-full so the root expands to the initial containing block
     <div className="flex flex-col min-h-full">
-      {/* Fixed header (TopBar + MainNav) */}
-      <header className="fixed inset-x-0 top-0 w-screen z-50">
+      {/* Fixed header positioned to slide under address bar */}
+      <header 
+        className="fixed inset-x-0 w-screen z-50"
+        style={{
+          top: 'calc(-1 * var(--address-bar-height, 0px))',
+          transition: 'top 0.3s ease',
+        }}
+      >
         <TopBar />
       </header>
       <MainNav />

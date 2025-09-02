@@ -13,8 +13,9 @@ export default function MainNav() {
     <nav
       className="fixed left-0 right-0 bg-white shadow-sm flex items-center justify-between px-4 md:px-8 z-50"
       style={{
-        top: 'var(--topbar-h)',
+        top: 'calc(var(--topbar-h) - var(--address-bar-height, 0px))',
         minHeight: 'var(--mainnav-h)',
+        transition: 'top 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
       }}
     >
       {/* Left: Logo */}
