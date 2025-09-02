@@ -30,7 +30,7 @@ export default function TopBar() {
 
   return (
     <div
-       className="bg-secondary text-white flex items-end justify-center fixed top-0 left-0 right-0"
+       className="bg-secondary text-white flex items-end justify-center"
       style={{
         height: 'var(--topbar-h)',
         paddingBottom: '2px',

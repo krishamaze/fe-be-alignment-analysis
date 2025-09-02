@@ -11,8 +11,8 @@ export default function PublicLayout({ children }) {
       {/* Fixed header (TopBar + MainNav) */}
       <header className="fixed inset-x-0 top-0 w-screen z-50">
         <TopBar />
-        <MainNav />
       </header>
+      <MainNav />
 
       {/* Page content with header offset */}
       <PageSection
