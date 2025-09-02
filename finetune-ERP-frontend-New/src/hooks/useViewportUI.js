@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function useViewportUI(
   mode = 'scroll',
@@ -7,22 +7,34 @@ export default function useViewportUI(
   const [bottomVisible, setBottomVisible] = useState(true);
   const [keyboardDocked, setKeyboardDocked] = useState(false);
 
-  // store the smallest viewport height seen (vh-min)
-  const minVhRef = useRef(window.innerHeight);
-
   useEffect(() => {
+    // lock stable min height on first load
+    const initHeight = window.innerHeight;
+    document.documentElement.style.setProperty('--vh-min', `${initHeight}px`);
+    document.documentElement.style.setProperty('--topbar-h', '40px'); // slim default
+
     const viewport = window.visualViewport;
     if (!viewport) return;
 
     const updateVh = () => {
       const vh = viewport.height;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
 
-      // update min vh
-      minVhRef.current = Math.min(minVhRef.current, vh);
+      // grow TopBar if viewport taller than min
+      const minVh = parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue('--vh-min'),
+        10
+      );
 
-      // expose both vars
-      document.documentElement.style.setProperty('--vh', `${vh}px`); // current vh
-      document.documentElement.style.setProperty('--vh-min', `${minVhRef.current}px`); // stable min vh
+      if (vh > minVh) {
+        const extra = vh - minVh;
+        document.documentElement.style.setProperty(
+          '--topbar-h',
+          `${40 + extra}px`
+        );
+      } else {
+        document.documentElement.style.setProperty('--topbar-h', '40px');
+      }
 
       // keyboard detection
       setKeyboardDocked(window.innerHeight - vh > keyboardThreshold);
@@ -38,7 +50,7 @@ export default function useViewportUI(
     };
   }, [keyboardThreshold]);
 
-  // scroll detection (unchanged)
+  // scroll detection for bottom nav
   useEffect(() => {
     if (mode !== 'scroll') return;
     let lastY = window.scrollY;
