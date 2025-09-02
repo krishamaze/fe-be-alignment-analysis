@@ -17,7 +17,7 @@
 
 ## Deviations & Improvements
 
-- Shared `Navbar` and `Footer` wrap all public pages.
+- Shared `PublicLayout` wraps all public pages with header, footer, and mobile bottom navigation.
 - Added SEO metadata (title, description, OG tags) for each page.
 - Contact, schedule-call, and booking forms use reCAPTCHA with server-side verification and DRF throttling.
 - Cleaned up leftover debug text in `ScheduleCall.jsx` metadata setup.
