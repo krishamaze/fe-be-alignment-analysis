@@ -4,21 +4,28 @@ export default function TopBar() {
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
-    const viewport = window.visualViewport;
-    if (!viewport) return;
     const EPSILON = 5;
-    const svh = window.innerHeight; // baseline (bar visible)
-    const lvh = screen.height; // max (bar hidden)
 
     const update = () => {
-      const dvh = viewport.height;
+      const svh = window.innerHeight; // baseline (bar visible)
+      const lvh = screen.height; // max (bar hidden)
+      const dvh = window.visualViewport
+        ? window.visualViewport.height
+        : window.innerHeight;
+
       if (Math.abs(dvh - lvh) < EPSILON) setExpanded(true);
       else if (Math.abs(dvh - svh) < EPSILON) setExpanded(false);
     };
 
     update();
-    viewport.addEventListener('resize', update);
-    return () => viewport.removeEventListener('resize', update);
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', update);
+      return () => window.visualViewport?.removeEventListener('resize', update);
+    } else {
+      window.addEventListener('resize', update);
+      return () => window.removeEventListener('resize', update);
+    }
   }, []);
 
   return (

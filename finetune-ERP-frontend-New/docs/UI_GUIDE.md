@@ -41,17 +41,17 @@ Dark mode is enabled via `class` strategy. Toggle a `dark` class on the root ele
 
 ## Reusable components
 
-| Component                                       | Location                          | Notes                                                                                                                        |
-| ----------------------------------------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `PublicLayout`                                  | `src/components/layout`           | wraps `TopBar`, `MainNav`, `BottomNav`, and `Footer` for public pages; offsets header so child pages only need `p-4` padding |
+| Component                                       | Location                          | Notes                                                                                                                           |
+| ----------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `PublicLayout`                                  | `src/components/layout`           | wraps `TopBar`, `MainNav`, `BottomNav`, and `Footer` for public pages; offsets header so child pages only need `p-4` padding    |
 | `TopBar` / `MainNav` / `BottomNav`              | `src/components/layout`           | modular public navigation pieces; `TopBar` text expands when the address bar hides and `BottomNav` manages its own account menu |
-| `Footer`                                        | `src/components/layout`           | slim desktop footer                                                                                                          |
-| `DashboardNavbar` / `DashboardBottomNav`        | `src/components/dashboard/layout` | responsive dashboard navigation with fixed bottom grid                                                                       |
-| `Pagination` / `ResponsivePaginationHandler`    | `src/components`                  | reusable pagination controls                                                                                                 |
-| `ToggleStatusModal` & `DeleteConfirmationModal` | `src/components`                  | confirmation dialogs                                                                                                         |
-| `StoreAssignModal` & `BranchHeadModal`          | `src/components/Store`            | assign stores or branch heads                                                                                                |
-| `Loader`                                        | `src/components/common`           | full-screen loading spinner                                                                                                  |
-| `PageSection`                                   | `src/components/common`           | semantic wrapper with auto `min-height`; use `withBottom` to offset BottomNav                                                |
+| `Footer`                                        | `src/components/layout`           | slim desktop footer                                                                                                             |
+| `DashboardNavbar` / `DashboardBottomNav`        | `src/components/dashboard/layout` | responsive dashboard navigation with fixed bottom grid                                                                          |
+| `Pagination` / `ResponsivePaginationHandler`    | `src/components`                  | reusable pagination controls                                                                                                    |
+| `ToggleStatusModal` & `DeleteConfirmationModal` | `src/components`                  | confirmation dialogs                                                                                                            |
+| `StoreAssignModal` & `BranchHeadModal`          | `src/components/Store`            | assign stores or branch heads                                                                                                   |
+| `Loader`                                        | `src/components/common`           | full-screen loading spinner                                                                                                     |
+| `PageSection`                                   | `src/components/common`           | semantic wrapper with auto `min-height`; use `withBottom` to offset BottomNav                                                   |
 
 Follow these patterns when adding new components to keep styling and accessibility consistent.
 
@@ -65,7 +65,11 @@ Global CSS variables define navigation heights:
 - `--mainnav-h` – main navigation (70px)
 - `--bottombar-h` – mobile bottom navigation (4rem)
 
-`PageSection` applies `min-height: calc(100vh - var(--topbar-h) - var(--mainnav-h))` and subtracts `--bottombar-h` when `withBottom` is set. `TopBar` text enlarges when the browser address bar hides, and `BottomNav` includes safe-area padding.
+`PageSection` applies `min-height: calc(100vh - var(--topbar-h) - var(--mainnav-h))` and subtracts `--bottombar-h` when `withBottom` is set. `TopBar` text enlarges when the browser address bar hides. Baseline heights are recomputed on each resize and fall back to `window.innerHeight` when `visualViewport` is unavailable. `BottomNav` includes safe-area padding.
+
+### Viewport units
+
+`PageSection` relies on `100vh` instead of `100dvh` to keep the `TopBar`, `MainNav`, and content heights stable when the URL bar or keyboard shows and hides. Using `100vh` ensures overlays cover the expected area without pushing content, while `TopBar` listens to `visualViewport` (with an `innerHeight` fallback) to detect address bar collapse.
 
 ## Dashboard tiles
 
