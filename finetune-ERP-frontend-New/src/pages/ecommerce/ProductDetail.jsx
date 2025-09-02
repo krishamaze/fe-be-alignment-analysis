@@ -3,8 +3,7 @@ import {
   useGetProductBySlugQuery,
   useGetVariantsQuery,
 } from '../../api/erpApi';
-
-export let metadata = {};
+import { buildProductMetadata } from './productDetailMeta';
 
 function ProductDetail() {
   const { slug } = useParams();
@@ -15,36 +14,7 @@ function ProductDetail() {
   if (isLoading) return <div className="p-4">Loading...</div>;
   if (!product) return <div className="p-4">Product not found</div>;
 
-  const metaTitle = `${product.name} - ${product.brand_name || product.brand}`;
-  const metaDesc = `Buy ${product.name} from ${product.brand_name || product.brand}`;
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.name,
-    brand: { '@type': 'Brand', name: product.brand_name || product.brand },
-    offers: {
-      '@type': 'Offer',
-      price: product.price,
-      priceCurrency: 'INR',
-      availability: product.availability
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock',
-    },
-    url: product.url,
-  };
-
-  metadata = {
-    title: metaTitle,
-    description: metaDesc,
-    alternates: { canonical: product.url },
-    openGraph: {
-      title: metaTitle,
-      description: metaDesc,
-      url: product.url,
-      images: [product.image || ''],
-    },
-    jsonLd,
-  };
+  buildProductMetadata(product);
 
   return (
     <div className="p-4 space-y-4">

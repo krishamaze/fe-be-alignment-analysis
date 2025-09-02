@@ -1,11 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useGetDepartmentsQuery } from '../../api/erpApi';
 
-export const metadata = {
-  title: 'Departments',
-  description: 'Browse departments',
-};
-
 function DepartmentsPage() {
   const { data } = useGetDepartmentsQuery();
   const departments = data?.content ?? [];

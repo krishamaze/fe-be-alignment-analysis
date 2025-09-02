@@ -43,21 +43,24 @@ export default function BottomNav({ visible = true }) {
           transition: 'transform 0.2s ease, opacity 0.2s ease',
         }}
       >
-        {bottomTabs.map(({ to, label, icon: Icon, onClick }) => (
-          <NavLink
-            key={label}
-            to={to}
-            onClick={onClick}
-            className={({ isActive }) =>
-              `flex flex-col items-center gap-0.5 text-xs pt-1 pb-0.5 ${
-                isActive ? 'text-secondary' : 'text-gray-600'
-              }`
-            }
-          >
-            <Icon className="w-5 h-5" />
-            <span>{label}</span>
-          </NavLink>
-        ))}
+        {bottomTabs.map(({ to, label, icon, onClick }) => {
+          const Icon = icon;
+          return (
+            <NavLink
+              key={label}
+              to={to}
+              onClick={onClick}
+              className={({ isActive }) =>
+                `flex flex-col items-center gap-0.5 text-xs pt-1 pb-0.5 ${
+                  isActive ? 'text-secondary' : 'text-gray-600'
+                }`
+              }
+            >
+              <Icon className="w-5 h-5" />
+              <span>{label}</span>
+            </NavLink>
+          );
+        })}
       </nav>
 
       {accountOpen && (
@@ -74,7 +77,11 @@ export default function BottomNav({ visible = true }) {
               { to: '/legal', label: 'Legal' },
             ].map(({ to, label }) => (
               <li key={to}>
-                <NavLink to={to} className="block" onClick={() => setAccountOpen(false)}>
+                <NavLink
+                  to={to}
+                  className="block"
+                  onClick={() => setAccountOpen(false)}
+                >
                   {label}
                 </NavLink>
               </li>

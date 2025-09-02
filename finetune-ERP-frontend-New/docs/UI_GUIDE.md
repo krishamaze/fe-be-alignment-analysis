@@ -120,4 +120,4 @@ Giveaway Redemption and Workledger tiles navigate to `/giveaway-redemption` and 
 
 ## SEO metadata
 
-- Public pages should declare `<title>`, `<meta>`, and `<link>` tags directly in the component using React 19's built-in metadata support to set the page title, description, and Open Graph meta tags.
+- Public pages should define metadata in a dedicated `*Meta.js` module imported by the component to avoid Fast Refresh warnings. Use React 19's metadata support to apply titles, descriptions, and Open Graph tags.
