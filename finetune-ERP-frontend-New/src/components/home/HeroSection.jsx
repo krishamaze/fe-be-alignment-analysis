@@ -12,7 +12,7 @@ export default function HeroSection() {
   return (
     <PageSection
       withBottom
-      className="relative flex flex-col md:flex-row items-center justify-center bg-gradient-to-r from-primary via-secondary to-surface text-surface px-6 py-12"
+      className="relative flex flex-col md:flex-row items-center justify-center bg-gradient-to-r from-primary via-secondary to-surface text-surface p-4 md:px-6 md:py-12"
     >
       {/* Left: Text and CTAs */}
       <div className="md:w-1/2 text-center md:text-left flex flex-col justify-center gap-6">
