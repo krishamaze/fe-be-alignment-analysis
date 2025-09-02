@@ -5,8 +5,10 @@ export default function PageSection({
   style = {},
   ...props
 }) {
-  // Full height under topbar + mainnav
-  const minHeight = `calc(var(--vh) - var(--topbar-h) - var(--mainnav-h))`;
+  // Always use vh-min so PageSection doesn’t resize when address bar hides/unhides
+  const minHeight = `calc(var(--vh-min) - var(--topbar-h) - var(--mainnav-h)${
+    withBottom ? ' - var(--bottombar-h)' : ''
+  })`;
 
   return (
     <section

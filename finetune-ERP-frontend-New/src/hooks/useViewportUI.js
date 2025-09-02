@@ -7,44 +7,31 @@ export default function useViewportUI(
   const [bottomVisible, setBottomVisible] = useState(true);
   const [keyboardDocked, setKeyboardDocked] = useState(false);
 
-  // keep baseline heights in a ref (no rerenders needed)
-  const baselineRef = useRef(null);
+  // store the smallest viewport height seen (vh-min)
+  const minVhRef = useRef(window.innerHeight);
 
   useEffect(() => {
     const viewport = window.visualViewport;
     if (!viewport) return;
 
-    const mainNav = document.querySelector('nav'); // MainNav element
-    const pageSection = document.querySelector('[data-pagesection]'); // PageSection
-
-    if (mainNav && pageSection && !baselineRef.current) {
-      baselineRef.current = {
-        mainNav: mainNav.offsetHeight,
-        pageSection: pageSection.offsetHeight,
-      };
-    }
-
     const updateVh = () => {
       const vh = viewport.height;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
 
-      if (baselineRef.current) {
-        const { mainNav, pageSection } = baselineRef.current;
-        let topbarH = vh - (mainNav + pageSection);
+      // update min vh
+      minVhRef.current = Math.min(minVhRef.current, vh);
 
-        // clamp to avoid collapsing too small or negative
-        topbarH = Math.max(50, topbarH);
-        document.documentElement.style.setProperty('--topbar-h', `${topbarH}px`);
-      }
+      // expose both vars
+      document.documentElement.style.setProperty('--vh', `${vh}px`); // current vh
+      document.documentElement.style.setProperty('--vh-min', `${minVhRef.current}px`); // stable min vh
 
       // keyboard detection
       setKeyboardDocked(window.innerHeight - vh > keyboardThreshold);
     };
 
     updateVh();
-
     viewport.addEventListener('resize', updateVh);
     window.addEventListener('orientationchange', updateVh);
+
     return () => {
       viewport.removeEventListener('resize', updateVh);
       window.removeEventListener('orientationchange', updateVh);
