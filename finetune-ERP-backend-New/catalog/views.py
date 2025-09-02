@@ -17,14 +17,14 @@ class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all().order_by("name")
     serializer_class = DepartmentSerializer
     lookup_field = "slug"
-    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
+    permission_classes = [IsSystemAdminOrReadOnly]
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all().order_by("name")
     serializer_class = CategorySerializer
     lookup_field = "slug"
-    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
+    permission_classes = [IsSystemAdminOrReadOnly]
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -38,7 +38,7 @@ class SubCategoryViewSet(viewsets.ModelViewSet):
     queryset = SubCategory.objects.all().order_by("name")
     serializer_class = SubCategorySerializer
     lookup_field = "slug"
-    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
+    permission_classes = [IsSystemAdminOrReadOnly]
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -53,7 +53,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all().order_by("name")
     serializer_class = ProductSerializer
     lookup_field = "slug"
-    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
+    permission_classes = [IsSystemAdminOrReadOnly]
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -97,7 +97,7 @@ class VariantViewSet(viewsets.ModelViewSet):
     queryset = Variant.objects.all().order_by("variant_name")
     serializer_class = VariantSerializer
     lookup_field = "slug"
-    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
+    permission_classes = [IsSystemAdminOrReadOnly]
 
     def get_queryset(self):
         qs = super().get_queryset()
