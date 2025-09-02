@@ -9,7 +9,7 @@ export default function PublicLayout({ children }) {
     // Use min-h-full so the root expands to the initial containing block for proper header behavior
     <div className="flex flex-col min-h-full">
       {/* Fixed header (TopBar + MainNav) */}
-      <header className="fixed top-0 left-0 w-full z-50">
+      <header className="fixed inset-x-0 top-0 w-screen z-50">
         <TopBar />
         <MainNav />
       </header>
