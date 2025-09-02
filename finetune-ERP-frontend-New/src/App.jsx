@@ -63,9 +63,6 @@ function AppContent() {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
 
-  // Choose PublicLayout mode per path if needed
-  const publicMode = location.pathname === '/shop' ? 'scroll' : 'paged';
-
   const routes = (
     <Routes>
       <Route path="/" element={<Hero />} />
@@ -174,7 +171,7 @@ function AppContent() {
     </Routes>
   );
 
-  return isDashboard ? routes : <PublicLayout mode={publicMode}>{routes}</PublicLayout>;
+  return isDashboard ? routes : <PublicLayout>{routes}</PublicLayout>;
 }
 
 export default function App() {

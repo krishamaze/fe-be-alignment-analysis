@@ -13,7 +13,6 @@ export default function HeroSection() {
     <PageSection
       withBottom
       className="relative flex flex-col md:flex-row items-center justify-center bg-gradient-to-r from-primary via-secondary to-surface text-surface p-4 md:px-6 md:py-12"
-      style={{ minHeight: 'calc(var(--vh) - var(--topbar-h) - var(--mainnav-h))' }} // 👈 ensures full hero fill
     >
       {/* Left: Text and CTAs */}
       <div className="md:w-1/2 text-center md:text-left flex flex-col justify-center gap-6 h-full">

@@ -5,21 +5,21 @@ export default function PageSection({
   style = {},
   ...props
 }) {
-  // Always use vh-min so PageSection doesn’t resize when address bar hides/unhides
-  const minHeight = `calc(var(--vh-min) - var(--topbar-h) - var(--mainnav-h)${
+  const minHeight = `calc(100vh - var(--topbar-h) - var(--mainnav-h)${
     withBottom ? ' - var(--bottombar-h)' : ''
   })`;
 
   return (
     <section
-      data-pagesection
-      className={`relative ${className}`}
-      style={{ minHeight, ...style }}
+      className={`${className} relative`}
+      style={{
+        minHeight,
+        paddingBottom: 'env(safe-area-inset-bottom)',
+        ...style,
+      }}
       {...props}
     >
-      <div className={withBottom ? 'pb-[var(--bottombar-h)]' : ''}>
-        {children}
-      </div>
+      {children}
     </section>
   );
 }
