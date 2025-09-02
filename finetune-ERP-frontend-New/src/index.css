@@ -6,7 +6,7 @@
   --topbar-h: 70px;
   --mainnav-h: 70px;
   --bottombar-h: 4rem;
-  --vh: 100dvh;
+  --vh: 100vh; /* default fallback, will be updated by JS */
 }
 
 html,

@@ -63,6 +63,9 @@ function AppContent() {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
 
+  // Choose PublicLayout mode per path if needed
+  const publicMode = location.pathname === '/shop' ? 'scroll' : 'paged';
+
   const routes = (
     <Routes>
       <Route path="/" element={<Hero />} />
@@ -82,14 +85,7 @@ function AppContent() {
       />
 
       {/* E-commerce routes */}
-      <Route
-        path="/shop"
-        element={
-          <PublicLayout mode="scroll">
-            <Shop />
-          </PublicLayout>
-        }
-      />
+      <Route path="/shop" element={<Shop />} />
       <Route path="/repair" element={<Repair />} />
       <Route path="/support" element={<Support />} />
       <Route path="/search" element={<SearchPage />} />
@@ -156,9 +152,7 @@ function AppContent() {
       >
         {['system_admin'].includes(role) && (
           <>
-            {/* <Route path="stores/add" element={<AddStore />} /> */}
             <Route path="users" element={<User />} />
-            {/* <Route path="users/add" element={<AddUser />} /> */}
             <Route path="stores" element={<Store />} />
             <Route path="brands" element={<BrandDashboard />} />
             <Route path="products" element={<ProductsDashboard />} />
@@ -177,12 +171,12 @@ function AppContent() {
           </>
         )}
       </Route>
-      {/* <Route path="*" element={<Navigate to="/" />} /> */}
     </Routes>
   );
 
-  return isDashboard ? routes : <PublicLayout>{routes}</PublicLayout>;
+  return isDashboard ? routes : <PublicLayout mode={publicMode}>{routes}</PublicLayout>;
 }
+
 export default function App() {
   return (
     <BrowserRouter>
