@@ -1,5 +1,4 @@
-import Navbar from './components/layout/Navbar';
-import Footer from './components/layout/Footer';
+import PublicLayout from './components/layout/PublicLayout';
 import Hero from '../src/pages/Hero';
 import TeamLogin from './pages/internal/TeamLogin';
 import Signup from './pages/customers/Signup';
@@ -62,11 +61,10 @@ function AppContent() {
   const token = useAppSelector(selectAuthToken);
   const role = useAppSelector(selectAuthRole);
   const location = useLocation();
+  const isDashboard = location.pathname.startsWith('/dashboard');
 
-  return (
-    <>
-      {!location.pathname.startsWith('/dashboard') && <Navbar />}
-      <Routes>
+  const routes = (
+    <Routes>
         <Route path="/" element={<Hero />} />
         <Route
           path="/teamlogin"
@@ -84,7 +82,14 @@ function AppContent() {
         />
 
         {/* E-commerce routes */}
-        <Route path="/shop" element={<Shop />} />
+        <Route
+          path="/shop"
+          element={
+            <PublicLayout mode="scroll">
+              <Shop />
+            </PublicLayout>
+          }
+        />
         <Route path="/repair" element={<Repair />} />
         <Route path="/support" element={<Support />} />
         <Route path="/search" element={<SearchPage />} />
@@ -176,9 +181,9 @@ function AppContent() {
         </Route>
         {/* <Route path="*" element={<Navigate to="/" />} /> */}
       </Routes>
-      {!location.pathname.startsWith('/dashboard') && <Footer />}
-    </>
   );
+
+  return isDashboard ? routes : <PublicLayout>{routes}</PublicLayout>;
 }
 export default function App() {
   return (
