@@ -9,7 +9,8 @@ export default function PublicLayout({ children, mode = 'scroll' }) {
   const { bottomNavVisible } = useViewportUI(mode);
 
   return (
-    <div className="flex flex-col min-h-[var(--vh)]">
+    <div className="flex flex-col min-h-[100dvh]">
+      {/* Fixed header (TopBar + MainNav) */}
       <header className="fixed top-0 left-0 w-full z-50">
         <TopBar mode="offers" />
         <MainNav />
