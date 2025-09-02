@@ -6,10 +6,10 @@ from catalog.models import Department, Category, SubCategory, Product, Variant
 
 
 @pytest.mark.django_db
-def test_product_list_requires_auth():
+def test_product_list_public():
     client = APIClient()
     resp = client.get("/api/products")
-    assert resp.status_code in (401, 403)
+    assert resp.status_code == 200
 
 
 @pytest.mark.django_db

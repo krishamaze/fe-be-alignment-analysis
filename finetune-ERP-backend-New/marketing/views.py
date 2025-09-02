@@ -15,7 +15,7 @@ class BrandViewSet(viewsets.ModelViewSet):
 
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
-    permission_classes = [permissions.IsAuthenticated, IsSystemAdminOrReadOnly]
+    permission_classes = [IsSystemAdminOrReadOnly]
 
     def create(self, request, *args, **kwargs):  # pragma: no cover - simple proxy
         return super().create(request, *args, **kwargs)

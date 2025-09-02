@@ -1,9 +1,13 @@
 # API Guide
 
+## Authentication Overview
+- Public GET: `/api/brands/`, `/api/departments/`, `/api/categories/`, `/api/subcategories/`, `/api/products/`, `/api/variants/`
+- Authenticated: cart, checkout, orders, account-related endpoints
+
 ## Brands
-- `GET /api/brands/` – auth required
+- `GET /api/brands/` – public list
 - `POST /api/brands/` – system_admin only
-- `GET /api/brands/{id}/` – auth required
+- `GET /api/brands/{id}/` – public detail
 - `PUT /api/brands/{id}/` – system_admin only
 - `DELETE /api/brands/{id}/` – system_admin only
 
@@ -36,33 +40,33 @@
 - `DELETE /api/qualities/{slug}` – system_admin only
 
 ## Taxonomy
-- `GET /api/departments` – auth required
+- `GET /api/departments` – public list
 - `POST /api/departments` – system_admin only
-- `GET /api/departments/{slug}` – auth required
+- `GET /api/departments/{slug}` – public detail
 - `PUT /api/departments/{slug}` – system_admin only (slug immutable)
 - `DELETE /api/departments/{slug}` – system_admin only
-- `GET /api/categories?department=slug` – auth required
+- `GET /api/categories?department=slug` – public list
 - `POST /api/categories` – system_admin only
-- `GET /api/categories/{slug}` – auth required
+- `GET /api/categories/{slug}` – public detail
 - `PUT /api/categories/{slug}` – system_admin only (slug immutable)
 - `DELETE /api/categories/{slug}` – system_admin only
-- `GET /api/subcategories?category=slug` – auth required
+- `GET /api/subcategories?category=slug` – public list
 - `POST /api/subcategories` – system_admin only
-- `GET /api/subcategories/{slug}` – auth required
+- `GET /api/subcategories/{slug}` – public detail
 - `PUT /api/subcategories/{slug}` – system_admin only (slug immutable)
 - `DELETE /api/subcategories/{slug}` – system_admin only
 
 ## Products
-- `GET /api/products` – auth required (filter by `brand`, `availability`, `department`, `category`, `subcategory`, `min_price`, `max_price`; order with `ordering=price| -price | -date_created`)
+- `GET /api/products` – public list (filter by `brand`, `availability`, `department`, `category`, `subcategory`, `min_price`, `max_price`; order with `ordering=price| -price | -date_created`)
 - `POST /api/products` – system_admin only
-- `GET /api/products/{slug}` – auth required
+- `GET /api/products/{slug}` – public detail
 - `PUT /api/products/{slug}` – system_admin only (slug immutable)
 - `DELETE /api/products/{slug}` – system_admin only
 
 ## Variants
-- `GET /api/variants` – auth required (filter by `product` slug)
+- `GET /api/variants` – public list (filter by `product` slug)
 - `POST /api/variants` – system_admin only
-- `GET /api/variants/{slug}` – auth required
+- `GET /api/variants/{slug}` – public detail
 - `PUT /api/variants/{slug}` – system_admin only (slug immutable)
 - `DELETE /api/variants/{slug}` – system_admin only
 
