@@ -17,26 +17,36 @@ export default function MainNav() {
         minHeight: 'var(--mainnav-h)',
       }}
     >
-      {/* Desktop: Logo + Links + Icons */}
-      <div className="flex items-center gap-8 w-full">
-        <Logo />
-        <ul className="hidden md:flex gap-6 mx-auto">
-          <li>
-            <NavLink to="/shop" className={navLinkClasses}>
-              Shop
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/repair" className={navLinkClasses}>
-              Repair
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/support" className={navLinkClasses}>
-              Support
-            </NavLink>
-          </li>
-        </ul>
+      {/* Left: Logo */}
+      <Logo />
+
+      {/* Center: Nav links (desktop only) */}
+      <ul className="hidden md:flex gap-6 mx-auto">
+        <li>
+          <NavLink to="/shop" className={navLinkClasses}>
+            Shop
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/repair" className={navLinkClasses}>
+            Repair
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/support" className={navLinkClasses}>
+            Support
+          </NavLink>
+        </li>
+      </ul>
+
+      {/* Right: Icons + CTA */}
+      <div className="flex items-center gap-4">
+        {/* Mobile: only Search */}
+        <NavLink to="/search" className="flex md:hidden" aria-label="Search">
+          <Search className="w-5 h-5" />
+        </NavLink>
+
+        {/* Desktop: full icon set + CTA */}
         <div className="hidden md:flex items-center gap-4">
           <NavLink to="/account" className="flex" aria-label="Account">
             <User className={iconClasses} />
@@ -54,14 +64,6 @@ export default function MainNav() {
             Book Now
           </Link>
         </div>
-      </div>
-
-      {/* Mobile: Logo + Search */}
-      <div className="flex items-center justify-between w-full md:hidden">
-        <Logo />
-        <NavLink to="/search" className="flex" aria-label="Search">
-          <Search className="w-5 h-5" />
-        </NavLink>
       </div>
     </nav>
   );
