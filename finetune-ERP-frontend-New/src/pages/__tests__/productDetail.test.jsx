@@ -2,7 +2,8 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { vi, test, expect } from 'vitest';
-import ProductDetail, { metadata } from '../ecommerce/ProductDetail';
+import ProductDetail from '../ecommerce/ProductDetail';
+import { metadata } from '../ecommerce/productDetailMeta';
 
 vi.mock('../../api/erpApi', () => ({
   useGetProductBySlugQuery: () => ({

@@ -4,11 +4,6 @@ import {
   useGetSubCategoriesQuery,
 } from '../../api/erpApi';
 
-export const metadata = {
-  title: 'Products',
-  description: 'Browse products',
-};
-
 function CategoryPage() {
   const { catSlug, subcatSlug } = useParams();
   const { data: subData } = useGetSubCategoriesQuery({ category: catSlug });
