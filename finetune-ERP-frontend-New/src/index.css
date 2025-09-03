@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   /* dynamic vars will be updated by viewport.js */
   --addressbar-fill: 0px;
