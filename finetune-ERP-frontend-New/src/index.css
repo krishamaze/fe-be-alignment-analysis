@@ -1,61 +1,38 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
-  --topbar-h: 40px;
-  --mainnav-h: 70px;
-  --bottombar-h: 4rem;
-  
-  /* Dynamic address bar measurements - updated by useViewport hook */
-  --address-bar-height: 0px;
-  --viewport-expanded: 0;
+  /* dynamic vars will be updated by viewport.js */
+  --addressbar-fill: 0px;
+  --topbar-h: 0px;         /* actual height set by TopBar */
+  --mainnav-h: 56px;       /* adjust if your MainNav differs */
+  --bottombar-h: 56px;     /* adjust if your BottomNav differs */
 }
 
-html,
-body,
-#root {
+/* App shell layout helpers */
+html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  scroll-behavior: auto;
+  background: var(--surface, #fff);
+  color: var(--onSurface, #000);
 }
 
-.input {
-  @apply w-full border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-keyline focus:ring-offset-2 focus:ring-offset-surface focus:border-keyline hover:border-keyline;
+/* Top filler (address bar space) */
+header {
+  transition: top 0.3s ease;
 }
 
-body {
-  @apply bg-surface text-black;
-  overflow-y: scroll;
+/* Bottom nav (default state) */
+.bottom-nav {
+  will-change: transform;
 }
 
-#root {
-  display: flex;
-  flex-direction: column;
+/* Hide bottom nav when keyboard is open */
+.keyboard-open .bottom-nav {
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
 }
 
-.topbar-text {
-  font-size: 10px;
-  transition: font-size 0.3s ease;
-}
-
-.topbar-text.large {
-  font-size: 14px;
-}
-
-/* Optional: Smooth TopBar reveal animation */
-@media (max-width: 768px) {
-  header {
-    /* TopBar slides smoothly as address bar shows/hides */
-    transition: top 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-  
-  /* Alternative approach: Only show when expanded */
-  /*
-  header {
-    transform: translateY(calc(-100% + var(--viewport-expanded) * 100%));
-    transition: transform 0.3s ease;
-  }
-  */
+/* Safe area fix for iOS */
+.bottom-nav {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  bottom: env(safe-area-inset-bottom, 0);
 }
