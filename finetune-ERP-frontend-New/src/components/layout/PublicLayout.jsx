@@ -8,9 +8,8 @@ import DebugCopyButton from '@/components/common/DebugCopyButton';
 
 export default function PublicLayout() {
   useEffect(() => {
-    // initialize viewport vars
     updateViewportVars();
-    // listen for resize / keyboard
+
     window.addEventListener('resize', updateViewportVars);
     window.visualViewport?.addEventListener('resize', updateViewportVars);
     window.visualViewport?.addEventListener('resize', handleKeyboard);
@@ -24,21 +23,24 @@ export default function PublicLayout() {
 
   return (
     <div className="relative min-h-[100dvh] bg-surface text-onSurface">
-      {/* Top filler + optional TopBar */}
-      <header
-        className="fixed inset-x-0 z-50"
-        style={{ top: 'var(--addressbar-fill, 0px)' }}
-      >
+      {/* Top area: TopBar + MainNav */}
+      <header className="fixed top-0 inset-x-0 z-50">
         <TopBar />
         <MainNav />
       </header>
 
-      {/* Page content */}
-      <main className="pt-[calc(var(--addressbar-fill,0px)+var(--topbar-h,0px)+var(--mainnav-h))] pb-[var(--bottombar-h,0px)]">
+      {/* Scrollable content with padding offsets */}
+      <main
+        className="
+          relative
+          pt-[calc(var(--topbar-h,0px)+var(--mainnav-h,0px))]
+          pb-[var(--bottombar-h,0px)]
+        "
+      >
         <Outlet />
       </main>
 
-      {/* Bottom navigation */}
+      {/* Bottom navigation (always fixed to screen edge) */}
       <BottomNav />
 
       {/* Floating debug copy button */}
