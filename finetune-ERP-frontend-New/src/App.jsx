@@ -1,5 +1,5 @@
 import PublicLayout from './components/layout/PublicLayout';
-import Hero from '../src/pages/Hero';
+import Hero from './pages/Hero';
 import TeamLogin from './pages/internal/TeamLogin';
 import Signup from './pages/customers/Signup';
 import Login from './pages/customers/Login';
@@ -10,8 +10,6 @@ import Dashboard from './components/dashboard/layout/DashboardLayout';
 import { useAppSelector } from './redux/hook';
 import { selectAuthToken, selectAuthRole } from './redux/slice/authSlice';
 import { useLocation } from 'react-router-dom';
-// import AddStore from './pages/AddStore';
-// import AddUser from './pages/AddUser';
 import User from './pages/internal/User';
 import GiveawayRedemption from './pages/internal/GiveawayRedemption';
 import { Toaster } from 'react-hot-toast';
@@ -65,57 +63,57 @@ function AppContent() {
 
   const routes = (
     <Routes>
-      <Route path="/" element={<Hero />} />
+      {/* Public layout wrapper */}
+      <Route element={<PublicLayout />}>
+        <Route index element={<Hero />} />
+        <Route path="shop" element={<Shop />} />
+        <Route path="repair" element={<Repair />} />
+        <Route path="support" element={<Support />} />
+        <Route path="search" element={<SearchPage />} />
+        <Route path="product/:slug" element={<ProductDetail />} />
+        <Route path="departments" element={<DepartmentsPage />} />
+        <Route
+          path="departments/:deptSlug/categories"
+          element={<DepartmentCategoriesPage />}
+        />
+        <Route
+          path="departments/:deptSlug/:catSlug/:subcatSlug/products"
+          element={<CategoryPage />}
+        />
+        <Route path="cart" element={<CartPage />} />
+        <Route path="partners" element={<Partners />} />
+        <Route path="help" element={<HelpCentre />} />
+        <Route path="legal" element={<Legal />} />
+        <Route path="marketing" element={<IndexPage />} />
+        <Route path="about" element={<About />} />
+        <Route path="contact" element={<Contact />} />
+        <Route path="locate" element={<Locate />} />
+        <Route path="offers" element={<Offers />} />
+        <Route path="careers" element={<Careers />} />
+        <Route path="stores" element={<Stores />} />
+        <Route path="stores/:id" element={<StoreDetails />} />
+        <Route path="spares" element={<Spares />} />
+        <Route path="bookings" element={<Bookings />} />
+        <Route path="schedule-call" element={<ScheduleCall />} />
+        <Route
+          path="account"
+          element={token ? <Account /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="orders"
+          element={token ? <Orders /> : <Navigate to="/login" replace />}
+        />
+      </Route>
+
+      {/* Auth routes (outside PublicLayout) */}
       <Route
         path="/teamlogin"
         element={token ? <Navigate to="/dashboard" /> : <TeamLogin />}
       />
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
-      <Route
-        path="/account"
-        element={token ? <Account /> : <Navigate to="/login" replace />}
-      />
-      <Route
-        path="/orders"
-        element={token ? <Orders /> : <Navigate to="/login" replace />}
-      />
 
-      {/* E-commerce routes */}
-      <Route path="/shop" element={<Shop />} />
-      <Route path="/repair" element={<Repair />} />
-      <Route path="/support" element={<Support />} />
-      <Route path="/search" element={<SearchPage />} />
-      <Route path="/product/:slug" element={<ProductDetail />} />
-      <Route path="/departments" element={<DepartmentsPage />} />
-      <Route
-        path="/departments/:deptSlug/categories"
-        element={<DepartmentCategoriesPage />}
-      />
-      <Route
-        path="/departments/:deptSlug/:catSlug/:subcatSlug/products"
-        element={<CategoryPage />}
-      />
-      <Route path="/cart" element={<CartPage />} />
-      <Route path="/partners" element={<Partners />} />
-      <Route path="/help" element={<HelpCentre />} />
-      <Route path="/legal" element={<Legal />} />
-      <Route path="/marketing" element={<IndexPage />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/contact" element={<Contact />} />
-      <Route path="/locate" element={<Locate />} />
-      <Route path="/offers" element={<Offers />} />
-      <Route path="/careers" element={<Careers />} />
-      <Route path="/stores" element={<Stores />} />
-      <Route path="/stores/:id" element={<StoreDetails />} />
-      <Route path="/spares" element={<Spares />} />
-      <Route path="/bookings" element={<Bookings />} />
-      <Route
-        path="/terms-and-conditions"
-        element={<Navigate to="/legal" replace />}
-      />
-      <Route path="/schedule-call" element={<ScheduleCall />} />
-
+      {/* Dashboard & internal routes */}
       <Route
         path="/workledger/*"
         element={
@@ -171,7 +169,7 @@ function AppContent() {
     </Routes>
   );
 
-  return isDashboard ? routes : <PublicLayout>{routes}</PublicLayout>;
+  return isDashboard ? routes : routes;
 }
 
 export default function App() {
