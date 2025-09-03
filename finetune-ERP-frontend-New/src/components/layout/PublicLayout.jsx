@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import TopBar from '@/components/layout/TopBar';
-import MainNav from '@/components/MainNav';
-import BottomNav from '@/components/BottomNav';
+import MainNav from '@/components/layout/MainNav';
+import BottomNav from '@/components/layout/BottomNav';
 import { useEffect } from 'react';
 import { updateViewportVars, handleKeyboard } from '@/utils/viewport';
 import DebugCopyButton from '@/components/common/DebugCopyButton';
