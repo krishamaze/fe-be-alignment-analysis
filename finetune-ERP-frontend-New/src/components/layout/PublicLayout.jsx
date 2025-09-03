@@ -4,6 +4,7 @@ import MainNav from '@/components/MainNav';
 import BottomNav from '@/components/BottomNav';
 import { useEffect } from 'react';
 import { updateViewportVars, handleKeyboard } from '@/utils/viewport';
+import DebugCopyButton from '@/components/common/DebugCopyButton';
 
 export default function PublicLayout() {
   useEffect(() => {
@@ -39,6 +40,9 @@ export default function PublicLayout() {
 
       {/* Bottom navigation */}
       <BottomNav />
+
+      {/* Floating debug copy button */}
+      <DebugCopyButton />
     </div>
   );
 }
