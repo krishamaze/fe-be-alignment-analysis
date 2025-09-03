@@ -2,92 +2,99 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Home, Wrench, ShoppingBag, ShoppingCart, User } from 'lucide-react';
 
-const rootPaths = ['/', '/shop', '/repair', '/cart', '/account'];
+const ROOT_PATHS = ['/', '/shop', '/repair', '/cart', '/account'];
 
 export default function BottomNav() {
   const location = useLocation();
   const [accountOpen, setAccountOpen] = useState(false);
   const navRef = useRef(null);
 
-  // close account dropdown on route change
+  // Close account dropdown on route change
   useEffect(() => {
     setAccountOpen(false);
   }, [location.pathname]);
 
-  // Measure nav height once and set CSS var
+  // Measure actual rendered height (incl. padding + safe area) and set CSS var
   useEffect(() => {
-    if (navRef.current) {
-      const h = navRef.current.offsetHeight;
+    const setHeightVar = () => {
+      if (!navRef.current) return;
+      const h = navRef.current.getBoundingClientRect().height;
       document.documentElement.style.setProperty('--bottombar-h', `${h}px`);
-    }
+    };
+
+    setHeightVar();
+    // Re-measure on resize / visualViewport change to catch safe-area + rotations
+    window.addEventListener('resize', setHeightVar);
+    window.visualViewport?.addEventListener('resize', setHeightVar);
+    return () => {
+      window.removeEventListener('resize', setHeightVar);
+      window.visualViewport?.removeEventListener('resize', setHeightVar);
+    };
   }, []);
 
   // Only show nav on allowed root paths
-  if (!rootPaths.some((path) => location.pathname.startsWith(path))) {
+  if (!ROOT_PATHS.some((p) => location.pathname.startsWith(p))) {
     return null;
   }
 
-  const bottomTabs = [
+  const tabs = [
     { to: '/', label: 'Home', icon: Home },
     { to: '/repair', label: 'Repair', icon: Wrench },
     { to: '/shop', label: 'Shop', icon: ShoppingBag },
     { to: '/cart', label: 'Cart', icon: ShoppingCart },
-    {
-      to: '/account',
-      label: 'Account',
-      icon: User,
-      custom: true, // toggle dropdown
-    },
+    { to: '/account', label: 'Account', icon: User, custom: true },
   ];
 
   return (
     <>
       <nav
         ref={navRef}
+        role="navigation"
+        aria-label="Primary bottom navigation"
         className="
           bottom-nav
-          md:hidden fixed bottom-0 inset-x-0 z-50
+          fixed bottom-0 inset-x-0 z-50
+          md:hidden
           flex justify-around items-center
           border-t border-outline bg-surface
           transition-transform duration-300
-          py-1
+          /* Keep a compact, native-like height */
+          h-[56px]
+          /* Allow icons + labels to breathe a bit */
+          px-2
         "
-        style={{
-          paddingBottom: 'env(safe-area-inset-bottom)',
-        }}
+        // Lock to the visual bottom; add safe-area padding so it floats above the home indicator.
+        style={{ paddingBottom: 'env(safe-area-inset-bottom, 0)' }}
       >
-        {bottomTabs.map(({ to, label, icon, custom }) => {
-          const Icon = icon;
-
-          if (custom) {
-            return (
-              <button
-                key={label}
-                type="button"
-                onClick={() => setAccountOpen((o) => !o)}
-                className="flex flex-col items-center gap-0.5 text-xs pt-1 pb-0.5 text-onSurface"
-              >
-                <Icon className="w-5 h-5" />
-                <span>{label}</span>
-              </button>
-            );
-          }
-
-          return (
+        {tabs.map(({ to, label, icon: Icon, custom }) =>
+          custom ? (
+            <button
+              key={label}
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded={accountOpen}
+              onClick={() => setAccountOpen((o) => !o)}
+              className="flex flex-col items-center gap-0.5 text-xs text-onSurface outline-none focus:opacity-90"
+            >
+              <Icon className="w-5 h-5" aria-hidden />
+              <span>{label}</span>
+            </button>
+          ) : (
             <NavLink
               key={label}
               to={to}
               className={({ isActive }) =>
-                `flex flex-col items-center gap-0.5 text-xs pt-1 pb-0.5 ${
+                `flex flex-col items-center gap-0.5 text-xs outline-none focus:opacity-90 ${
                   isActive ? 'text-secondary' : 'text-onSurface'
                 }`
               }
+              aria-label={label}
             >
-              <Icon className="w-5 h-5" />
+              <Icon className="w-5 h-5" aria-hidden />
               <span>{label}</span>
             </NavLink>
-          );
-        })}
+          )
+        )}
       </nav>
 
       {accountOpen && (
@@ -95,11 +102,12 @@ export default function BottomNav() {
           className="
             md:hidden fixed left-0 right-0 mx-4
             bg-surface border border-outline rounded-lg shadow-lg
-            z-40
+            z-[60]
           "
+          // Position the menu just above the nav, respecting safe area.
           style={{
             bottom:
-              'calc(var(--bottombar-h) + env(safe-area-inset-bottom) + 0.5rem)',
+              'calc(var(--bottombar-h, 56px) + env(safe-area-inset-bottom, 0) + 8px)',
           }}
         >
           <ul className="p-4 text-sm space-y-2">
