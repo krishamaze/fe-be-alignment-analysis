@@ -1,17 +1,23 @@
-import { useViewportExpansion } from '@/hooks/useViewport';
+import { useEffect, useRef } from 'react';
 
 export default function TopBar() {
-  const expanded = useViewportExpansion();
+  const ref = useRef(null);
+
+  // Measure TopBar height once and set CSS var
+  useEffect(() => {
+    if (ref.current) {
+      const h = ref.current.offsetHeight;
+      document.documentElement.style.setProperty('--topbar-h', `${h}px`);
+    }
+  }, []);
 
   return (
     <div
+      ref={ref}
       className="bg-secondary text-white flex items-end justify-center"
-      style={{
-        height: 'var(--topbar-h)',
-        paddingBottom: '2px',
-      }}
+      style={{ paddingBottom: '2px' }}
     >
-      <span className={`topbar-text ${expanded ? 'large' : ''}`}>
+      <span className="topbar-text">
         🔥 Free Shipping
       </span>
     </div>
