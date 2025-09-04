@@ -61,6 +61,8 @@ The mobile dashboard uses a fixed bottom navigation bar that displays navigation
 
 Navigation spacing now uses Tailwind utilities and container-based sizing—no global CSS variables or resize listeners are required.
 
+Public routes mount an inner `h-screen overflow-hidden flex flex-col` container. `TopBar` scrolls away, `MainNav` uses `sticky top-0`, content gets `flex-1 overflow-y-auto`, and `BottomNav` anchors with `absolute bottom-0`.
+
 ### Viewport units
 
 The app relies on modern viewport units (`100dvh`) so navigation positions remain stable without JavaScript handlers.

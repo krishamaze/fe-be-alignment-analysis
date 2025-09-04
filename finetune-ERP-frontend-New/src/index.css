@@ -13,11 +13,6 @@ body,
   color: var(--onSurface, #000);
 }
 
-/* Top filler (address bar space) */
-header {
-  transition: top 0.3s ease;
-}
-
 /* Bottom nav (default state) */
 .bottom-nav {
   will-change: transform;

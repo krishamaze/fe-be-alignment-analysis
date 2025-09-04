@@ -6,29 +6,23 @@ import DebugCopyButton from '@/components/common/DebugCopyButton';
 
 export default function PublicLayout() {
   return (
-    <div className="relative min-h-[100dvh] bg-surface text-onSurface">
-      {/* Top area: TopBar + MainNav */}
-      <header className="fixed top-0 inset-x-0 z-50">
+    <div className="min-h-[100dvh] bg-surface text-onSurface">
+      <div className="h-screen overflow-hidden relative flex flex-col">
         <TopBar />
         <MainNav />
-      </header>
 
-      {/* Scrollable content with padding offsets */}
-      <main
-        className="
-          relative
-          pt-[calc(var(--topbar-h,0px)+var(--mainnav-h,0px))]
-          pb-[var(--bottombar-h,0px)]
-        "
-      >
-        <Outlet />
-      </main>
+        <main
+          className="flex-1 overflow-y-auto"
+          style={{
+            paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0))',
+          }}
+        >
+          <Outlet />
+        </main>
 
-      {/* Bottom navigation (always fixed to screen edge) */}
-      <BottomNav />
-
-      {/* Floating debug copy button */}
-      <DebugCopyButton />
+        <BottomNav />
+        <DebugCopyButton />
+      </div>
     </div>
   );
 }
