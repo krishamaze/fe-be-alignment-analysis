@@ -10,14 +10,7 @@ export default function MainNav() {
     'w-5 h-5 transition transform hover:opacity-80 hover:scale-110';
 
   return (
-    <nav
-      className="fixed left-0 right-0 bg-white shadow-sm flex items-center justify-between px-4 md:px-8 z-50"
-      style={{
-        top: 'calc(var(--topbar-h) - var(--address-bar-height, 0px))',
-        minHeight: 'var(--mainnav-h)',
-        transition: 'top 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-      }}
-    >
+    <nav className="flex-shrink-0 bg-white shadow-sm flex items-center justify-between px-4 md:px-8 z-50 h-14">
       {/* Left: Logo */}
       <Logo />
 

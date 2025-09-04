@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Home, Wrench, ShoppingBag, ShoppingCart, User } from 'lucide-react';
 
@@ -7,30 +7,10 @@ const ROOT_PATHS = ['/', '/shop', '/repair', '/cart', '/account'];
 export default function BottomNav() {
   const location = useLocation();
   const [accountOpen, setAccountOpen] = useState(false);
-  const navRef = useRef(null);
-
   // Close account dropdown on route change
   useEffect(() => {
     setAccountOpen(false);
   }, [location.pathname]);
-
-  // Measure actual rendered height (incl. padding + safe area) and set CSS var
-  useEffect(() => {
-    const setHeightVar = () => {
-      if (!navRef.current) return;
-      const h = navRef.current.getBoundingClientRect().height;
-      document.documentElement.style.setProperty('--bottombar-h', `${h}px`);
-    };
-
-    setHeightVar();
-    // Re-measure on resize / visualViewport change to catch safe-area + rotations
-    window.addEventListener('resize', setHeightVar);
-    window.visualViewport?.addEventListener('resize', setHeightVar);
-    return () => {
-      window.removeEventListener('resize', setHeightVar);
-      window.visualViewport?.removeEventListener('resize', setHeightVar);
-    };
-  }, []);
 
   // Only show nav on allowed root paths
   if (!ROOT_PATHS.some((p) => location.pathname.startsWith(p))) {
@@ -48,26 +28,25 @@ export default function BottomNav() {
   return (
     <>
       <nav
-        ref={navRef}
         role="navigation"
         aria-label="Primary bottom navigation"
         className="
           bottom-nav
-          fixed bottom-0 inset-x-0 z-50
+          absolute bottom-0 inset-x-0 z-50
           md:hidden
           flex justify-around items-center
           border-t border-outline bg-surface
-          transition-transform duration-300
-          /* Keep a compact, native-like height */
-          h-[56px]
-          /* Allow icons + labels to breathe a bit */
-          px-2
+          h-14
+          flex-shrink-0
         "
-        // Lock to the visual bottom; add safe-area padding so it floats above the home indicator.
-        style={{ paddingBottom: 'env(safe-area-inset-bottom, 0)' }}
+        style={{
+          bottom: 'env(safe-area-inset-bottom, 0)',
+          paddingBottom: 'env(safe-area-inset-bottom, 0)',
+        }}
       >
-        {tabs.map(({ to, label, icon: Icon, custom }) =>
-          custom ? (
+        {tabs.map(({ to, label, icon, custom }) => {
+          const Icon = icon;
+          return custom ? (
             <button
               key={label}
               type="button"
@@ -93,21 +72,20 @@ export default function BottomNav() {
               <Icon className="w-5 h-5" aria-hidden />
               <span>{label}</span>
             </NavLink>
-          )
-        )}
+          );
+        })}
       </nav>
 
       {accountOpen && (
         <div
           className="
-            md:hidden fixed left-0 right-0 mx-4
+            md:hidden absolute left-0 right-0 mx-4
             bg-surface border border-outline rounded-lg shadow-lg
             z-[60]
           "
           // Position the menu just above the nav, respecting safe area.
           style={{
-            bottom:
-              'calc(var(--bottombar-h, 56px) + env(safe-area-inset-bottom, 0) + 8px)',
+            bottom: 'calc(56px + env(safe-area-inset-bottom, 0) + 8px)',
           }}
         >
           <ul className="p-4 text-sm space-y-2">
