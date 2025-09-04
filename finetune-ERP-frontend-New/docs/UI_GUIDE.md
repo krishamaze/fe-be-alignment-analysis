@@ -59,17 +59,11 @@ The mobile dashboard uses a fixed bottom navigation bar that displays navigation
 
 ## Layout
 
-Global CSS variables define navigation heights:
-
-- `--topbar-h` – top promo bar (40px)
-- `--mainnav-h` – main navigation (70px)
-- `--bottombar-h` – mobile bottom navigation (4rem)
-
-`PageSection` applies `min-height: calc(100vh - var(--topbar-h) - var(--mainnav-h))` and subtracts `--bottombar-h` when `withBottom` is set. `TopBar` text enlarges when the browser address bar hides. Baseline heights are recomputed on each resize and fall back to `window.innerHeight` when `visualViewport` is unavailable. `BottomNav` includes safe-area padding.
+Navigation spacing now uses Tailwind utilities and container-based sizing—no global CSS variables or resize listeners are required.
 
 ### Viewport units
 
-`PageSection` relies on `100vh` instead of `100dvh` to keep the `TopBar`, `MainNav`, and content heights stable when the URL bar or keyboard shows and hides. Using `100vh` ensures overlays cover the expected area without pushing content, while `TopBar` listens to `visualViewport` (with an `innerHeight` fallback) to detect address bar collapse.
+The app relies on modern viewport units (`100dvh`) so navigation positions remain stable without JavaScript handlers.
 
 ## Dashboard tiles
 

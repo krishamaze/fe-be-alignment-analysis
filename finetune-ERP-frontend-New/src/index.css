@@ -2,16 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* dynamic vars will be updated by viewport.js */
-  --addressbar-fill: 0px;
-  --topbar-h: 0px;         /* actual height set by TopBar */
-  --mainnav-h: 56px;       /* adjust if your MainNav differs */
-  --bottombar-h: 56px;     /* adjust if your BottomNav differs */
-}
-
 /* App shell layout helpers */
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -27,12 +21,6 @@ header {
 /* Bottom nav (default state) */
 .bottom-nav {
   will-change: transform;
-}
-
-/* Hide bottom nav when keyboard is open */
-.keyboard-open .bottom-nav {
-  transform: translateY(100%);
-  transition: transform 0.3s ease;
 }
 
 /* Safe area fix for iOS */
