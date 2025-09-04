@@ -43,7 +43,7 @@ Dark mode is enabled via `class` strategy. Toggle a `dark` class on the root ele
 
 | Component                                       | Location                          | Notes                                                                                                                                                                                                                       |
 | ----------------------------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `PublicLayout`                                  | `src/components/layout`           | wraps `TopBar`, `MainNav`, `BottomNav`, and `Footer` for public pages; root uses `min-h-full` to expand to the initial containing block so the header stays anchored; offsets header so child pages only need `p-4` padding |
+| `PublicLayout`                                  | `src/components/layout`           | wraps `TopBar`, `MainNav`, `BottomNav`, and `Footer` for public pages; outer `h-[100dvh] overflow-hidden` container with inner `relative flex flex-col` keeps navigation anchored |
 | `TopBar` / `MainNav` / `BottomNav`              | `src/components/layout`           | modular public navigation pieces; `TopBar` text expands when the address bar hides and `BottomNav` manages its own account menu                                                                                             |
 | `Footer`                                        | `src/components/layout`           | slim desktop footer                                                                                                                                                                                                         |
 | `DashboardNavbar` / `DashboardBottomNav`        | `src/components/dashboard/layout` | responsive dashboard navigation with fixed bottom grid                                                                                                                                                                      |
@@ -61,7 +61,7 @@ The mobile dashboard uses a fixed bottom navigation bar that displays navigation
 
 Navigation spacing now uses Tailwind utilities and container-based sizing—no global CSS variables or resize listeners are required.
 
-Public routes mount an inner `h-screen overflow-hidden flex flex-col` container. `TopBar` scrolls away, `MainNav` uses `sticky top-0`, content gets `flex-1 overflow-y-auto`, and `BottomNav` anchors with `absolute bottom-0`.
+Public routes wrap navigation inside an outer `h-[100dvh] overflow-hidden` container with an inner `h-full relative flex flex-col`. `TopBar` scrolls away, `MainNav` is a `flex-shrink-0 h-14` element, content uses `flex-1 overflow-y-auto min-h-0`, and `BottomNav` anchors with `absolute bottom-0`.
 
 ### Viewport units
 
