@@ -36,12 +36,13 @@ export default function BottomNav() {
           md:hidden
           flex justify-around items-center
           border-t border-outline bg-surface
-          transition-transform duration-300
-          /* Keep a compact, native-like height */
-          h-[56px]
-          /* Allow icons + labels to breathe a bit */
-          px-2
+          h-14
+          flex-shrink-0
         "
+        style={{
+          bottom: 'env(safe-area-inset-bottom, 0)',
+          paddingBottom: 'env(safe-area-inset-bottom, 0)',
+        }}
       >
         {tabs.map(({ to, label, icon, custom }) => {
           const Icon = icon;
