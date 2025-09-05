@@ -19,8 +19,7 @@ React + Vite application providing ERP and e‑commerce interfaces for finetune.
 
 | Route        | Component            |
 | ------------ | -------------------- |
-| `/`          | `Hero.jsx`           |
-| `/marketing` | `Index.jsx`          |
+| `/`          | `Index.jsx`          |
 | `/about`     | `public/About.jsx`   |
 | `/contact`   | `public/Contact.jsx` |
 | `/locate`    | `public/Locate.jsx`  |
