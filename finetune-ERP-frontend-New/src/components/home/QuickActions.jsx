@@ -34,7 +34,7 @@ export default function QuickActions() {
   ];
 
   return (
-    <section className="bg-gray-50 py-16">
+    <section className="bg-gray-50 py-16 min-h-screen flex items-center">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12 px-4">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">

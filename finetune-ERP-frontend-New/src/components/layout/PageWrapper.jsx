@@ -8,12 +8,5 @@ export default function PageWrapper({ mode = 'scroll', children }) {
     setMode(mode);
   }, [mode, setMode]);
 
-  const style =
-    mode === 'reel'
-      ? {
-          paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0))',
-        }
-      : undefined;
-
-  return <div style={style}>{children}</div>;
+  return <div>{children}</div>;
 }
