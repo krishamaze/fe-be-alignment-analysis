@@ -2,7 +2,8 @@
 
 ## Home Page Quick Actions
 
-- The `QuickActions` component on the home page shows pricing cards for common repairs.
+- The `QuickActions` component displays a "Most Popular Repairs" heading,
+  three pricing cards and a footer link to view all repair services.
 - Each card links to `/repair?service=<type>` to prefill the booking form.
 
 ## Booking Form
