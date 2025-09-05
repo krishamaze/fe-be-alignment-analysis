@@ -1,5 +1,4 @@
 import PublicLayout from './components/layout/PublicLayout';
-import Hero from './pages/Hero';
 import TeamLogin from './pages/internal/TeamLogin';
 import Signup from './pages/customers/Signup';
 import Login from './pages/customers/Login';
@@ -65,7 +64,7 @@ function AppContent() {
     <Routes>
       {/* Public layout wrapper */}
       <Route element={<PublicLayout />}>
-        <Route index element={<Hero />} />
+        <Route index element={<IndexPage />} />
         <Route path="shop" element={<Shop />} />
         <Route path="repair" element={<Repair />} />
         <Route path="support" element={<Support />} />
@@ -84,7 +83,6 @@ function AppContent() {
         <Route path="partners" element={<Partners />} />
         <Route path="help" element={<HelpCentre />} />
         <Route path="legal" element={<Legal />} />
-        <Route path="marketing" element={<IndexPage />} />
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
         <Route path="locate" element={<Locate />} />

@@ -45,6 +45,7 @@ export default function BottomNav() {
         `}
         style={{
           paddingBottom: 'env(safe-area-inset-bottom, 0)',
+          ['--bottombar-h']: 'calc(56px + env(safe-area-inset-bottom, 0px))',
         }}
       >
         {tabs.map(({ to, label, icon, custom }) => {
