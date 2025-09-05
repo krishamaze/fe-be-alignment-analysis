@@ -1,4 +1,5 @@
 import HeroSection from '@/components/home/HeroSection';
+import PageWrapper from '@/components/layout/PageWrapper';
 
 export default function Index() {
   return (
@@ -7,7 +8,9 @@ export default function Index() {
       <meta name="description" content="We finetune your device." />
       <meta property="og:title" content="Home – Finetune" />
       <meta property="og:description" content="We finetune your device." />
-      <HeroSection />
+      <PageWrapper mode="reel">
+        <HeroSection />
+      </PageWrapper>
     </>
   );
 }

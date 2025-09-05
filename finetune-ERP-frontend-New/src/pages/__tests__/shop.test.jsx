@@ -30,13 +30,13 @@ test('updates query params on filters and sorting', () => {
   fireEvent.click(screen.getByLabelText('B1'));
   expect(mockProducts).toHaveBeenLastCalledWith({
     ordering: '-date_created',
-    brand: 1,
+    brand: '1',
   });
   fireEvent.change(screen.getByDisplayValue('Newest'), {
     target: { value: 'price' },
   });
   expect(mockProducts).toHaveBeenLastCalledWith({
-    brand: 1,
+    brand: '1',
     ordering: 'price',
   });
 });
