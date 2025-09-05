@@ -40,11 +40,10 @@ export default function BottomNav() {
           border-t border-outline bg-surface
           h-14
           flex-shrink-0
-          transition-transform duration-200
+          transition-transform duration-300
           ${bottomNavVisible ? '' : 'translate-y-full'}
         `}
         style={{
-          bottom: 'env(safe-area-inset-bottom, 0)',
           paddingBottom: 'env(safe-area-inset-bottom, 0)',
         }}
       >

@@ -8,7 +8,7 @@ import {
 } from '@/components/layout/ScrollModeContext';
 
 function PublicLayoutInner() {
-  const { handleScroll } = useScrollMode();
+  const { registerScrollElement } = useScrollMode();
 
   return (
     <div className="h-[100dvh] bg-surface text-onSurface overflow-hidden">
@@ -17,8 +17,8 @@ function PublicLayoutInner() {
         <MainNav />
 
         <main
+          ref={registerScrollElement}
           className="flex-1 overflow-y-auto min-h-0"
-          onScroll={handleScroll}
         >
           <Outlet />
         </main>
