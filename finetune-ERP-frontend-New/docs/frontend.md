@@ -1,5 +1,10 @@
 # Frontend Booking and Repairs
 
+## Home Page Quick Actions
+
+- The `QuickActions` component on the home page shows pricing cards for common repairs.
+- Each card links to `/repair?service=<type>` to prefill the booking form.
+
 ## Booking Form
 
 - Issues are loaded dynamically from `/api/issues` and selected via a multi-select.
@@ -15,7 +20,6 @@
   "responses": [{ "question": 1, "answer": "yes" }]
 }
 ```
-
 
 ## Dashboard Routes
 
