@@ -33,6 +33,48 @@ const testimonials = [
   },
 ];
 
+function TestimonialCard({ testimonial }) {
+  return (
+    <div className="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-lg transition-all duration-300">
+      {/* 5 Star Rating (since all are positive) */}
+      <div className="flex mb-4">
+        {[...Array(5)].map((_, i) => (
+          <span key={i} className="text-yellow-400">
+            ★
+          </span>
+        ))}
+      </div>
+
+      {/* Testimonial Text */}
+      <blockquote className="text-gray-700 mb-4 leading-relaxed italic">
+        "{testimonial.text}"
+      </blockquote>
+
+      {/* Customer Info */}
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="font-semibold text-gray-900">{testimonial.author}</p>
+          <p className="text-sm text-gray-500">
+            {testimonial.service} • {testimonial.time}
+          </p>
+        </div>
+
+        {/* Service Tags */}
+        <div className="flex gap-2">
+          {testimonial.tags.slice(0, 2).map((tag, i) => (
+            <span
+              key={i}
+              className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CustomerTestimonials() {
   return (
     <section className="bg-white py-16 min-h-screen flex items-center">
@@ -47,51 +89,19 @@ export default function CustomerTestimonials() {
           </p>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        {/* Mobile Carousel */}
+        <div className="md:hidden flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 mb-12">
           {testimonials.slice(0, 4).map((testimonial) => (
-            <div
-              key={testimonial.id}
-              className="bg-gray-50 rounded-xl p-6 border border-gray-100"
-            >
-              {/* 5 Star Rating (since all are positive) */}
-              <div className="flex mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400">
-                    ★
-                  </span>
-                ))}
-              </div>
-
-              {/* Testimonial Text */}
-              <blockquote className="text-gray-700 mb-4 leading-relaxed italic">
-                "{testimonial.text}"
-              </blockquote>
-
-              {/* Customer Info */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-semibold text-gray-900">
-                    {testimonial.author}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {testimonial.service} • {testimonial.time}
-                  </p>
-                </div>
-
-                {/* Service Tags */}
-                <div className="flex gap-2">
-                  {testimonial.tags.slice(0, 2).map((tag, i) => (
-                    <span
-                      key={i}
-                      className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
+            <div key={testimonial.id} className="flex-shrink-0 w-80 snap-start">
+              <TestimonialCard testimonial={testimonial} />
             </div>
+          ))}
+        </div>
+
+        {/* Desktop Grid */}
+        <div className="hidden md:grid grid-cols-2 gap-8 mb-12">
+          {testimonials.slice(0, 4).map((testimonial) => (
+            <TestimonialCard key={testimonial.id} testimonial={testimonial} />
           ))}
         </div>
 

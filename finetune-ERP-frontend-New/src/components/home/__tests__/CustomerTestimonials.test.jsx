@@ -7,10 +7,14 @@ describe('CustomerTestimonials', () => {
     render(<CustomerTestimonials />);
 
     expect(screen.getByText('What Our Customers Say')).toBeTruthy();
-    expect(screen.getByText('Sachin Ramg')).toBeTruthy();
-    expect(screen.getByText('Rathikamns Ganesha')).toBeTruthy();
-    expect(screen.getByText('Shamili Krishnaraj')).toBeTruthy();
-    expect(screen.getByText('Sahan Farooqui')).toBeTruthy();
+    [
+      'Sachin Ramg',
+      'Rathikamns Ganesha',
+      'Shamili Krishnaraj',
+      'Sahan Farooqui',
+    ].forEach((name) => {
+      expect(screen.getAllByText(name)[0]).toBeTruthy();
+    });
     const link = screen.getByRole('link', {
       name: /Read All Reviews on Google/i,
     });

@@ -23,7 +23,7 @@
 - Spares page manages pricing via `/api/spares` with form submission for admins.
 - Bookings page requires login, enforces issue selection, shows inline success messaging, and maintains captcha + throttling for spam protection.
 - Index page fetches brand data from `/api/marketing/brands/` with loading, error, and empty states.
-- Index page features `CustomerTestimonials` showcasing recent reviews and a link to Google reviews.
+- Index page features `CustomerTestimonials` showcasing recent reviews, mobile-friendly horizontal scrolling, hover animations, and a link to Google reviews.
 - Stores list and details consume `/api/stores` with read-only UI and consistent loading/error/empty states.
 
 ## SEO & Performance Notes
