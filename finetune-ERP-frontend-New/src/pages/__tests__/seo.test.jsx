@@ -102,7 +102,9 @@ describe('SEO meta tags', () => {
     });
     expect(document.title).toBe('Home – Finetune');
     const desc = document.head.querySelector("meta[name='description']");
-    expect(desc.getAttribute('content')).toContain('We finetune your device.');
+    expect(desc.getAttribute('content')).toContain(
+      'Expert Mobile & Laptop Repairs in Coimbatore & Palakkad'
+    );
   });
 
   it('sets title and description for Stores page', async () => {
