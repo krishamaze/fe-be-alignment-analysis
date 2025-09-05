@@ -12,17 +12,21 @@ export function updateViewportVars() {
   const dvh = getCSSValue('100dvh');
   const filler = lvh - dvh; // address bar height
 
-  document.documentElement.style.setProperty('--addressbar-fill', filler + 'px');
+  document.documentElement.style.setProperty(
+    '--addressbar-fill',
+    filler + 'px'
+  );
 
   // define default bar heights if missing
-  if (!getComputedStyle(document.documentElement).getPropertyValue('--topbar-h')) {
+  if (
+    !getComputedStyle(document.documentElement).getPropertyValue('--topbar-h')
+  ) {
     document.documentElement.style.setProperty('--topbar-h', '0px');
   }
-  if (!getComputedStyle(document.documentElement).getPropertyValue('--mainnav-h')) {
+  if (
+    !getComputedStyle(document.documentElement).getPropertyValue('--mainnav-h')
+  ) {
     document.documentElement.style.setProperty('--mainnav-h', '56px');
-  }
-  if (!getComputedStyle(document.documentElement).getPropertyValue('--bottombar-h')) {
-    document.documentElement.style.setProperty('--bottombar-h', '56px');
   }
 }
 

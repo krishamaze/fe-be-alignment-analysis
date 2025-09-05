@@ -12,10 +12,10 @@ export function generateDebugLog() {
   // CSS variables we care about
   const styles = getComputedStyle(document.documentElement);
   const cssVars = {
-    '--addressbar-fill': styles.getPropertyValue('--addressbar-fill')?.trim() || '0px',
+    '--addressbar-fill':
+      styles.getPropertyValue('--addressbar-fill')?.trim() || '0px',
     '--topbar-h': styles.getPropertyValue('--topbar-h')?.trim() || '0px',
     '--mainnav-h': styles.getPropertyValue('--mainnav-h')?.trim() || '0px',
-    '--bottombar-h': styles.getPropertyValue('--bottombar-h')?.trim() || '0px',
   };
 
   // Safe-area insets (iOS notch / home indicator)
@@ -42,7 +42,9 @@ export function generateDebugLog() {
     `[${new Date().toLocaleTimeString()}]`,
     `vh=${vh} svh=${svh} dvh=${dvh.toFixed ? dvh.toFixed(2) : dvh}`,
     `| inner=${inner} visual=${visual} screen=${screenH}`,
-    `| ${Object.entries(cssVars).map(([k, v]) => `${k}=${v}`).join(' ')}`,
+    `| ${Object.entries(cssVars)
+      .map(([k, v]) => `${k}=${v}`)
+      .join(' ')}`,
     `| safe-area-top=${safeArea.top} safe-area-bottom=${safeArea.bottom}`,
     `| main-padding-top=${mainOffsets.paddingTop} main-padding-bottom=${mainOffsets.paddingBottom}`,
     `| keyboard=${keyboard}`,
