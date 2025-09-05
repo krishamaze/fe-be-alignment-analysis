@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useScrollMode } from '@/components/layout/ScrollModeContext';
 import { Home, Wrench, ShoppingBag, ShoppingCart, User } from 'lucide-react';
 
 const ROOT_PATHS = ['/', '/shop', '/repair', '/cart', '/account'];
@@ -7,6 +8,7 @@ const ROOT_PATHS = ['/', '/shop', '/repair', '/cart', '/account'];
 export default function BottomNav() {
   const location = useLocation();
   const [accountOpen, setAccountOpen] = useState(false);
+  const { bottomNavVisible } = useScrollMode();
   // Close account dropdown on route change
   useEffect(() => {
     setAccountOpen(false);
@@ -30,15 +32,17 @@ export default function BottomNav() {
       <nav
         role="navigation"
         aria-label="Primary bottom navigation"
-        className="
+        className={`
           bottom-nav
-          absolute bottom-0 inset-x-0 z-50
+          fixed bottom-0 inset-x-0 z-50
           md:hidden
           flex justify-around items-center
           border-t border-outline bg-surface
           h-14
           flex-shrink-0
-        "
+          transition-transform duration-200
+          ${bottomNavVisible ? '' : 'translate-y-full'}
+        `}
         style={{
           bottom: 'env(safe-area-inset-bottom, 0)',
           paddingBottom: 'env(safe-area-inset-bottom, 0)',
