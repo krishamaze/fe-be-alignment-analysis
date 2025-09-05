@@ -2,18 +2,17 @@
 
 ## Migrated Templates
 
-| Legacy Template | React Page |
-|-----------------|------------|
-| `serviceapp/index.html` | `src/pages/Index.jsx` |
-| `serviceapp/about.html` | `src/pages/About.jsx` |
-| `serviceapp/contact.html` | `src/pages/Contact.jsx` |
-| `serviceapp/terms.html` | `src/pages/Terms.jsx` |
-| `serviceapp/locate.html` | `src/pages/Locate.jsx` |
-| — (new) | `src/pages/ScheduleCall.jsx` |
-| `serviceapp/auth/store.html` | `src/pages/Stores.jsx`, `src/pages/StoreDetails.jsx` |
-| `serviceapp/auth/pricemaintanence.html` | `src/pages/Spares.jsx` |
-| `serviceapp/auth/bookingsView.html` | `src/pages/Bookings.jsx` |
-
+| Legacy Template                         | React Page                                           |
+| --------------------------------------- | ---------------------------------------------------- |
+| `serviceapp/index.html`                 | `src/pages/Index.jsx`                                |
+| `serviceapp/about.html`                 | `src/pages/About.jsx`                                |
+| `serviceapp/contact.html`               | `src/pages/Contact.jsx`                              |
+| `serviceapp/terms.html`                 | `src/pages/Terms.jsx`                                |
+| `serviceapp/locate.html`                | `src/pages/Locate.jsx`                               |
+| — (new)                                 | `src/pages/ScheduleCall.jsx`                         |
+| `serviceapp/auth/store.html`            | `src/pages/Stores.jsx`, `src/pages/StoreDetails.jsx` |
+| `serviceapp/auth/pricemaintanence.html` | `src/pages/Spares.jsx`                               |
+| `serviceapp/auth/bookingsView.html`     | `src/pages/Bookings.jsx`                             |
 
 ## Deviations & Improvements
 
@@ -24,6 +23,7 @@
 - Spares page manages pricing via `/api/spares` with form submission for admins.
 - Bookings page requires login, enforces issue selection, shows inline success messaging, and maintains captcha + throttling for spam protection.
 - Index page fetches brand data from `/api/marketing/brands/` with loading, error, and empty states.
+- Index page features `CustomerTestimonials` showcasing recent reviews and a link to Google reviews.
 - Stores list and details consume `/api/stores` with read-only UI and consistent loading/error/empty states.
 
 ## SEO & Performance Notes
@@ -36,7 +36,7 @@
 
 - Requires `VITE_RECAPTCHA_SITE_KEY` and backend `RECAPTCHA_SECRET_KEY` for captcha.
 - Backend exposes `/api/marketing/contact/`, `/api/marketing/schedule-call/`, and `/api/bookings` endpoints with throttling.
- 
+
 ### Bookings & Invoices
 
 ![Invoice and payment workflow](assets/invoice-payment.png)
@@ -64,7 +64,6 @@
 - **Staff sale flow:** open a booking in BookingsDashboard and submit the embedded sale form; required serial numbers must be entered when the category enables tracking.
 - **BranchHead purchase/return:** use InventoryDashboard to post stock-in or return entries for a store.
 - **Global roll-up:** visit the ledger roll-up view to see total quantities across stores.
-
 
 ## Deployment
 
