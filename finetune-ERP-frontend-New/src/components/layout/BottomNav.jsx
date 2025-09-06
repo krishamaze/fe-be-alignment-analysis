@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useScrollMode } from '@/components/layout/ScrollModeContext';
 import { Home, Wrench, ShoppingBag, ShoppingCart, User } from 'lucide-react';
@@ -9,10 +9,28 @@ export default function BottomNav() {
   const location = useLocation();
   const [accountOpen, setAccountOpen] = useState(false);
   const { bottomNavVisible } = useScrollMode();
+  const ref = useRef(null);
   // Close account dropdown on route change
   useEffect(() => {
     setAccountOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const updateHeight = () => {
+      document.documentElement.style.setProperty(
+        '--bottomnav-h',
+        `${ref.current.offsetHeight}px`
+      );
+    };
+
+    updateHeight();
+
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
 
   // Only show nav on allowed root paths
   if (!ROOT_PATHS.some((p) => location.pathname.startsWith(p))) {
@@ -30,6 +48,7 @@ export default function BottomNav() {
   return (
     <>
       <nav
+        ref={ref}
         role="navigation"
         aria-label="Primary bottom navigation"
         className={`
@@ -45,7 +64,6 @@ export default function BottomNav() {
         `}
         style={{
           paddingBottom: 'env(safe-area-inset-bottom, 0)',
-          ['--bottombar-h']: 'calc(56px + env(safe-area-inset-bottom, 0px))',
         }}
       >
         {tabs.map(({ to, label, icon, custom }) => {

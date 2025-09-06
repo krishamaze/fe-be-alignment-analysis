@@ -1,3 +1,5 @@
+import PageSection from '@/components/common/PageSection';
+
 const testimonials = [
   {
     id: 1,
@@ -77,7 +79,7 @@ function TestimonialCard({ testimonial }) {
 
 export default function CustomerTestimonials() {
   return (
-    <section className="bg-white py-16 min-h-screen flex items-center">
+    <PageSection className="bg-white py-16 flex flex-col justify-center">
       <div className="max-w-6xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -120,6 +122,6 @@ export default function CustomerTestimonials() {
           </a>
         </div>
       </div>
-    </section>
+    </PageSection>
   );
 }
