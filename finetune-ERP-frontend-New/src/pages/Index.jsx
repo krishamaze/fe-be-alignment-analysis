@@ -11,8 +11,8 @@ export default function Index() {
         name="description"
         content="Expert Mobile & Laptop Repairs in Coimbatore & Palakkad"
       />
-      <PageWrapper mode="scroll">
-        <div className="snap-y snap-mandatory overflow-y-auto h-screen">
+      <PageWrapper mode="reel">
+        <div className="snap-y snap-mandatory h-full overflow-y-auto">
           <HeroReel />
           <QuickActionsReel />
           <TestimonialsReel />

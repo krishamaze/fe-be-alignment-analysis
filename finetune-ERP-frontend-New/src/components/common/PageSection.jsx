@@ -10,18 +10,15 @@ export default function PageSection({
   const { mode } = useScrollMode();
   const { isMobile } = useDevice();
 
-  const minHeight = 'calc(100dvh - var(--topbar-h,0px) - var(--mainnav-h,0px))';
+  const height = mode === 'reel' ? 'h-full' : 'min-h-screen';
 
   const reelPadding =
     mode === 'reel' && isMobile ? 'pb-[calc(var(--bottomnav-h,0px)+1rem)]' : '';
 
   return (
     <section
-      className={`w-full ${reelPadding} ${className}`}
-      style={{
-        minHeight,
-        ...style,
-      }}
+      className={`w-full ${height} ${reelPadding} ${className}`}
+      style={style}
       {...props}
     >
       {children}

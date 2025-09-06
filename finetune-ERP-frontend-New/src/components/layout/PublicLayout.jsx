@@ -17,16 +17,22 @@ function PublicLayoutInner() {
   const isHomePage = location.pathname === '/';
 
   return (
-    <div className="flex flex-col min-h-screen bg-surface text-onSurface">
-      <TopBar />
-      <MainNav />
+    <div className="h-[100dvh] bg-surface text-onSurface overflow-hidden">
+      <div className="h-full relative flex flex-col">
+        <TopBar />
+        <MainNav />
 
-      <main ref={registerScrollElement} className="flex-1 overflow-y-auto">
-        <Outlet />
-      </main>
+        <main
+          ref={registerScrollElement}
+          className="flex-1 overflow-y-auto min-h-0"
+          style={{ paddingBottom: 'var(--bottomnav-h, 56px)' }}
+        >
+          <Outlet />
+        </main>
 
-      {isDesktop && isHomePage && <Footer />}
-      {isMobile && <BottomNav />}
+        {isDesktop && isHomePage && <Footer />}
+        {isMobile && <BottomNav />}
+      </div>
     </div>
   );
 }
