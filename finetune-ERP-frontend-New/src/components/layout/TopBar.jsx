@@ -18,9 +18,7 @@ export default function TopBar() {
       ref={ref}
       className="bg-secondary text-white flex items-center justify-center py-0.5"
     >
-      <span className="topbar-text text-xs leading-none">
-        🔥 Free Shipping
-      </span>
+      <span className="topbar-text text-xs leading-none">🔥 Free Shipping</span>
     </div>
   );
 }
