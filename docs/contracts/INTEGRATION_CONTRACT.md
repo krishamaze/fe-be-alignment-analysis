@@ -410,3 +410,7 @@ Status advances automatically when the booking time passes; admins may override 
   "timestamp": "2024-01-01T00:00:00Z"
 }
 ```
+
+## Related Guides
+- [Backend API](../../finetune-ERP-backend-New/docs/API.md)
+- [Frontend Architecture](../../finetune-ERP-frontend-New/docs/ARCHITECTURE.md)

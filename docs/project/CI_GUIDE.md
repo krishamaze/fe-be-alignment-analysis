@@ -28,3 +28,6 @@ Pull requests are expected to pass linting and testing jobs. Lighthouse results 
 ## Known Issues
 
 No outstanding CI issues.
+
+## Related Guides
+- [Test Guide](../TEST_GUIDE.md)

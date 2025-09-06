@@ -32,3 +32,7 @@ Asynchronous operations use `createAsyncThunk` backed by a shared `fetchBaseQuer
 ## Error handling
 
 API errors and success states surface as toast notifications. There is no global error boundary or automatic retry/backoff.
+
+## Related Guides
+- [Integration Contract](../../docs/contracts/INTEGRATION_CONTRACT.md)
+- [Frontend Security](SECURITY.md)

@@ -27,3 +27,7 @@
 - `/dashboard/repairs/issues`
 - `/dashboard/repairs/other-issues`
 - `/dashboard/repairs/questions`
+
+## Related Guides
+- [Frontend Security](SECURITY.md)
+- [Architecture](ARCHITECTURE.md)

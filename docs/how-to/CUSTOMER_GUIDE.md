@@ -10,3 +10,7 @@
 ## Notifications
 - You will receive email or SMS updates when your booking status changes.
 - Recent notifications appear under the bell icon for quick access.
+
+## Related Guides
+- [Admin Dashboard](ADMIN_DASHBOARD.md)
+- [Workflow Guide](../project/WORKFLOW_GUIDE.md)

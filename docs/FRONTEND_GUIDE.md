@@ -10,3 +10,7 @@
 - Uses a brand gradient with a dark overlay to maintain text readability.
 - CTAs meet 44px height for accessibility and include clear hover states.
 - Displays trust indicators (rating, repairs count, locations) in a responsive layout.
+
+## Related Guides
+- [SEO Guide](project/SEO_GUIDE.md)
+- [Frontend Security](../finetune-ERP-frontend-New/docs/SECURITY.md)

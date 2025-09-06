@@ -48,3 +48,7 @@ Planned for v1.1:
 - Lighthouse performance checks
 - Updated UI screenshots
 - Expanded deployment matrix
+
+## Related Guides
+- [Backend Architecture](../finetune-ERP-backend-New/docs/ARCHITECTURE.md)
+- [Integration Contract](contracts/INTEGRATION_CONTRACT.md)
