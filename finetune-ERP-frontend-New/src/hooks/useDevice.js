@@ -9,11 +9,11 @@ export default function useDevice() {
       return null;
     }
     try {
-      return {
-        mobile: window.matchMedia('(max-width: 767px)'),
-        desktop: window.matchMedia('(min-width: 768px)'),
-        touch: window.matchMedia('(pointer: coarse)'),
-      };
+      const mobile = window.matchMedia('(max-width: 767px)');
+      const desktop = window.matchMedia('(min-width: 768px)');
+      const touch = window.matchMedia('(pointer: coarse)');
+      if (!mobile || !desktop || !touch) return null;
+      return { mobile, desktop, touch };
     } catch (err) {
       console.warn('useDevice: matchMedia failed', err);
       return null;
