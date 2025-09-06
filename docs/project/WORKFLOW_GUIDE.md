@@ -10,3 +10,7 @@
 - On creation, confirmation is emailed/SMS to the customer and branch staff.
 - On status updates (approved, in_progress, completed, cancelled, rejected) customers are notified via configured channels.
 - SMS requests are POSTed to `SMS_GATEWAY_URL` if configured.
+
+## Related Guides
+- [Customer Guide](../how-to/CUSTOMER_GUIDE.md)
+- [Admin Dashboard](../how-to/ADMIN_DASHBOARD.md)

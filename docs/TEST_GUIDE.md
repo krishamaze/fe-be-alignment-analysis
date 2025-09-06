@@ -41,3 +41,7 @@ Run tests:
 ```bash
 npm test
 ```
+
+## Related Guides
+- [CI Guide](project/CI_GUIDE.md)
+- [API Guide](API_GUIDE.md)

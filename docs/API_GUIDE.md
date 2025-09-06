@@ -102,3 +102,7 @@
 - `GET /api/logs/` – system_admin only list
   - Filters: `entity_type`, `actor`, `start`, `end`
 - `GET /api/logs/export?format=csv|json` – system_admin only export (same filters)
+
+## Related Guides
+- [Integration Contract](contracts/INTEGRATION_CONTRACT.md)
+- [Test Guide](TEST_GUIDE.md)

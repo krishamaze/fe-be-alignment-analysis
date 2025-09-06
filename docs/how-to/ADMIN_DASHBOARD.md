@@ -58,3 +58,7 @@
 ## Notifications
 - Bell icon in the top navbar opens recent notifications.
 - Entries link to relevant bookings or entities when available.
+
+## Related Guides
+- [Customer Guide](CUSTOMER_GUIDE.md)
+- [Workflow Guide](../project/WORKFLOW_GUIDE.md)

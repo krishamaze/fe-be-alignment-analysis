@@ -22,3 +22,7 @@ graph TD
 ## Signals & middleware
 - `accounts.signals.auto_unassign_branch_head_on_user_change` removes inactive branch heads and clears their store.
 - Middleware stack includes CORS, session and WhiteNoise for static files.
+
+## Related Guides
+- [Integration Contract](../../docs/contracts/INTEGRATION_CONTRACT.md)
+- [Backend Security](SECURITY.md)
