@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { beforeEach, expect, test, vi } from 'vitest';
 import ReelLayout from '@/components/layout/ReelLayout';
 import {
@@ -51,7 +51,7 @@ test('ReelLayout toggles scroll mode', () => {
   expect(getByTestId('mode').textContent).toBe('scroll');
 });
 
-test('ReelLayout disables autoplay when single slide', () => {
+test('ReelLayout disables autoplay when single slide', async () => {
   const Wrapper = ({ children }) => (
     <ScrollModeProvider>{children}</ScrollModeProvider>
   );
@@ -73,5 +73,10 @@ test('ReelLayout disables autoplay when single slide', () => {
       </ReelLayout>
     </Wrapper>
   );
-  expect(swiperProps.autoplay).toEqual({ delay: 5000 });
+  await waitFor(() =>
+    expect(swiperProps.autoplay).toEqual({
+      delay: 5000,
+      disableOnInteraction: false,
+    })
+  );
 });

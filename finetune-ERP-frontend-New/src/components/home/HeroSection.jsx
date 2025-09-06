@@ -7,10 +7,13 @@ import {
   HiOutlineChevronDown,
 } from 'react-icons/hi2';
 import PageSection from '@/components/common/PageSection';
+import useDevice from '@/hooks/useDevice';
 
 export default function HeroSection() {
+  const { isMobile } = useDevice();
+
   return (
-    <PageSection className="relative min-h-screen bg-gradient-to-r from-black via-amber-600/30 to-yellow-400/40 flex items-center">
+    <PageSection className="relative overflow-hidden bg-gradient-to-r from-black via-amber-600/30 to-yellow-400/40 flex items-center">
       {/* Dark overlay for better text contrast */}
       <div className="absolute inset-0 bg-black/60" />
 
@@ -87,9 +90,11 @@ export default function HeroSection() {
       </div>
 
       {/* Scroll hint */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/80 animate-bounce">
-        <HiOutlineChevronDown className="w-6 h-6" />
-      </div>
+      {!isMobile && (
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/80 animate-bounce">
+          <HiOutlineChevronDown className="w-6 h-6" />
+        </div>
+      )}
     </PageSection>
   );
 }
