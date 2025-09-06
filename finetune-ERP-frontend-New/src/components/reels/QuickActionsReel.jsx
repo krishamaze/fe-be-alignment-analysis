@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import PageSection from '@/components/common/PageSection';
 import {
   HiOutlineDevicePhoneMobile,
   HiOutlineBattery100,
@@ -35,7 +34,13 @@ export default function QuickActionsReel() {
   ];
 
   return (
-    <PageSection className="snap-start bg-gray-50 flex items-center">
+    <section
+      className="bg-gray-50 flex items-center"
+      style={{
+        height: 'calc(100dvh - var(--topbar-h,0px) - var(--mainnav-h,0px))',
+        scrollSnapAlign: 'start',
+      }}
+    >
       <div className="max-w-5xl mx-auto w-full px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -78,6 +83,6 @@ export default function QuickActionsReel() {
           </Link>
         </div>
       </div>
-    </PageSection>
+    </section>
   );
 }

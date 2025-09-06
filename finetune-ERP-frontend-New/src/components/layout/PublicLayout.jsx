@@ -25,7 +25,11 @@ function PublicLayoutInner() {
         <main
           ref={registerScrollElement}
           className="flex-1 overflow-y-auto min-h-0"
-          style={{ paddingBottom: 'var(--bottomnav-h, 56px)' }}
+          style={{
+            paddingBottom: isMobile ? 'var(--bottomnav-h, 56px)' : '0',
+            scrollPaddingTop:
+              'calc(var(--topbar-h,0px) + var(--mainnav-h,0px))',
+          }}
         >
           <Outlet />
         </main>

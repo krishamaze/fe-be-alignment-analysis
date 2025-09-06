@@ -1,5 +1,5 @@
-import PageSection from '@/components/common/PageSection';
 import ReelLayout from '@/components/layout/ReelLayout';
+import useDevice from '@/hooks/useDevice';
 
 const testimonials = [
   {
@@ -36,15 +36,23 @@ const testimonials = [
   },
 ];
 
-function TestimonialSlide({ testimonial }) {
+function TestimonialSlide({ testimonial, isLast = false }) {
+  const { isDesktop } = useDevice();
+
   return (
-    <div className="flex items-center justify-center h-full px-4">
-      <div className="max-w-4xl mx-auto text-center">
+    <div
+      className="flex items-center justify-center bg-white"
+      style={{
+        height: 'calc(100dvh - var(--topbar-h,0px) - var(--mainnav-h,0px))',
+        scrollSnapAlign: 'start',
+      }}
+    >
+      <div className="max-w-4xl mx-auto px-4 text-center">
         <h2 className="text-3xl font-bold text-gray-900 mb-8">
           What Our Customers Say
         </h2>
 
-        <div className="bg-white rounded-2xl p-8 shadow-lg max-w-2xl mx-auto mb-8">
+        <div className="bg-gray-50 rounded-2xl p-8 shadow-lg max-w-2xl mx-auto mb-8">
           <div className="flex justify-center mb-4">
             {[...Array(5)].map((_, i) => (
               <span key={i} className="text-yellow-400 text-xl">
@@ -65,17 +73,23 @@ function TestimonialSlide({ testimonial }) {
           </div>
         </div>
 
-        <p className="text-gray-600">
+        <p className="text-gray-600 mb-8">
           Real feedback from customers across Coimbatore & Palakkad
         </p>
-        <a
-          href="https://www.google.com/search?q=finetune+mobile+reviews"
-          className="text-yellow-600 hover:text-yellow-700 font-medium mt-4 inline-block"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Read All Reviews on Google →
-        </a>
+
+        {isDesktop && isLast && (
+          <footer className="mt-16 pt-8 border-t border-gray-200">
+            <div className="flex items-center justify-center gap-6 text-sm text-gray-500">
+              <span>© 2025 Finetune Store. All rights reserved.</span>
+              <a href="/privacy" className="hover:text-gray-700">
+                Privacy
+              </a>
+              <a href="/terms" className="hover:text-gray-700">
+                Terms
+              </a>
+            </div>
+          </footer>
+        )}
       </div>
     </div>
   );
@@ -83,12 +97,21 @@ function TestimonialSlide({ testimonial }) {
 
 export default function TestimonialsReel() {
   return (
-    <PageSection className="snap-start bg-white">
+    <section
+      style={{
+        height: 'calc(100dvh - var(--topbar-h,0px) - var(--mainnav-h,0px))',
+        scrollSnapAlign: 'start',
+      }}
+    >
       <ReelLayout autoplay>
-        {testimonials.map((testimonial) => (
-          <TestimonialSlide key={testimonial.id} testimonial={testimonial} />
+        {testimonials.map((testimonial, index) => (
+          <TestimonialSlide
+            key={testimonial.id}
+            testimonial={testimonial}
+            isLast={index === testimonials.length - 1}
+          />
         ))}
       </ReelLayout>
-    </PageSection>
+    </section>
   );
 }
