@@ -1,8 +1,20 @@
+import { useEffect, useRef } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import Logo from '../common/Logo';
 import { User, Search, ShoppingCart } from 'lucide-react';
 
 export default function MainNav() {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      document.documentElement.style.setProperty(
+        '--mainnav-h',
+        `${ref.current.offsetHeight}px`
+      );
+    }
+  }, []);
+
   const navLinkClasses =
     'relative px-3 py-2 text-sm text-primary after:absolute after:left-0 after:-bottom-0.5 after:h-0.5 after:bg-secondary after:w-0 after:transition-all hover:after:w-full';
 
@@ -10,7 +22,11 @@ export default function MainNav() {
     'w-5 h-5 transition transform hover:opacity-80 hover:scale-110';
 
   return (
-    <nav className="flex-shrink-0 bg-white shadow-sm flex items-center justify-between px-4 md:px-8 z-50 h-14">
+    <nav
+      id="mainnav"
+      ref={ref}
+      className="flex-shrink-0 bg-white shadow-sm flex items-center justify-between px-4 md:px-8 z-50 h-14"
+    >
       {/* Left: Logo */}
       <Logo />
 
