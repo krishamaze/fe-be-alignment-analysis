@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
-import PageSection from '@/components/common/PageSection';
 import phoneIllustration from '@/assets/phone-illustration.png';
 
 export default function HeroReel() {
   return (
-    <PageSection className="snap-start relative overflow-hidden bg-gradient-to-r from-black via-amber-600/30 to-yellow-400/40 flex items-center">
+    <section className="snap-start h-full flex items-center relative overflow-hidden bg-gradient-to-r from-black via-amber-600/30 to-yellow-400/40">
       <div className="absolute inset-0 bg-black/60" />
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto px-4">
         {/* Left: Text and CTAs */}
@@ -56,6 +55,6 @@ export default function HeroReel() {
           />
         </div>
       </div>
-    </PageSection>
+    </section>
   );
 }
