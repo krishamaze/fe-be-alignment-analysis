@@ -35,9 +35,6 @@ finetune-ERP-frontend-New/src/assets/*.jpeg binary -filter -diff -merge
 finetune-ERP-frontend-New/src/assets/*.gif binary -filter -diff -merge
 finetune-ERP-frontend-New/src/assets/*.svg text -filter -diff -merge
 
-# REMOVED: The problematic blanket text rule
-# finetune-ERP-frontend-New/src/assets/** -filter -diff -merge text
-
 # ========================================
 # 🔹 Special Cases
 # ========================================
