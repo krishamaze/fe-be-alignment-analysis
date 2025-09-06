@@ -1,7 +1,7 @@
 import HeroSection from '@/components/home/HeroSection';
 import QuickActions from '@/components/home/QuickActions';
 import CustomerTestimonials from '@/components/home/CustomerTestimonials';
-import PageWrapper from '@/components/layout/PageWrapper';
+import ReelLayout from '@/components/layout/ReelLayout';
 
 export default function Index() {
   return (
@@ -16,11 +16,11 @@ export default function Index() {
         property="og:description"
         content="Expert Mobile & Laptop Repairs in Coimbatore & Palakkad"
       />
-      <PageWrapper mode="reel">
+      <ReelLayout autoplay>
         <HeroSection />
         <QuickActions />
         <CustomerTestimonials />
-      </PageWrapper>
+      </ReelLayout>
     </>
   );
 }
