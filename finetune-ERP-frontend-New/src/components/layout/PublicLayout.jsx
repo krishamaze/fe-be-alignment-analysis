@@ -1,4 +1,5 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import TopBar from '@/components/layout/TopBar';
 import MainNav from '@/components/layout/MainNav';
 import BottomNav from '@/components/layout/BottomNav';
@@ -11,10 +12,30 @@ import {
 
 function PublicLayoutInner() {
   const { registerScrollElement } = useScrollMode();
-  const location = useLocation();
   const { isDesktop, isMobile } = useDevice();
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
 
-  const isHomePage = location.pathname === '/';
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollContainer = document.querySelector(
+        '[data-scroll-container="true"]'
+      );
+      if (!scrollContainer) return;
+
+      const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+      const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
+
+      setIsFooterVisible(scrollPercentage >= 0.85);
+    };
+
+    const scrollContainer = document.querySelector(
+      '[data-scroll-container="true"]'
+    );
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll);
+      return () => scrollContainer.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
 
   return (
     <div className="h-[100dvh] bg-surface text-onSurface overflow-hidden">
@@ -25,6 +46,7 @@ function PublicLayoutInner() {
         <main
           ref={registerScrollElement}
           className="flex-1 overflow-y-auto min-h-0"
+          data-scroll-container="true"
           style={{
             paddingBottom: isMobile ? 'var(--bottomnav-h, 56px)' : '0',
             scrollPaddingTop:
@@ -34,9 +56,10 @@ function PublicLayoutInner() {
           <Outlet />
         </main>
 
-        {isDesktop && isHomePage && <Footer />}
         {isMobile && <BottomNav />}
       </div>
+
+      {isDesktop && <Footer isVisible={isFooterVisible} />}
     </div>
   );
 }

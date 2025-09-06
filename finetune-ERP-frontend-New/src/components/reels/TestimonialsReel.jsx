@@ -1,5 +1,4 @@
 import ReelLayout from '@/components/layout/ReelLayout';
-import useDevice from '@/hooks/useDevice';
 
 const testimonials = [
   {
@@ -36,9 +35,7 @@ const testimonials = [
   },
 ];
 
-function TestimonialSlide({ testimonial, isLast = false }) {
-  const { isDesktop } = useDevice();
-
+function TestimonialSlide({ testimonial }) {
   return (
     <div
       className="flex items-center justify-center bg-white"
@@ -76,20 +73,6 @@ function TestimonialSlide({ testimonial, isLast = false }) {
         <p className="text-gray-600 mb-8">
           Real feedback from customers across Coimbatore & Palakkad
         </p>
-
-        {isDesktop && isLast && (
-          <footer className="mt-16 pt-8 border-t border-gray-200">
-            <div className="flex items-center justify-center gap-6 text-sm text-gray-500">
-              <span>© 2025 Finetune Store. All rights reserved.</span>
-              <a href="/privacy" className="hover:text-gray-700">
-                Privacy
-              </a>
-              <a href="/terms" className="hover:text-gray-700">
-                Terms
-              </a>
-            </div>
-          </footer>
-        )}
       </div>
     </div>
   );
@@ -104,12 +87,8 @@ export default function TestimonialsReel() {
       }}
     >
       <ReelLayout autoplay>
-        {testimonials.map((testimonial, index) => (
-          <TestimonialSlide
-            key={testimonial.id}
-            testimonial={testimonial}
-            isLast={index === testimonials.length - 1}
-          />
+        {testimonials.map((testimonial) => (
+          <TestimonialSlide key={testimonial.id} testimonial={testimonial} />
         ))}
       </ReelLayout>
     </section>

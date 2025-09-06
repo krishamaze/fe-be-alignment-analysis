@@ -9,7 +9,7 @@
 - The home page uses a `scroll-snap` container (`scrollSnapType: 'y mandatory'`)
   where each reel (`HeroReel`, `QuickActionsReel`, `TestimonialsReel`) fills the
   viewport minus navigation heights for an Instagram-style experience.
-- `TestimonialsReel` links to Google Reviews via "Read All Reviews on Google" for full customer feedback.
+ - `TestimonialsReel` cycles through customer testimonials.
 
 ## Booking Form
 
