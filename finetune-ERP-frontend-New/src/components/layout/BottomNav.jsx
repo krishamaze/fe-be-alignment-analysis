@@ -16,12 +16,20 @@ export default function BottomNav() {
   }, [location.pathname]);
 
   useEffect(() => {
-    if (ref.current) {
+    if (!ref.current) return;
+
+    const updateHeight = () => {
       document.documentElement.style.setProperty(
         '--bottomnav-h',
         `${ref.current.offsetHeight}px`
       );
-    }
+    };
+
+    updateHeight();
+
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(ref.current);
+    return () => observer.disconnect();
   }, []);
 
   // Only show nav on allowed root paths
