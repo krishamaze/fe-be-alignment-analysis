@@ -8,6 +8,7 @@
 - Cards use large rounded corners (`rounded-2xl`) and hover shadows for visual emphasis.
 - The home page uses vertically snapped reels (`HeroReel`, `QuickActionsReel`,
   `TestimonialsReel`) for an Instagram-style scroll experience.
+- `TestimonialsReel` links to Google Reviews via "Read All Reviews on Google" for full customer feedback.
 
 ## Booking Form
 

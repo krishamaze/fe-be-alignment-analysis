@@ -68,6 +68,14 @@ function TestimonialSlide({ testimonial }) {
         <p className="text-gray-600">
           Real feedback from customers across Coimbatore & Palakkad
         </p>
+        <a
+          href="https://www.google.com/search?q=finetune+mobile+reviews"
+          className="text-yellow-600 hover:text-yellow-700 font-medium mt-4 inline-block"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Read All Reviews on Google →
+        </a>
       </div>
     </div>
   );
