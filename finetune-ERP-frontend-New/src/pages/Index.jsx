@@ -1,8 +1,7 @@
-import HeroSection from '@/components/home/HeroSection';
-import QuickActions from '@/components/home/QuickActions';
-import CustomerTestimonials from '@/components/home/CustomerTestimonials';
-import ReelLayout from '@/components/layout/ReelLayout';
 import PageWrapper from '@/components/layout/PageWrapper';
+import HeroReel from '@/components/reels/HeroReel';
+import QuickActionsReel from '@/components/reels/QuickActionsReel';
+import TestimonialsReel from '@/components/reels/TestimonialsReel';
 
 export default function Index() {
   return (
@@ -12,17 +11,12 @@ export default function Index() {
         name="description"
         content="Expert Mobile & Laptop Repairs in Coimbatore & Palakkad"
       />
-      <meta property="og:title" content="Home – Finetune" />
-      <meta
-        property="og:description"
-        content="Expert Mobile & Laptop Repairs in Coimbatore & Palakkad"
-      />
-      <PageWrapper mode="reel">
-        <ReelLayout autoplay>
-          <HeroSection />
-          <QuickActions />
-          <CustomerTestimonials />
-        </ReelLayout>
+      <PageWrapper mode="scroll">
+        <div className="snap-y snap-mandatory overflow-y-auto h-screen">
+          <HeroReel />
+          <QuickActionsReel />
+          <TestimonialsReel />
+        </div>
       </PageWrapper>
     </>
   );

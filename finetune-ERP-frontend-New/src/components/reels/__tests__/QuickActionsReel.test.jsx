@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
-import QuickActions from '../QuickActions';
+import QuickActionsReel from '../QuickActionsReel';
 
-describe('QuickActions', () => {
+describe('QuickActionsReel', () => {
   it('renders header, three repair cards and CTA link', () => {
     render(
       <MemoryRouter>
-        <QuickActions />
+        <QuickActionsReel />
       </MemoryRouter>
     );
 
