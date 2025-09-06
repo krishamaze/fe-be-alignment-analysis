@@ -1,4 +1,5 @@
 # Public API Integration Contract
+_Version 1.0 — last updated 2025-09-06_
 
 ## Endpoints
 

@@ -2,6 +2,8 @@
 
 Welcome to the Finetune ERP docs. This index points to all guides in this repository.
 
+Tip: use GitHub's repository search to quickly find topics across all docs.
+
 ## Project Guides
 - [CI Guide](project/CI_GUIDE.md) – continuous integration setup and usage.
 - [SEO Guide](project/SEO_GUIDE.md) – search engine optimization practices.
