@@ -12,7 +12,13 @@ export default function Index() {
         content="Expert Mobile & Laptop Repairs in Coimbatore & Palakkad"
       />
       <PageWrapper mode="reel">
-        <div className="snap-y snap-mandatory h-full overflow-y-auto">
+        <div
+          className="h-full overflow-y-auto"
+          style={{
+            scrollSnapType: 'y mandatory',
+            scrollBehavior: 'smooth',
+          }}
+        >
           <HeroReel />
           <QuickActionsReel />
           <TestimonialsReel />
