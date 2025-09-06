@@ -74,7 +74,7 @@ import END_POINTS from '@/utils/Endpoints';
 2. **`npm install` fails** → ensure Node.js ≥ 18.
 3. **API requests fail** → confirm the backend at `https://api.finetune.store` is reachable.
 4. **Immediate redirect to login** → clear invalid tokens from cookies.
-5. **Missing styles** → ensure `src/index.css` imports Tailwind directives and that Vite restarted after editing config.
+5. **Missing styles** → ensure `src/index.css` imports external CSS (e.g., Swiper) before Tailwind directives and restart Vite after editing config.
 
 ## Roadmap
 
