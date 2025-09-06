@@ -54,7 +54,7 @@ Dark mode is enabled via `class` strategy. Toggle a `dark` class on the root ele
 | `Loader`                                        | `src/components/common`           | full-screen loading spinner                                                                                                                                                                                                                                  |
 | `PageSection`                                   | `src/components/common`           | semantic wrapper with auto `min-height` minus top and main nav heights
 | `PageWrapper`                                   | `src/components/layout`           | sets scroll mode (`reel` or `scroll`); sections in `reel` mode should fill the viewport
-| `ReelLayout`                                    | `src/components/layout`           | wraps sections in Swiper slides and enforces `reel` mode with swipe, arrow navigation, and optional autoplay
+| `ReelLayout`                                    | `src/components/layout`           | wraps sections in Swiper slides and enforces `reel` mode with swipe, arrow navigation, and optional autoplay (disabled when only one slide)
 
 Follow these patterns when adding new components to keep styling and accessibility consistent.
 

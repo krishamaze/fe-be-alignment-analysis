@@ -18,7 +18,9 @@ export default function ReelLayout({ children, autoplay = false }) {
       modules={[Navigation, Autoplay, Keyboard]}
       navigation={isDesktop}
       keyboard={isDesktop}
-      autoplay={autoplay ? { delay: 5000, disableOnInteraction: false } : false}
+      autoplay={
+        Children.count(children) > 1 && autoplay ? { delay: 5000 } : false
+      }
       allowTouchMove={!isDesktop}
       slidesPerView={1}
       className="h-full"

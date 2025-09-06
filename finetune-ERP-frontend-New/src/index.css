@@ -1,9 +1,10 @@
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import 'swiper/css';
-@import 'swiper/css/navigation';
 
 /* App shell layout helpers */
 html,
