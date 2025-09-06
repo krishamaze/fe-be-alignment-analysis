@@ -43,7 +43,7 @@ export default function QuickActions() {
   const actionClasses = `
     min-h-[44px] w-full
     flex flex-col items-center justify-center
-    p-4 rounded-lg transition-transform hover:scale-105
+    p-4 transition-transform hover:scale-105
   `;
 
   return (
@@ -63,7 +63,7 @@ export default function QuickActions() {
             return (
               <div
                 key={title}
-                className={`bg-white shadow-sm hover:shadow-lg duration-300 group ${actionClasses}`}
+                className={`bg-white shadow-sm hover:shadow-lg duration-300 group rounded-2xl ${actionClasses}`}
               >
                 <Icon
                   className={`w-12 h-12 ${color} mb-4 group-hover:scale-110 transition-transform duration-300`}
