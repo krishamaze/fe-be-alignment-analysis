@@ -13,8 +13,9 @@
   mode to let native scroll snapping work. The page adjusts to dynamic reel
   configuration changes and logs height mismatches for debugging. Desktop wheel
   events accumulate delta with an adaptive threshold to maintain consistent
-  cross-device section navigation and avoid bubbling conflicts. Section transitions use `requestAnimationFrame`
-  with cubic easing for smooth scrolling and respect `prefers-reduced-motion`.
+  cross-device section navigation and avoid bubbling conflicts. Each scroll, key
+  press, or swipe advances exactly one reel using `requestAnimationFrame` over a
+  600ms `easeInOutCubic` animation and respects `prefers-reduced-motion`.
 - `TestimonialsReel` cycles through customer testimonials.
 
 ## Booking Form
