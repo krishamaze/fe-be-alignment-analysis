@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { devLog } from '@/utils/devLog';
 import PageWrapper from '@/components/layout/PageWrapper';
 import HeroReel from '@/components/reels/HeroReel';
@@ -12,7 +12,6 @@ const REEL_CONFIG = [
 ];
 
 export default function Index() {
-  const containerRef = useRef(null);
   const [currentSection, setCurrentSection] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
 
@@ -30,26 +29,52 @@ export default function Index() {
 
   const scrollToSection = useCallback(
     (sectionIndex, duration = 600) => {
-      const container = containerRef.current;
+      const container = document.querySelector(
+        '[data-scroll-container="true"]'
+      );
+
       if (
         !container ||
         isScrolling ||
         sectionIndex < 0 ||
         sectionIndex >= sectionsCount
-      )
+      ) {
+        devLog('Scroll blocked', {
+          container: !!container,
+          isScrolling,
+          sectionIndex,
+          sectionsCount,
+        });
         return;
-
-      const containerHeight = container.clientHeight;
-      const actualHeight = container.scrollHeight / sectionsCount;
-      if (Math.abs(containerHeight - actualHeight) > 10) {
-        devLog('Height mismatch detected', { containerHeight, actualHeight });
       }
 
       setIsScrolling(true);
-      const targetScroll = sectionIndex * containerHeight;
+
+      const navHeight =
+        (parseInt(
+          getComputedStyle(document.documentElement).getPropertyValue(
+            '--topbar-h'
+          )
+        ) || 0) +
+        (parseInt(
+          getComputedStyle(document.documentElement).getPropertyValue(
+            '--mainnav-h'
+          )
+        ) || 0);
+
+      const sectionHeight = window.innerHeight - navHeight;
+      const targetScroll = sectionIndex * sectionHeight;
       const startScroll = container.scrollTop;
       const distance = targetScroll - startScroll;
       const startTime = performance.now();
+
+      devLog('Scrolling to section', {
+        sectionIndex,
+        sectionHeight,
+        targetScroll,
+        startScroll,
+        navHeight,
+      });
 
       const animateScroll = (currentTime) => {
         const elapsed = currentTime - startTime;
@@ -63,6 +88,7 @@ export default function Index() {
         } else {
           setCurrentSection(sectionIndex);
           setIsScrolling(false);
+          devLog('Scroll completed', { sectionIndex });
         }
       };
 
@@ -72,13 +98,12 @@ export default function Index() {
   );
 
   useEffect(() => {
-    const container = containerRef.current;
+    const container = document.querySelector('[data-scroll-container="true"]');
     if (!container) return;
 
     const handleWheel = (e) => {
       e.preventDefault();
       e.stopPropagation();
-
       if (isScrolling) return;
 
       const deltaY = e.deltaY;
@@ -91,6 +116,10 @@ export default function Index() {
       }
 
       if (nextSection !== currentSection) {
+        devLog('Wheel scroll triggered', {
+          from: currentSection,
+          to: nextSection,
+        });
         scrollToSection(nextSection);
       }
     };
@@ -99,12 +128,13 @@ export default function Index() {
       passive: false,
       capture: true,
     });
+
     return () =>
       container.removeEventListener('wheel', handleWheel, { capture: true });
   }, [currentSection, isScrolling, sectionsCount, scrollToSection]);
 
   useEffect(() => {
-    const container = containerRef.current;
+    const container = document.querySelector('[data-scroll-container="true"]');
     if (!container) return;
 
     let touchStartY = 0;
@@ -135,6 +165,10 @@ export default function Index() {
         }
 
         if (nextSection !== currentSection) {
+          devLog('Touch scroll triggered', {
+            from: currentSection,
+            to: nextSection,
+          });
           scrollToSection(nextSection);
         }
       }
@@ -143,7 +177,9 @@ export default function Index() {
     container.addEventListener('touchstart', handleTouchStart, {
       passive: true,
     });
-    container.addEventListener('touchend', handleTouchEnd, { passive: true });
+    container.addEventListener('touchend', handleTouchEnd, {
+      passive: true,
+    });
 
     return () => {
       container.removeEventListener('touchstart', handleTouchStart);
@@ -165,11 +201,16 @@ export default function Index() {
 
       if (nextSection !== currentSection) {
         e.preventDefault();
+        devLog('Keyboard scroll triggered', {
+          from: currentSection,
+          to: nextSection,
+        });
         scrollToSection(nextSection);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
+
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentSection, isScrolling, sectionsCount, scrollToSection]);
 
@@ -180,19 +221,11 @@ export default function Index() {
         name="description"
         content="Expert Mobile & Laptop Repairs in Coimbatore & Palakkad"
       />
-
       <PageWrapper mode="reel">
-        <div
-          ref={containerRef}
-          className="h-full overflow-y-auto snap-y snap-mandatory fullpage-scrolling"
-          style={{ scrollBehavior: 'auto', scrollSnapStop: 'always' }}
-        >
-          {activeReels.map((reel) => {
-            const Component = reel.component;
-            return <Component key={reel.id} />;
-          })}
-        </div>
-
+        {activeReels.map((reel) => {
+          const Component = reel.component;
+          return <Component key={reel.id} />;
+        })}
         <nav
           className="fixed right-6 top-1/2 transform -translate-y-1/2 z-50 hidden md:flex flex-col gap-3"
           role="tablist"

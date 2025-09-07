@@ -35,12 +35,7 @@ export default function QuickActionsReel() {
   ];
 
   return (
-    <section
-      className="snap-start fullpage-section relative overflow-hidden bg-gray-50 flex items-center"
-      style={{
-        height: 'calc(100dvh - var(--topbar-h,0px) - var(--mainnav-h,0px))',
-      }}
-    >
+    <section className="snap-start fullpage-section relative overflow-hidden bg-gray-50 flex items-center">
       <MultiSlideReel reelId="quickActions" showHint={false}>
         <div className="max-w-5xl mx-auto w-full px-4">
           <div className="text-center mb-12">
