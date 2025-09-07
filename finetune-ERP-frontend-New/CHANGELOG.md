@@ -13,4 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix dashboard icon imports to ensure valid heroicon modules.
 - Forward tile routes into `CardItem` so dashboard tiles navigate correctly.
 - Route Giveaway Redemption through `FocusLayout` at `/giveaway-redemption` and make the layout title configurable.
-- Improve desktop reel navigation by normalizing wheel sensitivity and attaching wheel listeners only on desktop devices.
+- Improve desktop reel navigation by normalizing wheel sensitivity, attaching wheel listeners only on desktop devices, and preventing default only after significant wheel movement.
+- Remove root scroll snapping to let `PageWrapper` control scroll behavior.
+- Add missing favicon asset and update reference in `index.html`.

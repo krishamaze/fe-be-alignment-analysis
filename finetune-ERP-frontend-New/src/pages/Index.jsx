@@ -106,21 +106,20 @@ export default function Index() {
     ).matches;
     if (!isDesktop) return;
 
-    let wheelDelta = 0;
-    const deltaThreshold = 30;
-
     const handleWheel = (e) => {
+      if (isScrolling) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      const deltaY = e.deltaY;
+      if (Math.abs(deltaY) < 10) return;
+
       e.preventDefault();
       e.stopPropagation();
-      if (isScrolling) return;
 
-      wheelDelta += e.deltaY;
-      if (Math.abs(wheelDelta) < deltaThreshold) return;
-
-      const deltaY = wheelDelta;
-      wheelDelta = 0;
       let nextSection = currentSection;
-
       if (deltaY > 0 && currentSection < sectionsCount - 1) {
         nextSection = currentSection + 1;
       } else if (deltaY < 0 && currentSection > 0) {
