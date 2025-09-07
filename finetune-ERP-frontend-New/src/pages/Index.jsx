@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { devLog } from '@/utils/devLog';
 import PageWrapper from '@/components/layout/PageWrapper';
+import { useScrollMode } from '@/components/layout/ScrollModeContext';
 import HeroReel from '@/components/reels/HeroReel';
 import QuickActionsReel from '@/components/reels/QuickActionsReel';
 import TestimonialsReel from '@/components/reels/TestimonialsReel';
@@ -15,6 +16,7 @@ export default function Index() {
   const [currentSection, setCurrentSection] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const wheelDelta = useRef(0);
+  const { scrollElement } = useScrollMode();
 
   const activeReels = REEL_CONFIG.filter((reel) => reel.enabled);
   const sectionsCount = activeReels.length;
@@ -30,9 +32,7 @@ export default function Index() {
 
   const scrollToSection = useCallback(
     (sectionIndex, duration = 600) => {
-      const container = document.querySelector(
-        '[data-scroll-container="true"]'
-      );
+      const container = scrollElement;
 
       if (
         !container ||
@@ -95,11 +95,11 @@ export default function Index() {
 
       requestAnimationFrame(animateScroll);
     },
-    [isScrolling, sectionsCount]
+    [scrollElement, isScrolling, sectionsCount]
   );
 
   useEffect(() => {
-    const container = document.querySelector('[data-scroll-container="true"]');
+    const container = scrollElement;
     if (!container) return;
 
     const isDesktop = window.matchMedia(
@@ -151,10 +151,16 @@ export default function Index() {
 
     return () =>
       container.removeEventListener('wheel', handleWheel, { capture: true });
-  }, [currentSection, isScrolling, sectionsCount, scrollToSection]);
+  }, [
+    scrollElement,
+    currentSection,
+    isScrolling,
+    sectionsCount,
+    scrollToSection,
+  ]);
 
   useEffect(() => {
-    const container = document.querySelector('[data-scroll-container="true"]');
+    const container = scrollElement;
     if (!container) return;
 
     let touchStartY = 0;
@@ -205,7 +211,13 @@ export default function Index() {
       container.removeEventListener('touchstart', handleTouchStart);
       container.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [currentSection, isScrolling, sectionsCount, scrollToSection]);
+  }, [
+    scrollElement,
+    currentSection,
+    isScrolling,
+    sectionsCount,
+    scrollToSection,
+  ]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {

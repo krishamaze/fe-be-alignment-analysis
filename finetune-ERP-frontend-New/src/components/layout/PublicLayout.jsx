@@ -11,7 +11,7 @@ import {
 } from '@/components/layout/ScrollModeContext';
 
 function PublicLayoutInner() {
-  const { registerScrollElement } = useScrollMode();
+  const { mode, registerScrollElement } = useScrollMode();
   const { isDesktop, isMobile } = useDevice();
   const [isFooterVisible, setIsFooterVisible] = useState(false);
 
@@ -44,14 +44,16 @@ function PublicLayoutInner() {
         <MainNav />
 
         <main
-          ref={registerScrollElement}
           className="flex-1 overflow-y-auto min-h-0"
-          data-scroll-container="true"
           style={{
             paddingBottom: isMobile ? 'var(--bottomnav-h, 56px)' : '0',
             scrollPaddingTop:
               'calc(var(--topbar-h,0px) + var(--mainnav-h,0px))',
           }}
+          {...(mode !== 'reel' && {
+            'data-scroll-container': 'true',
+            ref: registerScrollElement,
+          })}
         >
           <Outlet />
         </main>
