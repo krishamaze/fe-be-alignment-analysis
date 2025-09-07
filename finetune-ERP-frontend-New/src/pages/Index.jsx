@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { devLog } from '@/utils/devLog';
 import PageWrapper from '@/components/layout/PageWrapper';
 import HeroReel from '@/components/reels/HeroReel';
@@ -14,6 +14,7 @@ const REEL_CONFIG = [
 export default function Index() {
   const [currentSection, setCurrentSection] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
+  const wheelDelta = useRef(0);
 
   const activeReels = REEL_CONFIG.filter((reel) => reel.enabled);
   const sectionsCount = activeReels.length;
@@ -113,16 +114,24 @@ export default function Index() {
         return;
       }
 
-      const deltaY = e.deltaY;
-      if (Math.abs(deltaY) < 10) return;
-
+      // Always prevent default to avoid bubbling conflicts
       e.preventDefault();
       e.stopPropagation();
 
+      const deltaY = e.deltaY;
+      wheelDelta.current += deltaY;
+
+      // Cross-platform adaptive threshold
+      const threshold = Math.max(10, Math.abs(deltaY) * 0.5);
+      if (Math.abs(wheelDelta.current) < threshold) return;
+
+      const direction = wheelDelta.current > 0 ? 1 : -1;
+      wheelDelta.current = 0;
+
       let nextSection = currentSection;
-      if (deltaY > 0 && currentSection < sectionsCount - 1) {
+      if (direction > 0 && currentSection < sectionsCount - 1) {
         nextSection = currentSection + 1;
-      } else if (deltaY < 0 && currentSection > 0) {
+      } else if (direction < 0 && currentSection > 0) {
         nextSection = currentSection - 1;
       }
 
