@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { devLog } from '@/utils/devLog';
 import PageWrapper from '@/components/layout/PageWrapper';
 import HeroReel from '@/components/reels/HeroReel';
 import QuickActionsReel from '@/components/reels/QuickActionsReel';
@@ -18,6 +19,12 @@ export default function Index() {
   const activeReels = REEL_CONFIG.filter((reel) => reel.enabled);
   const sectionsCount = activeReels.length;
 
+  useEffect(() => {
+    if (currentSection >= sectionsCount) {
+      setCurrentSection(Math.max(0, sectionsCount - 1));
+    }
+  }, [sectionsCount, currentSection]);
+
   const easeInOutCubic = (t) =>
     t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
@@ -32,8 +39,14 @@ export default function Index() {
       )
         return;
 
+      const containerHeight = container.clientHeight;
+      const actualHeight = container.scrollHeight / sectionsCount;
+      if (Math.abs(containerHeight - actualHeight) > 10) {
+        devLog('Height mismatch detected', { containerHeight, actualHeight });
+      }
+
       setIsScrolling(true);
-      const targetScroll = sectionIndex * container.clientHeight;
+      const targetScroll = sectionIndex * containerHeight;
       const startScroll = container.scrollTop;
       const distance = targetScroll - startScroll;
       const startTime = performance.now();

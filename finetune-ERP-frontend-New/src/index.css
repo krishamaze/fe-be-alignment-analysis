@@ -61,6 +61,15 @@ html {
   scroll-snap-align: start;
 }
 
+[dir='rtl'] .snap-x {
+  scroll-snap-type: x mandatory;
+  direction: rtl;
+}
+
+[dir='rtl'] .snap-start-x {
+  scroll-snap-align: end;
+}
+
 /* Hide horizontal scrollbars */
 .snap-x::-webkit-scrollbar {
   display: none;

@@ -55,7 +55,7 @@ Dark mode is enabled via `class` strategy. Toggle a `dark` class on the root ele
 | `PageSection`                                   | `src/components/common`           | semantic wrapper that uses `h-full` in reel mode and `min-h-screen` otherwise; adds mobile bottom padding in reel mode                                                                                                                                                                   |
 |                                                 |
 | `PageWrapper`                                   | `src/components/layout`           | sets scroll mode (`reel` or `scroll`); sections in `reel` mode should fill the viewport                                                                                                                                                                                                  |
-| `MultiSlideReel`                                | `src/components/layout`           | horizontally scrollable reel with custom easing, session-aware swipe hints, and ScrollModeContext integration |
+| `MultiSlideReel`                                | `src/components/layout`           | horizontally scrollable reel with custom easing, session-aware swipe hints, ScrollModeContext integration, and RTL support |
 |                                                                                                                 |
 Follow these patterns when adding new components to keep styling and accessibility consistent.
 

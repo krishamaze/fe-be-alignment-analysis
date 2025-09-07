@@ -10,7 +10,8 @@
   reel (`HeroReel`, `QuickActionsReel`, `TestimonialsReel`) applies `snap-start`
   so sections fill the viewport minus navigation heights for an Instagram-style
   experience. `ScrollModeContext` skips its scroll hiding logic when in `reel`
-  mode to let native scroll snapping work.
+  mode to let native scroll snapping work. The page adjusts to dynamic reel
+  configuration changes and logs height mismatches for debugging.
  - `TestimonialsReel` cycles through customer testimonials.
 
 ## Booking Form
