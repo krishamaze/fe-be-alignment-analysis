@@ -1,27 +1,52 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { devLog } from '@/utils/devLog';
 import PageWrapper from '@/components/layout/PageWrapper';
 import HeroReel from '@/components/reels/HeroReel';
 import QuickActionsReel from '@/components/reels/QuickActionsReel';
 import TestimonialsReel from '@/components/reels/TestimonialsReel';
 
+const REEL_CONFIG = [
+  { id: 'hero', component: HeroReel, enabled: true },
+  { id: 'quickActions', component: QuickActionsReel, enabled: true },
+  { id: 'testimonials', component: TestimonialsReel, enabled: true },
+];
+
 export default function Index() {
   const containerRef = useRef(null);
   const [currentSection, setCurrentSection] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
-  const sectionsCount = 3; // Hero, QuickActions, Testimonials
 
-  // Smooth easing function - easeInOutCubic
+  const activeReels = REEL_CONFIG.filter((reel) => reel.enabled);
+  const sectionsCount = activeReels.length;
+
+  useEffect(() => {
+    if (currentSection >= sectionsCount) {
+      setCurrentSection(Math.max(0, sectionsCount - 1));
+    }
+  }, [sectionsCount, currentSection]);
+
   const easeInOutCubic = (t) =>
     t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-  // Smooth scroll to section with custom easing
   const scrollToSection = useCallback(
     (sectionIndex, duration = 600) => {
       const container = containerRef.current;
-      if (!container || isScrolling) return;
+      if (
+        !container ||
+        isScrolling ||
+        sectionIndex < 0 ||
+        sectionIndex >= sectionsCount
+      )
+        return;
+
+      const containerHeight = container.clientHeight;
+      const actualHeight = container.scrollHeight / sectionsCount;
+      if (Math.abs(containerHeight - actualHeight) > 10) {
+        devLog('Height mismatch detected', { containerHeight, actualHeight });
+      }
 
       setIsScrolling(true);
-      const targetScroll = sectionIndex * container.clientHeight;
+      const targetScroll = sectionIndex * containerHeight;
       const startScroll = container.scrollTop;
       const distance = targetScroll - startScroll;
       const startTime = performance.now();
@@ -43,16 +68,16 @@ export default function Index() {
 
       requestAnimationFrame(animateScroll);
     },
-    [isScrolling]
+    [isScrolling, sectionsCount]
   );
 
-  // Handle wheel events for desktop
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const handleWheel = (e) => {
       e.preventDefault();
+      e.stopPropagation();
 
       if (isScrolling) return;
 
@@ -70,26 +95,33 @@ export default function Index() {
       }
     };
 
-    container.addEventListener('wheel', handleWheel, { passive: false });
-    return () => container.removeEventListener('wheel', handleWheel);
+    container.addEventListener('wheel', handleWheel, {
+      passive: false,
+      capture: true,
+    });
+    return () =>
+      container.removeEventListener('wheel', handleWheel, { capture: true });
   }, [currentSection, isScrolling, sectionsCount, scrollToSection]);
 
-  // Handle touch events for mobile
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     let touchStartY = 0;
-    let touchEndY = 0;
+    let touchStartTime = 0;
 
     const handleTouchStart = (e) => {
       touchStartY = e.touches[0].clientY;
+      touchStartTime = Date.now();
     };
 
     const handleTouchEnd = (e) => {
       if (isScrolling) return;
 
-      touchEndY = e.changedTouches[0].clientY;
+      const touchDuration = Date.now() - touchStartTime;
+      if (touchDuration < 50) return;
+
+      const touchEndY = e.changedTouches[0].clientY;
       const deltaY = touchStartY - touchEndY;
       const minSwipeDistance = 50;
 
@@ -111,9 +143,7 @@ export default function Index() {
     container.addEventListener('touchstart', handleTouchStart, {
       passive: true,
     });
-    container.addEventListener('touchend', handleTouchEnd, {
-      passive: true,
-    });
+    container.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {
       container.removeEventListener('touchstart', handleTouchStart);
@@ -121,7 +151,6 @@ export default function Index() {
     };
   }, [currentSection, isScrolling, sectionsCount, scrollToSection]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (isScrolling) return;
@@ -151,36 +180,40 @@ export default function Index() {
         name="description"
         content="Expert Mobile & Laptop Repairs in Coimbatore & Palakkad"
       />
+
       <PageWrapper mode="reel">
         <div
           ref={containerRef}
           className="h-full overflow-y-auto snap-y snap-mandatory fullpage-scrolling"
-          style={{
-            scrollBehavior: 'auto',
-            scrollSnapStop: 'always',
-          }}
+          style={{ scrollBehavior: 'auto', scrollSnapStop: 'always' }}
         >
-          <HeroReel />
-          <QuickActionsReel />
-          <TestimonialsReel />
+          {activeReels.map((reel) => {
+            const Component = reel.component;
+            return <Component key={reel.id} />;
+          })}
         </div>
 
-        {/* Section indicators (optional) */}
-        <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-50 hidden md:flex flex-col gap-3">
-          {Array.from({ length: sectionsCount }).map((_, index) => (
+        <nav
+          className="fixed right-6 top-1/2 transform -translate-y-1/2 z-50 hidden md:flex flex-col gap-3"
+          role="tablist"
+          aria-label="Page sections"
+        >
+          {activeReels.map((reel, index) => (
             <button
-              key={index}
+              key={reel.id}
               onClick={() => scrollToSection(index)}
               disabled={isScrolling}
-              className={`section-indicator w-3 h-3 rounded-full border-2 ${
+              role="tab"
+              aria-selected={currentSection === index}
+              className={`section-indicator w-3 h-3 rounded-full border-2 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 ${
                 currentSection === index
                   ? 'bg-secondary border-secondary'
-                  : 'bg-transparent border-white hover:border-secondary'
+                  : 'bg-transparent border-white hover:border-secondary disabled:opacity-50'
               }`}
-              aria-label={`Go to section ${index + 1}`}
+              aria-label={`Go to ${reel.id} section (${index + 1} of ${sectionsCount})`}
             />
           ))}
-        </div>
+        </nav>
       </PageWrapper>
     </>
   );

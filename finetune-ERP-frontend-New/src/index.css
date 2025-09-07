@@ -1,6 +1,3 @@
-@import 'swiper/css';
-@import 'swiper/css/navigation';
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -51,6 +48,38 @@ html {
 }
 
 /* Ensure scroll snap containers work properly */
+/* Horizontal scroll snap for multi-slide reels */
+.snap-x {
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 0;
+  scroll-padding-right: 0;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+}
+
+.snap-start-x {
+  scroll-snap-align: start;
+}
+
+[dir='rtl'] .snap-x {
+  scroll-snap-type: x mandatory;
+  direction: rtl;
+}
+
+[dir='rtl'] .snap-start-x {
+  scroll-snap-align: end;
+}
+
+/* Hide horizontal scrollbars */
+.snap-x::-webkit-scrollbar {
+  display: none;
+}
+
+.snap-x {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 [style*='scroll-snap-type'] {
   -webkit-overflow-scrolling: touch;
 }
@@ -82,4 +111,18 @@ html {
 .bottom-nav {
   padding-bottom: env(safe-area-inset-bottom, 0);
   bottom: env(safe-area-inset-bottom, 0);
+}
+
+@keyframes swipe-pulse {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-pulse {
+  animation: swipe-pulse 2s infinite;
 }
