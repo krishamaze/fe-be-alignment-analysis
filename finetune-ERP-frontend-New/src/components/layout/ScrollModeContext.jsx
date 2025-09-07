@@ -34,9 +34,9 @@ export const ScrollModeProvider = ({ children }) => {
 
   const handleScroll = useCallback(
     (e) => {
-      // 🔥 KEY FIX: Don't interfere with scroll snap in reel mode
+      // 🔥 KEY FIX: Don't interfere with fullpage scroll in reel mode
       if (mode === 'reel') {
-        // Allow native scroll snap to work
+        // Allow fullpage scroll logic to work
         return;
       }
       const current = e.target.scrollTop;

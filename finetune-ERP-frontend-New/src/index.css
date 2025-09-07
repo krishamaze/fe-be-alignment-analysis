@@ -21,11 +21,20 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Disable text selection during scroll transitions */
+.fullpage-scrolling {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
 /* Better scroll snap support */
 .snap-y {
   scroll-snap-type: y mandatory;
   scroll-padding-top: 0;
   scroll-padding-bottom: 0;
+  overscroll-behavior: none;
 }
 
 .snap-mandatory {
@@ -50,6 +59,18 @@ html {
 .snap-y::-webkit-scrollbar {
   width: 0;
   background: transparent;
+}
+
+/* Smooth transitions for section indicators */
+.section-indicator {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Optimize performance for fullpage scrolling */
+.fullpage-section {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
 }
 
 /* Bottom nav (default state) */
