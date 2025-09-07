@@ -16,6 +16,7 @@ export const ScrollModeContext = createContext({
   bottomNavVisible: true,
   scrollDirection: 'down',
   registerScrollElement: () => {},
+  scrollElement: null,
 });
 
 export const ScrollModeProvider = ({ children }) => {
@@ -106,8 +107,9 @@ export const ScrollModeProvider = ({ children }) => {
       bottomNavVisible,
       scrollDirection,
       registerScrollElement: setScrollEl,
+      scrollElement: scrollEl,
     }),
-    [mode, bottomNavVisible, scrollDirection]
+    [mode, bottomNavVisible, scrollDirection, scrollEl]
   );
 
   return (
