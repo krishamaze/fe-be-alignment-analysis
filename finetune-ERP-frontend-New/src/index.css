@@ -18,14 +18,18 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Disable text selection during scroll transitions */
-.main-nav,
-.top-bar {
-  position: fixed !important;
-  top: 0;
+/* Fixed navigation bars */
+.top-bar,
+.main-nav {
+  position: fixed;
+  width: 100%;
   left: 0;
-  right: 0;
   z-index: 1000;
+  transition: transform 0.3s ease-in-out;
+}
+
+.top-bar {
+  top: 0;
 }
 
 .main-nav {
@@ -41,6 +45,8 @@ html {
   scroll-padding-top: 0;
   scroll-padding-bottom: 0;
   overscroll-behavior: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Better scroll snap support */
@@ -114,21 +120,17 @@ html {
 
 /* Optimize performance for fullpage scrolling */
 .fullpage-section {
-  height: calc(100vh - var(--topbar-h, 0px) - var(--mainnav-h, 0px)) !important;
+  height: calc(100vh - var(--topbar-h, 0px) - var(--mainnav-h, 0px));
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  flex-shrink: 0;
   will-change: transform;
   backface-visibility: hidden;
   transform-style: preserve-3d;
-  flex-shrink: 0;
-}
-
-.fullpage-scrolling .fullpage-section {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
 }
 
 .fullpage-scrolling::-webkit-scrollbar {
-  width: 0;
-  background: transparent;
+  display: none;
 }
 
 /* Bottom nav (default state) */

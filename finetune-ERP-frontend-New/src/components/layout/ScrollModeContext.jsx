@@ -16,6 +16,7 @@ export const ScrollModeContext = createContext({
   bottomNavVisible: true,
   scrollDirection: 'down',
   registerScrollElement: () => {},
+  scrollElement: null,
 });
 
 export const ScrollModeProvider = ({ children }) => {
@@ -99,15 +100,20 @@ export const ScrollModeProvider = ({ children }) => {
     return () => scrollEl.removeEventListener('scroll', onScroll);
   }, [scrollEl, handleScroll]);
 
+  const registerScrollElement = useCallback((el) => {
+    setScrollEl(el);
+  }, []);
+
   const value = useMemo(
     () => ({
       mode,
       setMode,
       bottomNavVisible,
       scrollDirection,
-      registerScrollElement: setScrollEl,
+      registerScrollElement,
+      scrollElement: scrollEl,
     }),
-    [mode, bottomNavVisible, scrollDirection]
+    [mode, bottomNavVisible, scrollDirection, scrollEl, registerScrollElement]
   );
 
   return (

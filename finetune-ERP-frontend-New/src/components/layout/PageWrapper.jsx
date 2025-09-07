@@ -10,26 +10,24 @@ export default function PageWrapper({ mode = 'scroll', children }) {
 
   if (mode === 'reel') {
     return (
-      <div className="h-full overflow-hidden">
-        <div
-          className="h-full overflow-y-auto snap-y snap-mandatory fullpage-scrolling"
-          data-scroll-container="true"
-          ref={(el) => registerScrollElement && registerScrollElement(el)}
-          style={{
-            scrollBehavior: 'auto',
-            scrollSnapStop: 'always',
-            paddingTop: 'calc(var(--topbar-h, 0px) + var(--mainnav-h, 0px))',
-          }}
-        >
-          {children}
-        </div>
+      <div
+        ref={registerScrollElement}
+        className="h-full overflow-y-auto snap-y snap-mandatory fullpage-scrolling"
+        style={{
+          scrollBehavior: 'auto',
+          scrollSnapStop: 'always',
+          paddingTop: 'calc(var(--topbar-h, 0px) + var(--mainnav-h, 0px))',
+        }}
+      >
+        {children}
       </div>
     );
   }
 
   return (
     <div
-      className="min-h-screen"
+      ref={registerScrollElement}
+      className="h-full overflow-y-auto"
       style={{
         paddingTop: 'calc(var(--topbar-h, 0px) + var(--mainnav-h, 0px))',
       }}

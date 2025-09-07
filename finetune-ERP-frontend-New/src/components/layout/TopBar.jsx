@@ -1,17 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { forwardRef } from 'react';
 
-export default function TopBar() {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    if (ref.current) {
-      document.documentElement.style.setProperty(
-        '--topbar-h',
-        `${ref.current.offsetHeight}px`
-      );
-    }
-  }, []);
-
+const TopBar = forwardRef(function TopBar(_props, ref) {
   return (
     <div
       id="topbar"
@@ -21,4 +10,6 @@ export default function TopBar() {
       <span className="topbar-text text-xs leading-none">🔥 Free Shipping</span>
     </div>
   );
-}
+});
+
+export default TopBar;

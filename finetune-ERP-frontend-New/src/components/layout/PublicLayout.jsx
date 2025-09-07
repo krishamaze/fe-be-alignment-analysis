@@ -1,65 +1,72 @@
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import TopBar from '@/components/layout/TopBar';
-import MainNav from '@/components/layout/MainNav';
-import BottomNav from '@/components/layout/BottomNav';
-import Footer from '@/components/layout/Footer';
-import useDevice from '@/hooks/useDevice';
 import {
   ScrollModeProvider,
   useScrollMode,
 } from '@/components/layout/ScrollModeContext';
+import TopBar from './TopBar';
+import MainNav from './MainNav';
+import Footer from './Footer';
+import BottomNav from './BottomNav';
 
 function PublicLayoutInner() {
-  const { registerScrollElement } = useScrollMode();
-  const { isDesktop, isMobile } = useDevice();
-  const [isFooterVisible, setIsFooterVisible] = useState(false);
+  const { mode, scrollElement } = useScrollMode();
+  const topBarRef = useRef(null);
+  const mainNavRef = useRef(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollContainer = document.querySelector(
-        '[data-scroll-container="true"]'
+  // Measure nav heights and set CSS variables
+  useLayoutEffect(() => {
+    const updateNavHeight = () => {
+      const topBarHeight = topBarRef.current?.offsetHeight || 0;
+      const mainNavHeight = mainNavRef.current?.offsetHeight || 0;
+      document.documentElement.style.setProperty(
+        '--topbar-h',
+        `${topBarHeight}px`
       );
-      if (!scrollContainer) return;
-
-      const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
-      const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
-
-      setIsFooterVisible(scrollPercentage >= 0.85);
+      document.documentElement.style.setProperty(
+        '--mainnav-h',
+        `${mainNavHeight}px`
+      );
     };
 
-    const scrollContainer = document.querySelector(
-      '[data-scroll-container="true"]'
-    );
-    if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', handleScroll);
-      return () => scrollContainer.removeEventListener('scroll', handleScroll);
-    }
+    updateNavHeight();
+    window.addEventListener('resize', updateNavHeight);
+    return () => window.removeEventListener('resize', updateNavHeight);
   }, []);
 
+  // Show/hide nav on scroll (only in 'scroll' mode)
+  useEffect(() => {
+    if (mode !== 'scroll' || !scrollElement) return;
+
+    let lastScrollTop = 0;
+    const handleScroll = () => {
+      const { scrollTop } = scrollElement;
+      const isScrollingDown = scrollTop > lastScrollTop;
+      const topBar = topBarRef.current;
+
+      if (topBar) {
+        if (scrollTop > 200 && isScrollingDown) {
+          topBar.classList.add('-translate-y-full');
+        } else {
+          topBar.classList.remove('-translate-y-full');
+        }
+      }
+      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    };
+
+    scrollElement.addEventListener('scroll', handleScroll);
+    return () => scrollElement.removeEventListener('scroll', handleScroll);
+  }, [scrollElement, mode]);
+
   return (
-    <div className="h-[100dvh] bg-surface text-onSurface overflow-hidden">
-      <div className="h-full relative flex flex-col">
-        <TopBar />
-        <MainNav />
-
-        <main
-          ref={registerScrollElement}
-          className="flex-1 overflow-y-auto min-h-0"
-          data-scroll-container="true"
-          style={{
-            paddingBottom: isMobile ? 'var(--bottomnav-h, 56px)' : '0',
-            scrollPaddingTop:
-              'calc(var(--topbar-h,0px) + var(--mainnav-h,0px))',
-          }}
-        >
-          <Outlet />
-        </main>
-
-        {isMobile && <BottomNav />}
-      </div>
-
-      {isDesktop && <Footer isVisible={isFooterVisible} />}
+    <div className="flex flex-col min-h-screen">
+      <TopBar ref={topBarRef} />
+      <MainNav ref={mainNavRef} />
+      <main className="flex-grow">
+        <Outlet />
+      </main>
+      {mode === 'scroll' && <Footer />}
+      <BottomNav />
     </div>
   );
 }
