@@ -1,5 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="480" width="640" id="flag-icon-css-bq">
-  <path d="M0 0h640v480H0z" fill="#21468b"/>
-  <path d="M0 0h640v320H0z" fill="#fff"/>
-  <path d="M0 0h640v160H0z" fill="#ae1c28"/>
-</svg>
+version https://git-lfs.github.com/spec/v1
+oid sha256:f657536fcb379d14a6e4b351d43bccd6f118c57babdc8ba6f1529530bc7a37ba
+size 227
