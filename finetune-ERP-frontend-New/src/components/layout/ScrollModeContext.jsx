@@ -34,7 +34,11 @@ export const ScrollModeProvider = ({ children }) => {
 
   const handleScroll = useCallback(
     (e) => {
-      if (mode === 'reel') return;
+      // 🔥 KEY FIX: Don't interfere with scroll snap in reel mode
+      if (mode === 'reel') {
+        // Allow native scroll snap to work
+        return;
+      }
       const current = e.target.scrollTop;
       const delta = current - lastY.current;
       const direction = delta > 0 ? 'down' : 'up';

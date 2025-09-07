@@ -35,10 +35,9 @@ export default function QuickActionsReel() {
 
   return (
     <section
-      className="bg-gray-50 flex items-center"
+      className="snap-start bg-gray-50 flex items-center"
       style={{
         height: 'calc(100dvh - var(--topbar-h,0px) - var(--mainnav-h,0px))',
-        scrollSnapAlign: 'start',
       }}
     >
       <div className="max-w-5xl mx-auto w-full px-4">
