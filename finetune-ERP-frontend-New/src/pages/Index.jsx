@@ -101,12 +101,24 @@ export default function Index() {
     const container = document.querySelector('[data-scroll-container="true"]');
     if (!container) return;
 
+    const isDesktop = window.matchMedia(
+      '(hover: hover) and (pointer: fine)'
+    ).matches;
+    if (!isDesktop) return;
+
+    let wheelDelta = 0;
+    const deltaThreshold = 30;
+
     const handleWheel = (e) => {
       e.preventDefault();
       e.stopPropagation();
       if (isScrolling) return;
 
-      const deltaY = e.deltaY;
+      wheelDelta += e.deltaY;
+      if (Math.abs(wheelDelta) < deltaThreshold) return;
+
+      const deltaY = wheelDelta;
+      wheelDelta = 0;
       let nextSection = currentSection;
 
       if (deltaY > 0 && currentSection < sectionsCount - 1) {
