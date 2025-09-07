@@ -52,6 +52,7 @@ export default function Index() {
 
       setIsScrolling(true);
 
+      // Preserve existing nav height calculation
       const navHeight =
         (parseInt(
           getComputedStyle(document.documentElement).getPropertyValue(
@@ -70,7 +71,7 @@ export default function Index() {
       const distance = targetScroll - startScroll;
       const startTime = performance.now();
 
-      // Accessibility: respect reduced motion preference
+      // Accessibility support
       const prefersReducedMotion = window.matchMedia(
         '(prefers-reduced-motion: reduce)'
       ).matches;
@@ -82,15 +83,14 @@ export default function Index() {
         targetScroll,
         startScroll,
         navHeight,
-        duration: animationDuration,
       });
 
+      // Smooth animation loop
       const animateScroll = (currentTime) => {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / animationDuration, 1);
         const easedProgress = easeInOutCubic(progress);
 
-        // Apply eased animation
         container.scrollTop = startScroll + distance * easedProgress;
 
         if (progress < 1) {
@@ -102,7 +102,6 @@ export default function Index() {
         }
       };
 
-      // Start animation
       requestAnimationFrame(animateScroll);
     },
     [scrollElement, isScrolling, sectionsCount]
