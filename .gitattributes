@@ -1,42 +1,23 @@
-# ========================================
-# 🔹 Global LFS Rules (big/heavy binaries)
-# ========================================
-*.psd   filter=lfs diff=lfs merge=lfs -text
-*.pdf   filter=lfs diff=lfs merge=lfs -text
-*.zip   filter=lfs diff=lfs merge=lfs -text
-*.xlsx  filter=lfs diff=lfs merge=lfs -text
-*.docx  filter=lfs diff=lfs merge=lfs -text
-*.mp4   filter=lfs diff=lfs merge=lfs -text
-*.mp3   filter=lfs diff=lfs merge=lfs -text
-*.tiff  filter=lfs diff=lfs merge=lfs -text
-*.bmp   filter=lfs diff=lfs merge=lfs -text
+# Auto detect text files and perform LF normalization
+* text=auto
 
-# Global image rule (default: LFS)
-*.png   filter=lfs diff=lfs merge=lfs -text
-*.jpg   filter=lfs diff=lfs merge=lfs -text
-*.jpeg  filter=lfs diff=lfs merge=lfs -text
-*.gif   filter=lfs diff=lfs merge=lfs -text
+# Images
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.svg filter=lfs diff=lfs merge=lfs -text
 
-# ========================================
-# 🔹 Frontend Assets: Selective Override
-# (Only override text files, preserve binary handling for images)
-# ========================================
-# Text files in assets can stay in regular Git
-finetune-ERP-frontend-New/src/assets/*.js text -filter -diff -merge
-finetune-ERP-frontend-New/src/assets/*.css text -filter -diff -merge  
-finetune-ERP-frontend-New/src/assets/*.json text -filter -diff -merge
-finetune-ERP-frontend-New/src/assets/*.md text -filter -diff -merge
-finetune-ERP-frontend-New/src/assets/*.txt text -filter -diff -merge
+# Fonts
+*.woff filter=lfs diff=lfs merge=lfs -text
+*.woff2 filter=lfs diff=lfs merge=lfs -text
+*.ttf filter=lfs diff=lfs merge=lfs -text
+*.otf filter=lfs diff=lfs merge=lfs -text
 
-# Images in frontend assets: force binary handling (override LFS for these specific files)
-finetune-ERP-frontend-New/src/assets/*.png binary -filter -diff -merge
-finetune-ERP-frontend-New/src/assets/*.jpg binary -filter -diff -merge
-finetune-ERP-frontend-New/src/assets/*.jpeg binary -filter -diff -merge
-finetune-ERP-frontend-New/src/assets/*.gif binary -filter -diff -merge
-finetune-ERP-frontend-New/src/assets/*.svg text -filter -diff -merge
+# Videos
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.mov filter=lfs diff=lfs merge=lfs -text
+*.avi filter=lfs diff=lfs merge=lfs -text
 
-# ========================================
-# 🔹 Special Cases
-# ========================================
-finetune-ERP-backend-New/requirements.txt text diff
-docs/assets/* -filter -diff -merge text
+# Others
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.ai filter=lfs diff=lfs merge=lfs -text
+*.sketch filter=lfs diff=lfs merge=lfs -text
