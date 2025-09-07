@@ -38,10 +38,9 @@ const testimonials = [
 function TestimonialSlide({ testimonial }) {
   return (
     <div
-      className="flex items-center justify-center bg-white"
+      className="snap-start flex items-center justify-center bg-white"
       style={{
         height: 'calc(100dvh - var(--topbar-h,0px) - var(--mainnav-h,0px))',
-        scrollSnapAlign: 'start',
       }}
     >
       <div className="max-w-4xl mx-auto px-4 text-center">
@@ -81,9 +80,9 @@ function TestimonialSlide({ testimonial }) {
 export default function TestimonialsReel() {
   return (
     <section
+      className="snap-start"
       style={{
         height: 'calc(100dvh - var(--topbar-h,0px) - var(--mainnav-h,0px))',
-        scrollSnapAlign: 'start',
       }}
     >
       <ReelLayout autoplay>

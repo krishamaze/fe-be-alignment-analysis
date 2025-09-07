@@ -6,9 +6,11 @@
   three pricing cards and a footer link to view all repair services.
 - Each card links to `/repair?service=<type>` to prefill the booking form.
 - Cards use large rounded corners (`rounded-2xl`) and hover shadows for visual emphasis.
-- The home page uses a `scroll-snap` container (`scrollSnapType: 'y mandatory'`)
-  where each reel (`HeroReel`, `QuickActionsReel`, `TestimonialsReel`) fills the
-  viewport minus navigation heights for an Instagram-style experience.
+- The home page uses a scroll snap container (`snap-y snap-mandatory`) where each
+  reel (`HeroReel`, `QuickActionsReel`, `TestimonialsReel`) applies `snap-start`
+  so sections fill the viewport minus navigation heights for an Instagram-style
+  experience. `ScrollModeContext` skips its scroll hiding logic when in `reel`
+  mode to let native scroll snapping work.
  - `TestimonialsReel` cycles through customer testimonials.
 
 ## Booking Form

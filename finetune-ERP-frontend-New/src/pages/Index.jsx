@@ -13,10 +13,11 @@ export default function Index() {
       />
       <PageWrapper mode="reel">
         <div
-          className="h-full overflow-y-auto"
+          className="h-full overflow-y-auto snap-y snap-mandatory"
           style={{
-            scrollSnapType: 'y mandatory',
             scrollBehavior: 'smooth',
+            // Force snap behavior
+            scrollSnapStop: 'always',
           }}
         >
           <HeroReel />

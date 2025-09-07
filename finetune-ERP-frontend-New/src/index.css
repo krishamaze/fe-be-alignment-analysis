@@ -21,13 +21,33 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Ensure scroll snap works properly */
+/* Better scroll snap support */
+.snap-y {
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: 0;
+  scroll-padding-bottom: 0;
+}
+
+.snap-mandatory {
+  scroll-snap-type: y mandatory;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+/* Force snap stops - helps with Chrome issues */
+.snap-always {
+  scroll-snap-stop: always;
+}
+
+/* Ensure scroll snap containers work properly */
 [style*='scroll-snap-type'] {
   -webkit-overflow-scrolling: touch;
 }
 
 /* Hide scrollbar for cleaner reels experience */
-[style*='scroll-snap-type']::-webkit-scrollbar {
+.snap-y::-webkit-scrollbar {
   width: 0;
   background: transparent;
 }
