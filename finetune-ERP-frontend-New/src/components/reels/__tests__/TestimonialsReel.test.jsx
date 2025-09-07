@@ -1,17 +1,7 @@
 // @vitest-environment jsdom
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import TestimonialsReel from '../TestimonialsReel';
-
-vi.mock('swiper/react', () => ({
-  Swiper: ({ children }) => <div>{children}</div>,
-  SwiperSlide: ({ children }) => <div>{children}</div>,
-}));
-vi.mock('swiper/modules', () => ({
-  Navigation: {},
-  Autoplay: {},
-  Keyboard: {},
-}));
 
 describe('TestimonialsReel', () => {
   it('renders testimonials content', () => {

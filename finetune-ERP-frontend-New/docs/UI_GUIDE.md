@@ -55,8 +55,8 @@ Dark mode is enabled via `class` strategy. Toggle a `dark` class on the root ele
 | `PageSection`                                   | `src/components/common`           | semantic wrapper that uses `h-full` in reel mode and `min-h-screen` otherwise; adds mobile bottom padding in reel mode                                                                                                                                                                   |
 |                                                 |
 | `PageWrapper`                                   | `src/components/layout`           | sets scroll mode (`reel` or `scroll`); sections in `reel` mode should fill the viewport                                                                                                                                                                                                  |
-| `ReelLayout`                                    | `src/components/layout`           | wraps sections in Swiper slides and enforces `reel` mode with swipe, arrow navigation, and optional autoplay (disabled when only one slide)                                                                                                                                              |
-
+| `MultiSlideReel`                                | `src/components/layout`           | horizontally scrollable reel with custom easing, session-aware swipe hints, and ScrollModeContext integration |
+|                                                                                                                 |
 Follow these patterns when adding new components to keep styling and accessibility consistent.
 
 The mobile dashboard uses a fixed bottom navigation bar that displays navigation tiles in a three-column grid (six columns on wider breakpoints) and can be shown or hidden via the floating toggle button.
