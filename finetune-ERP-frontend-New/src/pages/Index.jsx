@@ -6,6 +6,10 @@ import HeroReel from '@/components/reels/HeroReel';
 import QuickActionsReel from '@/components/reels/QuickActionsReel';
 import TestimonialsReel from '@/components/reels/TestimonialsReel';
 
+// Cubic easing for smooth animations
+const easeInOutCubic = (t) =>
+  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
 const REEL_CONFIG = [
   { id: 'hero', component: HeroReel, enabled: true },
   { id: 'quickActions', component: QuickActionsReel, enabled: true },
@@ -26,9 +30,6 @@ export default function Index() {
       setCurrentSection(Math.max(0, sectionsCount - 1));
     }
   }, [sectionsCount, currentSection]);
-
-  const easeInOutCubic = (t) =>
-    t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
   const scrollToSection = useCallback(
     (sectionIndex, duration = 600) => {
@@ -69,19 +70,27 @@ export default function Index() {
       const distance = targetScroll - startScroll;
       const startTime = performance.now();
 
+      // Accessibility: respect reduced motion preference
+      const prefersReducedMotion = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches;
+      const animationDuration = prefersReducedMotion ? 0 : duration;
+
       devLog('Scrolling to section', {
         sectionIndex,
         sectionHeight,
         targetScroll,
         startScroll,
         navHeight,
+        duration: animationDuration,
       });
 
       const animateScroll = (currentTime) => {
         const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
+        const progress = Math.min(elapsed / animationDuration, 1);
         const easedProgress = easeInOutCubic(progress);
 
+        // Apply eased animation
         container.scrollTop = startScroll + distance * easedProgress;
 
         if (progress < 1) {
@@ -93,6 +102,7 @@ export default function Index() {
         }
       };
 
+      // Start animation
       requestAnimationFrame(animateScroll);
     },
     [scrollElement, isScrolling, sectionsCount]
