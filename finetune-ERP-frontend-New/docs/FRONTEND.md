@@ -11,8 +11,10 @@
   so sections fill the viewport minus navigation heights for an Instagram-style
   experience. `ScrollModeContext` skips its scroll hiding logic when in `reel`
   mode to let native scroll snapping work. The page adjusts to dynamic reel
-  configuration changes and logs height mismatches for debugging.
- - `TestimonialsReel` cycles through customer testimonials.
+  configuration changes and logs height mismatches for debugging. Desktop wheel
+  events accumulate delta with an adaptive threshold to maintain consistent
+  cross-device section navigation and avoid bubbling conflicts.
+- `TestimonialsReel` cycles through customer testimonials.
 
 ## Booking Form
 
