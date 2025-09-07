@@ -19,11 +19,28 @@ html {
 }
 
 /* Disable text selection during scroll transitions */
+.main-nav,
+.top-bar {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.main-nav {
+  top: var(--topbar-h, 0px);
+}
+
 .fullpage-scrolling {
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: 0;
+  scroll-padding-bottom: 0;
+  overscroll-behavior: none;
 }
 
 /* Better scroll snap support */
@@ -97,9 +114,21 @@ html {
 
 /* Optimize performance for fullpage scrolling */
 .fullpage-section {
+  height: calc(100vh - var(--topbar-h, 0px) - var(--mainnav-h, 0px)) !important;
   will-change: transform;
   backface-visibility: hidden;
   transform-style: preserve-3d;
+  flex-shrink: 0;
+}
+
+.fullpage-scrolling .fullpage-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.fullpage-scrolling::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
 }
 
 /* Bottom nav (default state) */

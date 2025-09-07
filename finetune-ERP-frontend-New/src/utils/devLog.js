@@ -1,5 +1,7 @@
-export function devLog(...args) {
-  if (import.meta.env?.DEV) {
-    console.debug(...args);
+/* global process */
+
+export const devLog = (message, data) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`[Fullpage] ${message}`, data || '');
   }
-}
+};

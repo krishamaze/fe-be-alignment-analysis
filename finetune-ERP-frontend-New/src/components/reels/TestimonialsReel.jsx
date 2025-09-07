@@ -62,12 +62,7 @@ function TestimonialSlide({ testimonial }) {
 
 export default function TestimonialsReel() {
   return (
-    <section
-      className="snap-start fullpage-section relative overflow-hidden bg-white"
-      style={{
-        height: 'calc(100dvh - var(--topbar-h,0px) - var(--mainnav-h,0px))',
-      }}
-    >
+    <section className="snap-start fullpage-section relative overflow-hidden bg-white">
       <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-10">
         <h2 className="text-3xl font-bold text-gray-900 text-center">
           What Our Customers Say

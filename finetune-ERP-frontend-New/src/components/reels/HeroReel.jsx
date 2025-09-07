@@ -4,12 +4,7 @@ import phoneIllustration from '@/assets/phone-illustration.png';
 
 export default function HeroReel() {
   return (
-    <section
-      className="snap-start fullpage-section relative overflow-hidden bg-gradient-to-r from-black via-amber-600/30 to-yellow-400/40 flex items-center"
-      style={{
-        height: 'calc(100dvh - var(--topbar-h,0px) - var(--mainnav-h,0px))',
-      }}
-    >
+    <section className="snap-start fullpage-section relative overflow-hidden bg-gradient-to-r from-black via-amber-600/30 to-yellow-400/40 flex items-center">
       <MultiSlideReel reelId="hero" showHint={false}>
         <>
           <div className="absolute inset-0 bg-black/60" />
