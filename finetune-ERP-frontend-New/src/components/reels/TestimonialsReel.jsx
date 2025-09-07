@@ -38,7 +38,7 @@ const testimonials = [
 function TestimonialSlide({ testimonial }) {
   return (
     <div
-      className="snap-start flex items-center justify-center bg-white"
+      className="snap-start fullpage-section flex items-center justify-center bg-white"
       style={{
         height: 'calc(100dvh - var(--topbar-h,0px) - var(--mainnav-h,0px))',
       }}
@@ -80,7 +80,7 @@ function TestimonialSlide({ testimonial }) {
 export default function TestimonialsReel() {
   return (
     <section
-      className="snap-start"
+      className="snap-start fullpage-section relative overflow-hidden"
       style={{
         height: 'calc(100dvh - var(--topbar-h,0px) - var(--mainnav-h,0px))',
       }}
