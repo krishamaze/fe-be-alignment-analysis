@@ -53,6 +53,18 @@ export default function MultiSlideReel({
   const slideRefs = useRef([]);
   const observerRef = useRef(null);
   const currentSlideRef = useRef(0);
+  const updateTimeoutRef = useRef(null);
+
+  const setSlideDebounced = useCallback((index) => {
+    if (updateTimeoutRef.current) clearTimeout(updateTimeoutRef.current);
+    updateTimeoutRef.current = setTimeout(() => {
+      if (index !== currentSlideRef.current) {
+        setCurrentSlide(index);
+      }
+    }, 50);
+  }, []);
+
+  useEffect(() => () => clearTimeout(updateTimeoutRef.current), []);
 
   const slides = Children.toArray(children);
   const hasMultipleSlides = slides.length > 1;
@@ -83,15 +95,13 @@ export default function MultiSlideReel({
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
             const slideIndex = parseInt(entry.target.dataset.slideIndex);
-            if (slideIndex !== currentSlideRef.current) {
-              setCurrentSlide(slideIndex);
-            }
+            setSlideDebounced(slideIndex);
           }
         });
       },
-      { root: containerRef.current, threshold: [0.6], rootMargin: '0px' }
+      { root: containerRef.current, threshold: [0.4], rootMargin: '0px' }
     );
 
     const observer = observerRef.current;
@@ -105,7 +115,7 @@ export default function MultiSlideReel({
       });
       observer.disconnect();
     };
-  }, [hasMultipleSlides]);
+  }, [hasMultipleSlides, setSlideDebounced]);
   const scrollToSlide = useCallback((index) => {
     if (!containerRef.current) return;
     containerRef.current.scrollTo({
