@@ -69,6 +69,11 @@ Navigation spacing uses Tailwind utilities and container-based sizing; `BottomNa
 Public routes wrap navigation inside a `ScrollModeProvider` with a stable `h-[100dvh] overflow-hidden` container and an inner `flex flex-col` layout. `TopBar` and `MainNav` sit above a `main` region using `flex-1 min-h-0` that applies `overflow-y-auto` only in scroll mode and `overflow-hidden` in reel mode, which is registered for scroll tracking and applies `scrollPaddingTop` equal to the nav heights. The provider hides the navigation after 100px of downward scrolling on mobile or 200px on desktop; upward scroll reveals it immediately on mobile or after 100px on desktop. In reel mode, `PageWrapper` registers its own scroll container and `PublicLayout` disables its `main` scroll container. Sections should fill the container height (`calc(100dvh - var(--topbar-h,0px) - var(--mainnav-h,0px))`); `BottomNav` exposes its size via `--bottomnav-h` for padding adjustments.
 On desktop, a `Footer` stays hidden until about 85% scroll, then slides into view.
 
+### Reel layout notes
+
+- `PageWrapper` sets its container height to `calc(100vh - var(--topbar-h) - var(--mainnav-h))` and adds bottom padding equal to `--bottomnav-h`.
+- `PageSection` applies bottom padding via `--bottomnav-h` when in reel mode on mobile.
+
 ### Viewport units
 
 The app relies on modern viewport units (`100dvh`) so navigation positions remain stable without JavaScript handlers.

@@ -13,7 +13,7 @@ export default function PageSection({
   const height = mode === 'reel' ? 'h-full' : 'min-h-screen';
 
   const reelPadding =
-    mode === 'reel' && isMobile ? 'pb-[calc(var(--bottomnav-h,0px)+1rem)]' : '';
+    mode === 'reel' && isMobile ? 'pb-[var(--bottomnav-h,0px)]' : '';
 
   return (
     <section

@@ -114,7 +114,7 @@ html {
 
 /* Optimize performance for fullpage scrolling */
 .fullpage-section {
-  height: calc(100vh - var(--topbar-h, 0px) - var(--mainnav-h, 0px)) !important;
+  height: calc(100vh - var(--topbar-h) - var(--mainnav-h)) !important;
   will-change: transform;
   backface-visibility: hidden;
   transform-style: preserve-3d;

@@ -9,18 +9,18 @@ export default function HeroReel() {
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto px-4">
         {/* Left: Text and CTAs */}
         <div className="text-center lg:text-left">
-          <p className="text-gray-300 text-sm sm:text-base mb-3 font-medium">
+          <p className="text-gray-300 text-sm sm:text-base pb-3 font-medium">
             Serving Coimbatore & Palakkad • 10+ Years Trusted
           </p>
-          <h1 className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4">
+          <h1 className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight pb-4">
             Expert Mobile & Laptop Repairs
           </h1>
-          <p className="text-gray-200 text-lg sm:text-xl mb-6 max-w-lg mx-auto lg:mx-0">
+          <p className="text-gray-200 text-lg sm:text-xl pb-6 max-w-lg mx-auto lg:mx-0">
             Same-day repairs • Free pickup & delivery • 90-day warranty
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-6">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pb-6">
             <Link
               to="/repair"
               className="bg-gray-900 text-white px-8 py-4 rounded-lg font-semibold hover:bg-yellow-400 hover:text-gray-900 transition-colors"

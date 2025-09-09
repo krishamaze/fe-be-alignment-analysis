@@ -47,6 +47,7 @@ function PublicLayoutInner() {
           className={`flex-1 min-h-0 ${mode === 'reel' ? 'overflow-hidden' : 'overflow-y-auto'}`}
           style={{
             paddingBottom: isMobile ? 'var(--bottomnav-h, 56px)' : '0',
+            paddingTop: 'calc(var(--topbar-h,0px) + var(--mainnav-h,0px))',
             scrollPaddingTop:
               'calc(var(--topbar-h,0px) + var(--mainnav-h,0px))',
           }}
