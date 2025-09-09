@@ -16,3 +16,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve desktop reel navigation by normalizing wheel sensitivity, attaching wheel listeners only on desktop devices, and preventing default only after significant wheel movement.
 - Remove root scroll snapping to let `PageWrapper` control scroll behavior.
 - Add missing favicon asset and update reference in `index.html`.
+- Fetch users via RTK Query with built-in pagination.
+- Lazy-load route components to reduce initial bundle size.

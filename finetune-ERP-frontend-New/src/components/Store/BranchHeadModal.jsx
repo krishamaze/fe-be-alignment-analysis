@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '@/redux/hook';
-import { getUsers } from '../../api/user';
+import { useAppDispatch } from '@/redux/hook';
+import { useGetUsersQuery } from '@/api/erpApi';
 import {
   assignBranchHeadToStore,
   unassignBranchHeadFromStore,
@@ -9,16 +9,16 @@ import toast from 'react-hot-toast';
 
 const BranchHeadModal = ({ isOpen, onClose, store }) => {
   const dispatch = useAppDispatch();
-  const { userData } = useAppSelector((state) => state.user);
+  const { data } = useGetUsersQuery({ role: 'branch_head' }, { skip: !isOpen });
+  const userData = data?.content ?? [];
   const [selectedUserId, setSelectedUserId] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
-      dispatch(getUsers({ role: 'branch_head' }));
       setSelectedUserId(store?.branch_head || '');
     }
-  }, [isOpen, dispatch, store]);
+  }, [isOpen, store]);
 
   if (!isOpen) return null;
 
