@@ -6,7 +6,7 @@ export default function HeroReel() {
   const slides = [
     <div key="hero" className="relative flex items-center h-full">
       <div className="absolute inset-0 bg-black/60" />
-      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto px-4">
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto px-4">
         {/* Left: Text and CTAs */}
         <div className="text-center lg:text-left">
           <p className="text-gray-300 text-sm sm:text-base mb-3 font-medium">
@@ -15,12 +15,12 @@ export default function HeroReel() {
           <h1 className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4">
             Expert Mobile & Laptop Repairs
           </h1>
-          <p className="text-gray-200 text-lg sm:text-xl mb-8 max-w-lg mx-auto lg:mx-0">
+          <p className="text-gray-200 text-lg sm:text-xl mb-6 max-w-lg mx-auto lg:mx-0">
             Same-day repairs • Free pickup & delivery • 90-day warranty
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-6">
             <Link
               to="/repair"
               className="bg-gray-900 text-white px-8 py-4 rounded-lg font-semibold hover:bg-yellow-400 hover:text-gray-900 transition-colors"
@@ -36,7 +36,7 @@ export default function HeroReel() {
           </div>
 
           {/* Trust indicators */}
-          <div className="flex items-center gap-6 text-gray-300 text-sm justify-center lg:justify-start">
+          <div className="flex items-center gap-4 text-gray-300 text-sm justify-center lg:justify-start">
             <div className="flex items-center gap-1">
               <span className="text-yellow-400">★</span>
               <span>4.6/5 rating</span>
@@ -60,7 +60,7 @@ export default function HeroReel() {
   ];
 
   return (
-    <section className="snap-start fullpage-section overflow-hidden bg-gradient-to-r from-black via-amber-600/30 to-yellow-400/40">
+    <section className="snap-start fullpage-section overflow-hidden bg-gradient-to-b from-black via-amber-600/30 to-yellow-400/40">
       <MultiSlideReel reelId="hero" showHint={false}>
         {slides}
       </MultiSlideReel>

@@ -35,8 +35,8 @@ export default function QuickActionsReel() {
   ];
   const slides = [
     <div key="repairs" className="h-full flex">
-      <div className="max-w-5xl mx-auto w-full h-full px-4 flex flex-col items-center justify-center gap-12">
-        <div className="text-center space-y-4">
+      <div className="max-w-5xl mx-auto w-full h-full px-4 flex flex-col items-center justify-center gap-8">
+        <div className="text-center space-y-2">
           <h2 className="text-3xl font-bold text-gray-900">
             Most Popular Repairs
           </h2>
@@ -51,7 +51,7 @@ export default function QuickActionsReel() {
             return (
               <div
                 key={title}
-                className="bg-white shadow-sm hover:shadow-lg transition-transform duration-300 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 space-y-4"
+                className="bg-white shadow-sm hover:shadow-lg transition-transform duration-300 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 space-y-3"
               >
                 <Icon className={`w-12 h-12 ${color}`} />
                 <h3 className="text-lg font-semibold">{title}</h3>
@@ -81,7 +81,7 @@ export default function QuickActionsReel() {
   ];
 
   return (
-    <section className="snap-start fullpage-section overflow-hidden bg-gray-50">
+    <section className="snap-start fullpage-section overflow-hidden bg-gradient-to-b from-yellow-400/40 to-gray-50">
       <MultiSlideReel reelId="quickActions" showHint={false}>
         {slides}
       </MultiSlideReel>
