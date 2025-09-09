@@ -35,7 +35,7 @@ function TestimonialSlide({ testimonial }) {
   return (
     <div className="w-full flex items-center justify-center px-4">
       <div className="max-w-2xl mx-auto">
-        <div className="bg-gray-50 rounded-2xl p-8 shadow-lg flex flex-col items-center text-center space-y-6">
+        <div className="bg-gray-50 rounded-2xl p-6 shadow-lg flex flex-col items-center text-center space-y-4">
           <div className="flex justify-center">
             {[...Array(5)].map((_, i) => (
               <span key={i} className="text-yellow-400 text-xl">
@@ -66,8 +66,8 @@ export default function TestimonialsReel() {
   ));
 
   return (
-    <section className="snap-start fullpage-section overflow-hidden bg-white">
-      <div className="h-full flex flex-col items-center justify-center gap-8 px-4">
+    <section className="snap-start fullpage-section overflow-hidden bg-gradient-to-b from-gray-50 to-white">
+      <div className="h-full flex flex-col items-center justify-center gap-6 px-4">
         <div className="text-center space-y-2">
           <h2 className="text-3xl font-bold text-gray-900">
             What Our Customers Say

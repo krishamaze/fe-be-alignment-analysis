@@ -17,6 +17,8 @@
   press, or swipe advances exactly one reel using `requestAnimationFrame` over a
   600ms `easeInOutCubic` animation and respects `prefers-reduced-motion`.
 - `TestimonialsReel` cycles through customer testimonials.
+- Consecutive reels use vertical gradient backgrounds and reduced vertical gaps
+  so each carousel fits comfortably within a single viewport.
 
 ## Booking Form
 
