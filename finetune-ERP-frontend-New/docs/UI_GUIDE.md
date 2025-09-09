@@ -54,7 +54,7 @@ Dark mode is enabled via `class` strategy. Toggle a `dark` class on the root ele
 | `Loader`                                        | `src/components/common`           | full-screen loading spinner                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `PageSection`                                   | `src/components/common`           | semantic wrapper that uses `h-full` in reel mode and `min-h-screen` otherwise; adds mobile bottom padding in reel mode                                                                                                                                                                                                                                                                                                                                       |
 |                                                 |
-| `PageWrapper`                                   | `src/components/layout`           | sets scroll mode (`reel` or `scroll`); in reel mode provides the scroll container and offsets for navigation; sections should fill the viewport                                                                                                                                                                                                                                                                                                              |
+| `PageWrapper`                                   | `src/components/layout`           | sets scroll mode (`reel` or `scroll`); in reel mode provides the scroll container; sections should fill the viewport                                                                                                                                                                                                                                                                                                              |
 | `MultiSlideReel`                                | `src/components/layout`           | horizontally scrollable reel with session-aware swipe hints, debounced slide detection, CSS scroll snapping, ScrollModeContext integration, and RTL support                                                                                                                                                                                                                                                                                                                             |
 |                                                 |
 
@@ -71,7 +71,7 @@ On desktop, a `Footer` stays hidden until about 85% scroll, then slides into vie
 
 ### Reel layout notes
 
-- `PageWrapper` sets its container height to `calc(100vh - var(--topbar-h) - var(--mainnav-h))` and adds bottom padding equal to `--bottomnav-h`.
+- `PageWrapper` uses a full-viewport container.
 - `PageSection` applies bottom padding via `--bottomnav-h` when in reel mode on mobile.
 
 ### Viewport units

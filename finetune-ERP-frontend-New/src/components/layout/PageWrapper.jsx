@@ -13,7 +13,7 @@ export default function PageWrapper({ mode = 'scroll', children }) {
       <div
         className="overflow-hidden"
         style={{
-          height: 'calc(100vh - var(--topbar-h) - var(--mainnav-h))',
+          height: '100dvh',
         }}
       >
         <div
@@ -23,7 +23,6 @@ export default function PageWrapper({ mode = 'scroll', children }) {
           style={{
             scrollBehavior: 'auto',
             scrollSnapStop: 'always',
-            paddingBottom: 'var(--bottomnav-h, 0px)',
           }}
         >
           {children}
@@ -32,14 +31,5 @@ export default function PageWrapper({ mode = 'scroll', children }) {
     );
   }
 
-  return (
-    <div
-      className="min-h-screen"
-      style={{
-        paddingTop: 'calc(var(--topbar-h, 0px) + var(--mainnav-h, 0px))',
-      }}
-    >
-      {children}
-    </div>
-  );
+  return <div className="min-h-screen">{children}</div>;
 }
