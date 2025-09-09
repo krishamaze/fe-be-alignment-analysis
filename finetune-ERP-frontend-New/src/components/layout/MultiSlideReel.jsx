@@ -1,16 +1,23 @@
 import { useState, useEffect, useRef, useCallback, Children } from 'react';
 import { useScrollMode } from './ScrollModeContext';
 
-const easeInOutCubic = (t) =>
-  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
 const safeSessionStorage = {
-  getItem: (key) =>
-    typeof window !== 'undefined' ? sessionStorage.getItem(key) : null,
-  setItem: (key, value) =>
-    typeof window !== 'undefined'
-      ? sessionStorage.setItem(key, value)
-      : undefined,
+  getItem: (key) => {
+    try {
+      return typeof window !== 'undefined' ? sessionStorage.getItem(key) : null;
+    } catch {
+      return null;
+    }
+  },
+  setItem: (key, value) => {
+    try {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem(key, value);
+      }
+    } catch {
+      /* noop */
+    }
+  },
 };
 
 function SwipeHint({ show, onHide, reelId }) {
@@ -36,17 +43,16 @@ export default function MultiSlideReel({
   children,
   reelId,
   showHint = true,
-  enableCustomEasing = false,
   className = '',
   style = {},
 }) {
   const { setMode } = useScrollMode();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showHintOverlay, setShowHintOverlay] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
   const containerRef = useRef(null);
   const slideRefs = useRef([]);
   const observerRef = useRef(null);
+  const currentSlideRef = useRef(0);
 
   const slides = Children.toArray(children);
   const hasMultipleSlides = slides.length > 1;
@@ -63,6 +69,10 @@ export default function MultiSlideReel({
   }, [showHint, hasMultipleSlides, reelId]);
 
   useEffect(() => {
+    currentSlideRef.current = currentSlide;
+  }, [currentSlide]);
+
+  useEffect(() => {
     if (
       !hasMultipleSlides ||
       !containerRef.current ||
@@ -70,19 +80,12 @@ export default function MultiSlideReel({
     )
       return;
 
-    if (observerRef.current) {
-      slideRefs.current.forEach((slide) => {
-        if (slide) observerRef.current.unobserve(slide);
-      });
-      observerRef.current.disconnect();
-    }
-
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
             const slideIndex = parseInt(entry.target.dataset.slideIndex);
-            if (slideIndex !== currentSlide && !isAnimating) {
+            if (slideIndex !== currentSlideRef.current) {
               setCurrentSlide(slideIndex);
             }
           }
@@ -91,67 +94,25 @@ export default function MultiSlideReel({
       { root: containerRef.current, threshold: [0.6], rootMargin: '0px' }
     );
 
+    const observer = observerRef.current;
     slideRefs.current.forEach((slide) => {
-      if (slide) observerRef.current.observe(slide);
+      if (slide) observer.observe(slide);
     });
 
     return () => {
-      if (observerRef.current) {
-        slideRefs.current.forEach((slide) => {
-          if (slide) observerRef.current.unobserve(slide);
-        });
-        observerRef.current.disconnect();
-      }
-    };
-  }, [hasMultipleSlides, currentSlide, isAnimating]);
-
-  const scrollToSlideWithEasing = useCallback(
-    (targetIndex, duration = 600) => {
-      if (!containerRef.current || isAnimating) return;
-
-      const container = containerRef.current;
-      const slideWidth = container.clientWidth;
-      const targetScroll = targetIndex * slideWidth;
-      const startScroll = container.scrollLeft;
-      const distance = targetScroll - startScroll;
-      const startTime = performance.now();
-
-      setIsAnimating(true);
-
-      const animateScroll = (currentTime) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const easedProgress = easeInOutCubic(progress);
-
-        container.scrollLeft = startScroll + distance * easedProgress;
-
-        if (progress < 1) {
-          requestAnimationFrame(animateScroll);
-        } else {
-          setCurrentSlide(targetIndex);
-          setIsAnimating(false);
-        }
-      };
-
-      requestAnimationFrame(animateScroll);
-    },
-    [isAnimating]
-  );
-
-  const scrollToSlide = useCallback(
-    (index) => {
-      if (!containerRef.current || isAnimating) return;
-      containerRef.current.scrollTo({
-        left: index * containerRef.current.clientWidth,
-        behavior: 'smooth',
+      slideRefs.current.forEach((slide) => {
+        if (slide) observer.unobserve(slide);
       });
-    },
-    [isAnimating]
-  );
-
-  const handleScrollToSlide = enableCustomEasing
-    ? scrollToSlideWithEasing
-    : scrollToSlide;
+      observer.disconnect();
+    };
+  }, [hasMultipleSlides]);
+  const scrollToSlide = useCallback((index) => {
+    if (!containerRef.current) return;
+    containerRef.current.scrollTo({
+      left: index * containerRef.current.clientWidth,
+      behavior: 'smooth',
+    });
+  }, []);
 
   if (!hasMultipleSlides) {
     return (
@@ -165,18 +126,14 @@ export default function MultiSlideReel({
     <div className={`relative h-full ${className}`} style={style}>
       <div
         ref={containerRef}
-        className={`h-full overflow-x-auto flex ${
-          enableCustomEasing ? '' : 'snap-x snap-mandatory'
-        }`}
+        className="h-full overflow-x-auto flex snap-x snap-mandatory"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {slides.map((slide, index) => (
           <div
             key={index}
             ref={(el) => (slideRefs.current[index] = el)}
-            className={`w-full flex-shrink-0 ${
-              enableCustomEasing ? '' : 'snap-start-x'
-            }`}
+            className="w-full flex-shrink-0 snap-start-x"
             data-slide-index={index}
           >
             {slide}
@@ -200,15 +157,14 @@ export default function MultiSlideReel({
         {slides.map((_, index) => (
           <button
             key={index}
-            disabled={isAnimating}
             role="tab"
             aria-selected={currentSlide === index}
             className={`w-4 h-4 min-w-[44px] min-h-[44px] rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 flex items-center justify-center ${
               currentSlide === index
                 ? 'bg-secondary scale-125'
-                : 'bg-gray-300 hover:bg-gray-400 disabled:opacity-50'
+                : 'bg-gray-300 hover:bg-gray-400'
             }`}
-            onClick={() => handleScrollToSlide(index)}
+            onClick={() => scrollToSlide(index)}
             aria-label={`Go to slide ${index + 1} of ${slides.length}`}
           >
             <span className="sr-only">Slide {index + 1}</span>

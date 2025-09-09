@@ -11,6 +11,7 @@ const ResponsivePaginationHandler = ({
 }) => {
   const [isMobile, setIsMobile] = useState(false);
   const loadingRef = useRef(false);
+  const sentinelRef = useRef(null);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -19,44 +20,37 @@ const ResponsivePaginationHandler = ({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const isAtBottom = () => {
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    const windowHeight = window.innerHeight;
-    const fullHeight = document.documentElement.scrollHeight;
-    return scrollTop + windowHeight >= fullHeight - 2; // small offset
-  };
-
   useEffect(() => {
-    if (!isMobile) return;
+    if (!isMobile || !sentinelRef.current) return;
 
-    const onScroll = () => {
-      if (isAtBottom() && !loadingRef.current && size < totalElements) {
-        loadingRef.current = true;
-        onMobilePageChange(size + 10);
-      }
-    };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (
+          entry.isIntersecting &&
+          !loadingRef.current &&
+          size < totalElements
+        ) {
+          loadingRef.current = true;
+          onMobilePageChange(size + 10);
+        }
+      });
+    });
 
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
   }, [isMobile, size, totalElements, onMobilePageChange]);
 
   useEffect(() => {
     loadingRef.current = false;
-
-    const timeout = setTimeout(() => {
-      if (isMobile && isAtBottom() && size < totalElements) {
-        loadingRef.current = true;
-        onMobilePageChange(size + 10);
-      }
-    }, 200); // delay after render
-
-    return () => clearTimeout(timeout);
-  }, [size, isMobile, totalElements, onMobilePageChange]);
+  }, [size]);
 
   return (
     <>
       {isMobile ? (
-        <div className="h-10 w-full flex justify-center items-center">
+        <div
+          ref={sentinelRef}
+          className="h-10 w-full flex justify-center items-center"
+        >
           {size < totalElements ? (
             <span className="text-gray-400 text-sm">
               Scroll to load more...

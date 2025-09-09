@@ -76,7 +76,6 @@ export default function TestimonialsReel() {
         reelId="testimonials"
         className="pt-20"
         showHint={true}
-        enableCustomEasing={true}
       >
         {testimonials.map((testimonial) => (
           <TestimonialSlide key={testimonial.id} testimonial={testimonial} />
