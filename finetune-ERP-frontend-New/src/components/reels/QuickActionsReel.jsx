@@ -33,52 +33,57 @@ export default function QuickActionsReel() {
       color: 'text-yellow-500',
     },
   ];
+  const slides = [
+    <div key="repairs" className="h-full flex items-center">
+      <div className="max-w-5xl mx-auto w-full px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Most Popular Repairs
+          </h2>
+          <p className="text-lg text-gray-600">
+            Transparent pricing • Same-day service • 90-day warranty
+          </p>
+        </div>
+
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-3 place-items-stretch">
+          {repairs.map(({ icon, title, price, description, link, color }) => {
+            const Icon = icon;
+            return (
+              <div
+                key={title}
+                className="bg-white shadow-sm hover:shadow-lg transition-transform duration-300 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105"
+              >
+                <Icon className={`w-12 h-12 ${color} mb-4`} />
+                <h3 className="text-lg font-semibold mb-2">{title}</h3>
+                <p className="text-3xl font-bold mb-2">{price}</p>
+                <p className="text-gray-600 mb-6">{description}</p>
+                <Link
+                  to={link}
+                  className="min-h-[44px] inline-flex items-center justify-center px-5 py-2 rounded-lg bg-gray-900 text-white font-medium hover:bg-yellow-400 hover:text-gray-900 transition-colors"
+                >
+                  Book Now
+                </Link>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="text-center mt-12">
+          <Link
+            to="/repair"
+            className="text-gray-900 hover:text-yellow-600 font-medium text-lg"
+          >
+            View all repair services →
+          </Link>
+        </div>
+      </div>
+    </div>,
+  ];
 
   return (
-    <section className="snap-start fullpage-section relative overflow-hidden bg-gray-50 flex items-center">
+    <section className="snap-start fullpage-section overflow-hidden bg-gray-50">
       <MultiSlideReel reelId="quickActions" showHint={false}>
-        <div className="max-w-5xl mx-auto w-full px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Most Popular Repairs
-            </h2>
-            <p className="text-lg text-gray-600">
-              Transparent pricing • Same-day service • 90-day warranty
-            </p>
-          </div>
-
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-3 place-items-stretch">
-            {repairs.map(({ icon, title, price, description, link, color }) => {
-              const Icon = icon;
-              return (
-                <div
-                  key={title}
-                  className="bg-white shadow-sm hover:shadow-lg transition-transform duration-300 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105"
-                >
-                  <Icon className={`w-12 h-12 ${color} mb-4`} />
-                  <h3 className="text-lg font-semibold mb-2">{title}</h3>
-                  <p className="text-3xl font-bold mb-2">{price}</p>
-                  <p className="text-gray-600 mb-6">{description}</p>
-                  <Link
-                    to={link}
-                    className="min-h-[44px] inline-flex items-center justify-center px-5 py-2 rounded-lg bg-gray-900 text-white font-medium hover:bg-yellow-400 hover:text-gray-900 transition-colors"
-                  >
-                    Book Now
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="text-center mt-12">
-            <Link
-              to="/repair"
-              className="text-gray-900 hover:text-yellow-600 font-medium text-lg"
-            >
-              View all repair services →
-            </Link>
-          </div>
-        </div>
+        {slides}
       </MultiSlideReel>
     </section>
   );
