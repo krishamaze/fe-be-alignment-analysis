@@ -34,19 +34,19 @@ const testimonials = [
 function TestimonialSlide({ testimonial }) {
   return (
     <div className="w-full flex items-center justify-center px-4">
-      <div className="max-w-2xl mx-auto text-center">
-        <div className="bg-gray-50 rounded-2xl p-8 shadow-lg">
-          <div className="flex justify-center mb-4">
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-gray-50 rounded-2xl p-8 shadow-lg flex flex-col items-center text-center space-y-6">
+          <div className="flex justify-center">
             {[...Array(5)].map((_, i) => (
               <span key={i} className="text-yellow-400 text-xl">
                 ★
               </span>
             ))}
           </div>
-          <blockquote className="text-xl text-gray-900 mb-6 leading-relaxed">
+          <blockquote className="text-xl text-gray-900 leading-relaxed">
             "{testimonial.text}"
           </blockquote>
-          <div className="text-center">
+          <div>
             <p className="font-semibold text-gray-900 text-lg">
               {testimonial.author}
             </p>
@@ -66,19 +66,25 @@ export default function TestimonialsReel() {
   ));
 
   return (
-    <section className="snap-start fullpage-section relative overflow-hidden bg-white">
-      <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-10">
-        <h2 className="text-3xl font-bold text-gray-900 text-center">
-          What Our Customers Say
-        </h2>
-        <p className="text-gray-600 text-center mt-2">
-          Real feedback from customers across Coimbatore & Palakkad
-        </p>
-      </div>
+    <section className="snap-start fullpage-section overflow-hidden bg-white">
+      <div className="h-full flex flex-col items-center justify-center gap-8 px-4">
+        <div className="text-center space-y-2">
+          <h2 className="text-3xl font-bold text-gray-900">
+            What Our Customers Say
+          </h2>
+          <p className="text-gray-600">
+            Real feedback from customers across Coimbatore & Palakkad
+          </p>
+        </div>
 
-      <MultiSlideReel reelId="testimonials" className="pt-20" showHint>
-        {slides}
-      </MultiSlideReel>
+        <MultiSlideReel
+          reelId="testimonials"
+          showHint
+          className="w-full flex-1"
+        >
+          {slides}
+        </MultiSlideReel>
+      </div>
     </section>
   );
 }
