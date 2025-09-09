@@ -28,6 +28,7 @@ export const erpApi = createApi({
     'Serial',
     'PriceLog',
     'InventoryConfig',
+    'User',
   ],
   endpoints: (builder) => ({
     getBrands: builder.query({
@@ -83,6 +84,10 @@ export const erpApi = createApi({
         method: 'DELETE',
       }),
       invalidatesTags: ['Store'],
+    }),
+    getUsers: builder.query({
+      query: (params) => ({ url: END_POINTS.GET_USERS, params }),
+      providesTags: ['User'],
     }),
     getSpares: builder.query({
       query: () => ({ url: END_POINTS.GET_SPARES }),
@@ -506,6 +511,7 @@ export const {
   useCreateBrandMutation,
   useUpdateBrandMutation,
   useDeleteBrandMutation,
+  useGetUsersQuery,
   useGetStoresQuery,
   useCreateStoreMutation,
   useUpdateStoreMutation,

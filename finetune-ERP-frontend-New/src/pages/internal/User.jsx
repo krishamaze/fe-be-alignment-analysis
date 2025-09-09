@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import {
-  getUsers,
   modifyUserStatus,
   softDeleteUser,
   updateUser,
+  createUser,
 } from '../../api/user';
 import NoDataFound from '@/assets/images/NoDataFound.png';
 import toast from 'react-hot-toast';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { getStores } from '../../api/store';
-import { createUser } from '../../api/user';
 import { MESSAGE } from '@/utils/Constants';
 import Loader from '@/components/common/Loader';
 import { MdToggleOff, MdToggleOn } from 'react-icons/md';
@@ -19,18 +18,15 @@ import ResponsivePaginationHandler from '@/components/ResponsivePaginationHandle
 import { FaEdit, FaUserTie } from 'react-icons/fa';
 import { FaBuildingUser } from 'react-icons/fa6';
 import StoreAssignModal from '@/components/Store/StoreAssignModal';
+import { useGetUsersQuery } from '@/api/erpApi';
 
 const UserList = () => {
   const dispatch = useAppDispatch();
   const { isLoading } = useAppSelector((state) => state?.user);
-  const { userData } = useAppSelector((state) => state?.user);
   const [isEdit, setIsEdit] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   // const { stores } = useAppSelector((state) => state?.store);
-  const { totalPages, currentPage, totalElements, pageSize } = useAppSelector(
-    (state) => state?.user
-  );
   const [showToggle, setShowToggle] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [storeAssignModal, setStoreAssignModal] = useState(false);
@@ -52,10 +48,28 @@ const UserList = () => {
     search: '',
   });
 
+  const {
+    data: usersResponse,
+    isFetching,
+    refetch,
+  } = useGetUsersQuery(pagination);
+  const userData = usersResponse?.content ?? [];
+  const totalPages = usersResponse?.totalPages ?? 0;
+  const currentPage = usersResponse?.pageable?.pageNumber
+    ? usersResponse.pageable.pageNumber + 1
+    : 0;
+  const totalElements = usersResponse?.totalElements ?? 0;
+  const pageSize = usersResponse?.pageable?.pageSize ?? pagination.size;
+
   useEffect(() => {
-    dispatch(getUsers(pagination));
     dispatch(getStores());
-  }, [pagination, dispatch, storeAssignModal]);
+  }, [dispatch, storeAssignModal]);
+
+  useEffect(() => {
+    if (!storeAssignModal) {
+      refetch();
+    }
+  }, [storeAssignModal, refetch]);
 
   const generateRandomString = (length) => {
     const chars = 'abcdefghijklmnopqrstuvwxyz';
@@ -122,7 +136,7 @@ const UserList = () => {
           if (response.meta.requestStatus === 'fulfilled') {
             toast.success(MESSAGE.USER_UPDATED);
             handleClose();
-            dispatch(getUsers(pagination));
+            refetch();
             dispatch(getStores());
           } else {
             toast.error('BAD REQUEST');
@@ -140,7 +154,7 @@ const UserList = () => {
           if (response.meta.requestStatus === 'fulfilled') {
             toast.success(MESSAGE.USER_CREATED);
             handleClose();
-            dispatch(getUsers());
+            refetch();
             dispatch(getStores());
           } else {
             toast.error('BAD REQUEST');
@@ -203,7 +217,7 @@ const UserList = () => {
         if (response.meta.requestStatus === 'fulfilled') {
           toast.success(MESSAGE.USER_STATUS_UPDATED);
           dispatch(getStores());
-          dispatch(getUsers(pagination));
+          refetch();
           handleClose();
         } else {
           toast.error('BAD REQUEST');
@@ -225,7 +239,7 @@ const UserList = () => {
         if (response.meta.requestStatus === 'fulfilled') {
           toast.success(MESSAGE.USER_DELETED);
           dispatch(getStores());
-          dispatch(getUsers());
+          refetch();
           handleClose();
         } else {
           toast.error('BAD REQUEST');
@@ -271,7 +285,7 @@ const UserList = () => {
     <div className="relative">
       {!isEdit && (
         <div className="p-6">
-          {isLoading && <Loader />}
+          {(isLoading || isFetching) && <Loader />}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full sm:w-auto">
               <div className="flex items-center justify-between sm:justify-start w-full sm:w-auto">

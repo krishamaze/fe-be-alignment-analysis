@@ -2,20 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { baseQueryWithReauth } from './baseQuery';
 import END_POINTS from '@/utils/Endpoints';
 
-export const getUsers = createAsyncThunk(
-  'user/getUsers',
-  async (params, thunkAPI) => {
-    const result = await baseQueryWithReauth(
-      { url: `${END_POINTS.GET_USERS}`, method: 'GET', params },
-      thunkAPI
-    );
-    if (result.error) {
-      return thunkAPI.rejectWithValue(result.error.data || result.error.status);
-    }
-    return result.data;
-  }
-);
-
 export const createUser = createAsyncThunk(
   'user/createUser',
   async (requestBody, thunkAPI) => {
