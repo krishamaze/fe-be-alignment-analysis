@@ -44,7 +44,7 @@ function PublicLayoutInner() {
         <MainNav />
 
         <main
-          className={`flex-1 min-h-0 ${mode === 'reel' ? '' : 'overflow-y-auto'}`}
+          className={`flex-1 min-h-0 ${mode === 'reel' ? 'overflow-hidden' : 'overflow-y-auto'}`}
           style={{
             paddingBottom: isMobile ? 'var(--bottomnav-h, 56px)' : '0',
             scrollPaddingTop:
