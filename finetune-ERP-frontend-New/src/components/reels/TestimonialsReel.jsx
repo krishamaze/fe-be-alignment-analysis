@@ -61,6 +61,10 @@ function TestimonialSlide({ testimonial }) {
 }
 
 export default function TestimonialsReel() {
+  const slides = testimonials.map((testimonial) => (
+    <TestimonialSlide key={testimonial.id} testimonial={testimonial} />
+  ));
+
   return (
     <section className="snap-start fullpage-section relative overflow-hidden bg-white">
       <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-10">
@@ -72,14 +76,8 @@ export default function TestimonialsReel() {
         </p>
       </div>
 
-      <MultiSlideReel
-        reelId="testimonials"
-        className="pt-20"
-        showHint={true}
-      >
-        {testimonials.map((testimonial) => (
-          <TestimonialSlide key={testimonial.id} testimonial={testimonial} />
-        ))}
+      <MultiSlideReel reelId="testimonials" className="pt-20" showHint>
+        {slides}
       </MultiSlideReel>
     </section>
   );
