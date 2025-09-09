@@ -10,7 +10,12 @@ export default function PageWrapper({ mode = 'scroll', children }) {
 
   if (mode === 'reel') {
     return (
-      <div className="h-full overflow-hidden">
+      <div
+        className="overflow-hidden"
+        style={{
+          height: 'calc(100vh - var(--topbar-h) - var(--mainnav-h))',
+        }}
+      >
         <div
           className="h-full overflow-y-auto snap-y snap-mandatory fullpage-scrolling"
           data-scroll-container="true"
@@ -18,7 +23,7 @@ export default function PageWrapper({ mode = 'scroll', children }) {
           style={{
             scrollBehavior: 'auto',
             scrollSnapStop: 'always',
-            paddingTop: 'calc(var(--topbar-h, 0px) + var(--mainnav-h, 0px))',
+            paddingBottom: 'var(--bottomnav-h, 0px)',
           }}
         >
           {children}

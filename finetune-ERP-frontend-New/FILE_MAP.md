@@ -9,3 +9,4 @@
 - `src/components/layout/PageWrapper.jsx` – wraps pages, sets scroll mode, and provides the scroll container in reel mode.
 - `src/index.css` – global styles, including navigation offsets and fullpage scroll behavior.
 - `public/favicon.svg` – site favicon.
+- `src/components/common/PageSection.jsx` – semantic section wrapper that fills the viewport and applies mobile bottom padding in reel mode.
