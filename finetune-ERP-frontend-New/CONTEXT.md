@@ -65,6 +65,13 @@
 * FE deps install; build path OK
 * Postgres ready; JWT & CORS configured
 
+**Detective Mode Protocol Status:**
+- ✅ Evidence Collection: Setup logs analyzed
+- ✅ Context Documentation: This file created  
+- 🔄 Security Remediation: npm audit + pyproject.toml fixes in progress
+- 📋 Validation Automation: Pending CI integration
+- 📋 Research Pipeline: Pending documentation integration
+
 ## 7) Validation Commands (copy/paste)
 
 **Backend**
@@ -115,3 +122,27 @@ pip install pip-audit && pip-audit
 3. **Prune env noise** (delete unknown `http-proxy` var; move setup-only vars to Provisioning.md).
 4. **Lock DEBUG off in prod** (assert in settings).
 5. **Add minimal “Platform Health” CI** (audit + tests on PRs).
+
+**Research Resources (for AI context):**
+- Django 5.2 docs: https://docs.djangoproject.com/en/5.2/
+- React 19 docs: https://react.dev/
+- Vite docs: https://vite.dev/
+- npm audit docs: https://docs.npmjs.com/cli/v10/commands/npm-audit
+
+## 11) Pattern Recognition & Learnings
+**Recently Solved Issues:**
+*[Auto-updated after each task completion]*
+
+**Common Error Patterns:**
+- npm security vulnerabilities → `npm audit fix` workflow
+- Django migration issues → `migrate --plan` first
+- CORS errors → check ALLOWED_HOSTS + CORS_ALLOWED_ORIGINS
+
+**Performance Patterns:**
+*[Will be populated as patterns emerge]*
+
+## 12) Change History
+**Last Updated:** 2025-09-11 10:07 AM IST
+**Updated By:** Detective Mode Protocol - Security audit task
+**Key Changes:** Initial creation, identified critical npm vulnerabilities
+**Next Update Trigger:** After security fix completion
