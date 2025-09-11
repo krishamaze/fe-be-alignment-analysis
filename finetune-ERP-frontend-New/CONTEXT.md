@@ -51,12 +51,12 @@
 
 **Critical**
 
-* **Frontend security audit:** 11 npm vulns (incl. critical) → fix/replace; remove deprecated packages (`rimraf@3`, `inflight@1.0.6`, `glob@7`).
-* **Backend build config:** root `pyproject.toml` invalid (missing `[build-system]`, `name`) → fix to unblock tooling.
+* _None_ – npm audit reports **0 vulnerabilities** after upgrading transitive deps (`rimraf` 5, `glob` 10) and removing deprecated packages (`redux-toolkit`, `@lhci/cli`).
+* Backend build config fixed: root `pyproject.toml` now includes `[build-system]` and project metadata.
 
 **Config Cleanup**
 
-* Vite/npm warning: unknown env key `http-proxy` → remove/rename if unused.
+* Removed unknown env key `http-proxy` to silence npm warning.
 * Running pip as root in container is expected; no action.
 
 **Working**
@@ -67,8 +67,8 @@
 
 **Detective Mode Protocol Status:**
 - ✅ Evidence Collection: Setup logs analyzed
-- ✅ Context Documentation: This file created  
-- 🔄 Security Remediation: npm audit + pyproject.toml fixes in progress
+- ✅ Context Documentation: This file created
+- ✅ Security Remediation: npm audit + pyproject fixes completed
 - 📋 Validation Automation: Pending CI integration
 - 📋 Research Pipeline: Pending documentation integration
 
@@ -117,11 +117,8 @@ pip install pip-audit && pip-audit
 
 ## 10) Next Priorities (do in order)
 
-1. **Fix npm vulns** (pin/upgrade; remove deprecated transitive deps; consider `npm dedupe`).
-2. **Repair `pyproject.toml`** (add `[build-system]`, minimal metadata).
-3. **Prune env noise** (delete unknown `http-proxy` var; move setup-only vars to Provisioning.md).
-4. **Lock DEBUG off in prod** (assert in settings).
-5. **Add minimal “Platform Health” CI** (audit + tests on PRs).
+1. **Lock DEBUG off in prod** (assert in settings).
+2. **Add minimal “Platform Health” CI** (audit + tests on PRs).
 
 **Research Resources (for AI context):**
 - Django 5.2 docs: https://docs.djangoproject.com/en/5.2/
@@ -131,18 +128,23 @@ pip install pip-audit && pip-audit
 
 ## 11) Pattern Recognition & Learnings
 **Recently Solved Issues:**
-*[Auto-updated after each task completion]*
+- Resolved 11 frontend npm vulnerabilities; removed `redux-toolkit` & `@lhci/cli`; enforced `rimraf` 5 and `glob` 10 via overrides.
+- Added valid `pyproject.toml` with build-system and project metadata.
+- Cleared `http-proxy` env config causing npm warnings.
 
 **Common Error Patterns:**
 - npm security vulnerabilities → `npm audit fix` workflow
 - Django migration issues → `migrate --plan` first
 - CORS errors → check ALLOWED_HOSTS + CORS_ALLOWED_ORIGINS
 
+**Solution Patterns:**
+- Use `package.json` `overrides` to force updated transitive dependencies.
+
 **Performance Patterns:**
 *[Will be populated as patterns emerge]*
 
 ## 12) Change History
-**Last Updated:** 2025-09-11 10:07 AM IST
-**Updated By:** Detective Mode Protocol - Security audit task
-**Key Changes:** Initial creation, identified critical npm vulnerabilities
-**Next Update Trigger:** After security fix completion
+**Last Updated:** 2025-09-11 10:35 AM IST
+**Updated By:** Security remediation task
+**Key Changes:** Resolved npm vulnerabilities, added build metadata, removed env noise
+**Next Update Trigger:** After implementing DEBUG checks & CI
