@@ -74,6 +74,32 @@ SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
+# Additional security headers
+X_FRAME_OPTIONS = "DENY"
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "same-origin"
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin"
+X_XSS_PROTECTION = "1; mode=block"
+
+# Content Security Policy
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'")
+CSP_IMG_SRC = ("'self'", "data:")
+CSP_FONT_SRC = ("'self'", "data:")
+CSP_CONNECT_SRC = ("'self'",)
+CSP_REPORT_URI = os.environ.get("CSP_REPORT_URI")
+CSP_HEADER_VALUE = "; ".join(
+    [
+        f"default-src {' '.join(CSP_DEFAULT_SRC)}",
+        f"style-src {' '.join(CSP_STYLE_SRC)}",
+        f"script-src {' '.join(CSP_SCRIPT_SRC)}",
+        f"img-src {' '.join(CSP_IMG_SRC)}",
+        f"font-src {' '.join(CSP_FONT_SRC)}",
+        f"connect-src {' '.join(CSP_CONNECT_SRC)}",
+    ]
+)
+
 
 # ✅ Custom User
 AUTH_USER_MODEL = "accounts.CustomUser"
@@ -115,6 +141,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "corsheaders",
+    "csp",
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_simplejwt.token_blacklist",
@@ -135,6 +162,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "csp.middleware.CSPMiddleware",
+    "utils.middleware.SecurityHeadersMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",

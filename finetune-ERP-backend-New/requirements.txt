@@ -10,3 +10,4 @@ twilio==7.7.1
 weasyprint==66.0
 whitenoise==6.9.0
 psycopg2-binary>=2.9
+django-csp==4.0
