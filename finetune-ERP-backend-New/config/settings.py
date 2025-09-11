@@ -74,6 +74,31 @@ SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
+# Additional security headers
+X_FRAME_OPTIONS = "DENY"
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "same-origin"
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin"
+X_XSS_PROTECTION = "1; mode=block"
+
+# Content Security Policy
+CSP_DIRECTIVES = {
+    "default-src": ("'self'",),
+    "style-src": ("'self'",),
+    "script-src": ("'self'",),
+    "object-src": ("'none'",),
+    "base-uri": ("'self'",),
+    "form-action": ("'self'",),
+    "frame-ancestors": ("'none'",),
+    "img-src": ("'self'", "data:", "https:"),
+    "font-src": ("'self'", "data:"),
+    "connect-src": ("'self'",),
+}
+CONTENT_SECURITY_POLICY = {"DIRECTIVES": CSP_DIRECTIVES}
+csp_report = os.environ.get("CSP_REPORT_URI")
+if csp_report:
+    CONTENT_SECURITY_POLICY["REPORT_URI"] = csp_report
+
 
 # ✅ Custom User
 AUTH_USER_MODEL = "accounts.CustomUser"
@@ -115,6 +140,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "corsheaders",
+    "csp",
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_simplejwt.token_blacklist",
@@ -135,6 +161,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "csp.middleware.CSPMiddleware",
+    "utils.middleware.SecurityHeadersMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",

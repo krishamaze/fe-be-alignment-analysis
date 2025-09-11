@@ -8,6 +8,7 @@ Tip: use GitHub's repository search to quickly find topics across all docs.
 - [CI Guide](project/CI_GUIDE.md) – continuous integration setup and usage.
 - [SEO Guide](project/SEO_GUIDE.md) – search engine optimization practices.
 - [Workflow Guide](project/WORKFLOW_GUIDE.md) – booking workflow overview.
+- [Security Headers](project/SECURITY_HEADERS.md) – HTTP header configuration and validation.
 
 ## How-To Guides
 - [Customer Guide](how-to/CUSTOMER_GUIDE.md) – instructions aimed at end customers.
