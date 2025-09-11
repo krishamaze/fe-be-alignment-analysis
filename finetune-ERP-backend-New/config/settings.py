@@ -82,23 +82,22 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin"
 X_XSS_PROTECTION = "1; mode=block"
 
 # Content Security Policy
-CSP_DEFAULT_SRC = ("'self'",)
-CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
-CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'")
-CSP_IMG_SRC = ("'self'", "data:")
-CSP_FONT_SRC = ("'self'", "data:")
-CSP_CONNECT_SRC = ("'self'",)
-CSP_REPORT_URI = os.environ.get("CSP_REPORT_URI")
-CSP_HEADER_VALUE = "; ".join(
-    [
-        f"default-src {' '.join(CSP_DEFAULT_SRC)}",
-        f"style-src {' '.join(CSP_STYLE_SRC)}",
-        f"script-src {' '.join(CSP_SCRIPT_SRC)}",
-        f"img-src {' '.join(CSP_IMG_SRC)}",
-        f"font-src {' '.join(CSP_FONT_SRC)}",
-        f"connect-src {' '.join(CSP_CONNECT_SRC)}",
-    ]
-)
+CSP_DIRECTIVES = {
+    "default-src": ("'self'",),
+    "style-src": ("'self'",),
+    "script-src": ("'self'",),
+    "object-src": ("'none'",),
+    "base-uri": ("'self'",),
+    "form-action": ("'self'",),
+    "frame-ancestors": ("'none'",),
+    "img-src": ("'self'", "data:", "https:"),
+    "font-src": ("'self'", "data:"),
+    "connect-src": ("'self'",),
+}
+CONTENT_SECURITY_POLICY = {"DIRECTIVES": CSP_DIRECTIVES}
+csp_report = os.environ.get("CSP_REPORT_URI")
+if csp_report:
+    CONTENT_SECURITY_POLICY["REPORT_URI"] = csp_report
 
 
 # ✅ Custom User

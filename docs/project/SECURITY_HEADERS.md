@@ -8,8 +8,23 @@ The backend now sends several HTTP headers to harden the application.
 - `X-XSS-Protection: 1; mode=block` – legacy XSS filter for older browsers.
 - `Referrer-Policy: same-origin` – limits referrer information.
 - `Cross-Origin-Opener-Policy: same-origin` – isolates browsing contexts.
-- `Content-Security-Policy` – restricts external resources and can report
-  violations via `CSP_REPORT_URI`.
+- `Content-Security-Policy` – restricts external resources without
+  `unsafe-inline` and blocks untrusted embeddings. Violations can report via
+  `CSP_REPORT_URI`.
+
+### CSP Directives
+```
+default-src 'self';
+style-src 'self';
+script-src 'self';
+object-src 'none';
+base-uri 'self';
+form-action 'self';
+frame-ancestors 'none';
+img-src 'self' data: https:;
+font-src 'self' data:;
+connect-src 'self';
+```
 
 ## Validation Commands
 Run the server and inspect headers:

@@ -12,7 +12,4 @@ class SecurityHeadersMiddleware:
         xss = getattr(settings, "X_XSS_PROTECTION", None)
         if xss:
             response.setdefault("X-XSS-Protection", xss)
-        csp = getattr(settings, "CSP_HEADER_VALUE", None)
-        if csp:
-            response.setdefault("Content-Security-Policy", csp)
         return response
