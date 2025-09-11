@@ -108,10 +108,13 @@ const authSlice = createSlice({
       state.token = token;
       state.refreshToken = refreshToken;
       state.isAuthenticated = true;
+      // NOTE: Consider HttpOnly cookies for enhanced XSS protection
+      // Current implementation allows JS access for SPA token refresh
       Cookies.set('token', token, {
         secure: true,
         sameSite: 'strict',
         expires: 1,
+        // TODO: Migrate to HttpOnly cookies with refresh endpoint
       });
       Cookies.set('refreshToken', refreshToken, {
         secure: true,
@@ -150,10 +153,13 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.refreshToken = action.payload.refreshToken;
         state.isAuthenticated = true;
+        // NOTE: Consider HttpOnly cookies for enhanced XSS protection
+        // Current implementation allows JS access for SPA token refresh
         Cookies.set('token', action.payload.token, {
           secure: true,
           sameSite: 'strict',
           expires: 1,
+          // TODO: Migrate to HttpOnly cookies with refresh endpoint
         });
         Cookies.set('refreshToken', action.payload.refreshToken, {
           secure: true,

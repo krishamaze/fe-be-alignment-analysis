@@ -1,4 +1,7 @@
-const API_BASE_URL = 'https://finetunetechcrafterp-dev.up.railway.app';
+// Environment-based API URL
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  'https://finetunetechcrafterp-dev.up.railway.app';
 
 const END_POINTS = {
   API_BASE_URL,
