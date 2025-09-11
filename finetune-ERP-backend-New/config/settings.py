@@ -165,14 +165,13 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 # ✅ Database Configuration Fix
-DATABASE_URL = os.environ.get("DATABASE_URL")
-if not DATABASE_URL:
-    DATABASE_URL = f'sqlite:///{BASE_DIR / "db.sqlite3"}'
-elif not DATABASE_URL.startswith(('sqlite://', 'postgresql://', 'postgres://', 'mysql://')):
-    # Handle malformed DATABASE_URL
-    DATABASE_URL = f'sqlite:///{BASE_DIR / "db.sqlite3"}'
-os.environ["DATABASE_URL"] = DATABASE_URL
-DATABASES = {"default": dj_database_url.config(default=DATABASE_URL)}
+DEFAULT_SQLITE_URL = f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+DATABASE_URL = os.environ.get("DATABASE_URL", DEFAULT_SQLITE_URL)
+try:
+    DATABASES = {"default": dj_database_url.parse(DATABASE_URL)}
+except Exception:
+    DATABASE_URL = DEFAULT_SQLITE_URL
+    DATABASES = {"default": dj_database_url.parse(DATABASE_URL)}
 
 # ✅ Password Validators
 AUTH_PASSWORD_VALIDATORS = [

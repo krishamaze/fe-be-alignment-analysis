@@ -38,11 +38,12 @@ DATABASE_URL = os.environ.get("DATABASE_URL", f'sqlite:///{BASE_DIR / "db.sqlite
 ```
 **After**
 ```python
-DATABASE_URL = os.environ.get("DATABASE_URL")
-if not DATABASE_URL:
-    DATABASE_URL = f'sqlite:///{BASE_DIR / "db.sqlite3"}'
-elif not DATABASE_URL.startswith(('sqlite://', 'postgresql://', 'postgres://', 'mysql://')):
-    DATABASE_URL = f'sqlite:///{BASE_DIR / "db.sqlite3"}'
+DEFAULT_SQLITE_URL = f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+DATABASE_URL = os.environ.get("DATABASE_URL", DEFAULT_SQLITE_URL)
+try:
+    DATABASES = {"default": dj_database_url.parse(DATABASE_URL)}
+except Exception:
+    DATABASES = {"default": dj_database_url.parse(DEFAULT_SQLITE_URL)}
 ```
 
 ### 4. Frontend Hard‑coded API Endpoint
@@ -91,3 +92,8 @@ Removed `pytz` from backend requirements.
 - Ensure `VITE_API_BASE_URL` is set in production environments.
 - Confirm `SECURE_SSL_REDIRECT` and HSTS settings align with hosting TLS configuration.
 - Provide refresh-token endpoint before migrating to HttpOnly cookies.
+
+## HSTS Preload Warning
+- Enabling `SECURE_HSTS_PRELOAD = True` submits the domain to browser preload lists.
+- Removal from these lists is lengthy; treat the decision as effectively permanent.
+- Only enable preload after verifying long-term HTTPS support for the domain and all subdomains.
