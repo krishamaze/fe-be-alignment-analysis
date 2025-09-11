@@ -32,15 +32,15 @@ ALLOWED_HOSTS = [
 ]
 
 # ✅ CORS
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False  # Change from True
 CORS_ALLOWED_ORIGINS = [
     "https://finetune.store",
     "https://www.finetune.store",
     "https://api.finetune.store",
+    "https://fe-be-alignment-analysis.vercel.app",
     "https://finetunetechcraft-erp-git-axios-f-efe947-finetunetechs-projects.vercel.app",
     "https://finetunetechcraft-erp-git-feature-ca76ad-finetunetechs-projects.vercel.app",
     "https://finetunetechcrafterp-dev.up.railway.app",
-    "https://fe-be-alignment-analysis.vercel.app",
 ]
 
 
@@ -67,6 +67,12 @@ CSRF_COOKIE_SAMESITE = (
 SESSION_COOKIE_SAMESITE = "None"
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 APPEND_SLASH = False
+
+# HTTPS Security Headers
+SECURE_SSL_REDIRECT = not DEBUG
+SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
 
 # ✅ Custom User
@@ -158,8 +164,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# ✅ Database: Use PostgreSQL
-DATABASE_URL = os.environ.get("DATABASE_URL", f'sqlite:///{BASE_DIR / "db.sqlite3"}')
+# ✅ Database Configuration Fix
+DATABASE_URL = os.environ.get("DATABASE_URL")
+if not DATABASE_URL:
+    DATABASE_URL = f'sqlite:///{BASE_DIR / "db.sqlite3"}'
+elif not DATABASE_URL.startswith(('sqlite://', 'postgresql://', 'postgres://', 'mysql://')):
+    # Handle malformed DATABASE_URL
+    DATABASE_URL = f'sqlite:///{BASE_DIR / "db.sqlite3"}'
+os.environ["DATABASE_URL"] = DATABASE_URL
 DATABASES = {"default": dj_database_url.config(default=DATABASE_URL)}
 
 # ✅ Password Validators
