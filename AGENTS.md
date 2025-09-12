@@ -46,3 +46,25 @@ Vitest configured via `vitest.config.js` and global setup in `setupTests.js`.
 3. **Tests**
 4. **Risks**
 5. **Rollback**
+
+---
+
+## Agent Overview
+finetune.os orchestrates specialized agents that communicate over Redis and HTTP. Each agent owns a discrete capability such as scheduling, data ingestion, or report generation.
+
+## Core Components
+- **Coordinator** – dispatches tasks to agents and aggregates results.
+- **Registry** – YAML catalogue mapping agent names to Docker images.
+- **Queue** – Redis instance used for task routing.
+
+## Integration Points
+- Agents expose REST hooks under `/agents/<name>/hooks`.
+- Frontend widgets interact with agents through the coordinator API.
+- Custom agents implement the `AgentProtocol` class in `finetune-ERP-backend-New/utils/agents.py`.
+
+## Workflow Examples
+1. User submits a job via UI.
+2. Coordinator enqueues task to Redis.
+3. Agent consumes the job, performs work, and posts results to the callback URL.
+4. Frontend polls coordinator for completion and renders output.
+

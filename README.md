@@ -1,10 +1,42 @@
-# Finetune ERP Monorepo
+# finetune.os
 
-This repository hosts both the frontend and backend for the Finetune ERP system.
+finetune.os is an experimental AI operating system that orchestrates modular agents to automate full-stack workflows. This repository includes all code and configuration required to run and extend the platform.
 
-- `finetune-ERP-frontend-New` – React + Vite frontend, deployed on Vercel
-- `finetune-ERP-backend-New` – Django backend, deployed on Railway
+## Quick Start
 
-See each directory for setup instructions and additional documentation.
+1. **Clone & Install**
+   ```bash
+   git clone <repo-url>
+   cd finetune.os
+   pip install -r requirements-dev.txt
+   pnpm install --prefix finetune-ERP-frontend-New
+   ```
+2. **Environment**
+   ```bash
+   cp env.example .env
+   # edit variables for your setup
+   ```
+3. **Run Services**
+   ```bash
+   python finetune-ERP-backend-New/manage.py runserver
+   pnpm --prefix finetune-ERP-frontend-New dev
+   ```
 
-Packaging artifacts (`*.egg-info`) are excluded from version control.
+## Agent Deployment
+
+Agents are defined in `AGENTS.md`. To deploy one:
+
+```bash
+python scripts/deploy_agent.py <agent_name>
+```
+
+The script builds the agent image, registers it with the coordinator, and performs health checks.
+
+## Contributing
+
+1. Fork the repository and create a local branch.
+2. Run `pytest` and `pnpm test` before submitting.
+3. Open a pull request following the template in `AGENTS.md`.
+
+Start with `CONTEXT.md` for architecture guidance and `FILEMAP.md` to navigate the codebase.
+
