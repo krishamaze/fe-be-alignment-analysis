@@ -2,7 +2,7 @@
 
 Install test dependencies and run `pytest`:
 ```bash
-pip install -r requirements-test.txt
+pip install -e .[backend,dev,test]
 pytest
 ```
 

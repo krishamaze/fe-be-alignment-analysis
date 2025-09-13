@@ -8,7 +8,7 @@ finetune.os is an experimental AI operating system that orchestrates modular age
    ```bash
    git clone <repo-url>
    cd finetune.os
-   pip install -r requirements-dev.txt
+   pip install -e .[backend,dev,test]
    pnpm install --prefix finetune-ERP-frontend-New
    ```
 2. **Environment**

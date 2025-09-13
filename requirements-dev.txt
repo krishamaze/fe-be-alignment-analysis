@@ -1,2 +1,0 @@
--r finetune-ERP-backend-New/requirements-test.txt
-freezegun==1.5.5

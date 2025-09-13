@@ -5,8 +5,7 @@
 Install dependencies:
 
 ```bash
-pip install -r requirements.txt
-pip install -r requirements-dev.txt
+pip install -e .[backend,dev,test]
 ```
 
 Apply migrations so the test database has the latest schemas:
