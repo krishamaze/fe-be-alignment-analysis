@@ -35,22 +35,22 @@ function TestimonialSlide({ testimonial }) {
   return (
     <div className="w-full flex items-center justify-center px-4">
       <div className="max-w-2xl mx-auto">
-        <div className="bg-gray-50 rounded-2xl p-6 shadow-lg flex flex-col items-center text-center space-y-4">
+        <div className="bg-surface rounded-2xl p-6 shadow-lg flex flex-col items-center text-center space-y-4">
           <div className="flex justify-center">
             {[...Array(5)].map((_, i) => (
-              <span key={i} className="text-yellow-400 text-xl">
+              <span key={i} className="text-secondary text-heading-md">
                 ★
               </span>
             ))}
           </div>
-          <blockquote className="text-xl text-gray-900 leading-relaxed">
+          <blockquote className="text-body-lg text-primary leading-relaxed">
             "{testimonial.text}"
           </blockquote>
           <div>
-            <p className="font-semibold text-gray-900 text-lg">
+            <p className="font-semibold text-primary text-body-md">
               {testimonial.author}
             </p>
-            <p className="text-gray-500">
+            <p className="text-primary/60 text-body-sm">
               {testimonial.service} • {testimonial.time}
             </p>
           </div>
@@ -66,13 +66,13 @@ export default function TestimonialsReel() {
   ));
 
   return (
-    <section className="snap-start fullpage-section overflow-hidden bg-gradient-to-b from-gray-50 to-white">
+    <section className="snap-start fullpage-section overflow-hidden bg-gradient-to-b from-surface/80 to-surface">
       <div className="h-full flex flex-col items-center justify-center gap-6 px-4">
         <div className="text-center space-y-2">
-          <h2 className="text-3xl font-bold text-gray-900">
+          <h2 className="text-heading-xl font-bold text-primary">
             What Our Customers Say
           </h2>
-          <p className="text-gray-600">
+          <p className="text-body-md text-primary/60">
             Real feedback from customers across Coimbatore & Palakkad
           </p>
         </div>

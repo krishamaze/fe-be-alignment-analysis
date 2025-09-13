@@ -6,6 +6,9 @@ import HeroReel from '@/components/reels/HeroReel';
 import QuickActionsReel from '@/components/reels/QuickActionsReel';
 import TestimonialsReel from '@/components/reels/TestimonialsReel';
 
+// SEO metadata moved to dedicated module per React 19 guidelines
+export { metadata } from './IndexMeta';
+
 // Cubic easing for smooth animations
 const easeInOutCubic = (t) =>
   t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -257,11 +260,7 @@ export default function Index() {
 
   return (
     <>
-      <title>Home – Finetune</title>
-      <meta
-        name="description"
-        content="Expert Mobile & Laptop Repairs in Coimbatore & Palakkad"
-      />
+      {/* Metadata is provided via IndexMeta.js */}
       <PageWrapper mode="reel">
         {activeReels.map((reel) => {
           const Component = reel.component;
@@ -279,10 +278,10 @@ export default function Index() {
               disabled={isScrolling}
               role="tab"
               aria-selected={currentSection === index}
-              className={`section-indicator w-3 h-3 rounded-full border-2 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 ${
+              className={`section-indicator w-3 h-3 rounded-full border-2 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-keyline focus:ring-offset-2 ${
                 currentSection === index
-                  ? 'bg-secondary border-secondary'
-                  : 'bg-transparent border-white hover:border-secondary disabled:opacity-50'
+                  ? 'bg-secondary border-keyline'
+                  : 'bg-transparent border-surface hover:border-keyline disabled:opacity-50'
               }`}
               aria-label={`Go to ${reel.id} section (${index + 1} of ${sectionsCount})`}
             />

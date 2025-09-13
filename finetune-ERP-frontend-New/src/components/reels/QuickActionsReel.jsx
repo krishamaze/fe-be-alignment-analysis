@@ -1,46 +1,42 @@
 import { Link } from 'react-router-dom';
 import MultiSlideReel from '@/components/layout/MultiSlideReel';
-import {
-  HiOutlineDevicePhoneMobile,
-  HiOutlineBattery100,
-  HiOutlineBolt,
-} from 'react-icons/hi2';
+import { Smartphone, Battery, PlugZap } from 'lucide-react';
 
 export default function QuickActionsReel() {
   const repairs = [
     {
-      icon: HiOutlineDevicePhoneMobile,
+      icon: Smartphone,
       title: 'Screen Repair',
       price: 'from ₹800',
       description: 'Cracked or damaged display',
       link: '/repair?service=screen',
-      color: 'text-blue-500',
+      color: 'text-secondary',
     },
     {
-      icon: HiOutlineBattery100,
+      icon: Battery,
       title: 'Battery Replacement',
       price: 'from ₹600',
       description: 'Fast draining or dead battery',
       link: '/repair?service=battery',
-      color: 'text-green-500',
+      color: 'text-success',
     },
     {
-      icon: HiOutlineBolt,
+      icon: PlugZap,
       title: 'Charging Port Fix',
       price: 'from ₹500',
       description: 'Loose or faulty charging port',
       link: '/repair?service=charging',
-      color: 'text-yellow-500',
+      color: 'text-secondary',
     },
   ];
   const slides = [
     <div key="repairs" className="h-full flex">
       <div className="max-w-5xl mx-auto w-full h-full px-4 flex flex-col items-center justify-center gap-8">
         <div className="text-center space-y-2">
-          <h2 className="text-3xl font-bold text-gray-900">
+          <h2 className="text-heading-xl font-bold text-primary">
             Most Popular Repairs
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-body-lg text-primary/60">
             Transparent pricing • Same-day service • 90-day warranty
           </p>
         </div>
@@ -51,15 +47,19 @@ export default function QuickActionsReel() {
             return (
               <div
                 key={title}
-                className="bg-white shadow-sm hover:shadow-lg transition-transform duration-300 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 space-y-3"
+                className="bg-surface shadow-sm hover:shadow-lg transition-transform duration-300 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 space-y-3"
               >
                 <Icon className={`w-12 h-12 ${color}`} />
-                <h3 className="text-lg font-semibold">{title}</h3>
-                <p className="text-3xl font-bold">{price}</p>
-                <p className="text-gray-600">{description}</p>
+                <h3 className="text-heading-md font-semibold text-primary">
+                  {title}
+                </h3>
+                <p className="text-display-md font-bold text-primary">
+                  {price}
+                </p>
+                <p className="text-body-md text-primary/60">{description}</p>
                 <Link
                   to={link}
-                  className="min-h-[44px] inline-flex items-center justify-center px-5 py-2 rounded-lg bg-gray-900 text-white font-medium hover:bg-yellow-400 hover:text-gray-900 transition-colors"
+                  className="min-h-[44px] inline-flex items-center justify-center px-5 py-2 rounded-lg bg-primary text-surface font-medium hover:bg-secondary hover:text-primary transition-colors"
                 >
                   Book Now
                 </Link>
@@ -71,7 +71,7 @@ export default function QuickActionsReel() {
         <div className="text-center">
           <Link
             to="/repair"
-            className="text-gray-900 hover:text-yellow-600 font-medium text-lg"
+            className="text-primary hover:text-secondary font-medium text-body-lg"
           >
             View all repair services →
           </Link>
@@ -81,7 +81,7 @@ export default function QuickActionsReel() {
   ];
 
   return (
-    <section className="snap-start fullpage-section overflow-hidden bg-gradient-to-b from-yellow-400/40 to-gray-50">
+    <section className="snap-start fullpage-section overflow-hidden bg-gradient-to-b from-secondary/40 to-surface">
       <MultiSlideReel reelId="quickActions" showHint={false}>
         {slides}
       </MultiSlideReel>

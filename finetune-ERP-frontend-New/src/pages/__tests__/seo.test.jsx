@@ -7,7 +7,7 @@ import About from '../public/About';
 import Contact from '../public/Contact';
 import Locate from '../public/Locate';
 import Legal from '../public/Legal';
-import Index from '../Index';
+import { metadata as homeMeta } from '../IndexMeta';
 import StoreDetails from '../internal/StoreDetails';
 import Stores from '../internal/Stores';
 import Spares from '../internal/Spares';
@@ -90,19 +90,9 @@ describe('SEO meta tags', () => {
     });
   });
 
-  it('sets title and description for Home page', async () => {
-    document.title = '';
-    const container = document.createElement('div');
-    await act(async () => {
-      createRoot(container).render(
-        <MemoryRouter>
-          <Index />
-        </MemoryRouter>
-      );
-    });
-    expect(document.title).toBe('Home – Finetune');
-    const desc = document.head.querySelector("meta[name='description']");
-    expect(desc.getAttribute('content')).toContain(
+  it('provides metadata for Home page via module', () => {
+    expect(homeMeta.title).toBe('Home – Finetune');
+    expect(homeMeta.description).toContain(
       'Expert Mobile & Laptop Repairs in Coimbatore & Palakkad'
     );
   });
