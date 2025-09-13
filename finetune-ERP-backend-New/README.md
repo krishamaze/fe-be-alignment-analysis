@@ -11,8 +11,7 @@ Backend service for user, store and attendance management built with Django and 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
-pip install -r requirements-test.txt  # optional for tests
+pip install -e .[backend,dev,test]
 python manage.py migrate
 python manage.py createsuperuser  # set admin credentials
 python manage.py runserver

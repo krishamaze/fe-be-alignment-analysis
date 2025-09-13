@@ -10,8 +10,7 @@
 ## Environment Setup
 ### Backend
 ```bash
-pip install -r requirements-dev.txt
-pip install -r finetune-ERP-backend-New/requirements-test.txt
+pip install -e .[backend,dev,test]
 ```
 Use SQLite for tests and avoid external services.
 
