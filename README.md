@@ -22,6 +22,10 @@ finetune.os is an experimental AI operating system that orchestrates modular age
    pnpm --prefix finetune-ERP-frontend-New dev
    ```
 
+## Architecture
+
+High-level component interactions are documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). The API surface is described in [docs/API_GUIDE.md](docs/API_GUIDE.md).
+
 ## Agent Deployment
 
 Agents are defined in `AGENTS.md`. To deploy one:
