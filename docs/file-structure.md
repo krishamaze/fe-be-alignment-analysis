@@ -90,3 +90,74 @@
 | `finetune-ERP-backend-New/docs/DEPLOYMENT.md` | Deployment handbook covering Railway configuration and secrets. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/docs/DEPLOYMENT.md) |
 | `finetune-ERP-frontend-New/vercel.json` | Vercel deployment settings defining routes, rewrites, and headers. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-frontend-New/vercel.json) |
 | `finetune-ERP-frontend-New/docs/DEPLOYMENT.md` | Frontend deployment guide covering Vercel flow and environment keys. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-frontend-New/docs/DEPLOYMENT.md) |
+
+## 🔍 Audit Status & Follow-up
+
+### Backend Checklist (Day 1 Review)
+| File | Status | Notes | Link |
+|------|--------|-------|------|
+| `finetune-ERP-backend-New/config/urls.py` | ✅ Exists | Main router wires every app URL module including accounts, attendance, bookings, and more. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/config/urls.py) |
+| `finetune-ERP-backend-New/config/settings.py` | ✅ Exists | Settings reference installed apps above and load REST framework/auth integrations. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/config/settings.py) |
+| `finetune-ERP-backend-New/accounts/urls.py` | ⚠️ Modular | No single `urls.py`; routes live in `accounts/urls/auth_urls.py` and `accounts/urls/user_urls.py` which are included in config. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/accounts/urls/auth_urls.py) |
+| `finetune-ERP-backend-New/accounts/views.py` | ⚠️ Modular | Views are split into `accounts/views/auth.py` and `accounts/views/admin_users.py`; confirm team alignment before adding wrapper file. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/accounts/views/auth.py) |
+| `finetune-ERP-backend-New/attendance/urls.py` | ✅ Exists | Provides REST routes for attendance approvals and shift workflows. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/attendance/urls.py) |
+| `finetune-ERP-backend-New/attendance/models.py` | ✅ Exists | Defines attendance, shift, and leave tracking models consumed by serializers/views. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/attendance/models.py) |
+| `finetune-ERP-backend-New/bookings/urls.py` | ✅ Exists | Exposes booking creation and management endpoints, imported by `config/urls.py`. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/bookings/urls.py) |
+| `finetune-ERP-backend-New/bookings/models.py` | ✅ Exists | Contains booking, schedule, and workflow models with notification hooks. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/bookings/models.py) |
+| `finetune-ERP-backend-New/catalog/urls.py` | ✅ Exists | Registers catalog taxonomy routes and nested viewsets. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/catalog/urls.py) |
+| `finetune-ERP-backend-New/catalog/models.py` | ✅ Exists | Models store categories, variants, and attribute definitions. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/catalog/models.py) |
+| `finetune-ERP-backend-New/inventory/urls.py` | ✅ Exists | Routing for stock ledger APIs, serials, and configuration endpoints. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/inventory/urls.py) |
+| `finetune-ERP-backend-New/inventory/models.py` | ✅ Exists | Tracks stock entries, serial numbers, and price logs referenced on dashboards. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/inventory/models.py) |
+| `finetune-ERP-backend-New/invoicing/urls.py` | ✅ Exists | Invoice REST routes are defined and imported by the project router. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/invoicing/urls.py) |
+| `finetune-ERP-backend-New/invoicing/models.py` | ✅ Exists | Holds invoice, payment, and adjustment models tied to finance workflows. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/invoicing/models.py) |
+| `finetune-ERP-backend-New/marketing/urls.py` | ✅ Exists | Provides marketing lead endpoints plus brand-specific routes. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/marketing/urls.py) |
+| `finetune-ERP-backend-New/marketing/models.py` | ✅ Exists | Defines campaign, lead, and brand models that power marketing flows. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/marketing/models.py) |
+| `finetune-ERP-backend-New/spares/urls.py` | ✅ Exists | REST routes supporting spare parts CRUD and filtering. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/spares/urls.py) |
+| `finetune-ERP-backend-New/spares/models.py` | ✅ Exists | Stores spare product metadata surfaced in frontend management pages. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/spares/models.py) |
+| `finetune-ERP-backend-New/store/urls.py` | ✅ Exists | Branch/store routing is defined and included in the project URL map. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/store/urls.py) |
+| `finetune-ERP-backend-New/store/views.py` | ✅ Exists | Contains store CRUD viewsets consumed by dashboards and API clients. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-backend-New/store/views.py) |
+
+### Frontend Checklist (Day 1 Review)
+| File or Directory | Status | Notes | Link |
+|-------------------|--------|-------|------|
+| `finetune-ERP-frontend-New/src/components/attendance/` | ❌ Missing | No attendance-specific component directory; create based on attendance APIs. | — |
+| `finetune-ERP-frontend-New/src/components/inventory/` | ✅ Exists | Inventory widgets (tables, forms, serial manager) already implemented. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-frontend-New/src/components/inventory/StockTable.jsx) |
+| `finetune-ERP-frontend-New/src/components/catalog/` | ❌ Missing | Catalog UI components absent; align with backend catalog endpoints before implementation. | — |
+| `finetune-ERP-frontend-New/src/components/invoicing/` | ❌ Missing | Dedicated invoicing components not present; invoices currently handled in shared components. | — |
+| `finetune-ERP-frontend-New/src/components/spares/` | ❌ Missing | Spares management uses page-level logic only; extract shared components for reuse. | — |
+| `finetune-ERP-frontend-New/src/pages/internal/AttendanceDashboard.jsx` | ❌ Missing | Dashboard not created; attendance flow relies solely on backend endpoints. | — |
+| `finetune-ERP-frontend-New/src/pages/internal/InventoryDashboard.jsx` | ✅ Exists | Inventory dashboard pulls ledger data via RTK Query and renders inventory components. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-frontend-New/src/pages/internal/InventoryDashboard.jsx) |
+| `finetune-ERP-frontend-New/src/pages/internal/CatalogDashboard.jsx` | ❌ Missing | No catalog dashboard; consider whether `ProductsDashboard.jsx` should cover catalog responsibilities. | — |
+| `finetune-ERP-frontend-New/src/pages/internal/InvoicingDashboard.jsx` | ⚠️ Renamed | Functionality exists as `InvoicesDashboard.jsx`; ensure routing and documentation reflect naming. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-frontend-New/src/pages/internal/InvoicesDashboard.jsx) |
+| `finetune-ERP-frontend-New/src/pages/internal/SparesDashboard.jsx` | ⚠️ Replaced | Spares workflows live in `Spares.jsx`; evaluate need for dashboard wrapper component. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-frontend-New/src/pages/internal/Spares.jsx) |
+| `finetune-ERP-frontend-New/src/redux/slices/attendanceSlice.js` | ❌ Missing | Redux slices directory uses singular `slice/`; no attendance slice exists yet. | — |
+| `finetune-ERP-frontend-New/src/redux/slices/inventorySlice.js` | ❌ Missing | Inventory logic handled via RTK Query and components; create slice if stateful caching required. | — |
+| `finetune-ERP-frontend-New/src/redux/slices/catalogSlice.js` | ❌ Missing | Catalog state not centralized; confirm requirement before building slice. | — |
+| `finetune-ERP-frontend-New/src/redux/slices/bookingsSlice.js` | ❌ Missing | Bookings rely on RTK Query; slice absent under current structure. | — |
+| `finetune-ERP-frontend-New/src/redux/slices/invoicingSlice.js` | ❌ Missing | Finance state derived from API hooks; implement slice only if memoized UI state needed. | — |
+| `finetune-ERP-frontend-New/src/api/modules/` | ❌ Missing | API layer has root `api` folder only; module-specific API helpers not scaffolded. | — |
+
+### DevOps & QA Checklist (Day 1 Review)
+| File | Status | Notes | Link |
+|------|--------|-------|------|
+| `env.example` | ✅ Exists | Provides shared environment variables for backend/frontend but lacks module-specific secrets. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/env.example) |
+| `finetune-ERP-backend-New/requirements.txt` | ❌ Missing | Backend relies on `pyproject.toml`; add compatibility requirements file if deployment expects it. | — |
+| `finetune-ERP-backend-New/Dockerfile` | ❌ Missing | No backend container spec located; required for containerized deployments. | — |
+| `finetune-ERP-backend-New/docker-compose.yml` | ❌ Missing | Compose stack absent; confirm orchestration approach for local + staging environments. | — |
+| `finetune-ERP-frontend-New/.env.example` | ✅ Exists | Frontend exposes API base URL variables for Vite builds. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-frontend-New/.env.example) |
+| `finetune-ERP-frontend-New/Dockerfile` | ❌ Missing | Need Dockerfile if frontend will be deployed via containers instead of Vercel. | — |
+| `tests/` (root) | ❌ Missing | Tests exist inside backend/frontend packages; root-level harness absent. | — |
+| `scripts/` (deployment) | ❌ Missing | No shared automation scripts tracked; evaluate requirement per release plan. | — |
+| `.github/workflows/` | ✅ Exists | CI pipelines for linting, Lighthouse, syncing, and tests already configured. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/.github/workflows/test.yml) |
+
+### 📊 Tracking Sheet Template
+| Team Member | Section | Files Checked | Missing Found | Issues Found | ETA Complete |
+|-------------|---------|---------------|---------------|--------------|--------------|
+| _(assign)_ | Backend-Auth | 0/5 | 0 | 0 | Day 1 |
+| _(assign)_ | Frontend-Components | 0/10 | 0 | 0 | Day 1 |
+| _(assign)_ | DevOps-Config | 0/6 | 0 | 0 | Day 1 |
+
+### ⚡ Immediate Actions
+- Team lead to set up shared tracking sheet, assign owners, and arrange an end-of-day sync.
+- Developers should pull the latest codebase, audit according to the checklist above, and log findings plus remediation ETAs.
+- Flag red-alert items (missing URLs, absent models, undefined API integrations, undocumented env vars, or broken tests) to the lead immediately.
