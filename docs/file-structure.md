@@ -14,7 +14,6 @@
 | `finetune-ERP-frontend-New/eslint.config.js` | Shared linting rules aligning with the Vite React project structure. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-frontend-New/eslint.config.js) |
 | `finetune-ERP-frontend-New/prettier.config.js` | Prettier formatting conventions for JSX, JS, and CSS assets. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-frontend-New/prettier.config.js) |
 | `finetune-ERP-frontend-New/setupTests.js` | Vitest test environment bootstrap configuring jsdom and globals. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-frontend-New/setupTests.js) |
-
 ## Backend Source
 | File | Description | Link |
 |------|-------------|------|
@@ -82,7 +81,6 @@
 | `finetune-ERP-frontend-New/agent.md` | Frontend agent description and integration hooks for UI widgets. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-frontend-New/agent.md) |
 | `finetune-ERP-frontend-New/docs/FRONTEND.md` | Extended frontend documentation covering layout system and tooling. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/finetune-ERP-frontend-New/docs/FRONTEND.md) |
 | `docs/known-issues/KNOWN_ISSUES.md` | Catalog of outstanding issues with mitigation notes and status. | [View](https://raw.githubusercontent.com/krishamaze/fe-be-alignment-analysis/main/docs/known-issues/KNOWN_ISSUES.md) |
-
 ## 🚀 Deploy
 | File | Description | Link |
 |------|-------------|------|
