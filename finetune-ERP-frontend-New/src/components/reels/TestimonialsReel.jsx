@@ -80,6 +80,7 @@ export default function TestimonialsReel() {
         <MultiSlideReel
           reelId="testimonials"
           showHint
+          mode="vertical"
           className="w-full flex-1"
         >
           {slides}

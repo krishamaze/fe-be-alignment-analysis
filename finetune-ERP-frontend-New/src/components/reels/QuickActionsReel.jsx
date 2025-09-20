@@ -82,7 +82,7 @@ export default function QuickActionsReel() {
 
   return (
     <section className="snap-start fullpage-section overflow-hidden bg-gradient-to-b from-secondary/40 to-surface">
-      <MultiSlideReel reelId="quickActions" showHint={false}>
+      <MultiSlideReel reelId="quickActions" showHint={false} mode="vertical">
         {slides}
       </MultiSlideReel>
     </section>

@@ -61,7 +61,7 @@ export default function HeroReel() {
 
   return (
     <section className="snap-start fullpage-section overflow-hidden bg-gradient-to-b from-primary via-secondary/30 to-secondary/40">
-      <MultiSlideReel reelId="hero" showHint={false}>
+      <MultiSlideReel reelId="hero" showHint={false} mode="vertical">
         {slides}
       </MultiSlideReel>
     </section>
