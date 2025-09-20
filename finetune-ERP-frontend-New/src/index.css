@@ -13,6 +13,20 @@ body,
   color: var(--onSurface, #000);
 }
 
+:root {
+  --fullpage-section-h: calc(
+    100vh - var(--topbar-h, 0px) - var(--mainnav-h, 0px)
+  );
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --fullpage-section-h: calc(
+      100dvh - var(--topbar-h, 0px) - var(--mainnav-h, 0px)
+    );
+  }
+}
+
 /* Smooth scroll snap behavior */
 html {
   scroll-behavior: smooth;
@@ -107,6 +121,22 @@ html {
   background: transparent;
 }
 
+.reel-vertical {
+  height: var(--fullpage-section-h, 100%);
+  max-height: var(--fullpage-section-h, 100%);
+  overscroll-behavior-y: contain;
+  scroll-behavior: smooth;
+  padding-bottom: var(--bottomnav-h, 0px);
+}
+
+.reel-section {
+  min-height: var(--fullpage-section-h, 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: clamp(1.5rem, 3vw, 3rem);
+}
+
 /* Smooth transitions for section indicators */
 .section-indicator {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -114,9 +144,7 @@ html {
 
 /* Optimize performance for fullpage scrolling */
 .fullpage-section {
-  height: calc(
-    100vh - var(--topbar-h, 0px) - var(--mainnav-h, 0px)
-  ) !important;
+  height: var(--fullpage-section-h) !important;
   will-change: transform;
   backface-visibility: hidden;
   transform-style: preserve-3d;
