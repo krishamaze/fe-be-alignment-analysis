@@ -1,4 +1,4 @@
-import MultiSlideReel from '@/components/layout/MultiSlideReel';
+import SectionSlider from '@/components/navigation/SectionSlider';
 
 const testimonials = [
   {
@@ -77,14 +77,14 @@ export default function TestimonialsReel() {
           </p>
         </div>
 
-        <MultiSlideReel
+        <SectionSlider
           reelId="testimonials"
           showHint
           mode="vertical"
           className="w-full flex-1"
         >
           {slides}
-        </MultiSlideReel>
+        </SectionSlider>
       </div>
     </section>
   );
