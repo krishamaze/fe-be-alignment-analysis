@@ -129,14 +129,16 @@ html {
   padding-bottom: var(--bottomnav-h, 0px);
 }
 
+/* Fix horizontal reel section height for backgrounds */
 .reel-section {
-  min-height: var(--fullpage-section-h, 100%);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .reel-vertical .reel-section {
+  min-height: var(--fullpage-section-h, 100%);
   padding-block: clamp(1.5rem, 3vw, 3rem);
 }
 
