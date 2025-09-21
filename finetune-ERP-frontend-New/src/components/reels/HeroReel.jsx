@@ -139,7 +139,8 @@ export default function HeroReel() {
       <div className="absolute inset-0 opacity-20 mix-blend-screen" aria-hidden>
         <div className="h-full w-full bg-[radial-gradient(circle_at_top,_rgba(226,195,61,0.25),_transparent_55%)]" />
       </div>
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+
         {isMobile ? <MobileLayout /> : <DesktopLayout />}
       </div>
     </div>,
