@@ -144,7 +144,7 @@ export default function HeroReel() {
 
   return (
     <section className="snap-start fullpage-section overflow-hidden">
-      <MultiSlideReel reelId="hero" showHint={false} mode="vertical">
+      <MultiSlideReel mode="horizontal" reelId="hero" showHint={false}>
         {slides}
       </MultiSlideReel>
     </section>
