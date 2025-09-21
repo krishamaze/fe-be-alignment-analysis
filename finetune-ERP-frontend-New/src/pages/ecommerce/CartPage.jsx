@@ -12,8 +12,8 @@ import {
   HiOutlineArrowLeft,
 } from 'react-icons/hi';
 import Payment from '@/components/ecommerce/Payment';
-import { useState } from 'react';
-import PageWrapper from '@/components/layout/PageWrapper';
+import { useEffect, useState } from 'react';
+import { useScrollMode } from '@/components/layout/ScrollModeContext';
 
 function CartPage() {
   const dispatch = useDispatch();
@@ -21,6 +21,12 @@ function CartPage() {
   const { items, total, itemCount } = useSelector((state) => state.cart);
   const [showPayment, setShowPayment] = useState(false);
   const [orderId, setOrderId] = useState('');
+  const { setMode } = useScrollMode();
+
+  useEffect(() => {
+    setMode('reel');
+    return () => setMode('scroll');
+  }, [setMode]);
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-IN', {
@@ -67,32 +73,29 @@ function CartPage() {
 
   if (showPayment) {
     return (
-      <PageWrapper mode="reel">
-        <div className="min-h-screen bg-gray-50 pt-20">
-          <div className="max-w-4xl mx-auto px-4 py-8">
-            <button
-              onClick={() => setShowPayment(false)}
-              className="flex items-center gap-2 text-gray-700 hover:text-keyline mb-6"
-            >
-              <HiOutlineArrowLeft className="w-4 h-4" />
-              Back to Cart
-            </button>
-            <Payment
-              amount={total}
-              orderId={orderId}
-              onSuccess={handlePaymentSuccess}
-              onFailure={handlePaymentFailure}
-            />
-          </div>
+      <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="max-w-4xl mx-auto px-4 py-8">
+          <button
+            onClick={() => setShowPayment(false)}
+            className="flex items-center gap-2 text-gray-700 hover:text-keyline mb-6"
+          >
+            <HiOutlineArrowLeft className="w-4 h-4" />
+            Back to Cart
+          </button>
+          <Payment
+            amount={total}
+            orderId={orderId}
+            onSuccess={handlePaymentSuccess}
+            onFailure={handlePaymentFailure}
+          />
         </div>
-      </PageWrapper>
+      </div>
     );
   }
 
   return (
-    <PageWrapper mode="reel">
-      <div className="min-h-screen bg-gray-50 pt-20">
-        <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gray-50 pt-20">
+      <div className="max-w-4xl mx-auto px-4 py-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
@@ -274,7 +277,7 @@ function CartPage() {
           )}
         </div>
       </div>
-    </PageWrapper>
+    </div>
   );
 }
 

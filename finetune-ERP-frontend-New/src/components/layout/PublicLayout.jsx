@@ -11,31 +11,31 @@ import {
 } from '@/components/layout/ScrollModeContext';
 
 function PublicLayoutInner() {
-  const { mode, registerScrollElement } = useScrollMode();
+  const { mode, registerScrollElement, scrollElement } = useScrollMode();
   const { isDesktop, isMobile } = useDevice();
   const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollContainer = document.querySelector(
-        '[data-scroll-container="true"]'
-      );
-      if (!scrollContainer) return;
+    if (!scrollElement) {
+      setIsFooterVisible(false);
+      return undefined;
+    }
 
-      const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = scrollElement;
       const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
 
       setIsFooterVisible(scrollPercentage >= 0.85);
     };
 
-    const scrollContainer = document.querySelector(
-      '[data-scroll-container="true"]'
-    );
-    if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', handleScroll);
-      return () => scrollContainer.removeEventListener('scroll', handleScroll);
-    }
-  }, []);
+    handleScroll();
+
+    scrollElement.addEventListener('scroll', handleScroll, { passive: true });
+    return () => scrollElement.removeEventListener('scroll', handleScroll);
+  }, [scrollElement]);
+
+  const navOffset =
+    'calc(var(--topbar-h,0px) + var(--navbar-h, var(--mainnav-h,0px)))';
 
   return (
     <div className="h-[100dvh] bg-surface text-onSurface overflow-hidden">
@@ -44,17 +44,24 @@ function PublicLayoutInner() {
         <MainNav />
 
         <main
-          className={`flex-1 min-h-0 ${mode === 'reel' ? 'overflow-hidden' : 'overflow-y-auto'}`}
+          ref={registerScrollElement}
+          data-scroll-container="true"
+          className={`flex-1 min-h-0 ${
+            mode === 'reel'
+              ? 'overflow-y-auto snap-y snap-mandatory fullpage-scrolling'
+              : 'overflow-y-auto'
+          }`}
           style={{
             paddingBottom: isMobile ? 'var(--bottomnav-h, 56px)' : '0',
-            paddingTop: 'calc(var(--topbar-h,0px) + var(--mainnav-h,0px))',
-            scrollPaddingTop:
-              'calc(var(--topbar-h,0px) + var(--mainnav-h,0px))',
+            paddingTop: navOffset,
+            scrollPaddingTop: navOffset,
+            ...(mode === 'reel'
+              ? {
+                  scrollBehavior: 'auto',
+                  scrollSnapStop: 'always',
+                }
+              : {}),
           }}
-          {...(mode !== 'reel' && {
-            'data-scroll-container': 'true',
-            ref: registerScrollElement,
-          })}
         >
           <Outlet />
         </main>

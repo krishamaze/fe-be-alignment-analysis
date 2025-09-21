@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   useGetProductsQuery,
@@ -7,9 +7,14 @@ import {
   useGetCategoriesQuery,
   useGetSubCategoriesQuery,
 } from '../../api/erpApi';
-import PageWrapper from '@/components/layout/PageWrapper';
+import { useScrollMode } from '@/components/layout/ScrollModeContext';
 
 function Shop() {
+  const { setMode } = useScrollMode();
+  useEffect(() => {
+    setMode('scroll');
+  }, [setMode]);
+
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [department, setDepartment] = useState('');
   const [category, setCategory] = useState('');
@@ -66,10 +71,9 @@ function Shop() {
   if (isLoading) return <div className="p-4">Loading...</div>;
 
   return (
-    <PageWrapper mode="scroll">
-      <div className="space-y-6">
-        {/* Filters */}
-        <div className="p-4 space-y-6">
+    <div className="space-y-6">
+      {/* Filters */}
+      <div className="p-4 space-y-6">
           {/* Sort */}
           <section className="space-y-3">
             <h3 className="font-medium text-sm">Sort</h3>
@@ -183,25 +187,24 @@ function Shop() {
           </section>
         </div>
 
-        {/* Products */}
-        <div className="p-4">
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((p) => (
-              <li key={p.id} className="border rounded p-4">
-                <Link to={`/product/${p.slug}`} className="font-semibold">
-                  {p.name}
-                </Link>
-                <p className="text-sm text-gray-500">{p.brand_name}</p>
-                <p className="mt-2">₹{p.price}</p>
-                {!p.availability && (
-                  <p className="text-red-500 text-sm">Out of stock</p>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
+      {/* Products */}
+      <div className="p-4">
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {products.map((p) => (
+            <li key={p.id} className="border rounded p-4">
+              <Link to={`/product/${p.slug}`} className="font-semibold">
+                {p.name}
+              </Link>
+              <p className="text-sm text-gray-500">{p.brand_name}</p>
+              <p className="mt-2">₹{p.price}</p>
+              {!p.availability && (
+                <p className="text-red-500 text-sm">Out of stock</p>
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
-    </PageWrapper>
+    </div>
   );
 }
 

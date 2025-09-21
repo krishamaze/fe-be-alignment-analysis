@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { devLog } from '@/utils/devLog';
-import PageWrapper from '@/components/layout/PageWrapper';
 import { useScrollMode } from '@/components/layout/ScrollModeContext';
 import HeroReel from '@/components/reels/HeroReel';
 import QuickActionsReel from '@/components/reels/QuickActionsReel';
@@ -23,7 +22,12 @@ export default function Index() {
   const [currentSection, setCurrentSection] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const wheelDelta = useRef(0);
-  const { scrollElement } = useScrollMode();
+  const { scrollElement, setMode } = useScrollMode();
+
+  useEffect(() => {
+    setMode('reel');
+    return () => setMode('scroll');
+  }, [setMode]);
 
   const activeReels = REEL_CONFIG.filter((reel) => reel.enabled);
   const sectionsCount = activeReels.length;
@@ -261,33 +265,31 @@ export default function Index() {
   return (
     <>
       {/* Metadata is provided via IndexMeta.js */}
-      <PageWrapper mode="reel">
-        {activeReels.map((reel) => {
-          const Component = reel.component;
-          return <Component key={reel.id} />;
-        })}
-        <nav
-          className="fixed right-6 top-1/2 transform -translate-y-1/2 z-50 hidden md:flex flex-col gap-3"
-          role="tablist"
-          aria-label="Page sections"
-        >
-          {activeReels.map((reel, index) => (
-            <button
-              key={reel.id}
-              onClick={() => scrollToSection(index)}
-              disabled={isScrolling}
-              role="tab"
-              aria-selected={currentSection === index}
-              className={`section-indicator w-3 h-3 rounded-full border-2 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-keyline focus:ring-offset-2 ${
-                currentSection === index
-                  ? 'bg-secondary border-keyline'
-                  : 'bg-transparent border-surface hover:border-keyline disabled:opacity-50'
-              }`}
-              aria-label={`Go to ${reel.id} section (${index + 1} of ${sectionsCount})`}
-            />
-          ))}
-        </nav>
-      </PageWrapper>
+      {activeReels.map((reel) => {
+        const Component = reel.component;
+        return <Component key={reel.id} />;
+      })}
+      <nav
+        className="fixed right-6 top-1/2 transform -translate-y-1/2 z-50 hidden md:flex flex-col gap-3"
+        role="tablist"
+        aria-label="Page sections"
+      >
+        {activeReels.map((reel, index) => (
+          <button
+            key={reel.id}
+            onClick={() => scrollToSection(index)}
+            disabled={isScrolling}
+            role="tab"
+            aria-selected={currentSection === index}
+            className={`section-indicator w-3 h-3 rounded-full border-2 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-keyline focus:ring-offset-2 ${
+              currentSection === index
+                ? 'bg-secondary border-keyline'
+                : 'bg-transparent border-surface hover:border-keyline disabled:opacity-50'
+            }`}
+            aria-label={`Go to ${reel.id} section (${index + 1} of ${sectionsCount})`}
+          />
+        ))}
+      </nav>
     </>
   );
 }

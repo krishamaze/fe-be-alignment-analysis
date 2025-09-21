@@ -8,9 +8,14 @@ export default function MainNav() {
 
   useEffect(() => {
     if (ref.current) {
+      const height = `${ref.current.offsetHeight}px`;
       document.documentElement.style.setProperty(
         '--mainnav-h',
-        `${ref.current.offsetHeight}px`
+        height
+      );
+      document.documentElement.style.setProperty(
+        '--navbar-h',
+        height
       );
     }
   }, []);

@@ -7,7 +7,7 @@
 - `src/components/reels/QuickActionsReel.jsx` – quick repair actions as a slide for `MultiSlideReel`.
 - `src/components/reels/TestimonialsReel.jsx` – customer testimonials rendered as multiple `MultiSlideReel` slides.
 - `src/utils/devLog.js` – development-only logger used for debugging.
-- `src/components/layout/PageWrapper.jsx` – wraps pages, sets scroll mode, and provides the scroll container in reel mode.
+- `src/components/layout/PublicLayout.jsx` – shared layout that wires scroll mode context into the main scroll container.
 - `src/index.css` – global styles, including navigation offsets and fullpage scroll behavior.
 - `public/favicon.svg` – site favicon.
 - `src/components/common/PageSection.jsx` – semantic section wrapper that fills the viewport and applies mobile bottom padding in reel mode.
