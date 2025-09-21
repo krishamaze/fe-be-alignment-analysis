@@ -133,13 +133,13 @@ export default function HeroReel() {
   const slides = [
     <div
       key="hero"
-      className="relative h-full min-h-[var(--fullpage-section-h)] overflow-hidden"
+      className="relative min-h-[var(--fullpage-section-h)] overflow-hidden"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950" />
       <div className="absolute inset-0 opacity-20 mix-blend-screen" aria-hidden>
         <div className="h-full w-full bg-[radial-gradient(circle_at_top,_rgba(226,195,61,0.25),_transparent_55%)]" />
       </div>
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
 
         {isMobile ? <MobileLayout /> : <DesktopLayout />}
       </div>
