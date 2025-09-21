@@ -168,7 +168,7 @@ export default function MultiSlideReel({
             className={
               isVertical
                 ? 'reel-section snap-start'
-                : 'w-full flex-shrink-0 snap-start-x'
+                : 'reel-section flex-shrink-0 snap-start-x w-full'
             }
             data-slide-index={index}
           >

@@ -134,6 +134,9 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.reel-vertical .reel-section {
   padding-block: clamp(1.5rem, 3vw, 3rem);
 }
 
