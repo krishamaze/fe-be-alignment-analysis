@@ -125,14 +125,22 @@ export default function SectionSlider({
     [isVertical]
   );
 
+  const containerClasses = [
+    'relative',
+    isVertical ? 'h-full' : 'min-h-[var(--fullpage-section-h,100vh)]',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <div className={`relative h-full ${className}`} style={style}>
+    <div className={containerClasses} style={style}>
       <div
         ref={containerRef}
         className={
           isVertical
             ? 'reel-vertical h-full overflow-y-auto snap-y snap-mandatory'
-            : 'h-full overflow-x-auto flex snap-x snap-mandatory'
+            : 'min-h-[var(--fullpage-section-h,100vh)] overflow-x-auto flex snap-x snap-mandatory'
         }
         style={
           isVertical
