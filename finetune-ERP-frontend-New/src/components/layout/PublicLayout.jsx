@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import TopBar from '@/components/layout/TopBar';
 import MainNav from '@/components/layout/MainNav';
 import BottomNav from '@/components/layout/BottomNav';
@@ -35,7 +35,22 @@ function PublicLayoutInner() {
   }, [scrollElement]);
 
   const navOffset =
-    'calc(var(--topbar-h,0px) + var(--navbar-h, var(--mainnav-h,0px)))';
+    'calc(var(--topbar-h, 0px) + var(--navbar-h, var(--mainnav-h, 0px)))';
+
+  const mainStyles = useMemo(
+    () => ({
+      paddingBottom: isMobile ? 'var(--bottomnav-h, 56px)' : '0',
+      paddingTop: navOffset,
+      scrollPaddingTop: navOffset,
+      ...(mode === 'reel'
+        ? {
+            scrollBehavior: 'auto',
+            scrollSnapStop: 'always',
+          }
+        : {}),
+    }),
+    [isMobile, mode, navOffset],
+  );
 
   return (
     <div className="h-[100dvh] bg-surface text-onSurface overflow-hidden">
@@ -51,17 +66,7 @@ function PublicLayoutInner() {
               ? 'overflow-y-auto snap-y snap-mandatory fullpage-scrolling'
               : 'overflow-y-auto'
           }`}
-          style={{
-            paddingBottom: isMobile ? 'var(--bottomnav-h, 56px)' : '0',
-            paddingTop: navOffset,
-            scrollPaddingTop: navOffset,
-            ...(mode === 'reel'
-              ? {
-                  scrollBehavior: 'auto',
-                  scrollSnapStop: 'always',
-                }
-              : {}),
-          }}
+          style={mainStyles}
         >
           <Outlet />
         </main>
