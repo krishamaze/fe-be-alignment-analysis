@@ -1,66 +1,152 @@
 import { Link } from 'react-router-dom';
 import MultiSlideReel from '@/components/layout/MultiSlideReel';
+import useDevice from '@/hooks/useDevice';
 import phoneIllustration from '@/assets/phone-illustration.png';
 
-export default function HeroReel() {
-  const slides = [
-    <div key="hero" className="relative flex items-center h-full">
-      <div className="absolute inset-0 bg-primary/60" />
-      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto px-4">
-        {/* Left: Text and CTAs */}
-        <div className="text-center lg:text-left">
-          <p className="text-surface/70 text-body-sm sm:text-body-md pb-3 font-medium">
+const stats = [
+  {
+    id: 'rating',
+    content: (
+      <span className="inline-flex items-center gap-1">
+        <span aria-hidden className="text-secondary">
+          ★
+        </span>
+        <span>4.6/5 rating</span>
+      </span>
+    ),
+  },
+  { id: 'repairs', content: '10,000+ devices repaired' },
+  { id: 'locations', content: '4 locations' },
+];
+
+function DesktopLayout() {
+  return (
+    <div className="grid h-full grid-cols-12 items-center gap-8">
+      <div className="col-span-7 flex h-full flex-col justify-center gap-8 text-surface">
+        <div className="space-y-4">
+          <p className="text-body-md font-medium text-surface/70">
             Serving Coimbatore & Palakkad • 10+ Years Trusted
           </p>
-          <h1 className="text-surface text-display-lg font-bold leading-tight pb-4">
+          <h1 className="text-6xl font-bold leading-tight">
             Expert Mobile & Laptop Repairs
           </h1>
-          <p className="text-surface/80 text-body-lg pb-6 max-w-lg mx-auto lg:mx-0">
+          <p className="max-w-xl text-xl text-surface/80">
             Same-day repairs • Free pickup & delivery • 90-day warranty
           </p>
-
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pb-6">
-            <Link
-              to="/repair"
-              className="bg-primary text-surface px-8 py-4 rounded-lg font-semibold hover:bg-secondary hover:text-primary transition-colors"
-            >
-              Get Instant Quote
-            </Link>
-            <Link
-              to="/shop"
-              className="border border-surface/30 text-surface px-8 py-4 rounded-lg hover:bg-surface/10 transition-colors"
-            >
-              Shop Accessories
-            </Link>
-          </div>
-
-          {/* Trust indicators */}
-          <div className="flex items-center gap-4 text-surface/80 text-body-sm justify-center lg:justify-start">
-            <div className="flex items-center gap-1">
-              <span className="text-secondary">★</span>
-              <span>4.6/5 rating</span>
-            </div>
-            <div>10,000+ devices repaired</div>
-            <div>4 locations</div>
-          </div>
         </div>
 
-        {/* Right: Illustration */}
-        <div className="flex justify-center lg:justify-end">
+        <div className="flex flex-wrap gap-4">
+          <Link
+            to="/repair"
+            className="rounded-lg bg-primary px-8 py-4 text-lg font-semibold text-surface transition-colors hover:bg-secondary hover:text-primary"
+          >
+            Get Instant Quote
+          </Link>
+          <Link
+            to="/shop"
+            className="rounded-lg border border-surface/30 px-8 py-4 text-lg text-surface transition-colors hover:bg-surface/10"
+          >
+            Shop Accessories
+          </Link>
+        </div>
+
+        <div className="mt-auto flex flex-wrap items-center gap-6 text-body-sm text-surface/80">
+          {stats.map((item) => (
+            <div key={item.id}>{item.content}</div>
+          ))}
+        </div>
+      </div>
+
+      <div className="col-span-5 h-full">
+        <div className="relative flex h-full items-center justify-center">
+          <div
+            aria-hidden
+            className="absolute -top-24 -right-20 h-64 w-64 rounded-full bg-secondary/20 blur-3xl"
+          />
+          <div
+            aria-hidden
+            className="absolute bottom-0 left-8 h-48 w-48 rounded-full bg-secondary/10 blur-3xl"
+          />
           <img
             src={phoneIllustration}
-            alt="Illustration of a smartphone undergoing repair"
-            className="w-64 sm:w-80 lg:w-96 h-auto opacity-90"
+            alt="Smartphone undergoing repair"
+            className="relative z-10 max-h-full w-auto drop-shadow-[0_30px_60px_rgba(0,0,0,0.45)]"
             loading="lazy"
           />
         </div>
+      </div>
+    </div>
+  );
+}
+
+function MobileLayout() {
+  return (
+    <div className="relative flex h-full flex-col justify-center">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <img
+          src={phoneIllustration}
+          alt="Smartphone undergoing repair"
+          className="h-3/4 w-auto opacity-40 blur-sm"
+          loading="lazy"
+        />
+      </div>
+
+      <div className="relative z-10 flex flex-col items-center gap-6 px-6 text-center text-surface">
+        <p className="text-body-sm font-medium text-surface/70">
+          Serving Coimbatore & Palakkad • 10+ Years Trusted
+        </p>
+        <h1 className="text-4xl font-bold leading-tight">
+          Expert Mobile & Laptop Repairs
+        </h1>
+        <p className="text-lg text-surface/80">
+          Same-day repairs • Free pickup & delivery • 90-day warranty
+        </p>
+
+        <div className="flex w-full flex-col items-center gap-4">
+          <Link
+            to="/repair"
+            className="w-full rounded-lg bg-primary px-6 py-3 text-base font-semibold text-surface transition-colors hover:bg-secondary hover:text-primary sm:w-auto"
+          >
+            Get Instant Quote
+          </Link>
+          <Link
+            to="/shop"
+            className="w-full rounded-lg border border-surface/30 px-6 py-3 text-base text-surface transition-colors hover:bg-surface/10 sm:w-auto"
+          >
+            Shop Accessories
+          </Link>
+        </div>
+      </div>
+
+      <div className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4 px-6 text-center text-body-sm text-surface/80">
+        {stats.map((item) => (
+          <div key={item.id}>{item.content}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function HeroReel() {
+  const { isMobile } = useDevice();
+
+  const slides = [
+    <div
+      key="hero"
+      className="relative h-full min-h-[var(--fullpage-section-h)] overflow-hidden"
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950" />
+      <div className="absolute inset-0 opacity-20 mix-blend-screen" aria-hidden>
+        <div className="h-full w-full bg-[radial-gradient(circle_at_top,_rgba(226,195,61,0.25),_transparent_55%)]" />
+      </div>
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        {isMobile ? <MobileLayout /> : <DesktopLayout />}
       </div>
     </div>,
   ];
 
   return (
-    <section className="snap-start fullpage-section overflow-hidden bg-gradient-to-b from-primary via-secondary/30 to-secondary/40">
+    <section className="snap-start fullpage-section overflow-hidden">
       <MultiSlideReel reelId="hero" showHint={false} mode="vertical">
         {slides}
       </MultiSlideReel>
