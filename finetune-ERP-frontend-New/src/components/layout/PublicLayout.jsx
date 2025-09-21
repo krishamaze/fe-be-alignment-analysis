@@ -40,14 +40,16 @@ function PublicLayoutInner() {
   const mainStyles = useMemo(
     () => ({
       paddingBottom: isMobile ? 'var(--bottomnav-h, 56px)' : '0',
-      paddingTop: navOffset,
       scrollPaddingTop: navOffset,
       ...(mode === 'reel'
         ? {
+            paddingTop: 0,
             scrollBehavior: 'auto',
             scrollSnapStop: 'always',
           }
-        : {}),
+        : {
+            paddingTop: navOffset,
+          }),
     }),
     [isMobile, mode, navOffset],
   );
