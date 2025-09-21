@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import MultiSlideReel from '@/components/layout/MultiSlideReel';
+import SectionSlider from '@/components/navigation/SectionSlider';
 import { Smartphone, Battery, PlugZap } from 'lucide-react';
 
 export default function QuickActionsReel() {
@@ -82,9 +82,9 @@ export default function QuickActionsReel() {
 
   return (
     <section className="snap-start fullpage-section overflow-hidden bg-gradient-to-b from-secondary/40 to-surface">
-      <MultiSlideReel reelId="quickActions" showHint={false} mode="vertical">
+      <SectionSlider reelId="quickActions" showHint={false} mode="vertical">
         {slides}
-      </MultiSlideReel>
+      </SectionSlider>
     </section>
   );
 }

@@ -2,7 +2,7 @@
 
 ## Bundling
 
-All routes are currently loaded eagerly. Consider using `React.lazy` and `Suspense` for large pages (e.g. dashboard vs e‑commerce) to create separate chunks. Heavy libraries should be lazy-loaded; `MultiSlideReel` replaces the Swiper-based `ReelLayout` to keep the initial bundle small.
+All routes are currently loaded eagerly. Consider using `React.lazy` and `Suspense` for large pages (e.g. dashboard vs e‑commerce) to create separate chunks. Heavy libraries should be lazy-loaded; `SectionSlider` replaces the Swiper-based `ReelLayout` to keep the initial bundle small.
 
 ## Budgets
 

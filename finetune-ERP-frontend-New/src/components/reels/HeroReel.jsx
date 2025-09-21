@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import MultiSlideReel from '@/components/layout/MultiSlideReel';
+import SectionSlider from '@/components/navigation/SectionSlider';
 import useDevice from '@/hooks/useDevice';
 import phoneIllustration from '@/assets/phone-illustration.png';
 
@@ -144,9 +144,9 @@ export default function HeroReel() {
 
   return (
     <section className="snap-start fullpage-section overflow-hidden">
-      <MultiSlideReel mode="horizontal" reelId="hero" showHint={false}>
+      <SectionSlider mode="horizontal" reelId="hero" showHint={false}>
         {slides}
-      </MultiSlideReel>
+      </SectionSlider>
     </section>
   );
 }

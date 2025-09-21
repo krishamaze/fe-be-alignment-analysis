@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback, Children } from 'react';
-import { useScrollMode } from './ScrollModeContext';
+import { useScrollMode } from '../layout/ScrollModeContext';
+
+import SwipeHint from './SwipeHint';
 
 const safeSessionStorage = {
   getItem: (key) => {
@@ -20,29 +22,7 @@ const safeSessionStorage = {
   },
 };
 
-function SwipeHint({ show, onHide, reelId, mode }) {
-  const isVertical = mode === 'vertical';
-  const hintKey = `reelHintShown-${mode}-${reelId}`;
-
-  useEffect(() => {
-    if (show) {
-      const timer = setTimeout(() => {
-        onHide();
-        safeSessionStorage.setItem(hintKey, 'true');
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [show, onHide, hintKey]);
-
-  if (!show) return null;
-  return (
-    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 bg-black/70 text-white px-6 py-3 rounded-full text-sm font-medium animate-pulse">
-      {isVertical ? '↑ Swipe up / down ↓' : '← Swipe for more →'}
-    </div>
-  );
-}
-
-export default function MultiSlideReel({
+export default function SectionSlider({
   children,
   reelId,
   showHint = true,
@@ -124,6 +104,7 @@ export default function MultiSlideReel({
       observer.disconnect();
     };
   }, [hasMultipleSlides, setSlideDebounced]);
+
   const scrollToSlide = useCallback(
     (index) => {
       if (!containerRef.current || !slideRefs.current[index]) return;
@@ -180,9 +161,11 @@ export default function MultiSlideReel({
       {showHint && hasMultipleSlides && (
         <SwipeHint
           show={showHintOverlay}
-          onHide={() => setShowHintOverlay(false)}
-          reelId={reelId}
           mode={mode}
+          onDismiss={() => {
+            setShowHintOverlay(false);
+            safeSessionStorage.setItem(hintStorageKey, 'true');
+          }}
         />
       )}
 
