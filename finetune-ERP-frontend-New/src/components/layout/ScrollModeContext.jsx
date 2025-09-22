@@ -9,6 +9,8 @@ import {
 } from 'react';
 import useDevice from '@/hooks/useDevice';
 
+export const SECTION_SLIDER_MODE = 'section-slider';
+
 // eslint-disable-next-line react-refresh/only-export-components
 export const ScrollModeContext = createContext({
   mode: 'scroll',
@@ -20,7 +22,7 @@ export const ScrollModeContext = createContext({
 });
 
 export const ScrollModeProvider = ({ children }) => {
-  const [mode, setMode] = useState('scroll');
+  const [mode, setInternalMode] = useState('scroll');
   const [bottomNavVisible, setBottomNavVisible] = useState(true);
   const [scrollDirection, setScrollDirection] = useState('down');
   const [scrollEl, setScrollEl] = useState(null);
@@ -33,10 +35,14 @@ export const ScrollModeProvider = ({ children }) => {
   const showThreshold = useMemo(() => (isMobile ? 0 : 100), [isMobile]);
   // TODO: detect mouse movement near bottom to reveal nav on desktop
 
+  const setMode = useCallback((nextMode) => {
+    setInternalMode(nextMode === 'reel' ? SECTION_SLIDER_MODE : nextMode);
+  }, []);
+
   const handleScroll = useCallback(
     (e) => {
-      // 🔥 KEY FIX: Don't interfere with fullpage scroll in reel mode
-      if (mode === 'reel') {
+      // 🔥 KEY FIX: Don't interfere with fullpage scroll in section slider mode
+      if (mode === SECTION_SLIDER_MODE) {
         // Allow fullpage scroll logic to work
         return;
       }
@@ -75,9 +81,9 @@ export const ScrollModeProvider = ({ children }) => {
     [mode, bottomNavVisible, hideThreshold, showThreshold]
   );
 
-  // Keep nav visible in reel mode
+  // Keep nav visible in section slider mode
   useEffect(() => {
-    if (mode === 'reel') {
+    if (mode === SECTION_SLIDER_MODE) {
       setBottomNavVisible(true);
     }
     distance.current = 0;
@@ -109,7 +115,7 @@ export const ScrollModeProvider = ({ children }) => {
       registerScrollElement: setScrollEl,
       scrollElement: scrollEl,
     }),
-    [mode, bottomNavVisible, scrollDirection, scrollEl]
+    [mode, bottomNavVisible, scrollDirection, scrollEl, setMode]
   );
 
   return (

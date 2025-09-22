@@ -78,7 +78,7 @@ export default function TestimonialsReel() {
         </div>
 
         <SectionSlider
-          reelId="testimonials"
+          sectionId="testimonials"
           showHint
           mode="vertical"
           className="w-full flex-1"

@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { devLog } from '@/utils/devLog';
-import { useScrollMode } from '@/components/layout/ScrollModeContext';
+import {
+  useScrollMode,
+  SECTION_SLIDER_MODE,
+} from '@/components/layout/ScrollModeContext';
 import HeroReel from '@/components/reels/HeroReel';
 import QuickActionsReel from '@/components/reels/QuickActionsReel';
 import TestimonialsReel from '@/components/reels/TestimonialsReel';
@@ -25,7 +28,7 @@ export default function Index() {
   const { scrollElement, setMode } = useScrollMode();
 
   useEffect(() => {
-    setMode('reel');
+    setMode(SECTION_SLIDER_MODE);
     return () => setMode('scroll');
   }, [setMode]);
 

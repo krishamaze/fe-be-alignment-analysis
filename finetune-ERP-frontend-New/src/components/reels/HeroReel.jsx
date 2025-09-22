@@ -144,7 +144,7 @@ export default function HeroReel() {
 
   return (
     <section className="snap-start fullpage-section overflow-hidden">
-      <SectionSlider mode="horizontal" reelId="hero" showHint={false}>
+      <SectionSlider mode="horizontal" sectionId="hero" showHint={false}>
         {slides}
       </SectionSlider>
     </section>

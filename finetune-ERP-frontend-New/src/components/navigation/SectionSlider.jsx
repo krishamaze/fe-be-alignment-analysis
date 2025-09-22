@@ -1,7 +1,21 @@
 import { useState, useEffect, useRef, useCallback, Children } from 'react';
-import { useScrollMode } from '../layout/ScrollModeContext';
+import {
+  useScrollMode,
+  SECTION_SLIDER_MODE,
+} from '../layout/ScrollModeContext';
 
 import SwipeHint from './SwipeHint';
+
+/**
+ * @typedef {Object} SectionSliderProps
+ * @property {import('react').ReactNode} children
+ * @property {string} [sectionId]
+ * @property {string} [reelId]
+ * @property {boolean} [showHint]
+ * @property {string} [className]
+ * @property {import('react').CSSProperties} [style]
+ * @property {'horizontal' | 'vertical'} [mode]
+ */
 
 const safeSessionStorage = {
   getItem: (key) => {
@@ -22,8 +36,12 @@ const safeSessionStorage = {
   },
 };
 
+/**
+ * @param {SectionSliderProps} props
+ */
 export default function SectionSlider({
   children,
+  sectionId,
   reelId,
   showHint = true,
   className = '',
@@ -33,11 +51,19 @@ export default function SectionSlider({
   const { setMode } = useScrollMode();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showHintOverlay, setShowHintOverlay] = useState(false);
+  const [isBlockingHorizontalSwipe, setIsBlockingHorizontalSwipe] =
+    useState(false);
   const containerRef = useRef(null);
   const slideRefs = useRef([]);
   const observerRef = useRef(null);
   const currentSlideRef = useRef(0);
   const updateTimeoutRef = useRef(null);
+  const verticalSettleTimeoutRef = useRef(null);
+  const isBlockingHorizontalSwipeRef = useRef(false);
+  const touchStartRef = useRef({ x: 0, y: 0 });
+  const hasVerticalIntentRef = useRef(false);
+
+  const sliderId = sectionId ?? reelId ?? 'section-slider';
 
   const setSlideDebounced = useCallback((index) => {
     if (updateTimeoutRef.current) clearTimeout(updateTimeoutRef.current);
@@ -48,17 +74,91 @@ export default function SectionSlider({
     }, 50);
   }, []);
 
-  useEffect(() => () => clearTimeout(updateTimeoutRef.current), []);
+  const blockHorizontalSwipe = useCallback(() => {
+    if (!isBlockingHorizontalSwipeRef.current) {
+      isBlockingHorizontalSwipeRef.current = true;
+      setIsBlockingHorizontalSwipe(true);
+    }
+
+    if (verticalSettleTimeoutRef.current) {
+      clearTimeout(verticalSettleTimeoutRef.current);
+    }
+
+    verticalSettleTimeoutRef.current = setTimeout(() => {
+      isBlockingHorizontalSwipeRef.current = false;
+      setIsBlockingHorizontalSwipe(false);
+    }, 200);
+  }, []);
+
+  useEffect(() => () => {
+      clearTimeout(updateTimeoutRef.current);
+      clearTimeout(verticalSettleTimeoutRef.current);
+    }, []);
 
   const slides = Children.toArray(children);
   const hasMultipleSlides = slides.length > 1;
   const isVertical = mode === 'vertical';
-  const hintStorageKey = `reelHintShown-${mode}-${reelId}`;
+  const hintStorageKey = `sectionHintShown-${mode}-${sliderId}`;
 
   useEffect(() => {
-    setMode('reel');
+    setMode(SECTION_SLIDER_MODE);
     return () => setMode('scroll');
   }, [setMode]);
+
+  useEffect(() => {
+    if (!containerRef.current || isVertical) return undefined;
+
+    const container = containerRef.current;
+
+    const handleTouchStart = (event) => {
+      if (event.touches.length !== 1) return;
+      const touch = event.touches[0];
+      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+      hasVerticalIntentRef.current = false;
+    };
+
+    const handleTouchMove = (event) => {
+      if (event.touches.length !== 1) return;
+      const touch = event.touches[0];
+      const deltaX = Math.abs(touch.clientX - touchStartRef.current.x);
+      const deltaY = Math.abs(touch.clientY - touchStartRef.current.y);
+
+      if (!hasVerticalIntentRef.current && deltaY > deltaX && deltaY > 6) {
+        hasVerticalIntentRef.current = true;
+      }
+
+      if (hasVerticalIntentRef.current) {
+        blockHorizontalSwipe();
+      }
+    };
+
+    const handleTouchEnd = () => {
+      if (hasVerticalIntentRef.current) {
+        blockHorizontalSwipe();
+        hasVerticalIntentRef.current = false;
+      }
+    };
+
+    container.addEventListener('touchstart', handleTouchStart, {
+      passive: true,
+    });
+    container.addEventListener('touchmove', handleTouchMove, {
+      passive: true,
+    });
+    container.addEventListener('touchend', handleTouchEnd, {
+      passive: true,
+    });
+    container.addEventListener('touchcancel', handleTouchEnd, {
+      passive: true,
+    });
+
+    return () => {
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchmove', handleTouchMove);
+      container.removeEventListener('touchend', handleTouchEnd);
+      container.removeEventListener('touchcancel', handleTouchEnd);
+    };
+  }, [isVertical, blockHorizontalSwipe]);
 
   useEffect(() => {
     if (!showHint || !hasMultipleSlides) return;
@@ -125,11 +225,9 @@ export default function SectionSlider({
     [isVertical]
   );
 
-  const containerClasses = [
-    'relative',
-    isVertical ? 'h-full' : 'min-h-[var(--fullpage-section-h,100vh)]',
-    className,
-  ]
+  const shouldBlockHorizontalSwipe = !isVertical && isBlockingHorizontalSwipe;
+
+  const containerClasses = ['relative', isVertical ? 'h-full' : '', className]
     .filter(Boolean)
     .join(' ');
 
@@ -140,14 +238,20 @@ export default function SectionSlider({
         className={
           isVertical
             ? 'reel-vertical h-full overflow-y-auto snap-y snap-mandatory'
-            : 'min-h-[var(--fullpage-section-h,100vh)] overflow-x-auto flex snap-x snap-mandatory'
+            : 'overflow-x-auto flex snap-x snap-mandatory'
         }
         style={
           isVertical
             ? {
                 overscrollBehavior: 'contain',
               }
-            : { scrollbarWidth: 'none', msOverflowStyle: 'none' }
+            : {
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                ...(shouldBlockHorizontalSwipe
+                  ? { touchAction: 'pan-y', overflowX: 'hidden' }
+                  : {}),
+              }
         }
       >
         {slides.map((slide, index) => (
@@ -181,7 +285,7 @@ export default function SectionSlider({
         <div
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3"
           role="tablist"
-          aria-label={`${reelId} slides`}
+          aria-label={`${sliderId} slides`}
         >
           {slides.map((_, index) => (
             <button

@@ -1,4 +1,7 @@
-import { useScrollMode } from '@/components/layout/ScrollModeContext';
+import {
+  useScrollMode,
+  SECTION_SLIDER_MODE,
+} from '@/components/layout/ScrollModeContext';
 import useDevice from '@/hooks/useDevice';
 
 export default function PageSection({
@@ -10,10 +13,11 @@ export default function PageSection({
   const { mode } = useScrollMode();
   const { isMobile } = useDevice();
 
-  const height = mode === 'reel' ? 'h-full' : 'min-h-screen';
+  const isSliderMode = mode === SECTION_SLIDER_MODE;
+  const height = isSliderMode ? 'h-full' : 'min-h-screen';
 
   const reelPadding =
-    mode === 'reel' && isMobile ? 'pb-[var(--bottomnav-h,0px)]' : '';
+    isSliderMode && isMobile ? 'pb-[var(--bottomnav-h,0px)]' : '';
 
   return (
     <section
