@@ -29,61 +29,77 @@ export default function QuickActionsReel() {
       color: 'text-secondary',
     },
   ];
-  const slides = [
-    <div key="repairs" className="h-full flex">
-      <div className="max-w-5xl mx-auto w-full h-full px-4 flex flex-col items-center justify-center gap-8">
-        <div className="text-center space-y-2">
-          <h2 className="text-heading-xl font-bold text-primary">
-            Most Popular Repairs
-          </h2>
-          <p className="text-body-lg text-primary/60">
-            Transparent pricing • Same-day service • 90-day warranty
-          </p>
-        </div>
-
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-3 place-items-stretch">
-          {repairs.map(({ icon, title, price, description, link, color }) => {
-            const Icon = icon;
-            return (
-              <div
-                key={title}
-                className="bg-surface shadow-sm hover:shadow-lg transition-transform duration-300 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 space-y-3"
-              >
-                <Icon className={`w-12 h-12 ${color}`} />
-                <h3 className="text-heading-md font-semibold text-primary">
-                  {title}
-                </h3>
-                <p className="text-display-md font-bold text-primary">
-                  {price}
-                </p>
-                <p className="text-body-md text-primary/60">{description}</p>
-                <Link
-                  to={link}
-                  className="min-h-[44px] inline-flex items-center justify-center px-5 py-2 rounded-lg bg-primary text-surface font-medium hover:bg-secondary hover:text-primary transition-colors"
-                >
-                  Book Now
-                </Link>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="text-center">
-          <Link
-            to="/repair"
-            className="text-primary hover:text-secondary font-medium text-body-lg"
-          >
-            View all repair services →
-          </Link>
-        </div>
-      </div>
-    </div>,
-  ];
 
   return (
     <section className="snap-start fullpage-section overflow-hidden bg-gradient-to-b from-secondary/40 to-surface">
       <SectionSlider sectionId="quickActions" showHint={false} mode="vertical">
-        {slides}
+        <div key="repairs" className="flex h-full">
+          <div className="mx-auto flex h-full w-full max-w-5xl flex-col items-center justify-center gap-8 px-4">
+            <div className="text-center space-y-2">
+              <h2 className="text-heading-xl font-bold text-primary">
+                Most Popular Repairs
+              </h2>
+              <p className="text-body-lg text-primary/60">
+                Transparent pricing • Same-day service • 90-day warranty
+              </p>
+            </div>
+
+            <div className="w-full">
+              <SectionSlider
+                reelId="quickActions-cards"
+                showHint={false}
+                mode="horizontal"
+                className="mt-6"
+                style={{ '--reel-section-min-h': 'auto' }}
+                slidesPerView={{ mobile: 1, tablet: 2, desktop: 3 }}
+                autoAdvanceGroup
+              >
+                {repairs.map(
+                  ({ icon, title, price, description, link, color }) => {
+                    const Icon = icon;
+                    return (
+                      <div
+                        key={title}
+                        className="flex h-full items-stretch px-2"
+                        aria-label={`${title} repair option`}
+                      >
+                        <article className="flex w-full flex-col items-center justify-between space-y-4 rounded-2xl bg-surface p-6 text-center shadow-sm transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+                          <Icon className={`h-12 w-12 ${color}`} />
+                          <div className="space-y-3">
+                            <h3 className="text-heading-md font-semibold text-primary">
+                              {title}
+                            </h3>
+                            <p className="text-display-md font-bold text-primary">
+                              {price}
+                            </p>
+                            <p className="text-body-md text-primary/60">
+                              {description}
+                            </p>
+                          </div>
+                          <Link
+                            to={link}
+                            className="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-primary px-5 py-2 font-medium text-surface transition-colors hover:bg-secondary hover:text-primary"
+                          >
+                            Book Now
+                          </Link>
+                        </article>
+                      </div>
+                    );
+                  }
+                )}
+              </SectionSlider>
+            </div>
+
+            <div className="text-center">
+              <Link
+                to="/repair"
+                className="text-body-lg font-medium text-primary hover:text-secondary"
+              >
+                View all repair services →
+              </Link>
+            </div>
+          </div>
+        </div>
       </SectionSlider>
     </section>
   );

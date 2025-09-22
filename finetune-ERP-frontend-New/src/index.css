@@ -131,7 +131,10 @@ html {
 
 /* Fix horizontal reel section height for backgrounds */
 .reel-section {
-  min-height: var(--fullpage-section-h, 100vh);
+  min-height: var(
+    --reel-section-min-h,
+    var(--fullpage-section-h, 100vh)
+  );
   display: flex;
   flex-direction: column;
   justify-content: center;
