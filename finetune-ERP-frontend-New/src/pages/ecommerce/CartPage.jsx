@@ -13,7 +13,10 @@ import {
 } from 'react-icons/hi';
 import Payment from '@/components/ecommerce/Payment';
 import { useEffect, useState } from 'react';
-import { useScrollMode } from '@/components/layout/ScrollModeContext';
+import {
+  useScrollMode,
+  SECTION_SLIDER_MODE,
+} from '@/components/layout/ScrollModeContext';
 
 function CartPage() {
   const dispatch = useDispatch();
@@ -24,7 +27,7 @@ function CartPage() {
   const { setMode } = useScrollMode();
 
   useEffect(() => {
-    setMode('reel');
+    setMode(SECTION_SLIDER_MODE);
     return () => setMode('scroll');
   }, [setMode]);
 

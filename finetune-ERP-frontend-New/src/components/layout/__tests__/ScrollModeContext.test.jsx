@@ -4,6 +4,7 @@ import { vi, test, expect } from 'vitest';
 import {
   ScrollModeProvider,
   useScrollMode,
+  SECTION_SLIDER_MODE,
 } from '@/components/layout/ScrollModeContext';
 
 vi.stubGlobal('requestAnimationFrame', (cb) => cb());
@@ -13,7 +14,7 @@ test('mode change resets bottom nav visibility', () => {
     <ScrollModeProvider>{children}</ScrollModeProvider>
   );
   const { result } = renderHook(() => useScrollMode(), { wrapper });
-  act(() => result.current.setMode('reel'));
+  act(() => result.current.setMode(SECTION_SLIDER_MODE));
   expect(result.current.bottomNavVisible).toBe(true);
   act(() => result.current.setMode('scroll'));
   expect(result.current.mode).toBe('scroll');

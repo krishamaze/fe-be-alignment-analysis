@@ -8,6 +8,7 @@ import useDevice from '@/hooks/useDevice';
 import {
   ScrollModeProvider,
   useScrollMode,
+  SECTION_SLIDER_MODE,
 } from '@/components/layout/ScrollModeContext';
 
 function PublicLayoutInner() {
@@ -41,7 +42,7 @@ function PublicLayoutInner() {
     () => ({
       paddingBottom: isMobile ? 'var(--bottomnav-h, 56px)' : '0',
       scrollPaddingTop: navOffset,
-      ...(mode === 'reel'
+      ...(mode === SECTION_SLIDER_MODE
         ? {
             paddingTop: 0,
             scrollBehavior: 'auto',
@@ -64,7 +65,7 @@ function PublicLayoutInner() {
           ref={registerScrollElement}
           data-scroll-container="true"
           className={`flex-1 min-h-0 ${
-            mode === 'reel'
+            mode === SECTION_SLIDER_MODE
               ? 'overflow-y-auto snap-y snap-mandatory fullpage-scrolling'
               : 'overflow-y-auto'
           }`}
