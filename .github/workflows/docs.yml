@@ -1,0 +1,49 @@
+name: docs
+
+on:
+  push:
+    paths:
+      - 'docs/**'
+      - 'scripts/generate_references.py'
+      - 'finetune-ERP-backend-New/**'
+      - 'finetune-ERP-frontend-New/**'
+      - 'README.md'
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'scripts/generate_references.py'
+      - 'finetune-ERP-backend-New/**'
+      - 'finetune-ERP-frontend-New/**'
+      - 'README.md'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Regenerate references
+        run: |
+          python scripts/generate_references.py
+          git diff --exit-code docs/reference
+
+      - name: Lychee link check
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --verbose --no-progress
+            README.md docs/ARCHITECTURE.md docs/DEVELOPER_GUIDE.md docs/GETTING_STARTED.md
+            docs/reference/API_ROUTES.md docs/reference/FRONTEND_ROUTES.md docs/reference/ENVIRONMENT_KEYS.md
+
+      - name: Markdown lint
+        uses: DavidAnson/markdownlint-cli2-action@v15
+        with:
+          globs: |
+            README.md
+            docs/**/*.md
