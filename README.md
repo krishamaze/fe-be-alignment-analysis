@@ -24,19 +24,17 @@ finetune.os is an experimental AI operating system that orchestrates modular age
 
 ## Architecture
 
-High-level component interactions are documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). The API surface is described in [docs/API_GUIDE.md](docs/API_GUIDE.md).
+High-level component interactions are documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). For a hands-on walkthrough use [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md) and keep the [docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md) open for daily workflows. Generated references in `docs/reference/` stay in sync with the codebase via `scripts/generate_references.py`.
 
 ## Agent Deployment
 
-Agents are defined in `AGENTS.md`. Provision and rollout steps are tracked in
-`docs/project/WORKFLOW_GUIDE.md`; follow those runbooks to build images,
-register coordinators, and execute health checks.
+Agents are defined in `AGENTS.md`. Use the coordinator utilities and deployment notes in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#agent-ecosystem) when rolling out new workers.
 
 ## Contributing
 
 1. Fork the repository and create a local branch.
-2. Run `pytest` and `pnpm test` before submitting.
-3. Open a pull request following the template in `AGENTS.md`.
+2. Run `pytest finetune-ERP-backend-New/tests -q` and `pnpm --dir finetune-ERP-frontend-New test` before submitting.
+3. Open a pull request following the template in `AGENTS.md` and include regenerated references when routes or settings change.
 
 Start with `CONTEXT.md` for architecture guidance and `FILEMAP.md` to navigate the codebase.
 
