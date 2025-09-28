@@ -1,7 +1,7 @@
-# Finetune ERP Backend – Agent Guide
+# Finetune ERP Backend – Operations Guide
 
 ## Project Overview
-Finetune ERP Backend is a Django and Django REST Framework service for managing users, stores, and attendance.
+Finetune ERP Backend is a Django and Django REST Framework service for managing users, stores, attendance, inventory, and invoicing workflows for repair shops.
 
 ## Architecture Summary
 - **accounts** – custom user model, authentication, role-based permissions.

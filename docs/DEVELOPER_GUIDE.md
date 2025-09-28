@@ -6,12 +6,12 @@ This how-to guide collects the day-to-day workflows for working inside the Finet
 
 | Area | Path | Responsibilities |
 | :--- | :--- | :-------------- |
-| Django API | `finetune-ERP-backend-New/` | Coordinator REST API, agent hooks, invoicing, inventory, and attendance flows. |
+| Django API | `finetune-ERP-backend-New/` | REST API for accounts, bookings, invoicing, inventory, attendance, and activity logs. |
 | React frontend | `finetune-ERP-frontend-New/` | Public marketing site, ecommerce flows, and internal dashboards powered by React Router 7. |
 | Shared docs | `docs/` | Diátaxis documents plus generated references for routes and environment variables. |
 
 > [!NOTE]
-> The backend exposes agent orchestration primitives described in [ARCHITECTURE.md](ARCHITECTURE.md). Do not duplicate scheduling or queue logic in feature code—extend the existing utilities in `finetune-ERP-backend-New/utils/` instead.
+> Reuse shared services in `finetune-ERP-backend-New/utils/` (pagination, notifications, middleware) before adding new helpers. The [Architecture Guide](ARCHITECTURE.md) documents how each Django app collaborates with the frontend modules.
 
 ## Backend workflow
 
@@ -23,7 +23,7 @@ This how-to guide collects the day-to-day workflows for working inside the Finet
    ```
 2. **Authentication** – JWT endpoints live under `/api/auth/*`. Token refresh and verification routes are listed in [API_ROUTES.md](reference/API_ROUTES.md).
 3. **Viewsets first** – New CRUD surfaces should extend existing DRF `ViewSet` patterns so routers keep routes discoverable. Register the viewset and rerun `python scripts/generate_references.py` to refresh documentation.
-4. **Background coordination** – Use the `AgentProtocol` helpers for long-running work instead of ad-hoc threads or Celery substitutes.
+4. **Background jobs** – Prefer Django management commands or the notification service for asynchronous work instead of ad-hoc threads.
 5. **Testing** – Targeted modules live under `finetune-ERP-backend-New/tests/`. Pytest is configured via `pytest.ini`.
    ```bash
    pytest finetune-ERP-backend-New/tests -q
