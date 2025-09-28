@@ -9,7 +9,6 @@ This tutorial walks a new contributor from cloning the monorepo to running both 
 | Python | 3.11+ | Matches the `requires-python` constraint in `pyproject.toml`. |
 | Node.js | 20 LTS | Provides the baseline for Vite 6 and pnpm. |
 | pnpm | 9.x (`corepack enable pnpm`) | pnpm drives the frontend workspace. |
-| Redis (optional) | 7.x | Only required when exercising queue-backed agent flows. |
 
 > [!NOTE]
 > The backend ships with SQLite defaults so you can complete this tutorial without provisioning PostgreSQL.

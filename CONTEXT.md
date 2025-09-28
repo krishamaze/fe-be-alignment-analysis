@@ -1,6 +1,6 @@
 # Context
 
-finetune.os follows an iterative, test-driven workflow where features begin as design docs and move through prototype branches before merging to `main` after review.
+Finetune ERP follows an iterative, test-driven workflow where features begin as design docs and move through prototype branches before merging to `main` after review.
 
 ## Development Methodology
 
@@ -12,7 +12,7 @@ finetune.os follows an iterative, test-driven workflow where features begin as d
 
 - **Backend**: Django REST Framework
 - **Frontend**: React + Vite
-- **Agents**: Python workers communicating via Redis queues
+- **Background services**: Django management commands and scheduled jobs that deliver notifications and attendance rollups
 
 ## Iteration Workflow
 
@@ -31,7 +31,7 @@ finetune.os follows an iterative, test-driven workflow where features begin as d
 
 - **Migrations**: run `python manage.py migrate` after pulling.
 - **Vite**: clear cache with `pnpm clean` if dev server fails.
-- **Agents**: monitor Redis queues with `redis-cli monitor` when jobs stall.
+- **Notifications**: review management command logs when emails or SMS notifications fail to send.
 
 Common patterns live in `docs/known-issues`.
 
