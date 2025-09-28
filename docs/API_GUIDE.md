@@ -1,108 +1,99 @@
 # API Guide
 
-## Authentication Overview
-- Public GET: `/api/brands/`, `/api/departments/`, `/api/categories/`, `/api/subcategories/`, `/api/products/`, `/api/variants/`
-- Authenticated: cart, checkout, orders, account-related endpoints
+This guide highlights cross-cutting workflows (auth, catalog, bookings,
+attendance, marketing) and the expectations around payloads and permissions. For
+an exhaustive endpoint inventory, consult the
+[`Backend API Routes Reference`](reference/BACKEND_API_ROUTES.md).
 
-## Brands
-- `GET /api/brands/` – public list
-- `POST /api/brands/` – system_admin only
-- `GET /api/brands/{id}/` – public detail
-- `PUT /api/brands/{id}/` – system_admin only
-- `DELETE /api/brands/{id}/` – system_admin only
+## Authentication
 
-## Stores
-- `GET /api/stores?store_type=BRANCH|HQ` – public list (authority details hidden; defaults to active branches)
-- `POST /api/stores` – system_admin only
-- `GET /api/stores/{id}` – public detail
-- `PUT /api/stores/{id}` – system_admin only
-- `DELETE /api/stores/{id}` – system_admin only
+- `POST /api/auth/login` – issue JWT access/refresh tokens; throttled under the
+  `login` scope.
+- `POST /api/auth/register` – create a customer account.
+- `POST /api/auth/logout` – blacklist refresh token.
+- `GET /api/auth/me` – inspect the current user's profile.
+- `POST /api/token/refresh` / `POST /api/token/verify` – lifecycle management for
+  JWTs.
 
-## Spares
-- `GET /api/spares` – public list (price hidden for non-admin)
-- `POST /api/spares` – system_admin only
-- `GET /api/spares/{id}` – public detail
-- `PUT /api/spares/{id}` – system_admin only
-- `DELETE /api/spares/{id}` – system_admin only
+All dashboard APIs require `Authorization: Bearer <token>` headers. Customer
+pages (`/account`, `/orders`) reuse the same tokens and share logout behaviour.
 
-## Units
-- `GET /api/units` – auth required
-- `GET /api/units/{slug}` – auth required
-- `POST /api/units` – system_admin only
-- `PUT /api/units/{slug}` – system_admin only (slug immutable)
-- `DELETE /api/units/{slug}` – system_admin only
+## Catalog & Inventory
 
-## Qualities
-- `GET /api/qualities` – auth required
-- `GET /api/qualities/{slug}` – auth required
-- `POST /api/qualities` – system_admin only
-- `PUT /api/qualities/{slug}` – system_admin only (slug immutable)
-- `DELETE /api/qualities/{slug}` – system_admin only
+Departments, categories, subcategories, products, and variants follow DRF
+`ModelViewSet` semantics exposed under `/api/*` prefixes. Filtering and ordering
+match the query parameters surfaced by the frontend (e.g., `?brand=`,
+`?department=`, `?min_price=`, `?ordering=-date_created`). Units and qualities
+require authentication for reads and restrict mutations to the `system_admin`
+role.
 
-## Taxonomy
-- `GET /api/departments` – public list
-- `POST /api/departments` – system_admin only
-- `GET /api/departments/{slug}` – public detail
-- `PUT /api/departments/{slug}` – system_admin only (slug immutable)
-- `DELETE /api/departments/{slug}` – system_admin only
-- `GET /api/categories?department=slug` – public list
-- `POST /api/categories` – system_admin only
-- `GET /api/categories/{slug}` – public detail
-- `PUT /api/categories/{slug}` – system_admin only (slug immutable)
-- `DELETE /api/categories/{slug}` – system_admin only
-- `GET /api/subcategories?category=slug` – public list
-- `POST /api/subcategories` – system_admin only
-- `GET /api/subcategories/{slug}` – public detail
-- `PUT /api/subcategories/{slug}` – system_admin only (slug immutable)
-- `DELETE /api/subcategories/{slug}` – system_admin only
+Inventory routes (`/api/stock-ledgers/`, `/api/stock-entries/`, `/api/serials/`,
+`/api/price-logs/`, `/api/inventory-config/`) are all admin-only. Stock entries
+support the standard `GET/POST/PUT/PATCH/DELETE` matrix; configuration accepts
+`GET` + `PUT` to adjust global thresholds.
 
-## Products
-- `GET /api/products` – public list (filter by `brand`, `availability`, `department`, `category`, `subcategory`, `min_price`, `max_price`; order with `ordering=price| -price | -date_created`)
-- `POST /api/products` – system_admin only
-- `GET /api/products/{slug}` – public detail
-- `PUT /api/products/{slug}` – system_admin only (slug immutable)
-- `DELETE /api/products/{slug}` – system_admin only
+## Bookings & Customer Experience
 
-## Variants
-- `GET /api/variants` – public list (filter by `product` slug)
-- `POST /api/variants` – system_admin only
-- `GET /api/variants/{slug}` – public detail
-- `PUT /api/variants/{slug}` – system_admin only (slug immutable)
-- `DELETE /api/variants/{slug}` – system_admin only
+Create and manage bookings through `/api/bookings`:
 
+```json
+{
+  "name": "John",
+  "email": "j@example.com",
+  "date": "2024-01-01",
+  "time": "10:00",
+  "captcha_token": "...",
+  "details": {"issues": [1,2], "brand": "Apple", "product": "iPhone"},
+  "responses": [
+    {"question_set_name": "A", "question": "Is it working?", "response": "Yes"}
+  ]
+}
+```
 
-## Bookings
-- `POST /api/bookings/` – public create (captcha + throttling). Supports nested `details` and `responses`:
-  ```json
-  {
-    "name": "John",
-    "email": "j@example.com",
-    "date": "2024-01-01",
-    "time": "10:00",
-    "captcha_token": "...",
-    "details": {"issues": [1,2], "brand": "Apple", "product": "iPhone"},
-    "responses": [{"question_set_name": "A", "question": "Is it working?", "response": "Yes"}]
-  }
-  ```
-- `GET /api/bookings/` – system_admin only list
-- `GET /api/bookings/{id}/` – system_admin only detail
-- `PATCH /api/bookings/{id}/` – system_admin only status update (reason required for `cancelled`/`rejected`)
-  - Transitions: pending→approved/rejected/cancelled, approved→in_progress/cancelled, in_progress→completed/cancelled
+- Public POSTs are throttled (`booking` scope) and send notifications when a
+  status transitions.
+- `system_admin` users can approve, reject, cancel, or complete bookings in line
+  with the serializer's transition table.
+- Supporting taxonomies (`/api/issues`, `/api/otherissues`, `/api/questions`)
+  are available to authenticated dashboards for configuration.
+- Customer feedback can be created via `POST /api/responses`; admins can list and
+  read responses for audit trails.
 
-## Issues & Questions
-- `GET /api/issues/`, `POST /api/issues/` – auth required; writes system_admin only
-- `GET /api/otherissues/`, `POST /api/otherissues/` – same rules
-- `GET /api/questions/`, `POST /api/questions/` – same rules
+## Attendance
 
-## Responses
-- `POST /api/responses/` – public create for a booking
-- `GET /api/responses/` – system_admin only list
+The attendance module lives under `/api/attendance/` and uses selfie uploads to
+validate advisor check-ins/outs.
 
-## Event Logs
-- `GET /api/logs/` – system_admin only list
-  - Filters: `entity_type`, `actor`, `start`, `end`
-- `GET /api/logs/export?format=csv|json` – system_admin only export (same filters)
+- Advisors call `POST /api/attendance/check-in` and `POST /api/attendance/check-out`
+  with multipart payloads that include latitude/longitude and images.
+- Managers review pending records through `GET /api/attendance/approvals` and
+  resolve them using `/approve` or `/reject` actions on individual IDs.
+- Reports exist for advisors (`GET /api/attendance/me/today`,
+  `GET /api/attendance/reports/me`) and store managers (`GET /api/attendance/reports/store/{store_id}`).
+- System administrators can manage shifts, schedules, week offs, exceptions,
+  geofences, and payroll profiles under `/api/attendance/admin/*` endpoints to
+  keep rosters in sync.
+
+## Marketing & Lead Capture
+
+- `GET/POST /api/brands/` – brand catalogue backing marketing pages; non-admins
+  are read-only.
+- `POST /api/marketing/contact/` – contact-us form submissions with scoped rate
+  limiting (`contact`).
+- `POST /api/marketing/schedule-call/` – schedule a callback with throttling via
+  the `schedule_call` scope.
+
+Frontend forms (`/contact`, `/schedule-call`) are wired to these endpoints via
+RTK Query mutations.
+
+## Activity Logs
+
+`GET /api/logs/` exposes an audit trail for privileged users with filters for
+entity, actor, and date range. Export logs through
+`GET /api/logs/export/?format=csv|json` to support compliance checks.
 
 ## Related Guides
-- [Integration Contract](contracts/INTEGRATION_CONTRACT.md)
-- [Test Guide](TEST_GUIDE.md)
+
+- [`Backend API Routes Reference`](reference/BACKEND_API_ROUTES.md)
+- [`Environment Key Reference`](reference/ENVIRONMENT_KEYS.md)
+- [`Frontend Route Reference`](reference/FRONTEND_ROUTES.md)

@@ -28,13 +28,9 @@ High-level component interactions are documented in [docs/ARCHITECTURE.md](docs/
 
 ## Agent Deployment
 
-Agents are defined in `AGENTS.md`. To deploy one:
-
-```bash
-python scripts/deploy_agent.py <agent_name>
-```
-
-The script builds the agent image, registers it with the coordinator, and performs health checks.
+Agents are defined in `AGENTS.md`. Provision and rollout steps are tracked in
+`docs/project/WORKFLOW_GUIDE.md`; follow those runbooks to build images,
+register coordinators, and execute health checks.
 
 ## Contributing
 

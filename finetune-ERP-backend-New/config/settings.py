@@ -24,12 +24,18 @@ BOOKING_NOTIFICATION_CHANNELS = os.environ.get(
 SMS_GATEWAY_URL = os.environ.get("SMS_GATEWAY_URL", "")
 SMS_GATEWAY_TOKEN = os.environ.get("SMS_GATEWAY_TOKEN", "")
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "noreply@example.com")
-ALLOWED_HOSTS = [
+_DEFAULT_ALLOWED_HOSTS = [
     "api.finetune.store",
     "localhost",
     "127.0.0.1",
     "finetunetechcrafterp-dev.up.railway.app",
 ]
+
+_allowed_hosts_env = os.environ.get("ALLOWED_HOSTS")
+if _allowed_hosts_env:
+    ALLOWED_HOSTS = [host.strip() for host in _allowed_hosts_env.split(",") if host.strip()]
+else:
+    ALLOWED_HOSTS = _DEFAULT_ALLOWED_HOSTS
 
 # ✅ CORS
 CORS_ALLOW_ALL_ORIGINS = False  # Change from True

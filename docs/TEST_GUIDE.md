@@ -28,7 +28,7 @@ pytest
 Install dependencies:
 
 ```bash
-npm ci
+pnpm install --prefix finetune-ERP-frontend-New --frozen-lockfile
 ```
 
 Vitest is configured with a **jsdom** environment for React component tests.
@@ -38,7 +38,7 @@ Vitest is configured with a **jsdom** environment for React component tests.
 Run tests:
 
 ```bash
-npm test
+pnpm --prefix finetune-ERP-frontend-New test
 ```
 
 ## Related Guides

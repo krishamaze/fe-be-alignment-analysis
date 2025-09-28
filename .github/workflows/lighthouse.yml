@@ -13,13 +13,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: finetune-ERP-frontend-New/pnpm-lock.yaml
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - name: Install dependencies
         working-directory: finetune-ERP-frontend-New
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       - name: Build app
         working-directory: finetune-ERP-frontend-New
-        run: npm run build
+        run: pnpm run build
       - name: Lighthouse audit
         working-directory: finetune-ERP-frontend-New
-        run: npx lhci autorun --config=lighthouserc.json
+        run: pnpm dlx @lhci/cli@0.14.3 autorun --config=lighthouserc.json
         continue-on-error: true
