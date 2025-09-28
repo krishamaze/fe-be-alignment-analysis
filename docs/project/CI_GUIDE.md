@@ -4,16 +4,16 @@ This project uses GitHub Actions to enforce quality gates on every pull request.
 
 ## Linting & Formatting
 
-- **ESLint** checks the frontend source via `npm run lint`.
-- **Prettier** ensures consistent formatting. Run `prettier . --write` to fix issues and `npm run format:check` to verify.
+- **ESLint** checks the frontend source via `pnpm --prefix finetune-ERP-frontend-New run lint`.
+- **Prettier** ensures consistent formatting. Run `prettier . --write` to fix issues and `pnpm --prefix finetune-ERP-frontend-New run format:check` to verify.
 - **Black** formats Python code in the backend. Run `black .` to auto-fix and `black . --check` in CI.
 - If formatting fails locally, rerun the appropriate formatter and commit the changes.
 
 ## Testing
 
-- Frontend unit tests run with `npm test` (Vitest).
+- Frontend unit tests run with `pnpm --prefix finetune-ERP-frontend-New test` (Vitest).
 - Backend tests run with `pytest`.
-- SEO tests rely on React 19 `<title>` and `<meta>` tags for titles and descriptions. Updating page metadata often requires regenerating snapshots via `npm test -u`.
+- SEO tests rely on React 19 `<title>` and `<meta>` tags for titles and descriptions. Updating page metadata often requires regenerating snapshots via `pnpm --prefix finetune-ERP-frontend-New test -- --update`.
 
 ## Lighthouse
 

@@ -2,48 +2,6 @@
 
 ## Backend Runtime & Services
 
-### File name : backend-v2/app/services/memory.py
-Status: OUTDATED
-
-Key Info:
-- File does not exist in the repository; `find` across the tree returns no matches.
-- No `AsyncMemoryService` implementation is present under any `backend` folder.
-- Current backend code lives under `finetune-ERP-backend-New/` using Django viewsets and services.
-
-Conflicts With: docs referencing "AsyncMemoryService" or "Mem0 v2" (none located).
-
-Missing Critical Info: Actual memory service architecture for the HARDENED enhancement pipeline is undocumented and unimplemented.
-
-Recommendation: MAJOR UPDATE – create or import the Mem0 v2 implementation and document its location.
-
-### File name : backend-v2/app/routers/
-Status: OUTDATED
-
-Key Info:
-- Directory `backend-v2/app/routers/` is absent from the repository.
-- Active API routers live inside Django apps such as `config/urls.py`, `catalog/urls.py`, `store/urls.py`, etc.
-- API wiring currently uses `path("api/", include(...))` statements in Django rather than FastAPI routers.
-
-Conflicts With: Any documentation instructing contributors to modify `backend-v2/app/routers/`.
-
-Missing Critical Info: Mapping of current Django DRF routers to documented endpoints.
-
-Recommendation: MAJOR UPDATE – replace or rewrite docs pointing at the nonexistent FastAPI layer.
-
-### File name : extension/
-Status: OUTDATED
-
-Key Info:
-- No `extension/` directory exists at the repository root or within submodules.
-- Browser extension architecture is not represented in the current codebase.
-- Frontend implementation is a React + Vite app under `finetune-ERP-frontend-New/`.
-
-Conflicts With: Any docs referencing an extension deployment path.
-
-Missing Critical Info: Updated description of Chrome/Edge extension story or confirmation that it has been deprecated.
-
-Recommendation: DELETE – remove outdated extension references or add the folder with current sources.
-
 ### File name : finetune-ERP-backend-New/config/settings.py
 Status: ACCURATE
 
@@ -66,7 +24,7 @@ Key Info:
 - Composes REST API routes from modular apps (accounts, store, spares, catalog, bookings, invoicing, marketing, attendance, activity, inventory).【F:finetune-ERP-backend-New/config/urls.py†L31-L38】
 - Uses DRF routers within each app rather than a monolithic router file.
 
-Conflicts With: Docs pointing at `/backend-v2/app/routers/` for API changes.
+Conflicts With: Legacy FastAPI router documentation (now replaced by Django URL references).
 
 Missing Critical Info: Attendance sub-routes under `/api/attendance/` are not captured in central API docs.
 
@@ -220,13 +178,13 @@ Status: PARTIALLY ACCURATE
 Key Info:
 - Quick start instructs `pip install -e .[backend,dev,test]` and `pnpm install --prefix finetune-ERP-frontend-New`, matching dependency layout.【F:README.md†L7-L24】
 - Describes architecture at a high level, pointing to docs for deeper guidance.【F:README.md†L26-L32】
-- References `scripts/deploy_agent.py` which does not exist in repository (no `scripts/` directory).【F:README.md†L34-L43】
+- Directs readers to `docs/project/WORKFLOW_GUIDE.md` for deployment runbooks instead of a missing script.【F:README.md†L34-L45】
 
-Conflicts With: Absent deployment script, no mention of hardened pipeline or Mem0 v2.
+Conflicts With: No mention of hardened pipeline or Mem0 v2 rollout.
 
 Missing Critical Info: Actual agent deployment procedure, queue configuration, hardened enhancement release steps.
 
-Recommendation: MAJOR UPDATE – remove nonexistent script reference and add pipeline overview.
+Recommendation: MAJOR UPDATE – expand deployment section with hardened pipeline overview.
 
 ### File name : CONTEXT.md
 Status: OUTDATED
@@ -238,7 +196,7 @@ Key Info:
 
 Conflicts With: Current absence of Redis settings in env.example and settings.py.
 
-Missing Critical Info: Hardened pipeline stages, Mem0 v2, backend-v2 migration timeline.
+Missing Critical Info: Hardened pipeline stages, Mem0 v2 roadmap, and any planned backend migration timeline.
 
 Recommendation: MAJOR UPDATE – incorporate new operational model and dependencies.
 
@@ -250,7 +208,7 @@ Key Info:
 - Does not describe actual app modules, attendance subsystem, or Mem0 pipeline.
 - Lacks mention of hardened enhancement stages or AsyncMemoryService.
 
-Conflicts With: Expectations around backend-v2/Mem0 described externally.
+Conflicts With: Expectations around future backend rewrites and Mem0 described externally.
 
 Missing Critical Info: Current Django app breakdown, coordinator endpoints, Mem0 data flow.
 

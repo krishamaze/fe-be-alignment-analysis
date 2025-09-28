@@ -14,18 +14,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: finetune-ERP-frontend-New/pnpm-lock.yaml
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - name: Install frontend dependencies
         working-directory: finetune-ERP-frontend-New
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       - name: Run Prettier
         working-directory: finetune-ERP-frontend-New
-        run: npm run format
+        run: pnpm run format
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - name: Install backend dependencies
-        working-directory: finetune-ERP-backend-New
-        run: pip install -r requirements-test.txt
+        run: pip install -e .[backend,dev,test]
       - name: Run Black
         working-directory: finetune-ERP-backend-New
         run: black .
@@ -41,21 +45,25 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: finetune-ERP-frontend-New/pnpm-lock.yaml
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - name: Install frontend dependencies
         working-directory: finetune-ERP-frontend-New
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       - name: ESLint
         working-directory: finetune-ERP-frontend-New
-        run: npm run lint
+        run: pnpm run lint
       - name: Prettier check
         working-directory: finetune-ERP-frontend-New
-        run: npm run format:check
+        run: pnpm run format:check
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - name: Install backend dependencies
-        working-directory: finetune-ERP-backend-New
-        run: pip install -r requirements-test.txt
+        run: pip install -e .[backend,dev,test]
       - name: Black check
         working-directory: finetune-ERP-backend-New
         run: black . --check
