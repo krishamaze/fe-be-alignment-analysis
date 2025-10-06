@@ -27,9 +27,15 @@ Finetune ERP Backend is a Django and Django REST Framework service for managing 
   python manage.py migrate
   ```
 - **Testing**
+  To run the backend tests, execute the following command from the monorepo root:
   ```bash
-  pytest            # or: python manage.py test
+  python -m pytest finetune-ERP-backend-New/tests -q
   ```
+  The test suite is configured using `pytest.ini` at the monorepo root, which sets the `DJANGO_SETTINGS_MODULE`.
+
+  **Important Test Configuration:**
+  The test environment automatically disables `SECURE_SSL_REDIRECT` via a fixture in `finetune-ERP-backend-New/tests/conftest.py`. This is to prevent `301` redirect errors during testing. If you encounter unexpected redirects in tests, this fixture is the first place to check.
+
 - **Data Sanitization**
   ```bash
   python manage.py sanitize_branch_heads --dry-run  # use --apply to commit
@@ -42,3 +48,4 @@ Finetune ERP Backend is a Django and Django REST Framework service for managing 
 | Missing migrations | Run `python manage.py makemigrations && python manage.py migrate`. |
 | CORS/CSRF blocked | Add the client origin to `CORS_ALLOWED_ORIGINS` and `CSRF_TRUSTED_ORIGINS`. |
 | Login fails | Ensure `SECRET_KEY` matches and refresh tokens at `/api/token/refresh`. |
+| Tests failing with 301 redirects | Check the `_set_timezone` fixture in `tests/conftest.py` to ensure `SECURE_SSL_REDIRECT` is set to `False`. |

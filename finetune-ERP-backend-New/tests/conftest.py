@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 @pytest.fixture(autouse=True)
 def _set_timezone(settings):
     settings.TIME_ZONE = "Asia/Kolkata"
+    settings.SECURE_SSL_REDIRECT = False  # Disable SSL redirect for all tests
     timezone.activate("Asia/Kolkata")
     yield
     timezone.deactivate()
