@@ -174,7 +174,7 @@ def collect_backend_routes(module: str, prefix: str = "") -> List[RouteEntry]:
     file_path = _module_to_path(module)
     if not file_path.exists():
         raise FileNotFoundError(f"Unable to locate module '{module}' at {file_path}")
-    source = file_path.read_text()
+    source = file_path.read_text(encoding='utf-8')
     analyzer = _UrlAnalyzer(source)
     tree = ast.parse(source, filename=str(file_path))
     analyzer.visit(tree)
@@ -244,7 +244,7 @@ def collect_backend_routes(module: str, prefix: str = "") -> List[RouteEntry]:
 
 
 def collect_frontend_routes() -> List[FrontendRoute]:
-    source = FRONTEND_APP.read_text()
+    source = FRONTEND_APP.read_text(encoding='utf-8')
     close_tag_pattern = re.compile(r"</Route>")
 
     idx = 0
@@ -350,7 +350,7 @@ def collect_frontend_routes() -> List[FrontendRoute]:
 
 def collect_env_vars() -> List[EnvVar]:
     settings_path = BACKEND_ROOT / "config" / "settings.py"
-    source = settings_path.read_text()
+    source = settings_path.read_text(encoding='utf-8')
     lines = source.splitlines()
     tree = ast.parse(source, filename=str(settings_path))
     env_vars: List[EnvVar] = []

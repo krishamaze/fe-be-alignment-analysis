@@ -31,3 +31,4 @@
 ## Invalidation
 
 There is no automatic cache invalidation. After mutations (create/update/delete), components explicitly re‑dispatch query thunks, e.g. `dispatch(getStores())` after `createStore`.
+

@@ -29,3 +29,4 @@ Seed basics for development:
 ```bash
 python manage.py seed_attendance_basics
 ```
+

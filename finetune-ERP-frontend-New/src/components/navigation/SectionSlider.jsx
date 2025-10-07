@@ -16,7 +16,7 @@ import SwipeHint from './SwipeHint';
  * @property {string} [className]
  * @property {import('react').CSSProperties} [style]
  * @property {'horizontal' | 'vertical'} [mode]
- * @property {{ mobile?: number, tablet?: number, desktop?: number }} [slidesPerView]
+ * @property {Object} [slidesPerView] - Slides per view configuration for different breakpoints
  * @property {boolean} [autoAdvanceGroup]
  */
 

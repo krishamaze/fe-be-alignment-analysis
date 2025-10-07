@@ -12,3 +12,4 @@
 - `public/favicon.svg` – site favicon.
 - `src/components/common/PageSection.jsx` – semantic section wrapper that fills the viewport and applies mobile bottom padding in reel mode.
 - `.env.example` – template environment variables for API configuration.
+

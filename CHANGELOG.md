@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Backend
+
+- Establish repository documentation and integration contract.
+
+### Frontend
+
 - Initial documentation scaffold.
 - Apply #E2C33D accent to borders and active states; remove legacy blue and purple styles.
 - Add Workledger dashboard tile and protected routes.
@@ -18,3 +24,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add missing favicon asset and update reference in `index.html`.
 - Fetch users via RTK Query with built-in pagination.
 - Lazy-load route components to reduce initial bundle size.
+

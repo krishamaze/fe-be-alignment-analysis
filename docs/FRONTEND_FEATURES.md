@@ -44,5 +44,6 @@
 
 ## Related Guides
 
-- [Frontend Security](SECURITY.md)
-- [Architecture](ARCHITECTURE.md)
+- [Security Guide](SECURITY.md)
+- [Architecture Guide](ARCHITECTURE.md)
+

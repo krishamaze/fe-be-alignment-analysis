@@ -105,3 +105,4 @@ Validation errors return field-level messages. All list endpoints paginate using
 
 ### Idempotency
 Write endpoints under `attendance/admin/*` accept an `Idempotency-Key` header. Subsequent requests with the same key return the first response.
+

@@ -21,3 +21,4 @@ Use your Postgres provider's snapshot/backup tooling. To restore locally:
 pg_dump $DATABASE_URL > backup.sql
 psql $DATABASE_URL < backup.sql
 ```
+

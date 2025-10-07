@@ -6,7 +6,7 @@ All routes are currently loaded eagerly. Consider using `React.lazy` and `Suspen
 
 ## Budgets
 
-- Keep initial bundle under **200 kB** gzipped.
+- Keep initial bundle under **200 kB** gzipped.
 - Avoid shipping unused icon libraries or polyfills.
 
 ## Assets
@@ -18,3 +18,4 @@ All routes are currently loaded eagerly. Consider using `React.lazy` and `Suspen
 
 - Run `vite build --analyze` to inspect bundle size.
 - Enable the browser's performance panel to profile slow components.
+
