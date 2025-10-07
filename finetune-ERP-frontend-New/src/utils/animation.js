@@ -11,16 +11,21 @@ export function easeInOutCubic(t) {
  *  element: HTMLElement,
  *  to: number,
  *  duration: number,
- *  axis: 'x' | 'y'
+ *  axis: 'x' | 'y',
+ *  onComplete?: () => void
  * }} options
- * @returns {void}
+ * @returns {{cancel: () => void}}
  */
-export function animateScroll({ element, to, duration, axis }) {
+export function animateScroll({ element, to, duration, axis, onComplete }) {
   const start = axis === 'y' ? element.scrollTop : element.scrollLeft;
   const change = to - start;
   let startTime = null;
+  let animationFrameId = null;
+  let cancelled = false;
 
   const animate = (currentTime) => {
+    if (cancelled) return;
+
     if (startTime === null) {
       startTime = currentTime;
     }
@@ -36,9 +41,20 @@ export function animateScroll({ element, to, duration, axis }) {
     }
 
     if (elapsed < duration) {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
+    } else if (onComplete) {
+      onComplete();
     }
   };
 
-  requestAnimationFrame(animate);
+  animationFrameId = requestAnimationFrame(animate);
+
+  return {
+    cancel: () => {
+      cancelled = true;
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    },
+  };
 }
