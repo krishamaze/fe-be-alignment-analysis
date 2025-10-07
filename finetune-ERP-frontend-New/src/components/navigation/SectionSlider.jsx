@@ -57,13 +57,11 @@ export default function SectionSlider({
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showHintOverlay, setShowHintOverlay] = useState(false);
 
-  // State to track if a scroll animation is in progress to prevent conflicts
-  const [isAnimating, setIsAnimating] = useState(false);
-
   const containerRef = useRef(null);
   const slideRefs = useRef([]);
 
-  // Refs for managing timers and touch events
+  // Refs for managing timers, touch events, and animations
+  const animationRef = useRef(null);
   const scrollTimeoutRef = useRef(null);
   const touchStartRef = useRef({ x: 0, y: 0, time: 0 });
   const slidesPerGroupRef = useRef(1);
@@ -117,33 +115,44 @@ export default function SectionSlider({
   const hintStorageKey = `sectionHintShown-${mode}-${sliderId}`;
 
   const scrollToSlide = useCallback(
-    (index) => {
-      if (
-        !containerRef.current ||
-        !slideRefs.current[index] ||
-        isAnimating
-      ) {
+    (index, smooth = true) => {
+      if (!containerRef.current || !slideRefs.current[index]) {
         return;
       }
-      setIsAnimating(true);
+
+      // Cancel any ongoing animation before starting a new one
+      if (animationRef.current) {
+        animationRef.current.cancel();
+      }
+
       const target = slideRefs.current[index];
       const to = isVertical ? target.offsetTop : target.offsetLeft;
       const axis = isVertical ? 'y' : 'x';
 
+      if (!smooth) {
+        if (axis === 'y') {
+          containerRef.current.scrollTop = to;
+        } else {
+          containerRef.current.scrollLeft = to;
+        }
+        setCurrentSlide(index);
+        return;
+      }
+
       // Use the custom animation utility to scroll smoothly
-      animateScroll({
+      animationRef.current = animateScroll({
         element: containerRef.current,
         to,
         duration: 600,
         axis,
+        onComplete: () => {
+          animationRef.current = null;
+        },
       });
 
       setCurrentSlide(index);
-
-      // Reset the animation lock after the animation is complete
-      setTimeout(() => setIsAnimating(false), 600);
     },
-    [isVertical, isAnimating]
+    [isVertical]
   );
 
   useEffect(() => {
@@ -213,22 +222,30 @@ export default function SectionSlider({
   useEffect(() => {
     if (!isVertical || !containerRef.current) return undefined;
     const container = containerRef.current;
+    let swipeInProgress = false;
 
     // Prevents default scroll and implements custom snap logic
     const handleWheel = (e) => {
       e.preventDefault();
-      if (isAnimating) return;
+      // If an animation is running, let the new event cancel it and start a new one.
+      if (animationRef.current) {
+        animationRef.current.cancel();
+      }
 
       const direction = e.deltaY > 0 ? 1 : -1;
       const nextSlide = Math.max(
         0,
         Math.min(currentSlide + direction, slides.length - 1)
       );
-      scrollToSlide(nextSlide);
+
+      if (nextSlide !== currentSlide) {
+        scrollToSlide(nextSlide);
+      }
     };
 
     // Touch event handlers for swipe gestures
     const handleTouchStart = (e) => {
+      swipeInProgress = false; // Reset on new touch
       touchStartRef.current = {
         x: e.touches[0].clientX,
         y: e.touches[0].clientY,
@@ -237,16 +254,26 @@ export default function SectionSlider({
     };
 
     const handleTouchMove = (e) => {
-      if (isAnimating || !touchStartRef.current.time) return;
+      if (swipeInProgress || !touchStartRef.current.time) return;
+
       const deltaY = e.touches[0].clientY - touchStartRef.current.y;
-      if (Math.abs(deltaY) > 30) {
+
+      // Check for a significant vertical swipe
+      if (Math.abs(deltaY) > 50) {
+        // Increased threshold for more deliberate swipes
+        swipeInProgress = true; // Mark this swipe as handled for this gesture
         const direction = deltaY > 0 ? -1 : 1;
         const nextSlide = Math.max(
           0,
           Math.min(currentSlide + direction, slides.length - 1)
         );
-        scrollToSlide(nextSlide);
-        touchStartRef.current = { x: 0, y: 0, time: 0 }; // Reset
+
+        if (nextSlide !== currentSlide) {
+          if (animationRef.current) {
+            animationRef.current.cancel();
+          }
+          scrollToSlide(nextSlide);
+        }
       }
     };
 
@@ -261,7 +288,7 @@ export default function SectionSlider({
       container.removeEventListener('touchstart', handleTouchStart);
       container.removeEventListener('touchmove', handleTouchMove);
     };
-  }, [isVertical, isAnimating, currentSlide, slides.length, scrollToSlide]);
+  }, [isVertical, currentSlide, slides.length, scrollToSlide]);
 
   useEffect(() => {
     if (!showHint || !hasMultipleSlides) return;
@@ -280,7 +307,7 @@ export default function SectionSlider({
         className={
           isVertical
             ? 'reel-vertical h-full overflow-y-hidden'
-            : 'overflow-x-auto flex snap-x snap-mandatory'
+            : 'overflow-x-auto flex snap-x snap-mandatory is-horizontal-scroll-container'
         }
         style={
           isVertical
@@ -334,7 +361,7 @@ export default function SectionSlider({
 
       {hasMultipleSlides && (
         <div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-1"
           role="tablist"
           aria-label={`${sliderId} slides`}
         >
@@ -357,12 +384,7 @@ export default function SectionSlider({
                 key={startIndex}
                 role="tab"
                 aria-selected={isActive}
-                className={`w-4 h-4 min-w-[44px] min-h-[44px] rounded-full transition-all duration-300 focus:outline-none focus:ri
-ng-2 focus:ring-secondary focus:ring-offset-2 flex items-center justify-center ${
-                  isActive
-                    ? 'bg-secondary scale-125'
-                    : 'bg-gray-300 hover:bg-gray-400'
-                }`}
+                className={`min-w-[44px] min-h-[44px] rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 flex items-center justify-center`}
                 onClick={() => scrollToSlide(startIndex)}
                 aria-label={`Go to slide ${indicatorIndex + 1} of ${
                   slidesPerView
@@ -370,6 +392,13 @@ ng-2 focus:ring-secondary focus:ring-offset-2 flex items-center justify-center $
                     : slides.length
                 }`}
               >
+                <span
+                  className={`h-2 w-2 rounded-full transition-all duration-300 ${
+                    isActive
+                      ? 'bg-secondary scale-125'
+                      : 'bg-gray-300 group-hover:bg-gray-400'
+                  }`}
+                />
                 <span className="sr-only">Slide {indicatorIndex + 1}</span>
               </button>
             );
