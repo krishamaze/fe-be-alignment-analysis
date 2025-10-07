@@ -66,7 +66,9 @@ function PublicLayoutInner() {
           data-scroll-container="true"
           className={`flex-1 min-h-0 ${
             mode === SECTION_SLIDER_MODE
-              ? 'overflow-y-auto snap-y snap-mandatory fullpage-scrolling'
+              ? // Disable native scroll snapping when SectionSlider is active
+                // to allow its custom JS-based scroll logic to take over.
+                'overflow-y-auto fullpage-scrolling'
               : 'overflow-y-auto'
           }`}
           style={mainStyles}
