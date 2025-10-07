@@ -127,6 +127,11 @@ export default function Index() {
     if (!isDesktop) return;
 
     const handleWheel = (e) => {
+      // If the event target is inside a horizontal slider, ignore the event
+      if (e.target.closest('.is-horizontal-scroll-container')) {
+        return;
+      }
+
       if (isScrolling) {
         e.preventDefault();
         e.stopPropagation();
@@ -191,6 +196,11 @@ export default function Index() {
     };
 
     const handleTouchEnd = (e) => {
+      // If the event target is inside a horizontal slider, ignore the event
+      if (e.target.closest('.is-horizontal-scroll-container')) {
+        return;
+      }
+
       if (isScrolling) return;
 
       const touchDuration = Date.now() - touchStartTime;

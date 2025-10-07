@@ -57,8 +57,8 @@ function DesktopLayout() {
         </div>
       </div>
 
-      <div className="col-span-5 h-full">
-        <div className="relative flex h-full items-center justify-center">
+      <div className="col-span-5 h-full overflow-hidden">
+        <div className="relative flex h-full w-full items-center justify-center">
           <div
             aria-hidden
             className="absolute -top-24 -right-20 h-64 w-64 rounded-full bg-secondary/20 blur-3xl"
