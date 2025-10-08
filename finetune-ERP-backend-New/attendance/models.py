@@ -57,7 +57,8 @@ class GenericIdempotency(models.Model):
 
     Attributes:
         key (CharField): The unique idempotency key from the request header.
-        user (ForeignKey): The user who made the request.
+        user (ForeignKey): The user who made the request. The record is deleted
+            if the user is deleted.
         endpoint (CharField): The API endpoint targeted by the request.
         object_pk (CharField): The primary key of the created object.
         created_at (DateTimeField): Timestamp of when the key was first stored.
@@ -91,6 +92,7 @@ class Shift(models.Model):
         updated_at (DateTimeField): Timestamp of last update.
 
     Example:
+        >>> from datetime import time
         >>> morning_shift = Shift.objects.create(
         ...     name="Morning 9-5",
         ...     start_time=time(9, 0),
@@ -147,6 +149,7 @@ class AdvisorPayrollProfile(models.Model):
 
     Attributes:
         user (OneToOneField): A one-to-one link to the advisor's user account.
+            The profile is deleted if the user is deleted.
         hourly_rate (DecimalField): The advisor's pay rate per hour.
         effective_from (DateField): The date from which this pay rate is effective.
         is_active (BooleanField): Whether this payroll profile is currently active.
@@ -189,7 +192,8 @@ class AdvisorSchedule(models.Model):
     considering exceptions or weekly off days.
 
     Attributes:
-        user (OneToOneField): Link to the advisor's user account.
+        user (OneToOneField): Link to the advisor's user account. The schedule
+            is deleted if the user is deleted.
         rule_type (CharField): The type of scheduling rule to apply.
             - 'fixed': The advisor works the same `default_shift` every day.
             - 'alternate_weekly': The advisor alternates between
@@ -199,8 +203,11 @@ class AdvisorSchedule(models.Model):
         parity_offset (SmallIntegerField): An offset (0 or 1) to flip the
             even/odd week calculation, useful for staggering schedules.
         default_shift (ForeignKey): The shift used for the 'fixed' rule type.
-        week_even_shift (ForeignKey): The shift for even-numbered weeks.
-        week_odd_shift (ForeignKey): The shift for odd-numbered weeks.
+            The shift cannot be deleted while in use by a schedule.
+        week_even_shift (ForeignKey): The shift for even-numbered weeks. The
+            shift cannot be deleted while in use by a schedule.
+        week_odd_shift (ForeignKey): The shift for odd-numbered weeks. The
+            shift cannot be deleted while in use by a schedule.
         is_active (BooleanField): If False, this schedule is ignored.
         created_at (DateTimeField): Timestamp of creation.
         updated_at (DateTimeField): Timestamp of last update.
@@ -320,7 +327,8 @@ class WeekOff(models.Model):
     resolving an advisor's schedule.
 
     Attributes:
-        user (ForeignKey): The advisor to whom this day off applies.
+        user (ForeignKey): The advisor to whom this day off applies. The
+            record is deleted if the user is deleted.
         weekday (SmallIntegerField): The day of the week (0=Monday, 6=Sunday).
         is_active (BooleanField): If False, this rule is ignored.
         created_at (DateTimeField): Timestamp of creation.
@@ -359,15 +367,17 @@ class ScheduleException(models.Model):
     These exceptions take precedence over the default `AdvisorSchedule`.
 
     Attributes:
-        user (ForeignKey): The advisor to whom this exception applies.
+        user (ForeignKey): The advisor to whom this exception applies. The
+            record is deleted if the user is deleted.
         date (DateField): The specific date the exception is for.
         override_shift (ForeignKey, optional): If set, this shift will be used
-            for the specified date, ignoring the default schedule.
+            for the specified date. The shift cannot be deleted while in use.
         mark_off (BooleanField): If True, the advisor is considered off on this
             date, regardless of any assigned shift.
         reason (TextField): An explanation for why the exception was created.
         created_by (ForeignKey): The user (typically an admin or branch head)
-            who created the exception.
+            who created the exception. The creating user cannot be deleted if
+            they created an exception.
         created_at (DateTimeField): Timestamp of creation.
 
     Constraints:
@@ -443,10 +453,13 @@ class Attendance(AttendanceBase):
     following calendar day, but the record remains associated with the start date.
 
     Attributes:
-        user (ForeignKey): The advisor this record belongs to.
-        store (ForeignKey): The store where the advisor worked.
+        user (ForeignKey): The advisor this record belongs to. The record is
+            deleted if the user is deleted.
+        store (ForeignKey): The store where the advisor worked. The store
+            cannot be deleted while it has attendance records.
         date (DateField): The calendar date of the shift start.
-        shift (ForeignKey): The shift assigned for this attendance record.
+        shift (ForeignKey): The shift assigned for this attendance record. The
+            shift cannot be deleted while it has attendance records.
         check_in (DateTimeField): The timestamp of the advisor's check-in.
         check_in_lat (DecimalField): Latitude at check-in.
         check_in_lon (DecimalField): Longitude at check-in.
@@ -629,6 +642,21 @@ class Attendance(AttendanceBase):
                 check-ins. Defaults to 15.
             halfday_threshold (int, optional): The minimum minutes required to be
                 considered 'PRESENT'. Below this is a 'HALF_DAY'. Defaults to 360.
+
+        Example:
+            >>> from datetime import time, date, datetime
+            >>> from django.utils import timezone
+            >>> # Note: This is a simplified example. In practice, you would
+            >>> # use model instances retrieved from the database.
+            >>> shift = Shift(start_time=time(9, 0), end_time=time(17, 0))
+            >>> attendance = Attendance(shift=shift, date=date(2023, 1, 1))
+            >>> attendance.check_in = timezone.make_aware(datetime(2023, 1, 1, 9, 20))
+            >>> attendance.check_out = timezone.make_aware(datetime(2023, 1, 1, 17, 0))
+            >>> attendance.apply_grace_and_status(grace_minutes=15)
+            >>> print(f"Late minutes: {attendance.late_minutes}")
+            Late minutes: 5
+            >>> print(f"Status: {attendance.status}")
+            Status: PRESENT
         """
 
         start_dt, end_dt = self._shift_bounds_for_date()
@@ -722,13 +750,16 @@ class AttendanceRequest(models.Model):
     branch head or system admin.
 
     Attributes:
-        attendance (ForeignKey): The `Attendance` record this request relates to.
+        attendance (ForeignKey): The `Attendance` record this request relates
+            to. The request is deleted if the attendance record is deleted.
         type (CharField): The type of request (e.g., 'OUTSIDE_GEOFENCE', 'OT', 'ADJUST').
-        requested_by (ForeignKey): The user who initiated the request.
+        requested_by (ForeignKey): The user who initiated the request. The
+            user cannot be deleted if they made a request.
         reason (TextField): Justification for the request.
         status (CharField): The current status of the request ('PENDING',
             'APPROVED', 'REJECTED').
-        decided_by (ForeignKey, optional): The user who approved or rejected it.
+        decided_by (ForeignKey, optional): The user who approved or rejected
+            it. The user cannot be deleted if they decided on a request.
         decided_at (DateTimeField, optional): Timestamp of the decision.
         created_at (DateTimeField): Timestamp of creation.
         updated_at (DateTimeField): Timestamp of last update.
@@ -931,6 +962,25 @@ def resolve_planned_shift(user, target_date: date) -> Optional["Shift"]:
     Returns:
         Optional["Shift"]: The `Shift` object if a shift is scheduled for that
         day, otherwise `None` to indicate a day off.
+
+    Example:
+        >>> from datetime import date
+        >>> from django.contrib.auth import get_user_model
+        >>> # Note: This is a simplified example that assumes a database state.
+        >>> User = get_user_model()
+        >>> advisor = User.objects.filter(role='advisor').first()
+        >>> if advisor:
+        ...     # On a normal workday, their shift is resolved.
+        ...     work_date = date(2023, 10, 26) # A Thursday
+        ...     # Make sure there isn't a week off for this day
+        ...     WeekOff.objects.filter(user=advisor, weekday=work_date.weekday()).delete()
+        ...     shift = resolve_planned_shift(advisor, work_date)
+        ...     print(f"Shift for {work_date}: {shift.name if shift else 'Day Off'}")
+        ...
+        ...     # Now, add a weekly off day for Thursday.
+        ...     WeekOff.objects.create(user=advisor, weekday=work_date.weekday())
+        ...     shift = resolve_planned_shift(advisor, work_date)
+        ...     print(f"Shift for {work_date}: {shift.name if shift else 'Day Off'}")
     """
 
     # Step 1: Check weekly off-days
