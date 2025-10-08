@@ -1,4 +1,25 @@
-"""Database models for the attendance app.
+"""Models for the attendance tracking and management system.
+
+This module defines the database schema for the attendance module, which is
+central to tracking employee work hours, shifts, schedules, and leave. It
+includes models for:
+- **Shifts (`Shift`)**: Reusable shift templates (e.g., "Morning Shift").
+- **Schedules (`AdvisorSchedule`, `ScheduleException`, `WeekOff`)**: Rules that
+  determine an advisor's expected shift for any given day.
+- **Attendance Records (`Attendance`)**: Captures daily check-in/check-out
+  times, location data, and status (Present, Absent, Late, etc.).
+- **Approval Workflows (`AttendanceRequest`)**: Manages requests for actions
+  like manual attendance adjustments or overtime, which require approval from
+  a branch head or admin.
+- **Payroll (`AdvisorPayrollProfile`)**: Stores payroll-related information
+  for advisors.
+- **Idempotency (`GenericIdempotency`)**: Prevents duplicate operations for
+  critical endpoints like check-in and check-out.
+
+The models are designed to handle complexities such as overnight shifts,
+alternating weekly schedules, geofence validation (handled in views), and
+automated status calculations. Signals are used to trigger actions, such as
+recalculating worked hours when a check-out time is recorded.
 
 Note:
     * Attendance records for an overnight shift use the shift's **start date**
@@ -6,8 +27,6 @@ Note:
     * Punch durations are rounded to the nearest 5 minutes.
     * A grace period of 15 minutes applies for late check-ins.
     * Half-day threshold is 6 hours (360 minutes).
-    * End-of-day auto-absence and approval workflows are implemented in later
-      phases.
 """
 
 from datetime import date, datetime, timedelta
@@ -25,11 +44,23 @@ from .choices import AttendanceStatus, RequestStatus, RequestType, ScheduleRuleT
 
 
 class GenericIdempotency(models.Model):
-    """Lightweight storage for idempotent writes.
+    """Stores a mapping for idempotent API write operations.
 
-    Stores a mapping of ``Idempotency-Key`` + ``endpoint`` + ``user`` to the
-    primary key of the object that was created or updated. Subsequent requests
-    with the same key simply return the previously stored object.
+    This model prevents duplicate object creation from repeated API requests
+    by mapping a unique ``Idempotency-Key`` (provided in the request header)
+    to the primary key of the object that was created.
+
+    When a write request is received with an idempotency key, the system first
+    checks if a record with that key, user, and endpoint already exists. If so,
+    it returns the previously created object instead of performing the action
+    again.
+
+    Attributes:
+        key (CharField): The unique idempotency key from the request header.
+        user (ForeignKey): The user who made the request.
+        endpoint (CharField): The API endpoint targeted by the request.
+        object_pk (CharField): The primary key of the created object.
+        created_at (DateTimeField): Timestamp of when the key was first stored.
     """
 
     key = models.CharField(max_length=64, unique=True, db_index=True)
@@ -45,7 +76,29 @@ class GenericIdempotency(models.Model):
 
 
 class Shift(models.Model):
-    """Represents a working shift for advisors."""
+    """A template for a recurring work shift.
+
+    Defines a named work period with a specific start and end time, which can
+    be assigned to advisors. It supports both standard and overnight shifts.
+
+    Attributes:
+        name (CharField): A unique name for the shift (e.g., "Morning Shift").
+        start_time (TimeField): The official start time of the shift.
+        end_time (TimeField): The official end time of the shift.
+        is_overnight (BooleanField): True if the shift extends past midnight.
+        is_active (BooleanField): If False, the shift cannot be assigned.
+        created_at (DateTimeField): Timestamp of creation.
+        updated_at (DateTimeField): Timestamp of last update.
+
+    Example:
+        >>> morning_shift = Shift.objects.create(
+        ...     name="Morning 9-5",
+        ...     start_time=time(9, 0),
+        ...     end_time=time(17, 0)
+        ... )
+        >>> morning_shift.total_minutes()
+        480
+    """
 
     name = models.CharField(max_length=64, unique=True)
     start_time = models.TimeField()
@@ -62,10 +115,14 @@ class Shift(models.Model):
         ordering = ["name"]
 
     def total_minutes(self) -> int:
-        """Return the total shift duration in minutes.
+        """Calculates the total duration of the shift in minutes.
 
-        If ``is_overnight`` is ``True`` or ``end_time`` is less than or equal to
-        ``start_time``, the shift is treated as crossing midnight.
+        This method correctly handles overnight shifts by adding a day to the
+        end time if the `is_overnight` flag is True or if the end time is
+        logically before or same as the start time.
+
+        Returns:
+            int: The total shift duration in minutes.
         """
 
         start = datetime.combine(date(2000, 1, 1), self.start_time)
@@ -82,7 +139,20 @@ class Shift(models.Model):
 
 
 class AdvisorPayrollProfile(models.Model):
-    """Payroll configuration for an advisor."""
+    """Stores payroll-related configuration for an advisor.
+
+    This model links an advisor user to their specific payroll details, such as
+    their hourly rate. This information can be used for salary calculation
+    based on worked hours.
+
+    Attributes:
+        user (OneToOneField): A one-to-one link to the advisor's user account.
+        hourly_rate (DecimalField): The advisor's pay rate per hour.
+        effective_from (DateField): The date from which this pay rate is effective.
+        is_active (BooleanField): Whether this payroll profile is currently active.
+        created_at (DateTimeField): Timestamp of creation.
+        updated_at (DateTimeField): Timestamp of last update.
+    """
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -111,7 +181,34 @@ PARITY_OFFSET_CHOICES = ((0, "Even as A"), (1, "Odd as A"))
 
 
 class AdvisorSchedule(models.Model):
-    """Represents an advisor's default scheduling rule."""
+    """Defines the default work schedule for an advisor.
+
+    This model supports multiple scheduling strategies, such as a fixed daily
+    shift or a bi-weekly alternating shift pattern. It serves as the baseline
+    for determining an advisor's expected shift on any given day, before
+    considering exceptions or weekly off days.
+
+    Attributes:
+        user (OneToOneField): Link to the advisor's user account.
+        rule_type (CharField): The type of scheduling rule to apply.
+            - 'fixed': The advisor works the same `default_shift` every day.
+            - 'alternate_weekly': The advisor alternates between
+              `week_even_shift` and `week_odd_shift` based on week parity.
+        anchor_monday (DateField): A reference Monday to calculate week parity.
+            The first week (starting from this Monday) is considered even.
+        parity_offset (SmallIntegerField): An offset (0 or 1) to flip the
+            even/odd week calculation, useful for staggering schedules.
+        default_shift (ForeignKey): The shift used for the 'fixed' rule type.
+        week_even_shift (ForeignKey): The shift for even-numbered weeks.
+        week_odd_shift (ForeignKey): The shift for odd-numbered weeks.
+        is_active (BooleanField): If False, this schedule is ignored.
+        created_at (DateTimeField): Timestamp of creation.
+        updated_at (DateTimeField): Timestamp of last update.
+
+    Raises:
+        ValidationError: On `clean()` if the required shifts for the selected
+            `rule_type` are not provided, or if `anchor_monday` is not a Monday.
+    """
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -158,7 +255,17 @@ class AdvisorSchedule(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def clean(self) -> None:
-        """Validate scheduling rules before saving."""
+        """Validates the scheduling rule configuration before saving.
+
+        Ensures that the necessary shift fields are populated based on the
+        selected `rule_type` and that the `anchor_monday` is a valid Monday.
+
+        Raises:
+            ValidationError: If `rule_type` is 'fixed' and `default_shift` is
+                missing, or if `rule_type` is 'alternate_weekly' and the
+                corresponding shifts are missing. Also raised if `anchor_monday`
+                is not a Monday.
+        """
 
         errors = {}
         if self.rule_type == "fixed":
@@ -176,10 +283,24 @@ class AdvisorSchedule(models.Model):
         super().clean()
 
     def resolve_shift_for(self, day: date) -> Optional["Shift"]:
-        """Resolve the planned :class:`Shift` for the given date.
+        """Determines the shift for a given date based on the schedule rule.
 
-        This method ignores WeekOff and exception rules which are handled by
-        :func:`resolve_planned_shift`.
+        This method applies the logic defined by `rule_type` to find the
+        correct shift for the specified day. For 'alternate_weekly' schedules,
+        it calculates the week parity relative to the `anchor_monday`.
+
+        Note:
+            This method only resolves the shift based on the `AdvisorSchedule`
+            rule. It does not account for `WeekOff` or `ScheduleException`
+            overrides. The `resolve_planned_shift` function should be used
+            for a complete resolution.
+
+        Args:
+            day (date): The date for which to resolve the shift.
+
+        Returns:
+            Optional["Shift"]: The resolved Shift instance, or None if no
+            shift is scheduled (e.g., for an inactive schedule).
         """
 
         if self.rule_type == "fixed":
@@ -192,7 +313,23 @@ class AdvisorSchedule(models.Model):
 
 
 class WeekOff(models.Model):
-    """Weekly off-days for an advisor."""
+    """Represents a recurring weekly day off for an advisor.
+
+    This model is used to mark specific days of the week (e.g., Sunday) as
+    non-working days for a particular user. These rules are checked first when
+    resolving an advisor's schedule.
+
+    Attributes:
+        user (ForeignKey): The advisor to whom this day off applies.
+        weekday (SmallIntegerField): The day of the week (0=Monday, 6=Sunday).
+        is_active (BooleanField): If False, this rule is ignored.
+        created_at (DateTimeField): Timestamp of creation.
+        updated_at (DateTimeField): Timestamp of last update.
+
+    Constraints:
+        - `unique_weekoff_user_weekday`: Ensures an advisor can only have one
+          `WeekOff` entry per weekday.
+    """
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -214,7 +351,29 @@ class WeekOff(models.Model):
 
 
 class ScheduleException(models.Model):
-    """Per-day schedule overrides and off-day markers."""
+    """An exception to an advisor's default schedule for a specific date.
+
+    This model is used to handle single-day deviations from the regular
+    schedule, such as assigning a different shift for one day or marking a
+    specific day as off (e.g., for a public holiday or special event).
+    These exceptions take precedence over the default `AdvisorSchedule`.
+
+    Attributes:
+        user (ForeignKey): The advisor to whom this exception applies.
+        date (DateField): The specific date the exception is for.
+        override_shift (ForeignKey, optional): If set, this shift will be used
+            for the specified date, ignoring the default schedule.
+        mark_off (BooleanField): If True, the advisor is considered off on this
+            date, regardless of any assigned shift.
+        reason (TextField): An explanation for why the exception was created.
+        created_by (ForeignKey): The user (typically an admin or branch head)
+            who created the exception.
+        created_at (DateTimeField): Timestamp of creation.
+
+    Constraints:
+        - `unique_scheduleexception_user_date`: Ensures there is only one
+          exception entry per user per date.
+    """
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -249,7 +408,16 @@ class ScheduleException(models.Model):
 
 
 class AttendanceBase(models.Model):
-    """Abstract base model providing selfie fields for attendance records."""
+    """Abstract base model for storing attendance-related photos.
+
+    This model provides common fields for check-in and check-out photos,
+    allowing other models like `Attendance` to inherit them. This promotes
+    reusability and a consistent structure.
+
+    Attributes:
+        check_in_photo (ImageField): The photo taken at check-in.
+        check_out_photo (ImageField): The photo taken at check-out.
+    """
 
     check_in_photo = models.ImageField(
         upload_to="attendance/checkins/", null=True, blank=True
@@ -263,11 +431,45 @@ class AttendanceBase(models.Model):
 
 
 class Attendance(AttendanceBase):
-    """Daily punch record for an advisor.
+    """Represents an advisor's daily attendance record.
 
-    The ``date`` field always refers to the calendar day on which the shift
-    *starts*; for overnight shifts the ``check_out`` may occur on the following
-    day but the record remains tied to the start date.
+    This is the core model for tracking an advisor's work day. It stores
+    check-in and check-out timestamps, location data, and the calculated
+    metrics like worked hours and lateness. The record is linked to a specific
+    user, store, shift, and date.
+
+    The `date` field always refers to the calendar day on which the shift
+    *starts*. For an overnight shift, the `check_out` may occur on the
+    following calendar day, but the record remains associated with the start date.
+
+    Attributes:
+        user (ForeignKey): The advisor this record belongs to.
+        store (ForeignKey): The store where the advisor worked.
+        date (DateField): The calendar date of the shift start.
+        shift (ForeignKey): The shift assigned for this attendance record.
+        check_in (DateTimeField): The timestamp of the advisor's check-in.
+        check_in_lat (DecimalField): Latitude at check-in.
+        check_in_lon (DecimalField): Longitude at check-in.
+        check_out (DateTimeField): The timestamp of the advisor's check-out.
+        check_out_lat (DecimalField): Latitude at check-out.
+        check_out_lon (DecimalField): Longitude at check-out.
+        worked_minutes (PositiveIntegerField): Total minutes worked, rounded.
+        late_minutes (PositiveIntegerField): Minutes late past the grace period.
+        early_out_minutes (PositiveIntegerField): Minutes short of the shift end.
+        ot_minutes (PositiveIntegerField): Approved overtime minutes.
+        status (CharField): The final status of the attendance record
+            (e.g., 'PRESENT', 'ABSENT', 'HALF_DAY', 'PENDING_APPROVAL').
+        notes (TextField): Any additional notes about the attendance.
+        created_at (DateTimeField): Timestamp of creation.
+        updated_at (DateTimeField): Timestamp of last update.
+
+    Relationships:
+        requests (RelatedManager): Reverse relationship to `AttendanceRequest`
+            records associated with this attendance.
+
+    Constraints:
+        - `unique_user_date_shift`: Ensures only one attendance record exists
+          for a user on a specific date for a given shift.
     """
 
     user = models.ForeignKey(
@@ -337,7 +539,19 @@ class Attendance(AttendanceBase):
     # ---- Helpers ----
     @staticmethod
     def _round_nearest_minutes(value_minutes: int, bucket: int = 5) -> int:
-        """Round to nearest ``bucket`` minutes (ties -> round half up)."""
+        """Rounds a duration in minutes to the nearest specified bucket.
+
+        This is a utility for standardizing time calculations. For example,
+        rounding to the nearest 5 minutes. Ties are rounded up.
+
+        Args:
+            value_minutes (int): The number of minutes to round.
+            bucket (int, optional): The minute interval to round to.
+                Defaults to 5.
+
+        Returns:
+            int: The rounded number of minutes.
+        """
 
         if bucket <= 1:
             return value_minutes
@@ -345,10 +559,19 @@ class Attendance(AttendanceBase):
         return (q + (1 if r >= (bucket / 2) else 0)) * bucket
 
     def compute_worked_minutes(self, rounding_bucket: int = 5) -> int:
-        """Compute worked minutes between ``check_in`` and ``check_out``.
+        """Calculates the total worked minutes between check-in and check-out.
 
-        If either is missing, ``0`` is returned. The result is rounded to the
-        nearest ``rounding_bucket`` minutes.
+        If either `check_in` or `check_out` is not set, this method returns 0.
+        The duration is calculated in minutes and then rounded to the nearest
+        specified interval.
+
+        Args:
+            rounding_bucket (int, optional): The minute interval for rounding.
+                Defaults to 5.
+
+        Returns:
+            int: The total rounded worked minutes. Returns 0 if timing is
+            incomplete.
         """
 
         if not self.check_in or not self.check_out:
@@ -358,7 +581,16 @@ class Attendance(AttendanceBase):
         return self._round_nearest_minutes(minutes, rounding_bucket)
 
     def _shift_bounds_for_date(self):
-        """Return (shift_start_dt, shift_end_dt) in local timezone-aware dts."""
+        """Calculates the timezone-aware start and end datetimes for the shift.
+
+        This helper method determines the exact start and end `datetime` objects
+        for the attendance record's assigned shift on its specific date. It
+        correctly handles overnight shifts by advancing the end date by one day.
+
+        Returns:
+            tuple[datetime, datetime]: A tuple containing the timezone-aware
+            start and end datetimes of the shift.
+        """
 
         tz = timezone.get_current_timezone()
         start = timezone.make_aware(
@@ -375,15 +607,28 @@ class Attendance(AttendanceBase):
     def apply_grace_and_status(
         self, grace_minutes: int = 15, halfday_threshold: int = 360
     ) -> None:
-        """Compute late/early/worked minutes and set ``status``.
+        """Calculates and sets metrics like late minutes, worked minutes, and status.
 
-        - ``late`` = max(0, check_in - shift_start - grace)
-        - ``early_out`` = max(0, shift_end - check_out)
-        - ``worked`` = rounded minutes between check_in/out
-        - ``status`` is determined by ``worked`` against ``halfday_threshold``
+        This method is called to finalize an attendance record. It computes:
+        - `late_minutes`: How many minutes the user checked in after the shift's
+          start time, considering a grace period.
+        - `early_out_minutes`: How many minutes the user checked out before the
+          shift's scheduled end time.
+        - `worked_minutes`: The total rounded duration between check-in and check-out.
+        - `status`: The final status ('PRESENT', 'HALF_DAY', 'ABSENT'), based
+          on the number of minutes worked.
 
-        ``PENDING_APPROVAL`` is applied by API endpoints when geofence or other
-        checks fail.
+        Note:
+            This method does not set the 'PENDING_APPROVAL' status, which is
+            handled at the view/API level based on business rules like geofence
+            violations. It modifies the instance attributes directly but does
+            not save the instance.
+
+        Args:
+            grace_minutes (int, optional): The grace period in minutes for late
+                check-ins. Defaults to 15.
+            halfday_threshold (int, optional): The minimum minutes required to be
+                considered 'PRESENT'. Below this is a 'HALF_DAY'. Defaults to 360.
         """
 
         start_dt, end_dt = self._shift_bounds_for_date()
@@ -425,12 +670,29 @@ class Attendance(AttendanceBase):
 
     @property
     def is_open(self) -> bool:
-        """Return ``True`` if attendance is open (no checkout yet)."""
+        """Checks if the attendance record is still open.
+
+        An attendance record is considered 'open' if the status is 'OPEN' and
+        the `check_out` timestamp has not yet been recorded. This is a common
+        check to see if an advisor is currently clocked in.
+
+        Returns:
+            bool: True if the user has checked in but not yet checked out.
+        """
 
         return self.status == "OPEN" and self.check_out is None
 
     def clean(self) -> None:
-        """Validate the attendance record before saving."""
+        """Performs validation on the attendance record before saving.
+
+        This method checks for several business rule violations:
+        - Ensures the user has the 'advisor' role.
+        - Verifies that the assigned shift is active.
+        - Confirms the attendance store matches the user's assigned store.
+
+        Raises:
+            ValidationError: If any of the validation checks fail.
+        """
 
         errors = {}
         if self.user and getattr(self.user, "role", None) != "advisor":
@@ -451,12 +713,40 @@ class Attendance(AttendanceBase):
 
 
 class AttendanceRequest(models.Model):
-    """Approval request attached to an :class:`Attendance` record.
+    """A request for approval related to an `Attendance` record.
 
-    Outside Geofence and Late requests are generated automatically at punch
-    time. Branch Head or Admin users will later approve or reject these via
-    dedicated endpoints. Approval of ``ADJUST`` requests must recompute
-    attendance metrics.
+    This model is used to manage workflows that require supervisor approval,
+    such as checking in outside the designated geofence, requesting overtime,
+    or making manual adjustments to attendance times. These requests are
+    typically created automatically or by an advisor and then actioned by a
+    branch head or system admin.
+
+    Attributes:
+        attendance (ForeignKey): The `Attendance` record this request relates to.
+        type (CharField): The type of request (e.g., 'OUTSIDE_GEOFENCE', 'OT', 'ADJUST').
+        requested_by (ForeignKey): The user who initiated the request.
+        reason (TextField): Justification for the request.
+        status (CharField): The current status of the request ('PENDING',
+            'APPROVED', 'REJECTED').
+        decided_by (ForeignKey, optional): The user who approved or rejected it.
+        decided_at (DateTimeField, optional): Timestamp of the decision.
+        created_at (DateTimeField): Timestamp of creation.
+        updated_at (DateTimeField): Timestamp of last update.
+        meta (JSONField): A flexible field to store request-specific data,
+            e.g., `{"requested_minutes": 60}` for an OT request.
+
+    Example:
+        >>> attendance_record = Attendance.objects.first()
+        >>> admin_user = CustomUser.objects.get(username='admin')
+        >>> req = AttendanceRequest.objects.create(
+        ...     attendance=attendance_record,
+        ...     type='OUTSIDE_GEOFENCE',
+        ...     requested_by=attendance_record.user,
+        ...     reason='Client meeting off-site.'
+        ... )
+        >>> req.approve(actor=admin_user)
+        >>> req.status
+        'APPROVED'
     """
 
     attendance = models.ForeignKey(
@@ -507,7 +797,23 @@ class AttendanceRequest(models.Model):
 
     # ---- Decision helpers ----
     def approve(self, actor) -> None:
-        """Approve the request and apply side-effects to the attendance."""
+        """Marks the request as 'APPROVED' and applies side-effects.
+
+        This method sets the request status to 'APPROVED', records the actor
+        who made the decision, and sets the decision timestamp.
+
+        It then applies logic based on the request `type`:
+        - **OT**: Updates `ot_minutes` on the related `Attendance` record.
+        - **ADJUST**: Updates `check_in` or `check_out` times on the
+          `Attendance` record based on `meta` data, then re-runs
+          `apply_grace_and_status` to recalculate metrics.
+        - **OUTSIDE_GEOFENCE, LATE**: No direct field changes on approval; the
+          approval itself is the desired outcome.
+
+        Args:
+            actor: The user instance (e.g., branch head, admin) approving
+                the request.
+        """
 
         from django.utils import timezone
 
@@ -560,7 +866,16 @@ class AttendanceRequest(models.Model):
         self.save(update_fields=["status", "decided_by", "decided_at", "updated_at"])
 
     def reject(self, actor) -> None:
-        """Mark the request as rejected."""
+        """Marks the request as 'REJECTED'.
+
+        This method sets the request status to 'REJECTED', records the actor
+        who made the decision, and sets the decision timestamp. No other
+        side-effects are applied to the attendance record.
+
+        Args:
+            actor: The user instance (e.g., branch head, admin) rejecting
+                the request.
+        """
 
         from django.utils import timezone
 
@@ -572,7 +887,16 @@ class AttendanceRequest(models.Model):
         self.save(update_fields=["status", "decided_by", "decided_at", "updated_at"])
 
     def clean(self) -> None:
-        """Validate request-specific requirements before saving."""
+        """Validates request-specific data stored in the `meta` field.
+
+        This method ensures that requests with specific `type` values have the
+        required data in their `meta` field. For example, an 'OT' (overtime)
+        request must include a positive integer for `requested_minutes`.
+
+        Raises:
+            ValidationError: If the `meta` field is missing required data for
+                the given request `type`.
+        """
 
         errors = {}
         if self.type == "OT":
@@ -587,16 +911,26 @@ class AttendanceRequest(models.Model):
 
 
 def resolve_planned_shift(user, target_date: date) -> Optional["Shift"]:
-    """Resolve the planned :class:`Shift` for a user on a given date.
+    """Determines the planned `Shift` for a user on a specific date.
 
-    The evaluation order is:
+    This function orchestrates the schedule resolution logic by checking for
+    a shift in a specific order of precedence:
+    1. **Weekly Off-Days (`WeekOff`)**: Checks if the day is a recurring day off.
+    2. **Schedule Exceptions (`ScheduleException`)**: Checks for any single-day
+       overrides, such as a holiday or a temporary shift change.
+    3. **Default Schedule (`AdvisorSchedule`)**: Falls back to the user's
+       standard fixed or alternating weekly schedule.
 
-    1. :class:`WeekOff` rules – if the weekday is marked off, the user is off.
-    2. :class:`ScheduleException` – explicit per-day overrides or off-day flags.
-    3. :class:`AdvisorSchedule` – the user's default schedule.
+    If any of the higher-priority rules result in a day off (e.g., `mark_off`
+    is True or it's a `WeekOff` day), the function will return `None`.
 
-    WeekOff and exception rules are evaluated before the default schedule. If no
-    shift is determined, ``None`` is returned to indicate an off-day.
+    Args:
+        user: The user instance for whom to resolve the shift.
+        target_date (date): The specific date to check.
+
+    Returns:
+        Optional["Shift"]: The `Shift` object if a shift is scheduled for that
+        day, otherwise `None` to indicate a day off.
     """
 
     # Step 1: Check weekly off-days
@@ -633,12 +967,23 @@ def resolve_planned_shift(user, target_date: date) -> Optional["Shift"]:
 
 @receiver(post_save, sender=Attendance)
 def finalize_attendance(sender, instance: Attendance, created, update_fields, **kwargs):
-    """Recompute minutes and status when an attendance is finalized.
+    """Signal handler to finalize attendance metrics upon check-out.
 
-    When ``check_out`` is set the record is considered finalized. We recompute
-    the derived minute fields and update the status accordingly. ``update_fields``
-    is inspected to avoid infinite save loops when the signal saves the model
-    again.
+    This `post_save` signal is triggered whenever an `Attendance` instance is
+    saved. It checks if a `check_out` time has been set (or updated). If so,
+    it calls `apply_grace_and_status()` to calculate the final worked minutes,
+    lateness, and status, then saves the updated instance.
+
+    To prevent an infinite loop from the `save()` call within the signal, it
+    checks the `update_fields` argument. If the save operation that triggered
+    the signal only contained fields that this signal itself computes, it exits early.
+
+    Args:
+        sender: The model class that sent the signal (`Attendance`).
+        instance (Attendance): The actual instance being saved.
+        created (bool): True if a new record was created.
+        update_fields (set): A set of fields being updated, if specified in save().
+        **kwargs: Wildcard keyword arguments.
     """
 
     computed_fields = {"worked_minutes", "late_minutes", "early_out_minutes", "status"}
