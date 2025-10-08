@@ -55,6 +55,7 @@ export default function SectionSlider({
 }) {
   const { setMode } = useScrollMode();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const prevSlideRef = useRef(0);
   const [showHintOverlay, setShowHintOverlay] = useState(false);
 
   const containerRef = useRef(null);
@@ -120,10 +121,27 @@ export default function SectionSlider({
         return;
       }
 
+      const fromIndex = currentSlide;
+
       // Cancel any ongoing animation before starting a new one
       if (animationRef.current) {
+        console.log('[SectionSlider]:', {
+          mode,
+          action: 'cancel',
+          fromIndex,
+          toIndex: index,
+          timestamp: Date.now(),
+        });
         animationRef.current.cancel();
       }
+
+      console.log('[SectionSlider]:', {
+        mode,
+        action: 'start',
+        fromIndex,
+        toIndex: index,
+        timestamp: Date.now(),
+      });
 
       const target = slideRefs.current[index];
       const to = isVertical ? target.offsetTop : target.offsetLeft;
@@ -136,6 +154,13 @@ export default function SectionSlider({
           containerRef.current.scrollLeft = to;
         }
         setCurrentSlide(index);
+        console.log('[SectionSlider]:', {
+          mode,
+          action: 'end',
+          fromIndex,
+          toIndex: index,
+          timestamp: Date.now(),
+        });
         return;
       }
 
@@ -146,13 +171,20 @@ export default function SectionSlider({
         duration: 600,
         axis,
         onComplete: () => {
+          console.log('[SectionSlider]:', {
+            mode,
+            action: 'end',
+            fromIndex,
+            toIndex: index,
+            timestamp: Date.now(),
+          });
           animationRef.current = null;
         },
       });
 
       setCurrentSlide(index);
     },
-    [isVertical]
+    [isVertical, currentSlide, mode]
   );
 
   useEffect(() => {
@@ -218,16 +250,85 @@ export default function SectionSlider({
     currentSlide,
   ]);
 
-  // Effect for handling custom vertical scroll logic
   useEffect(() => {
-    if (!isVertical || !containerRef.current) return undefined;
+    if (prevSlideRef.current !== currentSlide) {
+      console.log('[SectionSlider]:', {
+        mode,
+        action: 'index-change',
+        fromIndex: prevSlideRef.current,
+        toIndex: currentSlide,
+        timestamp: Date.now(),
+      });
+      prevSlideRef.current = currentSlide;
+    }
+  }, [currentSlide, mode]);
+
+  // Effect for handling custom scroll and swipe logic
+  useEffect(() => {
     const container = containerRef.current;
+    if (!container) return undefined;
+
     let swipeInProgress = false;
 
-    // Prevents default scroll and implements custom snap logic
+    // Touch event handlers for swipe gestures
+    const handleTouchStart = (e) => {
+      swipeInProgress = false; // Reset on new touch
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+        time: Date.now(),
+      };
+    };
+
+    const handleTouchMove = (e) => {
+      if (swipeInProgress || !touchStartRef.current.time) return;
+
+      const deltaX = e.touches[0].clientX - touchStartRef.current.x;
+      const deltaY = e.touches[0].clientY - touchStartRef.current.y;
+
+      // Determine swipe direction only once per gesture
+      if (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10) {
+        swipeInProgress = true; // Mark this swipe as handled for this gesture
+
+        // Vertical swipe logic
+        if (isVertical && Math.abs(deltaY) > Math.abs(deltaX)) {
+          console.log('[SectionSlider]:', {
+            mode,
+            action: 'direction-detected',
+            direction: 'vertical',
+            timestamp: Date.now(),
+          });
+
+          if (Math.abs(deltaY) > 50) {
+            const direction = deltaY > 0 ? -1 : 1;
+            const nextSlide = Math.max(
+              0,
+              Math.min(currentSlide + direction, slides.length - 1)
+            );
+
+            if (nextSlide !== currentSlide) {
+              if (animationRef.current) {
+                animationRef.current.cancel();
+              }
+              scrollToSlide(nextSlide);
+            }
+          }
+        } else if (!isVertical && Math.abs(deltaX) > Math.abs(deltaY)) {
+          // Horizontal swipe logic
+          console.log('[SectionSlider]:', {
+            mode,
+            action: 'direction-detected',
+            direction: 'horizontal',
+            timestamp: Date.now(),
+          });
+        }
+      }
+    };
+
+    // Prevents default scroll and implements custom snap logic for vertical mode
     const handleWheel = (e) => {
+      if (!isVertical) return;
       e.preventDefault();
-      // If an animation is running, let the new event cancel it and start a new one.
       if (animationRef.current) {
         animationRef.current.cancel();
       }
@@ -243,40 +344,6 @@ export default function SectionSlider({
       }
     };
 
-    // Touch event handlers for swipe gestures
-    const handleTouchStart = (e) => {
-      swipeInProgress = false; // Reset on new touch
-      touchStartRef.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-        time: Date.now(),
-      };
-    };
-
-    const handleTouchMove = (e) => {
-      if (swipeInProgress || !touchStartRef.current.time) return;
-
-      const deltaY = e.touches[0].clientY - touchStartRef.current.y;
-
-      // Check for a significant vertical swipe
-      if (Math.abs(deltaY) > 50) {
-        // Increased threshold for more deliberate swipes
-        swipeInProgress = true; // Mark this swipe as handled for this gesture
-        const direction = deltaY > 0 ? -1 : 1;
-        const nextSlide = Math.max(
-          0,
-          Math.min(currentSlide + direction, slides.length - 1)
-        );
-
-        if (nextSlide !== currentSlide) {
-          if (animationRef.current) {
-            animationRef.current.cancel();
-          }
-          scrollToSlide(nextSlide);
-        }
-      }
-    };
-
     container.addEventListener('wheel', handleWheel, { passive: false });
     container.addEventListener('touchstart', handleTouchStart, {
       passive: true,
@@ -288,7 +355,7 @@ export default function SectionSlider({
       container.removeEventListener('touchstart', handleTouchStart);
       container.removeEventListener('touchmove', handleTouchMove);
     };
-  }, [isVertical, currentSlide, slides.length, scrollToSlide]);
+  }, [isVertical, currentSlide, slides.length, scrollToSlide, mode]);
 
   useEffect(() => {
     if (!showHint || !hasMultipleSlides) return;
