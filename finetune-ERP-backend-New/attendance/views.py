@@ -62,6 +62,11 @@ User = get_user_model()
 
 
 class DummyCSVRenderer(BaseRenderer):
+    """A minimal CSV renderer for DRF.
+
+    This renderer is used to enable CSV format output for reporting endpoints.
+    It simply returns the pre-formatted CSV data provided by the view.
+    """
     media_type = "text/csv"
     format = "csv"
     charset = "utf-8"
@@ -78,8 +83,11 @@ class DummyCSVRenderer(BaseRenderer):
 
 
 def get_local_today() -> date:
-    """Return today's date in the current timezone."""
+    """Return today's date in the current timezone.
 
+    Returns:
+        date: The current local date.
+    """
     return timezone.localdate()
 
 
@@ -100,7 +108,6 @@ def get_shift_or_planned(user, shift_id: Optional[int]) -> Optional[Shift]:
         Optional[Shift]: The resolved `Shift` instance, or `None` if no
         active or planned shift is found for the user for the current day.
     """
-
     if shift_id:
         try:
             return Shift.objects.get(pk=shift_id, is_active=True)
@@ -127,7 +134,6 @@ def ensure_open_attendance(user, store, att_date: date, shift: Shift) -> Attenda
     Returns:
         Attendance: The existing or newly created `Attendance` instance.
     """
-
     att, _ = Attendance.objects.get_or_create(
         user=user, store=store, date=att_date, shift=shift, defaults={"status": "OPEN"}
     )
@@ -149,7 +155,6 @@ def require_selfie(file) -> None:
         serializers.ValidationError: If the file is missing, too large, or
             not a valid image type.
     """
-
     if not file:
         raise serializers.ValidationError("Selfie photo is required.")
     if getattr(file, "size", 0) > 3 * 1024 * 1024:
@@ -172,7 +177,6 @@ def _append_note(att: Attendance, note: Optional[str]) -> None:
         note (Optional[str]): The note string to append. If None or empty,
             the function does nothing.
     """
-
     if not note:
         return
     att.notes = f"{att.notes}\n{note}" if att.notes else note
@@ -200,7 +204,6 @@ def parse_month_param(request):
     Raises:
         ValueError: If the month string is provided but in an invalid format.
     """
-
     month_str = request.query_params.get("month") or request.GET.get("month")
     if month_str:
         try:
@@ -232,7 +235,6 @@ def csv_response(filename: str, rows: list[list[str]]):
     Returns:
         HttpResponse: A response object containing the CSV data.
     """
-
     from io import StringIO
     import csv
 
@@ -264,7 +266,6 @@ def store_scope_or_403(request_user, store_id: int):
     Raises:
         PermissionDenied: If the user does not have access to the specified store.
     """
-
     from rest_framework.exceptions import PermissionDenied
 
     role = getattr(request_user, "role", None)
@@ -307,18 +308,18 @@ class CheckInView(APIView):
     Parsers:
         - Handles multipart/form-data for file uploads.
     """
-
     permission_classes = [permissions.IsAuthenticated, IsAdvisor]
     parser_classes = [parsers.MultiPartParser, parsers.FormParser, parsers.JSONParser]
 
     class InputSerializer(serializers.Serializer):
+        """Serializer for check-in data validation."""
         shift_id = serializers.IntegerField(required=False)
         lat = serializers.FloatField()
         lon = serializers.FloatField()
         photo = serializers.FileField()
         note = serializers.CharField(required=False, allow_blank=True)
 
-    def post(self, request, *args, **kwargs):  # noqa: D401 - DRF signature
+    def post(self, request, *args, **kwargs):  # noqa: D401
         """Handles the POST request for a check-in action.
 
         Args:
@@ -437,11 +438,11 @@ class CheckOutView(APIView):
     Parsers:
         - Handles multipart/form-data for file uploads.
     """
-
     permission_classes = [permissions.IsAuthenticated, IsAdvisor]
     parser_classes = [parsers.MultiPartParser, parsers.FormParser, parsers.JSONParser]
 
     class InputSerializer(serializers.Serializer):
+        """Serializer for check-out data validation."""
         attendance_id = serializers.IntegerField()
         lat = serializers.FloatField()
         lon = serializers.FloatField()
@@ -538,7 +539,6 @@ class MeTodayView(APIView):
         - Must be an authenticated user.
         - User must have the 'advisor' role.
     """
-
     permission_classes = [permissions.IsAuthenticated, IsAdvisor]
 
     def get(self, request, *args, **kwargs):  # noqa: D401
@@ -626,7 +626,6 @@ def manager_scoped_queryset(user):
         QuerySet: An `AttendanceRequest` queryset filtered according to the
         user's permissions. Returns an empty queryset for unauthorized roles.
     """
-
     qs = AttendanceRequest.objects.select_related(
         "attendance",
         "attendance__user",
@@ -662,7 +661,6 @@ class ApprovalsListView(APIView):
         - Access is implicitly handled by `manager_scoped_queryset`, which
           returns an empty list for unauthorized roles.
     """
-
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):  # noqa: D401
@@ -728,7 +726,6 @@ class ApprovalsApproveView(APIView):
     Permissions:
         - Must be an authenticated user.
     """
-
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk, *args, **kwargs):  # noqa: D401
@@ -768,7 +765,6 @@ class ApprovalsRejectView(APIView):
     Permissions:
         - Must be an authenticated user.
     """
-
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk, *args, **kwargs):  # noqa: D401
