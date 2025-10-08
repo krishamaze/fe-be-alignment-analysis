@@ -153,6 +153,8 @@ html {
 /* Optimize performance for fullpage scrolling */
 .fullpage-section {
   height: var(--fullpage-section-h) !important;
+  width: 100vw;
+  overflow-x: hidden; /* Prevent horizontal overflow */
   will-change: transform;
   backface-visibility: hidden;
   transform-style: preserve-3d;

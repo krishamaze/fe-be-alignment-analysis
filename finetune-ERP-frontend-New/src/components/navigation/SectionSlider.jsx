@@ -3,6 +3,7 @@ import {
   useScrollMode,
   SECTION_SLIDER_MODE,
 } from '../layout/ScrollModeContext';
+import { animateScroll } from '@/utils/animation';
 
 import SwipeHint from './SwipeHint';
 
@@ -15,7 +16,7 @@ import SwipeHint from './SwipeHint';
  * @property {string} [className]
  * @property {import('react').CSSProperties} [style]
  * @property {'horizontal' | 'vertical'} [mode]
- * @property {{ mobile?: number, tablet?: number, desktop?: number }} [slidesPerView]
+ * @property {Object} [slidesPerView] - Slides per view configuration for different breakpoints
  * @property {boolean} [autoAdvanceGroup]
  */
 
@@ -54,18 +55,16 @@ export default function SectionSlider({
 }) {
   const { setMode } = useScrollMode();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const prevSlideRef = useRef(0);
   const [showHintOverlay, setShowHintOverlay] = useState(false);
-  const [isBlockingHorizontalSwipe, setIsBlockingHorizontalSwipe] =
-    useState(false);
+
   const containerRef = useRef(null);
   const slideRefs = useRef([]);
-  const observerRef = useRef(null);
-  const currentSlideRef = useRef(0);
-  const updateTimeoutRef = useRef(null);
-  const verticalSettleTimeoutRef = useRef(null);
-  const isBlockingHorizontalSwipeRef = useRef(false);
-  const touchStartRef = useRef({ x: 0, y: 0 });
-  const hasVerticalIntentRef = useRef(false);
+
+  // Refs for managing timers, touch events, and animations
+  const animationRef = useRef(null);
+  const scrollTimeoutRef = useRef(null);
+  const touchStartRef = useRef({ x: 0, y: 0, time: 0 });
   const slidesPerGroupRef = useRef(1);
   const slidesLengthRef = useRef(0);
   const autoAdvanceTimerRef = useRef(null);
@@ -76,41 +75,6 @@ export default function SectionSlider({
   const [visibleSlides, setVisibleSlides] = useState(baseSlidesPerView);
 
   const sliderId = sectionId ?? reelId ?? 'section-slider';
-
-  const setSlideDebounced = useCallback((index) => {
-    if (updateTimeoutRef.current) clearTimeout(updateTimeoutRef.current);
-    updateTimeoutRef.current = setTimeout(() => {
-      const totalSlides = slidesLengthRef.current;
-      if (!totalSlides) return;
-
-      const clampedIndex = Math.max(0, Math.min(index, totalSlides - 1));
-      const groupSize = Math.max(1, slidesPerGroupRef.current);
-      const normalizedIndex =
-        groupSize > 1
-          ? Math.floor(clampedIndex / groupSize) * groupSize
-          : clampedIndex;
-
-      if (normalizedIndex !== currentSlideRef.current) {
-        setCurrentSlide(normalizedIndex);
-      }
-    }, 50);
-  }, []);
-
-  const blockHorizontalSwipe = useCallback(() => {
-    if (!isBlockingHorizontalSwipeRef.current) {
-      isBlockingHorizontalSwipeRef.current = true;
-      setIsBlockingHorizontalSwipe(true);
-    }
-
-    if (verticalSettleTimeoutRef.current) {
-      clearTimeout(verticalSettleTimeoutRef.current);
-    }
-
-    verticalSettleTimeoutRef.current = setTimeout(() => {
-      isBlockingHorizontalSwipeRef.current = false;
-      setIsBlockingHorizontalSwipe(false);
-    }, 200);
-  }, []);
 
   const resolveSlidesPerView = useCallback(() => {
     if (!slidesPerView) return 1;
@@ -137,8 +101,7 @@ export default function SectionSlider({
 
   useEffect(
     () => () => {
-      clearTimeout(updateTimeoutRef.current);
-      clearTimeout(verticalSettleTimeoutRef.current);
+      clearTimeout(scrollTimeoutRef.current);
       if (autoAdvanceTimerRef.current) {
         clearInterval(autoAdvanceTimerRef.current);
       }
@@ -153,23 +116,75 @@ export default function SectionSlider({
   const hintStorageKey = `sectionHintShown-${mode}-${sliderId}`;
 
   const scrollToSlide = useCallback(
-    (index) => {
-      if (!containerRef.current || !slideRefs.current[index]) return;
+    (index, smooth = true) => {
+      if (!containerRef.current || !slideRefs.current[index]) {
+        return;
+      }
+
+      const fromIndex = currentSlide;
+
+      // Cancel any ongoing animation before starting a new one
+      if (animationRef.current) {
+        console.log('[SectionSlider]:', {
+          mode,
+          action: 'cancel',
+          fromIndex,
+          toIndex: index,
+          timestamp: Date.now(),
+        });
+        animationRef.current.cancel();
+      }
+
+      console.log('[SectionSlider]:', {
+        mode,
+        action: 'start',
+        fromIndex,
+        toIndex: index,
+        timestamp: Date.now(),
+      });
+
       const target = slideRefs.current[index];
-      if (isVertical) {
-        containerRef.current.scrollTo({
-          top: target.offsetTop,
-          behavior: 'smooth',
+      const to = isVertical ? target.offsetTop : target.offsetLeft;
+      const axis = isVertical ? 'y' : 'x';
+
+      if (!smooth) {
+        if (axis === 'y') {
+          containerRef.current.scrollTop = to;
+        } else {
+          containerRef.current.scrollLeft = to;
+        }
+        setCurrentSlide(index);
+        console.log('[SectionSlider]:', {
+          mode,
+          action: 'end',
+          fromIndex,
+          toIndex: index,
+          timestamp: Date.now(),
         });
         return;
       }
 
-      containerRef.current.scrollTo({
-        left: target.offsetLeft,
-        behavior: 'smooth',
+      // Use the custom animation utility to scroll smoothly
+      animationRef.current = animateScroll({
+        element: containerRef.current,
+        to,
+        duration: 600,
+        axis,
+        onComplete: () => {
+          console.log('[SectionSlider]:', {
+            mode,
+            action: 'end',
+            fromIndex,
+            toIndex: index,
+            timestamp: Date.now(),
+          });
+          animationRef.current = null;
+        },
       });
+
+      setCurrentSlide(index);
     },
-    [isVertical]
+    [isVertical, currentSlide, mode]
   );
 
   useEffect(() => {
@@ -211,7 +226,7 @@ export default function SectionSlider({
       if (!containerRef.current || !totalSlides) return;
 
       const maxIndex = Math.max(0, totalSlides - groupSize);
-      let nextIndex = currentSlideRef.current + groupSize;
+      let nextIndex = currentSlide + groupSize;
       if (nextIndex > maxIndex) {
         nextIndex = 0;
       }
@@ -232,109 +247,121 @@ export default function SectionSlider({
     slidesPerView,
     visibleSlides,
     scrollToSlide,
+    currentSlide,
   ]);
 
   useEffect(() => {
-    if (!containerRef.current || isVertical) return undefined;
+    if (prevSlideRef.current !== currentSlide) {
+      console.log('[SectionSlider]:', {
+        mode,
+        action: 'index-change',
+        fromIndex: prevSlideRef.current,
+        toIndex: currentSlide,
+        timestamp: Date.now(),
+      });
+      prevSlideRef.current = currentSlide;
+    }
+  }, [currentSlide, mode]);
 
+  // Effect for handling custom scroll and swipe logic
+  useEffect(() => {
     const container = containerRef.current;
+    if (!container) return undefined;
 
-    const handleTouchStart = (event) => {
-      if (event.touches.length !== 1) return;
-      const touch = event.touches[0];
-      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-      hasVerticalIntentRef.current = false;
+    let swipeInProgress = false;
+
+    // Touch event handlers for swipe gestures
+    const handleTouchStart = (e) => {
+      swipeInProgress = false; // Reset on new touch
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+        time: Date.now(),
+      };
     };
 
-    const handleTouchMove = (event) => {
-      if (event.touches.length !== 1) return;
-      const touch = event.touches[0];
-      const deltaX = Math.abs(touch.clientX - touchStartRef.current.x);
-      const deltaY = Math.abs(touch.clientY - touchStartRef.current.y);
+    const handleTouchMove = (e) => {
+      if (swipeInProgress || !touchStartRef.current.time) return;
 
-      if (!hasVerticalIntentRef.current && deltaY > deltaX && deltaY > 6) {
-        hasVerticalIntentRef.current = true;
-      }
+      const deltaX = e.touches[0].clientX - touchStartRef.current.x;
+      const deltaY = e.touches[0].clientY - touchStartRef.current.y;
 
-      if (hasVerticalIntentRef.current) {
-        blockHorizontalSwipe();
+      // Determine swipe direction only once per gesture
+      if (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10) {
+        swipeInProgress = true; // Mark this swipe as handled for this gesture
+
+        // Vertical swipe logic
+        if (isVertical && Math.abs(deltaY) > Math.abs(deltaX)) {
+          console.log('[SectionSlider]:', {
+            mode,
+            action: 'direction-detected',
+            direction: 'vertical',
+            timestamp: Date.now(),
+          });
+
+          if (Math.abs(deltaY) > 50) {
+            const direction = deltaY > 0 ? -1 : 1;
+            const nextSlide = Math.max(
+              0,
+              Math.min(currentSlide + direction, slides.length - 1)
+            );
+
+            if (nextSlide !== currentSlide) {
+              if (animationRef.current) {
+                animationRef.current.cancel();
+              }
+              scrollToSlide(nextSlide);
+            }
+          }
+        } else if (!isVertical && Math.abs(deltaX) > Math.abs(deltaY)) {
+          // Horizontal swipe logic
+          console.log('[SectionSlider]:', {
+            mode,
+            action: 'direction-detected',
+            direction: 'horizontal',
+            timestamp: Date.now(),
+          });
+        }
       }
     };
 
-    const handleTouchEnd = () => {
-      if (hasVerticalIntentRef.current) {
-        blockHorizontalSwipe();
-        hasVerticalIntentRef.current = false;
+    // Prevents default scroll and implements custom snap logic for vertical mode
+    const handleWheel = (e) => {
+      if (!isVertical) return;
+      e.preventDefault();
+      if (animationRef.current) {
+        animationRef.current.cancel();
+      }
+
+      const direction = e.deltaY > 0 ? 1 : -1;
+      const nextSlide = Math.max(
+        0,
+        Math.min(currentSlide + direction, slides.length - 1)
+      );
+
+      if (nextSlide !== currentSlide) {
+        scrollToSlide(nextSlide);
       }
     };
 
+    container.addEventListener('wheel', handleWheel, { passive: false });
     container.addEventListener('touchstart', handleTouchStart, {
       passive: true,
     });
-    container.addEventListener('touchmove', handleTouchMove, {
-      passive: true,
-    });
-    container.addEventListener('touchend', handleTouchEnd, {
-      passive: true,
-    });
-    container.addEventListener('touchcancel', handleTouchEnd, {
-      passive: true,
-    });
+    container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
     return () => {
+      container.removeEventListener('wheel', handleWheel);
       container.removeEventListener('touchstart', handleTouchStart);
       container.removeEventListener('touchmove', handleTouchMove);
-      container.removeEventListener('touchend', handleTouchEnd);
-      container.removeEventListener('touchcancel', handleTouchEnd);
     };
-  }, [isVertical, blockHorizontalSwipe]);
+  }, [isVertical, currentSlide, slides.length, scrollToSlide, mode]);
 
   useEffect(() => {
     if (!showHint || !hasMultipleSlides) return;
     const hintShown = safeSessionStorage.getItem(hintStorageKey);
     if (!hintShown) setShowHintOverlay(true);
   }, [showHint, hasMultipleSlides, hintStorageKey]);
-
-  useEffect(() => {
-    currentSlideRef.current = currentSlide;
-  }, [currentSlide]);
-
-  useEffect(() => {
-    if (
-      !hasMultipleSlides ||
-      !containerRef.current ||
-      typeof IntersectionObserver === 'undefined'
-    )
-      return;
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
-            const slideIndex = parseInt(entry.target.dataset.slideIndex);
-            setSlideDebounced(slideIndex);
-          }
-        });
-      },
-      { root: containerRef.current, threshold: [0.6], rootMargin: '0px' }
-    );
-
-    const observer = observerRef.current;
-    const slideElements = [...slideRefs.current];
-
-    slideElements.forEach((slide) => {
-      if (slide) observer.observe(slide);
-    });
-
-    return () => {
-      slideElements.forEach((slide) => {
-        if (slide) observer.unobserve(slide);
-      });
-      observer.disconnect();
-    };
-  }, [hasMultipleSlides, setSlideDebounced]);
-
-  const shouldBlockHorizontalSwipe = !isVertical && isBlockingHorizontalSwipe;
 
   const containerClasses = ['relative', isVertical ? 'h-full' : '', className]
     .filter(Boolean)
@@ -346,8 +373,8 @@ export default function SectionSlider({
         ref={containerRef}
         className={
           isVertical
-            ? 'reel-vertical h-full overflow-y-auto snap-y snap-mandatory'
-            : 'overflow-x-auto flex snap-x snap-mandatory'
+            ? 'reel-vertical h-full overflow-y-hidden'
+            : 'overflow-x-auto flex snap-x snap-mandatory is-horizontal-scroll-container'
         }
         style={
           isVertical
@@ -357,9 +384,6 @@ export default function SectionSlider({
             : {
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none',
-                ...(shouldBlockHorizontalSwipe
-                  ? { touchAction: 'pan-y', overflowX: 'hidden' }
-                  : {}),
               }
         }
       >
@@ -372,7 +396,7 @@ export default function SectionSlider({
               ref={(el) => (slideRefs.current[index] = el)}
               className={
                 isVertical
-                  ? 'reel-section snap-start'
+                  ? 'reel-section'
                   : 'reel-section flex-shrink-0 snap-start-x'
               }
               style={
@@ -404,7 +428,7 @@ export default function SectionSlider({
 
       {hasMultipleSlides && (
         <div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-1"
           role="tablist"
           aria-label={`${sliderId} slides`}
         >
@@ -427,12 +451,7 @@ export default function SectionSlider({
                 key={startIndex}
                 role="tab"
                 aria-selected={isActive}
-                className={`w-4 h-4 min-w-[44px] min-h-[44px] rounded-full transition-all duration-300 focus:outline-none focus:ri
-ng-2 focus:ring-secondary focus:ring-offset-2 flex items-center justify-center ${
-                  isActive
-                    ? 'bg-secondary scale-125'
-                    : 'bg-gray-300 hover:bg-gray-400'
-                }`}
+                className={`min-w-[44px] min-h-[44px] rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 flex items-center justify-center`}
                 onClick={() => scrollToSlide(startIndex)}
                 aria-label={`Go to slide ${indicatorIndex + 1} of ${
                   slidesPerView
@@ -440,6 +459,13 @@ ng-2 focus:ring-secondary focus:ring-offset-2 flex items-center justify-center $
                     : slides.length
                 }`}
               >
+                <span
+                  className={`h-2 w-2 rounded-full transition-all duration-300 ${
+                    isActive
+                      ? 'bg-secondary scale-125'
+                      : 'bg-gray-300 group-hover:bg-gray-400'
+                  }`}
+                />
                 <span className="sr-only">Slide {indicatorIndex + 1}</span>
               </button>
             );

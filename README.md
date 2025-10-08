@@ -39,5 +39,15 @@ High-level component interactions are documented in [docs/ARCHITECTURE.md](docs/
 2. Run `pytest finetune-ERP-backend-New/tests -q` and `pnpm --dir finetune-ERP-frontend-New test` before submitting.
 3. Open a pull request following the guidance in [docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md) and include regenerated references when routes or settings change.
 
-Start with `CONTEXT.md` for architecture guidance and `FILEMAP.md` to navigate the codebase.
+## Repository Structure
+
+| Path | Description |
+| --- | --- |
+| `README.md` | Project overview and developer onboarding |
+| `env.example` | Sample environment variables |
+| `finetune-ERP-backend-New/` | Django REST backend |
+| `finetune-ERP-frontend-New/` | React + Vite frontend |
+| `docs/` | Architecture guides, developer workflows, and auto-generated references |
+
+For detailed development workflows, see [docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md). For architectural context, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 

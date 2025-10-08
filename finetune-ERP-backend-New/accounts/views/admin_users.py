@@ -1,3 +1,10 @@
+"""
+Admin user management viewset for system administrators.
+
+This module provides CRUD operations for user management with search, filtering,
+and soft deletion capabilities. Only system administrators can access these endpoints.
+"""
+
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -9,23 +16,115 @@ from accounts.permissions import IsSystemAdminUser
 
 
 class AdminUserViewSet(viewsets.ModelViewSet):
-    """System admin: Manage users"""
+    """
+    ViewSet for system administrators to manage user accounts.
+
+    Provides full CRUD operations for user management with additional features:
+    - Soft deletion (sets deleted=True and is_active=False)
+    - Self-protection (prevents admins from deleting or disabling themselves)
+    - Search across username, email, name, phone, and store
+    - Filtering by role, store, and active status
+    - Ordering by username, date_joined, or id
+
+    Attributes:
+        queryset (QuerySet): Non-deleted users with store relationship prefetched.
+        permission_classes (list): Requires authenticated system admin.
+
+    Example:
+        GET /api/users?search=john&role=advisor&ordering=-date_joined
+
+        Response:
+        {
+            "count": 1,
+            "results": [
+                {
+                    "id": 5,
+                    "username": "john",
+                    "email": "john@example.com",
+                    "role": "advisor",
+                    "store": 1,
+                    "store_name": "Main Branch",
+                    "is_active": true
+                }
+            ]
+        }
+
+    Note:
+        Uses select_related("store") to optimize database queries when
+        retrieving user lists with store information.
+    """
 
     queryset = CustomUser.objects.filter(deleted=False).select_related("store")
     permission_classes = [IsAuthenticated, IsSystemAdminUser]
 
     def get_serializer_class(self):
+        """
+        Return appropriate serializer based on action.
+
+        Returns:
+            class: RegisterUserSerializer for create, CustomUserSerializer otherwise.
+        """
         return (
             RegisterUserSerializer if self.action == "create" else CustomUserSerializer
         )
 
     def create(self, request, *args, **kwargs):
+        """
+        Create a new user account.
+
+        Args:
+            request (Request): HTTP request with user data.
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            Response: Created user data with HTTP 201 status.
+
+        Raises:
+            ValidationError: If user data fails validation.
+
+        Example:
+            POST /api/users
+            {
+                "username": "newuser",
+                "email": "newuser@example.com",
+                "password": "securepass123",
+                "role": "advisor",
+                "store": 1
+            }
+        """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         return Response(CustomUserSerializer(user).data, status=status.HTTP_201_CREATED)
 
     def destroy(self, request, *args, **kwargs):
+        """
+        Soft delete a user account.
+
+        Sets deleted=True and is_active=False instead of hard deletion.
+        Prevents administrators from deleting their own account.
+
+        Args:
+            request (Request): HTTP request from authenticated admin.
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            Response: HTTP 204 No Content on success.
+
+        Raises:
+            HTTP 400: If admin attempts to delete their own account.
+
+        Example:
+            DELETE /api/users/5
+
+            Response: 204 No Content
+
+        Note:
+            Soft deletion preserves user data for audit trails while preventing
+            login and API access.
+        """
         user = self.get_object()
 
         if user == request.user:
@@ -42,6 +141,34 @@ class AdminUserViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, *args, **kwargs):
+        """
+        Update user account (PUT).
+
+        Prevents administrators from disabling their own account to avoid
+        accidental lockout.
+
+        Args:
+            request (Request): HTTP request with updated user data.
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            Response: Updated user data.
+
+        Raises:
+            HTTP 400: If admin attempts to disable their own account.
+
+        Example:
+            PUT /api/users/5
+            {
+                "username": "updateduser",
+                "email": "updated@example.com",
+                "is_active": true
+            }
+
+        Note:
+            Applies to both PUT and PATCH operations via partial_update().
+        """
         user = self.get_object()
 
         # Don’t disable yourself (covers PUT/PATCH if is_active present)
@@ -57,10 +184,45 @@ class AdminUserViewSet(viewsets.ModelViewSet):
         return super().update(request, *args, **kwargs)
 
     def partial_update(self, request, *args, **kwargs):
+        """
+        Partial update user account (PATCH).
+
+        Delegates to update() to apply the same self-protection rules.
+
+        Args:
+            request (Request): HTTP request with partial user data.
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            Response: Updated user data.
+        """
         # Mirror the same rules (self-disable & branch-head store assignment) for PATCH
         return self.update(request, *args, **kwargs)
 
     def get_queryset(self):
+        """
+        Return filtered and ordered queryset based on query parameters.
+
+        Supports the following query parameters:
+        - search: Search across username, email, first_name, last_name, phone, store_name
+        - role: Filter by user role (system_admin, branch_head, advisor, customer)
+        - store: Filter by store ID
+        - is_active: Filter by active status (true/false)
+        - ordering: Order by username, date_joined, or id (prefix with - for descending)
+
+        Returns:
+            QuerySet: Filtered and ordered user queryset.
+
+        Example:
+            GET /api/users?search=john&role=advisor&is_active=true&ordering=-date_joined
+
+            Returns advisors named "john" who are active, ordered by most recent first.
+
+        Note:
+            Default ordering is -date_joined (newest first). Only whitelisted
+            ordering fields are allowed to prevent SQL injection.
+        """
         queryset = super().get_queryset()
 
         # Search

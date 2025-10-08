@@ -1,0 +1,34 @@
+{
+  "source": {
+    "include": ["src"],
+    "includePattern": "\\.(jsx?|tsx?)$",
+    "excludePattern": "(node_modules|__tests__|dist)"
+  },
+  "plugins": ["node_modules/jsdoc-plugin-typescript", "node_modules/better-docs/category"],
+  "opts": {
+    "template": "node_modules/better-docs",
+    "destination": "./docs-generated",
+    "recurse": true,
+    "readme": "./README.md"
+  },
+  "templates": {
+    "better-docs": {
+      "name": "Finetune ERP Frontend",
+      "navigation": [
+        {
+          "label": "Components",
+          "href": "module-components.html"
+        },
+        {
+          "label": "Hooks",
+          "href": "module-hooks.html"
+        },
+        {
+          "label": "Utils",
+          "href": "module-utils.html"
+        }
+      ]
+    }
+  }
+}
+

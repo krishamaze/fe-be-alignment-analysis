@@ -45,20 +45,46 @@ export default function Index() {
     (sectionIndex, duration = 600) => {
       const container = scrollElement;
 
-      if (
-        !container ||
-        isScrolling ||
-        sectionIndex < 0 ||
-        sectionIndex >= sectionsCount
-      ) {
-        devLog('Scroll blocked', {
-          container: !!container,
-          isScrolling,
-          sectionIndex,
+      console.log('[Index.jsx Scroll Debug]:', {
+        from: currentSection,
+        to: sectionIndex,
+        reason: 'scrollToSection called',
+        eventType: 'programmatic',
+        timestamp: Date.now(),
+      });
+
+      if (!container) {
+        console.log('[Index.jsx Scroll Debug]:', {
+          from: currentSection,
+          to: sectionIndex,
+          reason: 'scroll blocked: no container',
+          eventType: 'programmatic',
+          timestamp: Date.now(),
+        });
+        return;
+      }
+      if (isScrolling) {
+        console.log('[Index.jsx Scroll Debug]:', {
+          from: currentSection,
+          to: sectionIndex,
+          reason: 'scroll blocked: isScrolling',
+          eventType: 'programmatic',
+          timestamp: Date.now(),
+        });
+        return;
+      }
+      if (sectionIndex < 0 || sectionIndex >= sectionsCount) {
+        console.log('[Index.jsx Scroll Debug]:', {
+          from: currentSection,
+          to: sectionIndex,
+          reason: 'scroll blocked: invalid section index',
+          eventType: 'programmatic',
+          timestamp: Date.now(),
           sectionsCount,
         });
         return;
       }
+
 
       setIsScrolling(true);
 
@@ -127,7 +153,34 @@ export default function Index() {
     if (!isDesktop) return;
 
     const handleWheel = (e) => {
+      console.log('[Index.jsx Scroll Debug]:', {
+        from: currentSection,
+        to: null,
+        reason: 'handleWheel triggered',
+        eventType: e.type,
+        timestamp: Date.now(),
+        deltaY: e.deltaY,
+      });
+      // If the event target is inside a horizontal slider, ignore the event
+      if (e.target.closest('.is-horizontal-scroll-container')) {
+        console.log('[Index.jsx Scroll Debug]:', {
+          from: currentSection,
+          to: null,
+          reason: 'scroll ignored: horizontal scroll container',
+          eventType: e.type,
+          timestamp: Date.now(),
+        });
+        return;
+      }
+
       if (isScrolling) {
+        console.log('[Index.jsx Scroll Debug]:', {
+          from: currentSection,
+          to: null,
+          reason: 'scroll ignored: isScrolling',
+          eventType: e.type,
+          timestamp: Date.now(),
+        });
         e.preventDefault();
         e.stopPropagation();
         return;
@@ -142,7 +195,18 @@ export default function Index() {
 
       // Cross-platform adaptive threshold
       const threshold = Math.max(10, Math.abs(deltaY) * 0.5);
-      if (Math.abs(wheelDelta.current) < threshold) return;
+      if (Math.abs(wheelDelta.current) < threshold) {
+        console.log('[Index.jsx Scroll Debug]:', {
+          from: currentSection,
+          to: null,
+          reason: 'scroll ignored: delta threshold not met',
+          eventType: e.type,
+          timestamp: Date.now(),
+          wheelDelta: wheelDelta.current,
+          threshold,
+        });
+        return;
+      }
 
       const direction = wheelDelta.current > 0 ? 1 : -1;
       wheelDelta.current = 0;
@@ -155,6 +219,13 @@ export default function Index() {
       }
 
       if (nextSection !== currentSection) {
+        console.log('[Index.jsx Scroll Debug]:', {
+          from: currentSection,
+          to: nextSection,
+          eventType: e.type,
+          timestamp: Date.now(),
+          direction,
+        });
         devLog('Wheel scroll triggered', {
           from: currentSection,
           to: nextSection,
@@ -191,10 +262,48 @@ export default function Index() {
     };
 
     const handleTouchEnd = (e) => {
-      if (isScrolling) return;
+      console.log('[Index.jsx Scroll Debug]:', {
+        from: currentSection,
+        to: null,
+        reason: 'handleTouchEnd triggered',
+        eventType: e.type,
+        timestamp: Date.now(),
+      });
+      // If the event target is inside a horizontal slider, ignore the event
+      if (e.target.closest('.is-horizontal-scroll-container')) {
+        console.log('[Index.jsx Scroll Debug]:', {
+          from: currentSection,
+          to: null,
+          reason: 'scroll ignored: horizontal scroll container',
+          eventType: e.type,
+          timestamp: Date.now(),
+        });
+        return;
+      }
+
+      if (isScrolling) {
+        console.log('[Index.jsx Scroll Debug]:', {
+          from: currentSection,
+          to: null,
+          reason: 'scroll ignored: isScrolling',
+          eventType: e.type,
+          timestamp: Date.now(),
+        });
+        return;
+      }
 
       const touchDuration = Date.now() - touchStartTime;
-      if (touchDuration < 50) return;
+      if (touchDuration < 50) {
+        console.log('[Index.jsx Scroll Debug]:', {
+          from: currentSection,
+          to: null,
+          reason: 'scroll ignored: touch duration too short',
+          eventType: e.type,
+          timestamp: Date.now(),
+          touchDuration,
+        });
+        return;
+      }
 
       const touchEndY = e.changedTouches[0].clientY;
       const deltaY = touchStartY - touchEndY;
@@ -210,12 +319,29 @@ export default function Index() {
         }
 
         if (nextSection !== currentSection) {
+          console.log('[Index.jsx Scroll Debug]:', {
+            from: currentSection,
+            to: nextSection,
+            eventType: e.type,
+            timestamp: Date.now(),
+            deltaY,
+          });
           devLog('Touch scroll triggered', {
             from: currentSection,
             to: nextSection,
           });
           scrollToSection(nextSection);
         }
+      } else {
+        console.log('[Index.jsx Scroll Debug]:', {
+          from: currentSection,
+          to: null,
+          reason: 'scroll ignored: swipe distance too short',
+          eventType: e.type,
+          timestamp: Date.now(),
+          deltaY,
+          minSwipeDistance,
+        });
       }
     };
 
@@ -240,7 +366,24 @@ export default function Index() {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (isScrolling) return;
+      console.log('[Index.jsx Scroll Debug]:', {
+        from: currentSection,
+        to: null,
+        reason: 'handleKeyDown triggered',
+        eventType: e.type,
+        timestamp: Date.now(),
+        key: e.key,
+      });
+      if (isScrolling) {
+        console.log('[Index.jsx Scroll Debug]:', {
+          from: currentSection,
+          to: null,
+          reason: 'scroll ignored: isScrolling',
+          eventType: e.type,
+          timestamp: Date.now(),
+        });
+        return;
+      }
 
       let nextSection = currentSection;
 
@@ -252,6 +395,13 @@ export default function Index() {
 
       if (nextSection !== currentSection) {
         e.preventDefault();
+        console.log('[Index.jsx Scroll Debug]:', {
+          from: currentSection,
+          to: nextSection,
+          eventType: e.type,
+          timestamp: Date.now(),
+          key: e.key,
+        });
         devLog('Keyboard scroll triggered', {
           from: currentSection,
           to: nextSection,
@@ -280,7 +430,15 @@ export default function Index() {
         {activeReels.map((reel, index) => (
           <button
             key={reel.id}
-            onClick={() => scrollToSection(index)}
+            onClick={() => {
+              console.log('[Index.jsx Scroll Debug]:', {
+                from: currentSection,
+                to: index,
+                eventType: 'click',
+                timestamp: Date.now(),
+              });
+              scrollToSection(index);
+            }}
             disabled={isScrolling}
             role="tab"
             aria-selected={currentSection === index}

@@ -33,6 +33,11 @@ test = [
     "freezegun==1.5.5",
     "black==24.4.2",
 ]
+docs = [
+    "sphinx>=7.0",
+    "sphinx-rtd-theme>=2.0",
+    "sphinx-autodoc-typehints>=1.25",
+]
 
 [tool.black]
 line-length = 88
