@@ -30,7 +30,7 @@ export default function MainNav() {
     <nav
       id="mainnav"
       ref={ref}
-      className="flex-shrink-0 bg-white shadow-sm flex items-center justify-between px-4 md:px-8 z-50 h-14"
+      className="main-nav flex-shrink-0 bg-white shadow-sm flex items-center justify-between px-4 md:px-8 z-50 h-14"
     >
       {/* Left: Logo */}
       <Logo />

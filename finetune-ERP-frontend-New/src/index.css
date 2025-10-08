@@ -32,17 +32,24 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Disable text selection during scroll transitions */
+/* Fixed navigation positioning */
+.top-bar,
+#topbar,
 .main-nav,
-.top-bar {
-  position: fixed !important;
-  top: 0;
+#mainnav {
+  position: fixed;
+  width: 100%;
   left: 0;
-  right: 0;
   z-index: 1000;
 }
 
-.main-nav {
+.top-bar,
+#topbar {
+  top: 0;
+}
+
+.main-nav,
+#mainnav {
   top: var(--topbar-h, 0px);
 }
 
