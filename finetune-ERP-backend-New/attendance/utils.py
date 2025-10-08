@@ -31,8 +31,15 @@ def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
 
     Returns:
         float: The distance between the two points in kilometers.
-    """
 
+    Example:
+        >>> # Distance between two points in London
+        >>> lat1, lon1 = 51.5072, -0.1276
+        >>> # Distance to a point approx 0.88km away
+        >>> lat2, lon2 = 51.51, -0.14
+        >>> round(haversine_km(lat1, lon1, lat2, lon2), 2)
+        0.88
+    """
     # Earth radius in kilometers
     radius = 6371.0
 
@@ -72,8 +79,23 @@ def within_radius_m(
     Returns:
         bool: `True` if the point is within the geofence radius, `False`
         otherwise.
-    """
 
+    Example:
+        >>> from collections import namedtuple
+        >>> Geofence = namedtuple("Geofence", ["latitude", "longitude", "radius_m", "is_active"])
+        >>> # Geofence centered in a city, with a 500m radius
+        >>> fence = Geofence(latitude=51.50, longitude=-0.12, radius_m=500, is_active=True)
+        >>> # A point within the radius (approx 88m away)
+        >>> within_radius_m(51.5008, -0.12, fence)
+        True
+        >>> # A point outside the radius (approx 880m away)
+        >>> within_radius_m(51.508, -0.12, fence)
+        False
+        >>> # Check with an inactive geofence
+        >>> inactive_fence = Geofence(latitude=51.50, longitude=-0.12, radius_m=500, is_active=False)
+        >>> within_radius_m(51.5008, -0.12, inactive_fence)
+        False
+    """
     if not geofence or not geofence.is_active:
         return False
 
@@ -107,7 +129,6 @@ def idem_get(request, endpoint: str):
         Optional[GenericIdempotency]: The matching `GenericIdempotency` instance
         if found, otherwise `None`.
     """
-
     key = request.headers.get("Idempotency-Key")
     if not key:
         return None
@@ -134,7 +155,6 @@ def idem_remember(request, endpoint: str, obj):
         obj: The model instance that was created or updated. Its primary key
             will be stored.
     """
-
     key = request.headers.get("Idempotency-Key")
     if not key:
         return
