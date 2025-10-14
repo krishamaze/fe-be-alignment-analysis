@@ -33,8 +33,8 @@ const testimonials = [
 
 function TestimonialSlide({ testimonial }) {
   return (
-    <div className="w-full h-full flex items-center justify-center px-4">
-      <div className="max-w-2xl mx-auto">
+    <div className="w-full h-full flex items-center justify-center px-2 md:px-3">
+      <div className="max-w-2xl mx-auto w-full">
         <div className="bg-surface rounded-2xl p-6 shadow-lg flex flex-col items-center text-center space-y-4">
           <div className="flex justify-center">
             {[...Array(5)].map((_, i) => (
@@ -82,7 +82,7 @@ export default function TestimonialsReel() {
           showHint
           mode="horizontal"
           className="w-full flex-1"
-          slidesPerView={{ mobile: 1, tablet: 1, desktop: 1 }}
+          slidesPerView={{ mobile: 1, tablet: 2, desktop: 3 }}
         >
           {slides}
         </SectionSlider>
