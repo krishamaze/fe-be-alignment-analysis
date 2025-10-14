@@ -47,6 +47,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://finetunetechcraft-erp-git-axios-f-efe947-finetunetechs-projects.vercel.app",
     "https://finetunetechcraft-erp-git-feature-ca76ad-finetunetechs-projects.vercel.app",
     "https://finetunetechcrafterp-dev.up.railway.app",
+    "https://6ab6cec2-da78-448b-9598-e17aa5a550f5-00-1bnru3v0ef4qz.pike.replit.dev",
+    "http://localhost:5000",
 ]
 
 
@@ -60,7 +62,8 @@ CSRF_TRUSTED_ORIGINS = [
     "https://finetunetechcraft-erp-git-feature-ca76ad-finetunetechs-projects.vercel.app",
     "https://finetunetechcrafterp-dev.up.railway.app",
     "https://fe-be-alignment-analysis.vercel.app",
-    "https://*.vercel.app",  # optional: allows preview builds
+    "https://*.vercel.app",
+    "https://6ab6cec2-da78-448b-9598-e17aa5a550f5-00-1bnru3v0ef4qz.pike.replit.dev",
 ]
 
 SESSION_COOKIE_SECURE = True
