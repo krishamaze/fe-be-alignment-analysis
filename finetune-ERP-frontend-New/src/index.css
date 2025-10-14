@@ -32,6 +32,19 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Optimize mobile scrolling performance */
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  html, body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    touch-action: pan-y;
+  }
+}
+
 /* Fixed navigation positioning */
 .top-bar,
 #topbar,
@@ -62,6 +75,9 @@ html {
   scroll-padding-top: 0;
   scroll-padding-bottom: 0;
   overscroll-behavior: none;
+  /* GPU acceleration for smooth performance */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 /* Better scroll snap support */
@@ -93,6 +109,18 @@ html {
   scroll-padding-right: 0;
   overscroll-behavior-x: contain;
   scroll-behavior: smooth;
+  /* Optimize horizontal scrolling performance */
+  -webkit-overflow-scrolling: touch;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  /* Add small gap between slides on desktop */
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .snap-x {
+    gap: 1rem;
+  }
 }
 
 .snap-start-x {
@@ -166,6 +194,28 @@ html {
   backface-visibility: hidden;
   transform-style: preserve-3d;
   flex-shrink: 0;
+  /* GPU acceleration */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Improve snap scrolling on mobile */
+@media (max-width: 768px) {
+  .fullpage-section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  
+  .snap-x {
+    scroll-snap-type: x mandatory;
+    /* Smoother scrolling on mobile */
+    scroll-behavior: smooth;
+  }
+  
+  .snap-start-x {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal; /* Allow faster scrolling through multiple items */
+  }
 }
 
 .fullpage-scrolling .fullpage-section {
@@ -181,12 +231,30 @@ html {
 /* Bottom nav (default state) */
 .bottom-nav {
   will-change: transform;
+  /* GPU acceleration */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Safe area fix for iOS */
 .bottom-nav {
   padding-bottom: env(safe-area-inset-bottom, 0);
   bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Ensure content doesn't get hidden under navigation */
+@media (max-width: 768px) {
+  main[data-scroll-container] {
+    padding-bottom: calc(var(--bottomnav-h, 56px) + 1rem) !important;
+  }
+}
+
+/* Prevent content from hiding behind top navigation */
+@media (min-width: 769px) {
+  .fullpage-section {
+    padding-top: calc(var(--topbar-h, 0px) + var(--mainnav-h, 0px));
+  }
 }
 
 @keyframes swipe-pulse {
