@@ -1,7 +1,22 @@
-// Environment-based API URL
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  'https://finetunetechcrafterp-dev.up.railway.app';
+// Environment-based API URL with Replit support
+const getApiBaseUrl = () => {
+  // If explicitly set via env, use that
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  
+  // In Replit environment, use HTTPS via Replit proxy
+  if (typeof window !== 'undefined' && window.location.hostname.includes('replit.dev')) {
+    const hostname = window.location.hostname;
+    // Replit proxies HTTPS to Django dev server, use port 8000
+    return `https://${hostname}:8000`;
+  }
+  
+  // Default to production Railway URL
+  return 'https://finetunetechcrafterp-dev.up.railway.app';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 const END_POINTS = {
   API_BASE_URL,

@@ -37,6 +37,14 @@ if _allowed_hosts_env:
 else:
     ALLOWED_HOSTS = _DEFAULT_ALLOWED_HOSTS
 
+# Add Replit domain to ALLOWED_HOSTS
+_replit_domains_hosts = os.environ.get("REPLIT_DOMAINS", "")
+if _replit_domains_hosts:
+    for domain in _replit_domains_hosts.split(","):
+        domain = domain.strip()
+        if domain and domain not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(domain)
+
 # ✅ CORS
 CORS_ALLOW_ALL_ORIGINS = False  # Change from True
 CORS_ALLOWED_ORIGINS = [
@@ -47,10 +55,13 @@ CORS_ALLOWED_ORIGINS = [
     "https://finetunetechcraft-erp-git-axios-f-efe947-finetunetechs-projects.vercel.app",
     "https://finetunetechcraft-erp-git-feature-ca76ad-finetunetechs-projects.vercel.app",
     "https://finetunetechcrafterp-dev.up.railway.app",
-    "https://6ab6cec2-da78-448b-9598-e17aa5a550f5-00-1bnru3v0ef4qz.pike.replit.dev",
-    "http://localhost:5000",
 ]
 
+# Allow Replit dev domains dynamically (both HTTP and HTTPS)
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.replit\.dev$",
+    r"^http://.*\.replit\.dev$",
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -63,18 +74,31 @@ CSRF_TRUSTED_ORIGINS = [
     "https://finetunetechcrafterp-dev.up.railway.app",
     "https://fe-be-alignment-analysis.vercel.app",
     "https://*.vercel.app",
-    "https://6ab6cec2-da78-448b-9598-e17aa5a550f5-00-1bnru3v0ef4qz.pike.replit.dev",
 ]
 
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# Add Replit dev domains via env or regex pattern  
+_replit_domains = os.environ.get("REPLIT_DOMAINS", "")
+if _replit_domains:
+    for domain in _replit_domains.split(","):
+        domain = domain.strip()
+        if domain:
+            # Add both HTTP and HTTPS variants
+            if f"https://{domain}" not in CSRF_TRUSTED_ORIGINS:
+                CSRF_TRUSTED_ORIGINS.append(f"https://{domain}")
+            if f"http://{domain}" not in CSRF_TRUSTED_ORIGINS:
+                CSRF_TRUSTED_ORIGINS.append(f"http://{domain}")
+
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = (
-    "None"  # Required for cross-origin cookie access (vercel → railway)
+    "None" if not DEBUG else "Lax"  # Required for cross-origin cookie access (vercel → railway)
 )
-SESSION_COOKIE_SAMESITE = "None"
+SESSION_COOKIE_SAMESITE = "None" if not DEBUG else "Lax"
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
 APPEND_SLASH = False
 
 # HTTPS Security Headers

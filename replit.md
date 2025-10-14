@@ -1,0 +1,109 @@
+# Finetune ERP - Replit Setup
+
+## Overview
+Full-stack ERP (Enterprise Resource Planning) application with Django REST backend and React frontend.
+
+**Last Updated:** October 14, 2025
+
+## Project Structure
+```
+.
+├── finetune-ERP-backend-New/   # Django REST API backend
+├── finetune-ERP-frontend-New/  # React + Vite frontend
+├── docs/                        # Project documentation
+└── pyproject.toml              # Python dependencies
+```
+
+## Technology Stack
+
+### Backend
+- **Framework:** Django 5.2.5
+- **API:** Django REST Framework 3.16.1
+- **Database:** PostgreSQL (Replit managed)
+- **Authentication:** JWT (djangorestframework-simplejwt)
+- **Language:** Python 3.11
+
+### Frontend
+- **Framework:** React 19
+- **Build Tool:** Vite 6.3
+- **State Management:** Redux Toolkit
+- **UI Libraries:** Tailwind CSS, Headless UI
+- **Language:** JavaScript (ES6+)
+
+## Current Configuration
+
+### Development Setup
+- **Frontend:** Runs on port 5000 (Vite dev server)
+- **Backend:** Runs on port 8000 (Django runserver)
+- **Database:** PostgreSQL via DATABASE_URL environment variable
+
+### Workflows
+1. **Frontend:** `cd finetune-ERP-frontend-New && npm run dev`
+   - Port: 5000 (webview output)
+   - Vite configured for Replit proxy
+
+2. **Backend:** `cd finetune-ERP-backend-New && python manage.py runserver 0.0.0.0:8000`
+   - Port: 8000 (console output)
+   - CORS configured for local frontend
+
+### Environment Variables
+- `DATABASE_URL` - PostgreSQL connection string (auto-configured)
+- `SECRET_KEY` - Django secret key
+- `DEBUG` - Debug mode (set to "True" for development)
+- Frontend uses `VITE_API_BASE_URL=http://localhost:8000` for local dev
+
+### CORS Configuration
+The backend is configured to accept requests from:
+- Replit development domain
+- localhost:5000 (frontend dev server)
+- Production domains (finetune.store, vercel deployments)
+
+## Recent Changes (October 14, 2025)
+- ✅ Installed Python 3.11 and Node.js 20
+- ✅ Installed backend dependencies from pyproject.toml
+- ✅ Installed frontend dependencies with --legacy-peer-deps flag
+- ✅ Configured Vite for Replit (port 5000, WebSocket HMR)
+- ✅ Created PostgreSQL database and ran migrations
+- ✅ Updated CORS/CSRF settings for Replit domains (regex-based for dynamic domains)
+- ✅ Created frontend and backend workflows
+- ✅ Updated .gitignore for Python and Node.js artifacts
+- ✅ Configured deployment for autoscale
+- ✅ Fixed frontend-backend integration for Replit (HTTP backend URL, dynamic detection)
+- ✅ Updated Django security settings for dev mode (non-secure cookies in DEBUG mode)
+
+## Development Commands
+
+### Backend
+```bash
+cd finetune-ERP-backend-New
+python manage.py migrate              # Run migrations
+python manage.py createsuperuser      # Create admin user
+python manage.py test                 # Run tests
+python manage.py collectstatic        # Collect static files
+```
+
+### Frontend
+```bash
+cd finetune-ERP-frontend-New
+npm run dev                           # Start dev server
+npm run build                         # Build for production
+npm run test                          # Run tests
+npm run lint                          # Lint code
+```
+
+## Key Files Modified for Replit
+1. `finetune-ERP-frontend-New/vite.config.js` - Port 5000, HMR config
+2. `finetune-ERP-backend-New/config/settings.py` - CORS/CSRF for Replit
+3. `finetune-ERP-frontend-New/.env` - Local backend URL
+4. `.gitignore` - Python and Node.js artifacts
+
+## Deployment
+The application is configured for autoscale deployment:
+- **Build:** Installs dependencies, runs migrations, collects static files
+- **Run:** Serves frontend build + backend API via Gunicorn on port 5000
+
+## Notes
+- Database uses PostgreSQL in both dev and production
+- Frontend makes API calls to localhost:8000 in development
+- Both servers run simultaneously via workflows
+- The backend includes multiple apps: accounts, attendance, bookings, catalog, inventory, invoicing, marketing, spares, store

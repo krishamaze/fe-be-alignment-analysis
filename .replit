@@ -52,3 +52,8 @@ externalPort = 80
 [[ports]]
 localPort = 8000
 externalPort = 8000
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["bash", "-c", "cd finetune-ERP-frontend-New && npm run build && cd ../finetune-ERP-backend-New && gunicorn --bind=0.0.0.0:5000 --reuse-port config.wsgi:application"]
+build = ["bash", "-c", "pip install -e .[backend] && cd finetune-ERP-frontend-New && npm install --legacy-peer-deps && cd ../finetune-ERP-backend-New && python manage.py migrate && python manage.py collectstatic --noinput"]
