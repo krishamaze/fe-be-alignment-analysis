@@ -10,10 +10,13 @@ const __dirname = path.dirname(__filename);
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: '0.0.0.0', // ADD THIS
-    port: 5173, // Optional if you want fixed port
+    host: '0.0.0.0',
+    port: 5000,
     strictPort: true,
-    historyApiFallback: true, // Optional - if port is busy, don't auto change
+    hmr: {
+      clientPort: 443,
+      protocol: 'wss',
+    },
   },
   resolve: {
     alias: {
