@@ -41,7 +41,6 @@ html {
   html, body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    touch-action: pan-y;
   }
 }
 
@@ -243,19 +242,7 @@ html {
   bottom: env(safe-area-inset-bottom, 0);
 }
 
-/* Ensure content doesn't get hidden under navigation */
-@media (max-width: 768px) {
-  main[data-scroll-container] {
-    padding-bottom: calc(var(--bottomnav-h, 56px) + 1rem) !important;
-  }
-}
-
-/* Prevent content from hiding behind top navigation */
-@media (min-width: 769px) {
-  .fullpage-section {
-    padding-top: calc(var(--topbar-h, 0px) + var(--mainnav-h, 0px));
-  }
-}
+/* No additional spacing needed - fullpage-section height already accounts for nav */
 
 @keyframes swipe-pulse {
   0%,
