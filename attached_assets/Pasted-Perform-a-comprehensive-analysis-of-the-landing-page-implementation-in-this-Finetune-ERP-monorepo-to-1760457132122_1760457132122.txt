@@ -1,0 +1,47 @@
+Perform a comprehensive analysis of the landing page implementation in this Finetune ERP monorepo to identify gaps and inconsistencies between the frontend and backend, with a focus on improving UI/UX. Specifically:
+
+1. **Locate the landing page components**: 
+   - Find the main landing page component(s) in the React frontend (`finetune-ERP-frontend-New/src/`)
+   - Identify the routing configuration that defines the landing page path
+   - Locate any corresponding backend API endpoints in the Django backend (`finetune-ERP-backend-New/`) that serve data to the landing page
+   - Document the file paths and component/view names
+
+2. **Analyze frontend-backend alignment**: 
+   - Identify all API calls made from the landing page (using fetch, axios, or other HTTP clients)
+   - Verify that corresponding Django REST Framework endpoints exist with matching URLs and HTTP methods
+   - Check for mismatches in:
+     * Data structures (nested objects, arrays)
+     * Field names (camelCase vs snake_case)
+     * Data types (strings vs numbers, date formats)
+     * Response status codes and error formats
+   - Verify error handling exists on both frontend (try-catch, error states) and backend (exception handling, validation)
+
+3. **Identify implementation gaps**:
+   - **Missing features**: Buttons or links that don't trigger actions, forms that don't submit, incomplete workflows
+   - **Broken UI elements**: Non-functional interactive components, missing click handlers, broken navigation
+   - **API issues**: Frontend calls to non-existent endpoints (404s), endpoints returning unexpected errors (500s), missing CORS headers
+   - **Orphaned code**: Frontend components without backend support, backend endpoints not consumed by frontend
+   - **Security gaps**: Missing authentication checks on protected endpoints, missing authorization for user-specific data, exposed sensitive information
+   - **Data validation**: Missing or inconsistent validation rules between frontend forms and backend serializers/models
+
+4. **Evaluate UI/UX quality and identify improvements**:
+   - **Visual design**: Inconsistent styling, poor color contrast, misaligned elements, responsive design issues on mobile/tablet
+   - **User feedback**: Missing loading states, no error messages or unclear error messages, lack of success confirmations
+   - **Accessibility**: Missing ARIA labels, poor keyboard navigation, insufficient color contrast ratios, missing alt text for images
+   - **User flow**: Confusing navigation, unclear call-to-action buttons, excessive clicks to complete tasks, missing breadcrumbs or progress indicators
+   - **Performance**: Slow page load times, janky animations, unoptimized images, excessive re-renders
+   - **Content**: Unclear copy, missing help text, poor information hierarchy, overwhelming amount of information
+
+5. **Check for best practices violations**:
+   - **Security**: CORS misconfiguration, CSRF token issues, exposed API keys, insecure authentication patterns, SQL injection vulnerabilities
+   - **Performance**: Unnecessary API calls in render loops, missing pagination, lack of caching, unoptimized bundle sizes, missing lazy loading
+   - **Code quality**: Inconsistent naming conventions, duplicated code, missing PropTypes/TypeScript types, poor component structure, missing comments for complex logic
+   - **Accessibility**: Non-semantic HTML, missing focus management, poor screen reader support
+
+6. **Provide a detailed report** with:
+   - A summary of critical issues prioritized by severity (blocking, high, medium, low)
+   - Specific file paths and line numbers for each identified issue
+   - Code snippets showing the problematic implementation
+   - Actionable recommendations with example code fixes for each gap
+   - UI/UX improvement suggestions with specific design recommendations (e.g., "Add a loading spinner component when fetching data", "Improve button contrast ratio from 2.1:1 to 4.5:1")
+   - A prioritized action plan for addressing the most impactful issues first
