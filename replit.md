@@ -70,6 +70,13 @@ The backend is configured to accept requests from:
 - ✅ Configured deployment for autoscale
 - ✅ Fixed frontend-backend integration for Replit (HTTP backend URL, dynamic detection)
 - ✅ Updated Django security settings for dev mode (non-secure cookies in DEBUG mode)
+- ✅ **Mobile Performance & Desktop Layout Improvements:**
+  - Updated TestimonialsReel to show 3 slides on desktop (was 1), 2 on tablet, 1 on mobile
+  - Added GPU acceleration to all scroll containers for smoother performance
+  - Optimized mobile scrolling with tap highlight removal and font smoothing
+  - Added responsive gap spacing between horizontal slides (0.5rem mobile, 1rem desktop)
+  - Improved snap scrolling behavior on mobile devices
+  - Fixed horizontal swipe gestures to work properly on mobile sliders
 
 ## Development Commands
 
