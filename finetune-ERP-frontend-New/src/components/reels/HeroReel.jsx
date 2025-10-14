@@ -1,8 +1,11 @@
-import { Link } from 'react-router-dom';
 import SectionSlider from '@/components/navigation/SectionSlider';
 import useDevice from '@/hooks/useDevice';
 import phoneIllustration from '@/assets/phone-illustration.png';
+import Button from '@/components/common/Button';
 
+/**
+ * Statistics displayed in the hero section
+ */
 const stats = [
   {
     id: 'rating',
@@ -19,38 +22,36 @@ const stats = [
   { id: 'locations', content: '4 locations' },
 ];
 
+/**
+ * Desktop layout for hero section
+ * Uses 12-column grid: 7 cols content, 5 cols image
+ */
 function DesktopLayout() {
   return (
     <div className="grid h-full grid-cols-12 items-center gap-8">
       <div className="col-span-7 flex h-full flex-col justify-center gap-8 text-surface">
         <div className="space-y-4">
-          <p className="text-body-md font-medium text-surface/70">
+          <p className="text-body-md font-medium text-surface/90">
             Serving Coimbatore & Palakkad • 10+ Years Trusted
           </p>
           <h1 className="text-6xl font-bold leading-tight">
             Expert Mobile & Laptop Repairs
           </h1>
-          <p className="max-w-xl text-xl text-surface/80">
+          <p className="max-w-xl text-xl text-surface">
             Same-day repairs • Free pickup & delivery • 90-day warranty
           </p>
         </div>
 
         <div className="flex flex-wrap gap-4">
-          <Link
-            to="/repair"
-            className="rounded-lg bg-primary px-8 py-4 text-lg font-semibold text-surface transition-colors hover:bg-secondary hover:text-primary"
-          >
+          <Button to="/repair" variant="primary" size="lg">
             Get Instant Quote
-          </Link>
-          <Link
-            to="/shop"
-            className="rounded-lg border border-surface/30 px-8 py-4 text-lg text-surface transition-colors hover:bg-surface/10"
-          >
+          </Button>
+          <Button to="/shop" variant="secondary" size="lg">
             Shop Accessories
-          </Link>
+          </Button>
         </div>
 
-        <div className="mt-auto flex flex-wrap items-center gap-6 text-body-sm text-surface/80">
+        <div className="mt-auto flex flex-wrap items-center gap-6 text-body-sm text-surface/90">
           {stats.map((item) => (
             <div key={item.id}>{item.content}</div>
           ))}
@@ -79,6 +80,10 @@ function DesktopLayout() {
   );
 }
 
+/**
+ * Mobile layout for hero section
+ * Centered content with background image overlay
+ */
 function MobileLayout() {
   return (
     <div className="relative flex h-full flex-col justify-center">
@@ -92,33 +97,27 @@ function MobileLayout() {
       </div>
 
       <div className="relative z-10 flex flex-col items-center gap-6 px-6 text-center text-surface">
-        <p className="text-body-sm font-medium text-surface/70">
+        <p className="text-body-sm font-medium text-surface/90">
           Serving Coimbatore & Palakkad • 10+ Years Trusted
         </p>
         <h1 className="text-4xl font-bold leading-tight">
           Expert Mobile & Laptop Repairs
         </h1>
-        <p className="text-lg text-surface/80">
+        <p className="text-lg text-surface">
           Same-day repairs • Free pickup & delivery • 90-day warranty
         </p>
 
         <div className="flex w-full flex-col items-center gap-4">
-          <Link
-            to="/repair"
-            className="w-full rounded-lg bg-primary px-6 py-3 text-base font-semibold text-surface transition-colors hover:bg-secondary hover:text-primary sm:w-auto"
-          >
+          <Button to="/repair" variant="primary" size="md" className="w-full sm:w-auto">
             Get Instant Quote
-          </Link>
-          <Link
-            to="/shop"
-            className="w-full rounded-lg border border-surface/30 px-6 py-3 text-base text-surface transition-colors hover:bg-surface/10 sm:w-auto"
-          >
+          </Button>
+          <Button to="/shop" variant="secondary" size="md" className="w-full sm:w-auto">
             Shop Accessories
-          </Link>
+          </Button>
         </div>
       </div>
 
-      <div className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4 px-6 text-center text-body-sm text-surface/80">
+      <div className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4 px-6 text-center text-body-sm text-surface/90">
         {stats.map((item) => (
           <div key={item.id}>{item.content}</div>
         ))}
@@ -127,6 +126,15 @@ function MobileLayout() {
   );
 }
 
+/**
+ * Hero Section Component
+ * 
+ * Main landing page hero with company value proposition, CTA buttons,
+ * and key statistics. Renders different layouts for mobile vs desktop.
+ * 
+ * @component
+ * @returns {React.Element} Hero section with responsive layout
+ */
 export default function HeroReel() {
   const { isMobile } = useDevice();
 

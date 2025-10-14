@@ -11,16 +11,38 @@ import TestimonialsReel from '@/components/reels/TestimonialsReel';
 // SEO metadata moved to dedicated module per React 19 guidelines
 export { metadata } from './IndexMeta';
 
-// Cubic easing for smooth animations
+/**
+ * Cubic easing function for smooth scroll animations
+ * @param {number} t - Progress value between 0 and 1
+ * @returns {number} Eased progress value
+ */
 const easeInOutCubic = (t) =>
   t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
+/**
+ * Configuration for landing page sections (reels)
+ * Each reel represents a full-page section with horizontal sliding content
+ */
 const REEL_CONFIG = [
   { id: 'hero', component: HeroReel, enabled: true },
   { id: 'quickActions', component: QuickActionsReel, enabled: true },
   { id: 'testimonials', component: TestimonialsReel, enabled: true },
 ];
 
+/**
+ * Landing Page Component
+ * 
+ * Full-page sectioned landing page with vertical scroll-snap navigation.
+ * Features:
+ * - Vertical section snapping (proximity mode for smoother UX)
+ * - Wheel, touch, and keyboard navigation support
+ * - Desktop: Right-side navigation dots
+ * - Mobile: Bottom progress bar indicator
+ * - Responsive layouts for mobile/desktop
+ * 
+ * @component
+ * @returns {React.Element} Landing page with multiple sections
+ */
 export default function Index() {
   const [currentSection, setCurrentSection] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -45,7 +67,7 @@ export default function Index() {
     (sectionIndex, duration = 600) => {
       const container = scrollElement;
 
-      console.log('[Index.jsx Scroll Debug]:', {
+      devLog('[Index.jsx Scroll Debug]:', {
         from: currentSection,
         to: sectionIndex,
         reason: 'scrollToSection called',
@@ -54,7 +76,7 @@ export default function Index() {
       });
 
       if (!container) {
-        console.log('[Index.jsx Scroll Debug]:', {
+        devLog('[Index.jsx Scroll Debug]:', {
           from: currentSection,
           to: sectionIndex,
           reason: 'scroll blocked: no container',
@@ -64,7 +86,7 @@ export default function Index() {
         return;
       }
       if (isScrolling) {
-        console.log('[Index.jsx Scroll Debug]:', {
+        devLog('[Index.jsx Scroll Debug]:', {
           from: currentSection,
           to: sectionIndex,
           reason: 'scroll blocked: isScrolling',
@@ -74,7 +96,7 @@ export default function Index() {
         return;
       }
       if (sectionIndex < 0 || sectionIndex >= sectionsCount) {
-        console.log('[Index.jsx Scroll Debug]:', {
+        devLog('[Index.jsx Scroll Debug]:', {
           from: currentSection,
           to: sectionIndex,
           reason: 'scroll blocked: invalid section index',
@@ -153,7 +175,7 @@ export default function Index() {
     if (!isDesktop) return;
 
     const handleWheel = (e) => {
-      console.log('[Index.jsx Scroll Debug]:', {
+      devLog('[Index.jsx Scroll Debug]:', {
         from: currentSection,
         to: null,
         reason: 'handleWheel triggered',
@@ -163,7 +185,7 @@ export default function Index() {
       });
       // If the event target is inside a horizontal slider, ignore the event
       if (e.target.closest('.is-horizontal-scroll-container')) {
-        console.log('[Index.jsx Scroll Debug]:', {
+        devLog('[Index.jsx Scroll Debug]:', {
           from: currentSection,
           to: null,
           reason: 'scroll ignored: horizontal scroll container',
@@ -174,7 +196,7 @@ export default function Index() {
       }
 
       if (isScrolling) {
-        console.log('[Index.jsx Scroll Debug]:', {
+        devLog('[Index.jsx Scroll Debug]:', {
           from: currentSection,
           to: null,
           reason: 'scroll ignored: isScrolling',
@@ -196,7 +218,7 @@ export default function Index() {
       // Cross-platform adaptive threshold
       const threshold = Math.max(10, Math.abs(deltaY) * 0.5);
       if (Math.abs(wheelDelta.current) < threshold) {
-        console.log('[Index.jsx Scroll Debug]:', {
+        devLog('[Index.jsx Scroll Debug]:', {
           from: currentSection,
           to: null,
           reason: 'scroll ignored: delta threshold not met',
@@ -219,7 +241,7 @@ export default function Index() {
       }
 
       if (nextSection !== currentSection) {
-        console.log('[Index.jsx Scroll Debug]:', {
+        devLog('[Index.jsx Scroll Debug]:', {
           from: currentSection,
           to: nextSection,
           eventType: e.type,
@@ -262,7 +284,7 @@ export default function Index() {
     };
 
     const handleTouchEnd = (e) => {
-      console.log('[Index.jsx Scroll Debug]:', {
+      devLog('[Index.jsx Scroll Debug]:', {
         from: currentSection,
         to: null,
         reason: 'handleTouchEnd triggered',
@@ -271,7 +293,7 @@ export default function Index() {
       });
       // If the event target is inside a horizontal slider, ignore the event
       if (e.target.closest('.is-horizontal-scroll-container')) {
-        console.log('[Index.jsx Scroll Debug]:', {
+        devLog('[Index.jsx Scroll Debug]:', {
           from: currentSection,
           to: null,
           reason: 'scroll ignored: horizontal scroll container',
@@ -282,7 +304,7 @@ export default function Index() {
       }
 
       if (isScrolling) {
-        console.log('[Index.jsx Scroll Debug]:', {
+        devLog('[Index.jsx Scroll Debug]:', {
           from: currentSection,
           to: null,
           reason: 'scroll ignored: isScrolling',
@@ -294,7 +316,7 @@ export default function Index() {
 
       const touchDuration = Date.now() - touchStartTime;
       if (touchDuration < 50) {
-        console.log('[Index.jsx Scroll Debug]:', {
+        devLog('[Index.jsx Scroll Debug]:', {
           from: currentSection,
           to: null,
           reason: 'scroll ignored: touch duration too short',
@@ -319,7 +341,7 @@ export default function Index() {
         }
 
         if (nextSection !== currentSection) {
-          console.log('[Index.jsx Scroll Debug]:', {
+          devLog('[Index.jsx Scroll Debug]:', {
             from: currentSection,
             to: nextSection,
             eventType: e.type,
@@ -333,7 +355,7 @@ export default function Index() {
           scrollToSection(nextSection);
         }
       } else {
-        console.log('[Index.jsx Scroll Debug]:', {
+        devLog('[Index.jsx Scroll Debug]:', {
           from: currentSection,
           to: null,
           reason: 'scroll ignored: swipe distance too short',
@@ -366,7 +388,7 @@ export default function Index() {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      console.log('[Index.jsx Scroll Debug]:', {
+      devLog('[Index.jsx Scroll Debug]:', {
         from: currentSection,
         to: null,
         reason: 'handleKeyDown triggered',
@@ -375,7 +397,7 @@ export default function Index() {
         key: e.key,
       });
       if (isScrolling) {
-        console.log('[Index.jsx Scroll Debug]:', {
+        devLog('[Index.jsx Scroll Debug]:', {
           from: currentSection,
           to: null,
           reason: 'scroll ignored: isScrolling',
@@ -395,7 +417,7 @@ export default function Index() {
 
       if (nextSection !== currentSection) {
         e.preventDefault();
-        console.log('[Index.jsx Scroll Debug]:', {
+        devLog('[Index.jsx Scroll Debug]:', {
           from: currentSection,
           to: nextSection,
           eventType: e.type,
@@ -422,6 +444,8 @@ export default function Index() {
         const Component = reel.component;
         return <Component key={reel.id} />;
       })}
+      
+      {/* Desktop: Section navigation dots */}
       <nav
         className="fixed right-6 top-1/2 transform -translate-y-1/2 z-50 hidden md:flex flex-col gap-3"
         role="tablist"
@@ -430,15 +454,7 @@ export default function Index() {
         {activeReels.map((reel, index) => (
           <button
             key={reel.id}
-            onClick={() => {
-              console.log('[Index.jsx Scroll Debug]:', {
-                from: currentSection,
-                to: index,
-                eventType: 'click',
-                timestamp: Date.now(),
-              });
-              scrollToSection(index);
-            }}
+            onClick={() => scrollToSection(index)}
             disabled={isScrolling}
             role="tab"
             aria-selected={currentSection === index}
@@ -451,6 +467,21 @@ export default function Index() {
           />
         ))}
       </nav>
+
+      {/* Mobile: Progress bar indicator */}
+      <div 
+        className="md:hidden fixed bottom-20 left-0 right-0 h-1 bg-gray-200 z-40"
+        role="progressbar"
+        aria-valuenow={((currentSection + 1) / sectionsCount) * 100}
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-label={`Section ${currentSection + 1} of ${sectionsCount}`}
+      >
+        <div 
+          className="h-full bg-secondary transition-all duration-300 ease-out"
+          style={{ width: `${((currentSection + 1) / sectionsCount) * 100}%` }}
+        />
+      </div>
     </>
   );
 }

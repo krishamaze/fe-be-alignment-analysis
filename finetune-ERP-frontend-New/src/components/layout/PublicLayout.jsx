@@ -5,6 +5,7 @@ import MainNav from '@/components/layout/MainNav';
 import BottomNav from '@/components/layout/BottomNav';
 import Footer from '@/components/layout/Footer';
 import useDevice from '@/hooks/useDevice';
+import { useViewportHeight } from '@/hooks/useViewportHeight';
 import {
   ScrollModeProvider,
   useScrollMode,
@@ -15,6 +16,9 @@ function PublicLayoutInner() {
   const { mode, registerScrollElement, scrollElement } = useScrollMode();
   const { isDesktop, isMobile } = useDevice();
   const [isFooterVisible, setIsFooterVisible] = useState(false);
+  
+  // Update viewport height for mobile devices
+  useViewportHeight();
 
   useEffect(() => {
     if (!scrollElement) {
@@ -58,10 +62,19 @@ function PublicLayoutInner() {
   return (
     <div className="h-[100dvh] bg-surface text-onSurface overflow-hidden">
       <div className="h-full relative flex flex-col">
+        {/* Skip to main content link for keyboard users */}
+        <a 
+          href="#main-content" 
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-primary focus:text-surface focus:px-4 focus:py-2 focus:rounded focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2"
+        >
+          Skip to main content
+        </a>
+        
         <TopBar />
         <MainNav />
 
         <main
+          id="main-content"
           ref={registerScrollElement}
           data-scroll-container="true"
           className={`flex-1 min-h-0 ${

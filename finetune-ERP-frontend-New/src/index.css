@@ -70,7 +70,7 @@ html {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
   scroll-padding-top: 0;
   scroll-padding-bottom: 0;
   overscroll-behavior: none;
@@ -81,14 +81,14 @@ html {
 
 /* Better scroll snap support */
 .snap-y {
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
   scroll-padding-top: 0;
   scroll-padding-bottom: 0;
   overscroll-behavior: none;
 }
 
 .snap-mandatory {
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
 }
 
 .snap-start {

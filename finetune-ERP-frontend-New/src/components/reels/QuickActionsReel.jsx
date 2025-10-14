@@ -1,7 +1,21 @@
-import { Link } from 'react-router-dom';
 import SectionSlider from '@/components/navigation/SectionSlider';
 import { Smartphone, Battery, PlugZap } from 'lucide-react';
+import Button from '@/components/common/Button';
 
+/**
+ * Quick Actions Section Component
+ * 
+ * Displays popular repair services in a horizontal scrolling carousel.
+ * Shows 1 slide on mobile, 2 on tablet, 3 on desktop.
+ * 
+ * Features:
+ * - Service cards with pricing
+ * - Direct booking links with service context
+ * - Icon-based visual representation
+ * 
+ * @component
+ * @returns {React.Element} Quick actions carousel section
+ */
 export default function QuickActionsReel() {
   const repairs = [
     {
@@ -39,8 +53,11 @@ export default function QuickActionsReel() {
           className="flex h-full items-stretch px-2"
           aria-label={`${title} repair option`}
         >
-          <article className="flex w-full flex-col items-center justify-between space-y-4 rounded-2xl bg-surface p-6 text-center shadow-sm transition-transform duration-300 hover:scale-105 hover:shadow-lg">
-            <Icon className={`h-12 w-12 ${color}`} />
+          <article 
+            className="flex w-full flex-col items-center justify-between space-y-4 rounded-2xl bg-surface p-6 text-center shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-lg focus-within:ring-2 focus-within:ring-secondary focus-within:ring-offset-2"
+            tabIndex="0"
+          >
+            <Icon className={`h-12 w-12 ${color}`} aria-hidden="true" />
             <div className="space-y-3">
               <h3 className="text-heading-md font-semibold text-primary">
                 {title}
@@ -48,12 +65,9 @@ export default function QuickActionsReel() {
               <p className="text-display-md font-bold text-primary">{price}</p>
               <p className="text-body-md text-primary/60">{description}</p>
             </div>
-            <Link
-              to={link}
-              className="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-primary px-5 py-2 font-medium text-surface transition-colors hover:bg-secondary hover:text-primary"
-            >
+            <Button to={link} variant="primary" size="md">
               Book Now
-            </Link>
+            </Button>
           </article>
         </div>
       );
@@ -85,12 +99,14 @@ export default function QuickActionsReel() {
         </SectionSlider>
 
         <div className="text-center">
-          <Link
+          <Button
             to="/repair"
-            className="text-body-lg font-medium text-primary hover:text-secondary"
+            variant="secondary"
+            size="sm"
+            className="bg-transparent border-none text-body-lg font-medium text-primary hover:text-secondary hover:bg-transparent"
           >
             View all repair services →
-          </Link>
+          </Button>
         </div>
       </div>
     </section>

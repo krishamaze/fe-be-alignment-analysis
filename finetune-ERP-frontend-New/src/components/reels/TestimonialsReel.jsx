@@ -1,5 +1,10 @@
 import SectionSlider from '@/components/navigation/SectionSlider';
+import PropTypes from 'prop-types';
 
+/**
+ * Testimonial data
+ * TODO: Replace with API call to backend /api/landing/testimonials/
+ */
 const testimonials = [
   {
     id: 1,
@@ -31,14 +36,29 @@ const testimonials = [
   },
 ];
 
+/**
+ * Individual testimonial slide component
+ * @param {Object} props - Component props
+ * @param {Object} props.testimonial - Testimonial data
+ * @param {number} props.testimonial.id - Unique identifier
+ * @param {string} props.testimonial.author - Customer name
+ * @param {string} props.testimonial.text - Testimonial content
+ * @param {string} props.testimonial.service - Service type
+ * @param {string} props.testimonial.time - Time ago
+ */
 function TestimonialSlide({ testimonial }) {
   return (
     <div className="w-full h-full flex items-center justify-center px-2 md:px-3">
       <div className="max-w-2xl mx-auto w-full">
-        <div className="bg-surface rounded-2xl p-6 shadow-lg flex flex-col items-center text-center space-y-4">
-          <div className="flex justify-center">
+        <div 
+          className="bg-surface rounded-2xl p-6 shadow-lg flex flex-col items-center text-center space-y-4 transition-all duration-300 hover:scale-105 hover:shadow-xl focus-within:ring-2 focus-within:ring-secondary focus-within:ring-offset-2"
+          tabIndex="0"
+          role="article"
+          aria-label={`Testimonial from ${testimonial.author}`}
+        >
+          <div className="flex justify-center" aria-label="5 out of 5 stars">
             {[...Array(5)].map((_, i) => (
-              <span key={i} className="text-secondary text-heading-md">
+              <span key={i} className="text-secondary text-heading-md" aria-hidden="true">
                 ★
               </span>
             ))}
@@ -60,6 +80,25 @@ function TestimonialSlide({ testimonial }) {
   );
 }
 
+TestimonialSlide.propTypes = {
+  testimonial: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    author: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired,
+    service: PropTypes.string.isRequired,
+    time: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+/**
+ * Testimonials Section Component
+ * 
+ * Displays customer testimonials in a horizontal scrolling carousel.
+ * Shows 1 slide on mobile, 2 on tablet, 3 on desktop.
+ * 
+ * @component
+ * @returns {React.Element} Testimonials carousel section
+ */
 export default function TestimonialsReel() {
   const slides = testimonials.map((testimonial) => (
     <TestimonialSlide key={testimonial.id} testimonial={testimonial} />
