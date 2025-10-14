@@ -92,10 +92,15 @@ npm run lint                          # Lint code
 ```
 
 ## Key Files Modified for Replit
-1. `finetune-ERP-frontend-New/vite.config.js` - Port 5000, HMR config
-2. `finetune-ERP-backend-New/config/settings.py` - CORS/CSRF for Replit
-3. `finetune-ERP-frontend-New/.env` - Local backend URL
-4. `.gitignore` - Python and Node.js artifacts
+1. `finetune-ERP-frontend-New/vite.config.js` - Port 5000, HMR config for WSS proxy
+2. `finetune-ERP-backend-New/config/settings.py` - CORS/CSRF/ALLOWED_HOSTS for Replit
+   - Uses CORS_ALLOWED_ORIGIN_REGEXES for dynamic Replit domains
+   - Auto-configures ALLOWED_HOSTS from REPLIT_DOMAINS env
+   - CSRF trusts both HTTP and HTTPS Replit domains
+   - Proxy headers enabled (USE_X_FORWARDED_HOST, USE_X_FORWARDED_PORT)
+3. `finetune-ERP-frontend-New/src/utils/Endpoints.js` - Dynamic API URL detection
+4. `finetune-ERP-frontend-New/.env` - HTTPS backend URL via Replit proxy
+5. `.gitignore` - Python and Node.js artifacts
 
 ## Deployment
 The application is configured for autoscale deployment:
@@ -103,7 +108,12 @@ The application is configured for autoscale deployment:
 - **Run:** Serves frontend build + backend API via Gunicorn on port 5000
 
 ## Notes
-- Database uses PostgreSQL in both dev and production
-- Frontend makes API calls to localhost:8000 in development
+- Database uses PostgreSQL in both dev and production (via Replit managed database)
+- Frontend makes API calls to backend on port 8000 via HTTPS proxy
 - Both servers run simultaneously via workflows
+- Replit automatically configures REPLIT_DOMAINS env variable for dynamic host management
 - The backend includes multiple apps: accounts, attendance, bookings, catalog, inventory, invoicing, marketing, spares, store
+- Mixed content issues avoided by using HTTPS for all API calls through Replit proxy
+
+## Important: Replit Domain Changes
+When Replit regenerates hostnames (on forks/restarts), update `VITE_API_BASE_URL` in `.env` to the new domain. The Endpoints.js file will auto-detect Replit domains, but the explicit env variable takes precedence.
