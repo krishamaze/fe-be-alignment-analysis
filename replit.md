@@ -94,6 +94,12 @@ The backend is configured to accept requests from:
     - Added flex-1 to SectionSlider for proper vertical spacing
     - Removed autoAdvanceGroup for consistent carousel behavior
     - Streamlined layout by removing redundant footer CTA
+  - **Fixed Hero Reel visibility and alignment issues:**
+    - Added paddingTop calculation using CSS variables (--topbar-h + --mainnav-h) to prevent content going under fixed navigation
+    - Removed max-w-7xl constraint for full-width display
+    - Added responsive font sizing (text-4xl md:text-5xl lg:text-6xl on desktop, text-3xl sm:text-4xl on mobile)
+    - Implemented break-words on all text elements to prevent overflow
+    - Verified carousel breakpoints: mobile (1 slide), tablet (2 slides), desktop (3 slides)
 
 ## Development Commands
 
