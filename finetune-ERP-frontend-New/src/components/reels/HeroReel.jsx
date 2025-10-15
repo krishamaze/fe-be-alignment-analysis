@@ -141,10 +141,7 @@ export default function HeroReel() {
   const slides = [
     <div
       key="hero"
-      className="relative w-full overflow-hidden bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950"
-      style={{
-        height: 'calc(100vh - var(--topbar-h, 0px) - var(--mainnav-h, 0px))',
-      }}
+      className="relative w-full h-full overflow-hidden bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950"
     >
       <div className="relative z-10 mx-auto flex h-full w-full items-center px-4 sm:px-6 lg:px-8">
         {isMobile ? <MobileLayout /> : <DesktopLayout />}
