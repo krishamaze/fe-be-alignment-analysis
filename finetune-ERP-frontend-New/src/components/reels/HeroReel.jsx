@@ -28,16 +28,16 @@ const stats = [
  */
 function DesktopLayout() {
   return (
-    <div className="grid h-full grid-cols-12 items-center gap-8">
+    <div className="grid h-full w-full grid-cols-12 items-center gap-8">
       <div className="col-span-7 flex h-full flex-col justify-center gap-8 text-surface">
         <div className="space-y-4">
-          <p className="text-body-md font-medium text-surface/90">
+          <p className="text-body-md font-medium text-surface/90 break-words">
             Serving Coimbatore & Palakkad • 10+ Years Trusted
           </p>
-          <h1 className="text-6xl font-bold leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight break-words">
             Expert Mobile & Laptop Repairs
           </h1>
-          <p className="max-w-xl text-xl text-surface">
+          <p className="text-lg lg:text-xl text-surface/100 break-words">
             Same-day repairs • Free pickup & delivery • 90-day warranty
           </p>
         </div>
@@ -51,7 +51,7 @@ function DesktopLayout() {
           </Button>
         </div>
 
-        <div className="mt-auto flex flex-wrap items-center gap-6 text-body-sm text-surface/90">
+        <div className="flex flex-wrap items-center gap-6 text-body-sm text-surface/90">
           {stats.map((item) => (
             <div key={item.id}>{item.content}</div>
           ))}
@@ -86,7 +86,7 @@ function DesktopLayout() {
  */
 function MobileLayout() {
   return (
-    <div className="relative flex h-full flex-col justify-center">
+    <div className="relative flex h-full w-full flex-col justify-center">
       <div className="absolute inset-0 flex items-center justify-center">
         <img
           src={phoneIllustration}
@@ -96,28 +96,28 @@ function MobileLayout() {
         />
       </div>
 
-      <div className="relative z-10 flex flex-col items-center gap-6 px-6 text-center text-surface">
-        <p className="text-body-sm font-medium text-surface/90">
+      <div className="relative z-10 flex flex-col items-center gap-6 text-center text-surface">
+        <p className="text-body-sm font-medium text-surface/90 break-words px-4">
           Serving Coimbatore & Palakkad • 10+ Years Trusted
         </p>
-        <h1 className="text-4xl font-bold leading-tight">
+        <h1 className="text-3xl sm:text-4xl font-bold leading-tight break-words px-4">
           Expert Mobile & Laptop Repairs
         </h1>
-        <p className="text-lg text-surface">
+        <p className="text-base sm:text-lg text-surface/100 break-words px-4">
           Same-day repairs • Free pickup & delivery • 90-day warranty
         </p>
 
-        <div className="flex w-full flex-col items-center gap-4">
-          <Button to="/repair" variant="primary" size="md" className="w-full sm:w-auto">
+        <div className="flex w-full flex-col items-center gap-4 px-4">
+          <Button to="/repair" variant="primary" size="md" className="w-full max-w-xs">
             Get Instant Quote
           </Button>
-          <Button to="/shop" variant="secondary" size="md" className="w-full sm:w-auto">
+          <Button to="/shop" variant="secondary" size="md" className="w-full max-w-xs">
             Shop Accessories
           </Button>
         </div>
       </div>
 
-      <div className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4 px-6 text-center text-body-sm text-surface/90">
+      <div className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4 px-4 text-center text-body-sm text-surface/90">
         {stats.map((item) => (
           <div key={item.id}>{item.content}</div>
         ))}
@@ -141,10 +141,12 @@ export default function HeroReel() {
   const slides = [
     <div
       key="hero"
-      className="relative min-h-[var(--fullpage-section-h)] overflow-hidden bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950"
+      className="relative h-full w-full overflow-hidden bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950"
+      style={{
+        paddingTop: 'calc(var(--topbar-h, 0px) + var(--mainnav-h, 0px))',
+      }}
     >
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
-
+      <div className="relative z-10 mx-auto flex h-full w-full items-center px-4 sm:px-6 lg:px-8">
         {isMobile ? <MobileLayout /> : <DesktopLayout />}
       </div>
     </div>,
