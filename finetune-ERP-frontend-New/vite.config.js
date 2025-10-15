@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: '0.0.0.0',
+    host: true, // Allow all hosts including dynamic Replit hosts
     port: 5000,
     strictPort: true,
     hmr: {
