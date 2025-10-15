@@ -57,6 +57,10 @@ externalPort = 8000
 localPort = 36889
 externalPort = 3000
 
+[[ports]]
+localPort = 37677
+externalPort = 3001
+
 [deployment]
 deploymentTarget = "autoscale"
 run = ["bash", "-c", "cd finetune-ERP-frontend-New && npm run build && cd ../finetune-ERP-backend-New && gunicorn --bind=0.0.0.0:5000 --reuse-port config.wsgi:application"]
