@@ -365,7 +365,7 @@ export default function SectionSlider({
     if (!hintShown) setShowHintOverlay(true);
   }, [showHint, hasMultipleSlides, hintStorageKey]);
 
-  const containerClasses = ['relative', isVertical ? 'h-full' : '', className]
+  const containerClasses = ['relative', 'h-full', className]
     .filter(Boolean)
     .join(' ');
 
