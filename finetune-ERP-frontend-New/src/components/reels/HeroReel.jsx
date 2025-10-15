@@ -91,7 +91,7 @@ function MobileLayout() {
         <img
           src={phoneIllustration}
           alt="Smartphone undergoing repair"
-          className="h-3/4 w-auto opacity-40 blur-sm"
+          className="max-h-[75%] max-w-full w-auto opacity-40 blur-sm"
           loading="lazy"
         />
       </div>
