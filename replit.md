@@ -58,7 +58,7 @@ The backend is configured to accept requests from:
 - localhost:5000 (frontend dev server)
 - Production domains (finetune.store, vercel deployments)
 
-## Recent Changes (October 14, 2025)
+## Recent Changes (October 15, 2025)
 - ✅ Installed Python 3.11 and Node.js 20
 - ✅ Installed backend dependencies from pyproject.toml
 - ✅ Installed frontend dependencies with --legacy-peer-deps flag
@@ -100,6 +100,12 @@ The backend is configured to accept requests from:
     - Added responsive font sizing (text-4xl md:text-5xl lg:text-6xl on desktop, text-3xl sm:text-4xl on mobile)
     - Implemented break-words on all text elements to prevent overflow
     - Verified carousel breakpoints: mobile (1 slide), tablet (2 slides), desktop (3 slides)
+  - **Scroll Direction Isolation & Build Fixes (October 15):**
+    - Fixed Vercel build failure: installed prop-types in finetune-ERP-frontend-New/package.json (not root)
+    - Implemented scroll direction isolation: horizontal carousel swipes now prevent vertical page scroll via e.preventDefault()
+    - Changed SectionSlider touchmove listener to passive:false to enable preventDefault functionality
+    - Replaced all console.log statements in SectionSlider with devLog for production readiness
+    - Verified frontend builds successfully with all fixes in place
 
 ## Development Commands
 
