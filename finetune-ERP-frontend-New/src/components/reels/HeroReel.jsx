@@ -141,9 +141,10 @@ export default function HeroReel() {
   const slides = [
     <div
       key="hero"
-      className="relative h-full w-full overflow-hidden bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950"
+      className="relative w-full overflow-hidden bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950"
       style={{
-        paddingTop: 'calc(var(--topbar-h, 0px) + var(--mainnav-h, 0px))',
+        height: 'calc(100vh - var(--topbar-h, 0px) - var(--mainnav-h, 0px))',
+        marginTop: 'calc(var(--topbar-h, 0px) + var(--mainnav-h, 0px))',
       }}
     >
       <div className="relative z-10 mx-auto flex h-full w-full items-center px-4 sm:px-6 lg:px-8">
