@@ -76,7 +76,7 @@ export default function QuickActionsReel() {
 
   return (
     <section className="snap-start fullpage-section overflow-hidden bg-gradient-to-b from-secondary/40 to-surface">
-      <div className="mx-auto flex h-full w-full max-w-5xl flex-col items-center justify-center gap-8 px-4">
+      <div className="h-full flex flex-col items-center justify-center gap-6 px-4">
         <div className="text-center space-y-2">
           <h2 className="text-heading-xl font-bold text-primary">
             Most Popular Repairs
@@ -88,26 +88,13 @@ export default function QuickActionsReel() {
 
         <SectionSlider
           sectionId="quickActions"
-          showHint={false}
+          showHint
           mode="horizontal"
-          className="mt-6 w-full"
-          style={{ '--reel-section-min-h': 'auto' }}
+          className="w-full flex-1"
           slidesPerView={{ mobile: 1, tablet: 2, desktop: 3 }}
-          autoAdvanceGroup
         >
           {slides}
         </SectionSlider>
-
-        <div className="text-center">
-          <Button
-            to="/repair"
-            variant="secondary"
-            size="sm"
-            className="bg-transparent border-none text-body-lg font-medium text-primary hover:text-secondary hover:bg-transparent"
-          >
-            View all repair services →
-          </Button>
-        </div>
       </div>
     </section>
   );
