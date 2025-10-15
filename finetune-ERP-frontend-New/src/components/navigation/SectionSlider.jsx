@@ -4,6 +4,7 @@ import {
   SECTION_SLIDER_MODE,
 } from '../layout/ScrollModeContext';
 import { animateScroll } from '@/utils/animation';
+import { devLog } from '@/utils/devLog';
 
 import SwipeHint from './SwipeHint';
 
@@ -125,7 +126,7 @@ export default function SectionSlider({
 
       // Cancel any ongoing animation before starting a new one
       if (animationRef.current) {
-        console.log('[SectionSlider]:', {
+        devLog('[SectionSlider]:', {
           mode,
           action: 'cancel',
           fromIndex,
@@ -135,7 +136,7 @@ export default function SectionSlider({
         animationRef.current.cancel();
       }
 
-      console.log('[SectionSlider]:', {
+      devLog('[SectionSlider]:', {
         mode,
         action: 'start',
         fromIndex,
@@ -154,7 +155,7 @@ export default function SectionSlider({
           containerRef.current.scrollLeft = to;
         }
         setCurrentSlide(index);
-        console.log('[SectionSlider]:', {
+        devLog('[SectionSlider]:', {
           mode,
           action: 'end',
           fromIndex,
@@ -171,7 +172,7 @@ export default function SectionSlider({
         duration: 600,
         axis,
         onComplete: () => {
-          console.log('[SectionSlider]:', {
+          devLog('[SectionSlider]:', {
             mode,
             action: 'end',
             fromIndex,
@@ -252,7 +253,7 @@ export default function SectionSlider({
 
   useEffect(() => {
     if (prevSlideRef.current !== currentSlide) {
-      console.log('[SectionSlider]:', {
+      devLog('[SectionSlider]:', {
         mode,
         action: 'index-change',
         fromIndex: prevSlideRef.current,
@@ -292,7 +293,7 @@ export default function SectionSlider({
 
         // Vertical swipe logic
         if (isVertical && Math.abs(deltaY) > Math.abs(deltaX)) {
-          console.log('[SectionSlider]:', {
+          devLog('[SectionSlider]:', {
             mode,
             action: 'direction-detected',
             direction: 'vertical',
@@ -314,8 +315,9 @@ export default function SectionSlider({
             }
           }
         } else if (!isVertical && Math.abs(deltaX) > Math.abs(deltaY)) {
-          // Horizontal swipe logic
-          console.log('[SectionSlider]:', {
+          // Horizontal swipe logic - prevent vertical page scroll
+          e.preventDefault();
+          devLog('[SectionSlider]:', {
             mode,
             action: 'direction-detected',
             direction: 'horizontal',
@@ -348,7 +350,7 @@ export default function SectionSlider({
     container.addEventListener('touchstart', handleTouchStart, {
       passive: true,
     });
-    container.addEventListener('touchmove', handleTouchMove, { passive: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     return () => {
       container.removeEventListener('wheel', handleWheel);
