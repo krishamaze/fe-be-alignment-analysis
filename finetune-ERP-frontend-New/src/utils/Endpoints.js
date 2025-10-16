@@ -69,6 +69,12 @@ const END_POINTS = {
   GET_INVENTORY_CONFIG: '/api/inventory-config',
   MODIFY_INVENTORY_CONFIG: '/api/inventory-config',
 
+  // SALES
+  GET_SALE_INVOICES: '/api/sales/invoices',
+  CREATE_SALE_INVOICE: '/api/sales/invoices',
+  GET_SALE_INVOICE_PDF: '/api/sales/invoices',
+  SEARCH_SALE_PRODUCTS: '/api/sales/products',
+
   // AUTHENTICATION
   LOGIN: '/api/auth/login',
   REFRESH_TOKEN: '/api/token/refresh',
