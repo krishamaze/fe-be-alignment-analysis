@@ -29,6 +29,7 @@ export const erpApi = createApi({
     'PriceLog',
     'InventoryConfig',
     'User',
+    'SaleInvoice',
   ],
   endpoints: (builder) => ({
     getBrands: builder.query({
@@ -503,7 +504,29 @@ export const erpApi = createApi({
       }),
       invalidatesTags: ['InventoryConfig'],
     }),
-  }),
+
+    getSaleInvoices: builder.query({
+      query: (params) => ({ url: END_POINTS.GET_SALE_INVOICES, params }),
+      providesTags: ['SaleInvoice']
+    }),
+    createSaleInvoice: builder.mutation({
+      query: (body) => ({
+        url: END_POINTS.CREATE_SALE_INVOICE,
+        method: 'POST',
+        body
+      }),
+      invalidatesTags: ['SaleInvoice']
+    }),
+    getSaleInvoicePdf: builder.query({
+      query: (id) => ({
+        url: `${END_POINTS.GET_SALE_INVOICES}/${id}/pdf/`,
+        responseHandler: (response) => response.blob()
+      })
+    }),
+    searchSaleProducts: builder.query({
+      query: (params) => ({ url: END_POINTS.SEARCH_SALE_PRODUCTS, params })
+    })
+  })
 });
 
 export const {
@@ -580,4 +603,8 @@ export const {
   useGetPriceLogsQuery,
   useGetInventoryConfigQuery,
   useUpdateInventoryConfigMutation,
+  useGetSaleInvoicesQuery,
+  useCreateSaleInvoiceMutation,
+  useGetSaleInvoicePdfQuery,
+  useSearchSaleProductsQuery,
 } = erpApi;
