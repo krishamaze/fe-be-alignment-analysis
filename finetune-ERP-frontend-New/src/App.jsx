@@ -74,6 +74,7 @@ const CategoryPage = lazy(() => import('./pages/ecommerce/CategoryPage'));
 const ProductDetail = lazy(() => import('./pages/ecommerce/ProductDetail'));
 const CartPage = lazy(() => import('./pages/ecommerce/CartPage'));
 const Partners = lazy(() => import('./pages/ecommerce/Partners'));
+import CreateSaleInvoice from './components/Sales/CreateSaleInvoice';
 const HelpCentre = lazy(() => import('./pages/ecommerce/HelpCentre'));
 
 function AppContent() {
@@ -186,6 +187,7 @@ function AppContent() {
               </Route>
               <Route path="settings" element={<Settings />} />
               <Route path="logs" element={<LogsDashboard />} />
+              <Route path="sales/create" element={<CreateSaleInvoice />} />
             </>
           )}
         </Route>
