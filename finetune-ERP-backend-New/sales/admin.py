@@ -11,7 +11,7 @@ class SaleInvoiceLineItemInline(admin.TabularInline):
 
 @admin.register(SaleInvoice)
 class SaleInvoiceAdmin(admin.ModelAdmin):
-    list_display = ['invoice_no', 'customer_name', 'total', 'status', 'created_at']
+    list_display = ['invoice_no', 'customer_name', 'total', 'status', 'payment_method', 'created_at']
     list_filter = ['status', 'invoice_type', 'created_at']
     search_fields = ['invoice_no', 'customer_name', 'customer_phone']
     readonly_fields = ['invoice_no', 'created_at', 'updated_at']
