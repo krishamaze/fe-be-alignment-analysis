@@ -22,7 +22,7 @@ class SaleInvoiceAdmin(admin.ModelAdmin):
             'fields': ('invoice_no', 'invoice_type', 'status')
         }),
         ('Customer Information', {
-            'fields': ('customer_name', 'customer_phone', 'customer_address')
+            'fields': ('customer_name', 'customer_phone', 'customer_address', 'payment_method', 'payment_ref_number', 'customer_gst', 'customer_email')
         }),
         ('Amounts', {
             'fields': ('subtotal', 'cgst', 'sgst', 'igst', 'total')
