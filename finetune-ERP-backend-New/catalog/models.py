@@ -100,6 +100,7 @@ class Product(models.Model):
     unit = models.ForeignKey(
         Unit, on_delete=models.SET_NULL, null=True, blank=True, related_name="products"
     )
+    barcode = models.CharField(max_length=50, blank=True, null=True, db_index=True)  # NEW FIELD
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

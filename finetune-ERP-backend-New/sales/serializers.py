@@ -21,7 +21,8 @@ class SaleInvoiceSerializer(serializers.ModelSerializer):
         model = SaleInvoice
         fields = [
             'id', 'invoice_no', 'invoice_type', 'customer_name', 
-            'customer_phone', 'customer_address', 'subtotal', 'cgst', 
+            'customer_phone', 'customer_address', 'payment_method', 'payment_ref_number', 'customer_gst', 'customer_email',
+            'subtotal', 'cgst', 
             'sgst', 'igst', 'total', 'status', 'line_items', 
             'created_by', 'issued_at', 'created_at'
         ]

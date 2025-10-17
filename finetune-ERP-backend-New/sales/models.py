@@ -25,6 +25,10 @@ class SaleInvoice(models.Model):
     customer_name = models.CharField(max_length=200)
     customer_phone = models.CharField(max_length=15)
     customer_address = models.TextField(blank=True)
+    payment_method = models.CharField(max_length=20, choices=[('CASHSALE', 'Cash Sale'), ('UPI', 'UPI'), ('CARD', 'Card')], default='CASHSALE')
+    payment_ref_number = models.CharField(max_length=100, blank=True)
+    customer_gst = models.CharField(max_length=15, blank=True)
+    customer_email = models.EmailField(max_length=100, blank=True)
     
     # Amounts
     subtotal = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -94,3 +98,17 @@ class SaleInvoiceLineItem(models.Model):
         # Auto-calculate amount
         self.amount = self.quantity * self.unit_price
         super().save(*args, **kwargs)
+
+
+class HsnGstRate(models.Model):
+    """HSN GST Rate"""
+    
+    hsn_code = models.CharField(max_length=8, unique=True)
+    gst_rate = models.DecimalField(max_digits=5, decimal_places=2)
+    description = models.CharField(max_length=200, blank=True)
+    
+    class Meta:
+        ordering = ['hsn_code']
+    
+    def __str__(self):
+        return f"{self.hsn_code} - {self.gst_rate}%"
