@@ -55,6 +55,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://finetunetechcraft-erp-git-axios-f-efe947-finetunetechs-projects.vercel.app",
     "https://finetunetechcraft-erp-git-feature-ca76ad-finetunetechs-projects.vercel.app",
     "https://finetunetechcrafterp-dev.up.railway.app",
+    "http://localhost:5000",  # ← ADD THIS
+    "http://localhost:5173",
 ]
 
 # Allow Replit dev domains dynamically (both HTTP and HTTPS)
@@ -185,6 +187,7 @@ INSTALLED_APPS = [
     "bookings",
     "catalog",
     "invoicing",
+    "sales",
     "activity",
     "inventory",
     ##'django_extensions',

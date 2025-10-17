@@ -55,6 +55,7 @@ class Category(models.Model):
         Department, on_delete=models.CASCADE, related_name="categories",
         null=True, blank=True
     )
+    hsn_code = models.CharField(max_length=8, blank=True)  # ← ONLY THIS LINE ADDED
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -64,3 +64,4 @@ htmlcov/
 # Replit
 .replit
 replit.nix
+.aider*
