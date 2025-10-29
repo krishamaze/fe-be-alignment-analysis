@@ -1,12 +1,9 @@
 import { useParams } from 'react-router-dom';
+import ComingSoon from '../../components/common/ComingSoon';
 
 function WorkledgerDetails() {
   const { id } = useParams();
-  return (
-    <div className="p-4">
-      <p className="text-gray-800">Details for {id} coming soon.</p>
-    </div>
-  );
+  return <ComingSoon>Details for {id} coming soon.</ComingSoon>;
 }
 
 export default WorkledgerDetails;
