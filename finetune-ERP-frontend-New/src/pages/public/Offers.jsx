@@ -1,5 +1,5 @@
-import React from 'react';
+import ComingSoon from '../../components/common/ComingSoon';
 
 export default function Offers() {
-  return <div className="pt-20 p-4 text-center">Coming Soon</div>;
+  return <ComingSoon />;
 }
