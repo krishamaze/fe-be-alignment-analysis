@@ -30,6 +30,7 @@ export const erpApi = createApi({
     'InventoryConfig',
     'User',
     'SaleInvoice',
+    'Attendance',
   ],
   endpoints: (builder) => ({
     getBrands: builder.query({
@@ -525,6 +526,10 @@ export const erpApi = createApi({
     }),
     searchSaleProducts: builder.query({
       query: (params) => ({ url: END_POINTS.SEARCH_SALE_PRODUCTS, params })
+    }),
+    getAttendanceById: builder.query({
+      query: (id) => ({ url: `/api/attendance/attendance/${id}` }),
+      providesTags: (result, error, id) => [{ type: 'Attendance', id }]
     })
   })
 });
@@ -607,4 +612,5 @@ export const {
   useCreateSaleInvoiceMutation,
   useGetSaleInvoicePdfQuery,
   useSearchSaleProductsQuery,
+  useGetAttendanceByIdQuery,
 } = erpApi;

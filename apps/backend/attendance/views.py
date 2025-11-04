@@ -602,6 +602,53 @@ class MeTodayView(APIView):
         )
 
 
+class AttendanceDetailView(APIView):
+    """Provides details for a single attendance record.
+
+    This view allows an advisor to view their own attendance records. It also
+    allows managers (branch heads, system admins) to view records within
+    their scope.
+
+    Permissions:
+        - Must be an authenticated user.
+        - Advisors can only see their own records.
+        - Branch heads can see records for their store.
+        - System admins can see all records.
+    """
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk, *args, **kwargs):  # noqa: D401
+        """Handles GET request for a single attendance record.
+
+        Args:
+            request: The Django HTTP request object.
+            pk (int): The primary key of the Attendance record.
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            Response: A DRF response with the serialized Attendance data.
+        """
+        from rest_framework.exceptions import PermissionDenied
+
+        att = get_object_or_404(Attendance, pk=pk)
+        user = request.user
+        role = getattr(user, "role", None)
+
+        # Permission check
+        is_owner = att.user_id == user.id
+        is_admin = role == "system_admin"
+        is_bh_in_store = role == "branch_head" and att.store_id == getattr(
+            user, "store_id", None
+        )
+
+        if not (is_owner or is_admin or is_bh_in_store):
+            raise PermissionDenied("You do not have permission to view this record.")
+
+        return Response(AttendanceSerializer(att).data)
+
+
 # ---------------------------------------------------------------------------
 # Approvals API
 # ---------------------------------------------------------------------------
@@ -1070,6 +1117,7 @@ __all__ = [
     "CheckInView",
     "CheckOutView",
     "MeTodayView",
+    "AttendanceDetailView",
     "ApprovalsListView",
     "ApprovalsApproveView",
     "ApprovalsRejectView",
