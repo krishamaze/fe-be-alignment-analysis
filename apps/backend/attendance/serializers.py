@@ -66,15 +66,8 @@ class ShiftAdminSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["id", "total_minutes"]
 
-    def get_total_minutes(self, obj: Shift) -> int:
-        """Returns the shift's total duration in minutes.
-
-        Args:
-            obj (Shift): The Shift instance.
-
-        Returns:
-            int: The total duration in minutes.
-        """
+    def get_total_minutes(self, obj: Shift) -> int:  # pragma: no cover - thin wrapper
+        """Returns the shift's total duration in minutes."""
         return obj.total_minutes()
 
 
@@ -106,14 +99,7 @@ class ShiftSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "total_minutes"]
 
     def get_total_minutes(self, obj: Shift) -> int:
-        """Returns the shift's total duration in minutes.
-
-        Args:
-            obj (Shift): The Shift instance.
-
-        Returns:
-            int: The total duration in minutes.
-        """
+        """Returns the shift's total duration in minutes."""
         return obj.total_minutes()
 
 
@@ -313,15 +299,7 @@ class AdvisorSchedulePreviewSerializer(serializers.Serializer):
     and values are shift information, without imposing a rigid structure.
     """
 
-    def to_representation(self, instance):
-        """Return the instance as is.
-
-        Args:
-            instance: The pre-computed dictionary.
-
-        Returns:
-            The instance itself.
-        """
+    def to_representation(self, instance):  # pragma: no cover - trivial
         return instance
 
 
@@ -384,18 +362,7 @@ class ScheduleExceptionSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "created_by", "created_at"]
 
     def validate(self, attrs: Dict[str, Any]) -> Dict[str, Any]:
-        """Ensures `override_shift` is null if `mark_off` is true.
-
-        Args:
-            attrs: The data to validate.
-
-        Returns:
-            The validated data.
-
-        Raises:
-            serializers.ValidationError: If `mark_off` is true and an
-                `override_shift` is provided.
-        """
+        """Ensures `override_shift` is null if `mark_off` is true."""
         mark_off = attrs.get("mark_off")
         override_shift = attrs.get("override_shift")
         if mark_off and override_shift is not None:
@@ -405,14 +372,7 @@ class ScheduleExceptionSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data: Dict[str, Any]) -> ScheduleException:
-        """Sets `created_by` to the request user before creating the instance.
-
-        Args:
-            validated_data: The validated data for creating the instance.
-
-        Returns:
-            The created `ScheduleException` instance.
-        """
+        """Sets `created_by` to the request user before creating the instance."""
         request = self.context.get("request")
         if request and request.user:
             validated_data["created_by"] = request.user
@@ -426,6 +386,7 @@ class StoreGeofenceSerializer(serializers.ModelSerializer):
     location and radius. It provides explicit validation for latitude and
     longitude fields to ensure they fall within standard geographical ranges,
     offering clearer API error messages than default model validation.
+
     """
 
     class Meta:
@@ -433,34 +394,12 @@ class StoreGeofenceSerializer(serializers.ModelSerializer):
         fields = ["id", "store", "latitude", "longitude", "radius_m", "is_active"]
         read_only_fields = ["id"]
 
-    def validate_latitude(self, value: float) -> float:
-        """Validates that latitude is within the range [-90, 90].
-
-        Args:
-            value: The latitude value.
-
-        Returns:
-            The validated latitude value.
-
-        Raises:
-            serializers.ValidationError: If the value is outside the valid range.
-        """
+    def validate_latitude(self, value):  # type: ignore[override]
         if not -90 <= value <= 90:
             raise serializers.ValidationError("Latitude must be between -90 and 90.")
         return value
 
-    def validate_longitude(self, value: float) -> float:
-        """Validates that longitude is within the range [-180, 180].
-
-        Args:
-            value: The longitude value.
-
-        Returns:
-            The validated longitude value.
-
-        Raises:
-            serializers.ValidationError: If the value is outside the valid range.
-        """
+    def validate_longitude(self, value):  # type: ignore[override]
         if not -180 <= value <= 180:
             raise serializers.ValidationError("Longitude must be between -180 and 180.")
         return value
@@ -600,14 +539,7 @@ class AttendanceRequestSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data: Dict[str, Any]) -> AttendanceRequest:
-        """Sets `requested_by` to the request user before creating the instance.
-
-        Args:
-            validated_data: The validated data for creating the instance.
-
-        Returns:
-            The created `AttendanceRequest` instance.
-        """
+        """Sets `requested_by` to the request user before creating the instance."""
         request = self.context.get("request")
         if request and request.user:
             validated_data["requested_by"] = request.user
@@ -697,15 +629,8 @@ class AttendanceRequestListSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = fields
 
-    def get_user_name(self, obj: AttendanceRequest) -> str:
-        """Returns the user's full name, or their username as a fallback.
-
-        Args:
-            obj: The AttendanceRequest instance.
-
-        Returns:
-            The user's name as a string.
-        """
+    def get_user_name(self, obj) -> str:
+        """Returns the user's full name, or their username as a fallback."""
         user = obj.attendance.user
         full = user.get_full_name()
         return full if full else user.username
