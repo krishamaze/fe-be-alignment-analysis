@@ -41,7 +41,7 @@ urlpatterns += [
     path("check-out", CheckOutView.as_view(), name="attendance-check-out"),
     path("me/today", MeTodayView.as_view(), name="attendance-me-today"),
     path(
-        "attendance/<int:pk>",
+        "<int:pk>",
         AttendanceDetailView.as_view(),
         name="attendance-detail",
     ),
