@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { devLog } from '@/utils/devLog';
+import { animateScroll } from '@/utils/animation';
 import {
   useScrollMode,
   SECTION_SLIDER_MODE,
@@ -10,14 +11,6 @@ import TestimonialsReel from '@/components/reels/TestimonialsReel';
 
 // SEO metadata moved to dedicated module per React 19 guidelines
 export { metadata } from './IndexMeta';
-
-/**
- * Cubic easing function for smooth scroll animations
- * @param {number} t - Progress value between 0 and 1
- * @returns {number} Eased progress value
- */
-const easeInOutCubic = (t) =>
-  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
 /**
  * Configuration for landing page sections (reels)
@@ -143,26 +136,19 @@ export default function Index() {
         navHeight,
       });
 
-      // Smooth animation loop
-      const animateScroll = (currentTime) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / animationDuration, 1);
-        const easedProgress = easeInOutCubic(progress);
-
-        container.scrollTop = startScroll + distance * easedProgress;
-
-        if (progress < 1) {
-          requestAnimationFrame(animateScroll);
-        } else {
+      animateScroll({
+        element: container,
+        to: targetScroll,
+        duration: animationDuration,
+        axis: 'y',
+        onComplete: () => {
           setCurrentSection(sectionIndex);
           setIsScrolling(false);
           devLog('Scroll completed', { sectionIndex });
-        }
-      };
-
-      requestAnimationFrame(animateScroll);
+        },
+      });
     },
-    [scrollElement, isScrolling, sectionsCount]
+    [scrollElement, isScrolling, sectionsCount, currentSection]
   );
 
   useEffect(() => {
