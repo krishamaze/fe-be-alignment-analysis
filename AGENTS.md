@@ -4,8 +4,8 @@
 
 This repository is a monorepo containing two main projects:
 
--   **`finetune-ERP-backend-New/`**: A Django and Django REST Framework application that serves as the backend API.
--   **`finetune-ERP-frontend-New/`**: A React application that provides the user interface.
+-   **`apps/backend/`**: A Django and Django REST Framework application that serves as the backend API.
+-   **`apps/frontend/`**: A React application that provides the user interface.
 
 This structure allows for shared configurations and streamlined development workflows.
 
@@ -26,7 +26,7 @@ To set up the development environment, follow these steps:
 
 3.  **Install frontend dependencies**:
     ```bash
-    pnpm install --prefix finetune-ERP-frontend-New
+    pnpm install --prefix apps/frontend
     ```
 
 4.  **Configure environment variables**:
@@ -41,24 +41,24 @@ To set up the development environment, follow these steps:
 
 -   **Run tests**:
     ```bash
-    pytest finetune-ERP-backend-New/tests -q
+    pytest apps/backend/tests -q
     ```
 
 -   **Run the development server**:
     ```bash
-    python finetune-ERP-backend-New/manage.py runserver
+    python apps/backend/manage.py runserver
     ```
 
 ### Frontend
 
 -   **Run tests**:
     ```bash
-    pnpm --dir finetune-ERP-frontend-New test
+    pnpm --dir apps/frontend test
     ```
 
 -   **Run the development server**:
     ```bash
-    pnpm --prefix finetune-ERP-frontend-New dev
+    pnpm --prefix apps/frontend dev
     ```
 
 ## 4. Tooling and Dependencies
@@ -95,5 +95,5 @@ Refer to the `env.example` file for a complete list of environment variables.
 
 For more detailed information about each sub-project, refer to their respective `AGENTS.md` files:
 
--   [Backend AGENTS.md](./finetune-ERP-backend-New/AGENTS.md)
--   [Frontend AGENTS.md](./finetune-ERP-frontend-New/AGENTS.md)
+-   [Backend AGENTS.md](./apps/backend/AGENTS.md)
+-   [Frontend AGENTS.md](./apps/frontend/AGENTS.md)

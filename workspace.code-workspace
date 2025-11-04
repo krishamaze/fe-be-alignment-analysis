@@ -1,0 +1,149 @@
+{
+  "folders": [
+    {
+      "name": "🏠 Root",
+      "path": "."
+    },
+    {
+      "name": "🔧 Backend",
+      "path": "./apps/backend"
+    },
+    {
+      "name": "⚛️ Frontend",
+      "path": "./apps/frontend"
+    },
+    {
+      "name": "📚 Documentation",
+      "path": "./docs"
+    },
+    {
+      "name": "🛠️ Tools",
+      "path": "./tools"
+    }
+  ],
+  "settings": {
+    "python.defaultInterpreterPath": "./venv/Scripts/python.exe",
+    "python.terminal.activateEnvironment": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": ["--line-length=88"],
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/*.pyc": true,
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/.pytest_cache": true,
+      "**/coverage": true,
+      "temp/": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/.pytest_cache": true,
+      "**/coverage": true,
+      "temp/": true
+    },
+    "typescript.preferences.includePackageJsonAutoImports": "auto",
+    "eslint.workingDirectories": ["apps/frontend"],
+    "prettier.configPath": "./apps/frontend/.prettierrc",
+    "emmet.includeLanguages": {
+      "javascript": "javascriptreact"
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-python.python",
+      "ms-python.black-formatter",
+      "ms-python.flake8",
+      "bradlc.vscode-tailwindcss",
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "ms-vscode.vscode-json",
+      "redhat.vscode-yaml",
+      "ms-python.pylint",
+      "ms-toolsai.jupyter",
+      "formulahendry.auto-rename-tag",
+      "christian-kohler.path-intellisense",
+      "ms-vscode.vscode-typescript-next"
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Start Development Servers",
+        "type": "shell",
+        "command": "pnpm dev",
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "new"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Run Backend Tests",
+        "type": "shell",
+        "command": "pytest apps/backend/tests -v",
+        "group": "test",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "new"
+        }
+      },
+      {
+        "label": "Run Frontend Tests",
+        "type": "shell",
+        "command": "pnpm --prefix apps/frontend test",
+        "group": "test",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "new"
+        }
+      },
+      {
+        "label": "Run All Tests",
+        "type": "shell",
+        "command": "pnpm test",
+        "group": "test",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "new"
+        }
+      }
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Django Debug",
+        "type": "python",
+        "request": "launch",
+        "program": "${workspaceFolder}/apps/backend/manage.py",
+        "args": ["runserver", "8000"],
+        "django": true,
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "DJANGO_SETTINGS_MODULE": "config.settings"
+        }
+      }
+    ]
+  }
+}

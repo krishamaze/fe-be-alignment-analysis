@@ -1,0 +1,26 @@
+{
+  "name": "finetune-erp",
+  "version": "0.1.0",
+  "description": "Finetune ERP monorepo - repair shop management system",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"pnpm --prefix apps/frontend dev\" \"python apps/backend/manage.py runserver\"",
+    "build": "pnpm --prefix apps/frontend build",
+    "test": "concurrently \"pnpm --prefix apps/frontend test\" \"pytest apps/backend/tests -q\"",
+    "lint": "pnpm --prefix apps/frontend lint",
+    "format": "pnpm --prefix apps/frontend format",
+    "backend:dev": "python apps/backend/manage.py runserver",
+    "backend:test": "pytest apps/backend/tests -q",
+    "frontend:dev": "pnpm --prefix apps/frontend dev",
+    "frontend:test": "pnpm --prefix apps/frontend test",
+    "frontend:build": "pnpm --prefix apps/frontend build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@9.0.0"
+}

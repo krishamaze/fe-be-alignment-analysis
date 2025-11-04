@@ -5,10 +5,26 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "finetune-erp"
 version = "0.1.0"
-description = "Finetune ERP monorepo"
+description = "Finetune ERP monorepo - repair shop management system"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []
+authors = [
+    {name = "Finetune ERP Team"}
+]
+keywords = ["erp", "repair-shop", "django", "react", "monorepo"]
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[tool.setuptools]
+packages = []
+py-modules = []
 
 [project.optional-dependencies]
 backend = [
