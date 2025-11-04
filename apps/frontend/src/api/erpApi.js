@@ -528,7 +528,7 @@ export const erpApi = createApi({
       query: (params) => ({ url: END_POINTS.SEARCH_SALE_PRODUCTS, params })
     }),
     getAttendanceById: builder.query({
-      query: (id) => ({ url: `/api/attendance/attendance/${id}` }),
+      query: (id) => ({ url: `/api/attendance/${id}` }),
       providesTags: (result, error, id) => [{ type: 'Attendance', id }]
     })
   })
